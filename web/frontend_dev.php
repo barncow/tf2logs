@@ -7,6 +7,10 @@ if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1', '192.168.0.197
   die('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
 
+//12/3/2010 - dirty hack to strip trailing slash since nginx won't do it
+$_SERVER['REQUEST_URI'] = rtrim($_SERVER['REQUEST_URI'], "/");
+$_SERVER['PATH_INFO'] = rtrim($_SERVER['PATH_INFO'], "/");
+
 require_once(dirname(__FILE__).'/../config/ProjectConfiguration.class.php');
 
 $configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'dev', true);

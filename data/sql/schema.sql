@@ -1,0 +1,3 @@
+CREATE TABLE log (id BIGINT AUTO_INCREMENT, name VARCHAR(100), redscore INT, bluescore INT, created_at DATETIME, updated_at DATETIME, PRIMARY KEY(id)) ENGINE = INNODB;
+CREATE TABLE stat (id BIGINT AUTO_INCREMENT, log_id BIGINT, name VARCHAR(100), steamid VARCHAR(30), team VARCHAR(4), kills INT, assists INT, deaths INT, kills_per_death INT, longest_kill_streak INT, capture_points_blocked INT, capture_points_captured INT, dominations INT, times_dominated INT, revenges INT, builtobjects INT, destroyedobjects INT, extinguishes INT, ubers INT, dropped_ubers INT, ubers_per_death INT, INDEX log_id_idx (log_id), PRIMARY KEY(id)) ENGINE = INNODB;
+ALTER TABLE stat ADD CONSTRAINT stat_log_id_log_id FOREIGN KEY (log_id) REFERENCES log(id) ON DELETE CASCADE;
