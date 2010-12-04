@@ -100,7 +100,7 @@ class LogParser {
 	    return; //do nothing, just add to scrubbed log
 	  }
 	  
-	  //throw new UnrecognizedLogLineException($logLine);
+	  throw new UnrecognizedLogLineException($logLine);
 	}
 }
 
