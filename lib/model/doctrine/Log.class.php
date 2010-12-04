@@ -12,4 +12,22 @@
  */
 class Log extends BaseLog
 {
+  protected $_timeStart;
+  protected $_scrubbedLog = "";
+  
+  public function set_timeStart($timeStart) {
+    $this->_timeStart = $timeStart;
+  }
+  
+  public function get_timeStart() {
+    return $this->_timeStart;
+  }
+  
+  public function appendToScrubbedLog($logLine) {
+    $this->_scrubbedLog .= $logLine."\n";
+  }
+  
+  public function getScrubbedLog() {
+    return $this->_scrubbedLog;
+  }
 }

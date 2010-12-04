@@ -13,7 +13,12 @@ $_root_dir = $_test_dir.'/..';
 
 // configuration
 require_once $_root_dir.'/config/ProjectConfiguration.class.php';
-$configuration = ProjectConfiguration::hasActive() ? ProjectConfiguration::getActive() : new ProjectConfiguration(realpath($_root_dir));
+//$configuration = ProjectConfiguration::hasActive() ? ProjectConfiguration::getActive() : new ProjectConfiguration(realpath($_root_dir));
+
+//changed to provide for Doctrine models in tests.
+$configuration = ProjectConfiguration::getApplicationConfiguration( 'frontend', 'test', true);
+new sfDatabaseManager($configuration);
+Doctrine_Core::loadData(sfConfig::get('sf_test_dir').'/fixtures');
 
 // lime
 require_once $configuration->getSymfonyLibDir().'/vendor/lime/lime.php';

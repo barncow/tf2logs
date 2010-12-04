@@ -1,7 +1,16 @@
+test:
+  doctrine:
+    param:
+      dsn:  mysql:dbname=tf2logs_test;host=localhost
+      
+dev:
+  doctrine:
+    param:
+      dsn:  mysql:dbname=tf2logs;host=localhost
+ 
 all:
   doctrine:
     class: sfDoctrineDatabase
     param:
-      dsn: 'mysql:host=localhost;dbname=tf2logs'
       username: root
       password: null
