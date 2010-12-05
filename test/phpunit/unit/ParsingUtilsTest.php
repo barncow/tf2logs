@@ -1,23 +1,8 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
+require_once 'BaseLogParserTestCase.php';
 
-class unit_ParsingUtilsTest extends sfPHPUnitBaseTestCase
-{
-  protected $logParser;
-  protected $parsingUtils;
-  protected $LFIXDIR;
-
-  protected function _start() {
-    $this->LFIXDIR = sfConfig::get('sf_test_dir')."/fixtures/LogParser/";
-    $this->logParser = new LogParser();
-    $this->parsingUtils = new ParsingUtils();
-  }
-  
-  protected function _end() {
-    unset($this->logParser);
-    unset($this->parsingUtils);
-  }
-  
+class unit_ParsingUtilsTest extends BaseLogParserTestCase {  
   public function testGetTimestamp() {
     //sunny case
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_initialline.log");
@@ -62,6 +47,28 @@ class unit_ParsingUtilsTest extends sfPHPUnitBaseTestCase
   
   public function testScrubLogLine() {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_initialline.log");
-    $this->assertEquals('L 09/29/2010 - 19:05:47: Log file started (file "logs/L0929002.log") (game "/home/barncow/255.255.255.255-27015/srcds_l/orangebox/tf") (version "4317")', $this->parsingUtils->scrubLogLine($l[0]));
+    $this->assertEquals('L 09/29/2010 - 19:05:47: Log file started (file "logs/L0929002.log") (game "/home/barncow/255.255.255.255-27015/srcds_l/orangebox/tf") (version "4317")'
+    , $this->parsingUtils->scrubLogLine($l[0]), "verify that initial line with server IP is scrubbed");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_rcon.log");
+    $this->assertEquals('L 09/29/2010 - 19:05:47: rcon from "255.255.255.255:50039": command "exec cevo_stopwatch.cfg"', $this->parsingUtils->scrubLogLine($l[0]));
+  }
+  
+  public function testGetPlayerLineAction() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_console_say.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('say', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_enteredgame.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('entered the game', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+  }
+  
+  public function testProcessServerCvarLine() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_servercvar.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    
+    $this->assertEquals('mp_falldamage', $this->parsingUtils->getServerCvarName($logLineDetails), "can get server cvar name");
+    $this->assertEquals(0, $this->parsingUtils->getServerCvarValue($logLineDetails), "can get server cvar value");
   }
 }

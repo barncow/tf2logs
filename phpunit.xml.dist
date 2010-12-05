@@ -3,7 +3,7 @@
   convertErrorsToExceptions="false"
   convertNoticesToExceptions="false"
   convertWarningsToExceptions="false"
-  stopOnFailure="true">
+  stopOnFailure="false">
   
   <testsuites>
     <testsuite name="Unit Tests">

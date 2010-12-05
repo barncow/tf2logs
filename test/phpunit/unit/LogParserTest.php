@@ -1,19 +1,8 @@
 <?php
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
+require_once 'BaseLogParserTestCase.php';
 
-class unit_LogParserTest extends sfPHPUnitBaseTestCase {
-  protected $logParser;
-  protected $LFIXDIR;
-
-  protected function _start() {
-    $this->LFIXDIR = sfConfig::get('sf_test_dir')."/fixtures/LogParser/";
-    $this->logParser = new LogParser();
-  }
-  
-  protected function _end() {
-    unset($this->logParser);
-  }
-  
+class unit_LogParserTest extends BaseLogParserTestCase {
   /**
   * @expectedException LogFileNotFoundException
   */

@@ -1,1 +1,6 @@
 L 09/29/2010 - 19:05:47: Log file started (file "logs/L0929002.log") (game "/home/barncow/74.122.197.144-27015/srcds_l/orangebox/tf") (version "4317")
+L 09/29/2010 - 19:05:47: server_cvar: "mp_falldamage" "0"
+L 09/29/2010 - 19:05:47: server_cvar: "mp_flashlight" "0"
+L 09/29/2010 - 19:05:47: "Console<0><Console><Console>" say ""CEVO TF2 stopwatch config file loaded. 08/14/10""
+L 09/29/2010 - 19:05:47: rcon from "184.58.218.223:50039": command "exec cevo_stopwatch.cfg"
+L 09/29/2010 - 19:05:54: "Target<46><STEAM_0:0:6845279><>" entered the game

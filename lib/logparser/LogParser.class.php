@@ -2,7 +2,9 @@
 require_once('exceptions/UnrecognizedLogLineException.class.php');
 require_once('exceptions/LogFileNotFoundException.class.php');
 require_once('exceptions/CorruptLogLineException.class.php');
+require_once('exceptions/InvalidPlayerStringException.class.php');
 require_once('ParsingUtils.class.php');
+require_once('PlayerInfo.class.php');
 
 /**
  * Handles processing a log and saving the results to a database.
@@ -96,10 +98,21 @@ class LogParser {
 	  $logLineDetails = $this->parsingUtils->getLineDetails($logLine);
 	  
 	  //go through line types. When complete with the line, return.
-	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)) {
+	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
 	    return; //do nothing, just add to scrubbed log
+	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
+	    //this will be a player action line. The quote matches the quote on a player string in the log.
+	    //Need to determine what action is being done here.
+	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
+	    if($playerLineAction == "say"
+	    || $playerLineAction == "entered the game") {
+	      return; //do nothing, just add to scrubbed log
+	    }
 	  }
 	  
+	  //still here. Did not return like expected, therefore this is an unrecognized line.
 	  throw new UnrecognizedLogLineException($logLine);
 	}
 }
