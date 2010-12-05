@@ -106,10 +106,16 @@ class LogParser {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
 	    //Need to determine what action is being done here.
 	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
+	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
+	    $this->log->addUniqueStatsFromPlayerInfos($players);
+	    
 	    if($playerLineAction == "say"
-	    || $playerLineAction == "entered the game") {
+	    || $playerLineAction == "entered the game"
+	    || $playerLineAction == "changed role to") {
 	      return; //do nothing, just add to scrubbed log
-	    }
+	    } //else if($playerLineAction == "joined team") {
+	      
+	    //}
 	  }
 	  
 	  //still here. Did not return like expected, therefore this is an unrecognized line.

@@ -10,6 +10,21 @@
  * @author     Your name here
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
-class Stat extends BaseStat
-{
+class Stat extends BaseStat {  
+  /**
+  * Sets the attributes found in the PlayerInfo object into this object.
+  */
+  function setPlayerInfoAttributes(PlayerInfo $playerInfo) {
+    $this->setSteamid($playerInfo->getSteamid());
+    $this->setName($playerInfo->getName());
+    $this->setTeam($playerInfo->getTeam());
+  }
+  
+  /**
+  * Convenience method to determine if this stat record is equal to
+  * the given playerInfo.
+  */
+  public function equalsPlayerInfo(PlayerInfo $playerInfo) {
+    return $this->getSteamid() == $playerInfo->getSteamid();
+  }
 }

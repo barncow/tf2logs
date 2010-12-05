@@ -9,5 +9,6 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
     $this->assertEquals($countOfLines, count(explode("\n", $log->getScrubbedLog()))-1, "count scrubbed lines == count orig lines");
+    $this->assertEquals(1, count($log->getStats()), "number of players, should exclude console");
   }
 }

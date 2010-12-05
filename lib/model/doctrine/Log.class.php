@@ -30,4 +30,37 @@ class Log extends BaseLog
   public function getScrubbedLog() {
     return $this->_scrubbedLog;
   }
+  
+  /**
+  * Adds a stat record for the given player, if unique.
+  */
+  public function addUniqueStatFromPlayerInfo(PlayerInfo $playerInfo) {
+    $addStat = true;
+    foreach($this->Stats as $key => $stat) {
+      if($stat->equalsPlayerInfo($playerInfo)) {
+        $addStat = false;
+        break;
+      }
+    }
+    
+    //no need to track the console's stats.
+    if($addStat && $playerInfo->getSteamid() != "Console") {
+      $stat = new Stat();
+      $stat->setPlayerInfoAttributes($playerInfo);
+      $this->Stats[] = $stat;
+    }
+  }
+  
+  /**
+  * For an array of given PlayerInfo objects, will add the unique players.
+  */
+  public function addUniqueStatsFromPlayerInfos($playerInfos) {
+    foreach($playerInfos as $key => $pi) {
+      if(!($pi instanceof PlayerInfo)) {
+        throw new InvalidArgumentException("playerInfos given to addUniqueStatsFromPlayerInfos must be of PlayerInfo type.");
+      }
+      
+      $this->addUniqueStatFromPlayerInfo($pi);
+    }
+  }
 }
