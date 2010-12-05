@@ -111,11 +111,21 @@ class LogParser {
 	    
 	    if($playerLineAction == "say"
 	    || $playerLineAction == "entered the game"
-	    || $playerLineAction == "changed role to") {
+	    || $playerLineAction == "changed role to"
+	    || $playerLineAction == "disconnected"
+	    || $playerLineAction == "connected, address"
+	    || $playerLineAction == "STEAM USERID validated"
+	    || $playerLineAction == "say_team"
+	    ) {
 	      return; //do nothing, just add to scrubbed log
 	    } else if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
+	      return;
+	    } else if($playerLineAction == "changed name to") {
+	      $p = $players[0];
+	      $p->setName($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
 	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
 	      return;
 	    } else if($playerLineAction == "killed") {
@@ -124,6 +134,49 @@ class LogParser {
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	      return;
+	    } else if($playerLineAction == "committed suicide with") {
+	      $p = $players[0];
+	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
+	      return;
+	    } else if($playerLineAction == "triggered") {
+	      //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
+	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
+	      
+	      if($playerLineActionDetail == "kill assist") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
+	        return;
+	      } else if($playerLineActionDetail == "domination") {
+	        $attacker = $players[0];
+	        $victim = $players[1];
+	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "dominations"); 
+	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "times_dominated"); 
+	        return;
+	      } else if($playerLineActionDetail == "builtobject") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "builtobjects"); 
+	        return;
+	      } else if($playerLineActionDetail == "killedobject") {
+          $attacker = $players[0];
+	        $objowner = $players[1];
+	        if(!$attacker->equals($objowner)) {
+	          //do not want to count destructions by a player destroying his own stuff
+	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "destroyedobjects"); 
+	        }
+	        return;
+	      } else if($playerLineActionDetail == "revenge") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "revenges"); 
+	        return;
+	      } else if($playerLineActionDetail == "player_extinguished") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "extinguishes"); 
+	        return;
+	      } else if($playerLineActionDetail == "chargedeployed") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
+	        return;
+	      }
 	    }
 	  }
 	  

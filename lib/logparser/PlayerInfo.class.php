@@ -15,11 +15,15 @@ class PlayerInfo {
   function __construct($name, $steamid, $team) {
     $this->setName($name);
     $this->setSteamid($steamid);
-    
-    if($team == "Unassigned") {
-      $team = null;
-    }
     $this->setTeam($team);
+  }
+  
+  /**
+  * Convenience method to determine if this playerInfo is equal to
+  * the given playerInfo.
+  */
+  public function equals(PlayerInfo $playerInfo) {
+    return $this->getSteamid() == $playerInfo->getSteamid();
   }
   
   /**
@@ -81,7 +85,7 @@ class PlayerInfo {
   }
   
   public function setTeam($team) {
-    if($team == "Unassigned") {
+    if($team == "Unassigned" || $team == "Spectator") {
       $team = null;
     }
     $this->team = $team;

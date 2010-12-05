@@ -48,9 +48,23 @@ class unit_PlayerInfoTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(array(new PlayerInfo("Target", "STEAM_0:0:6845279", null)), PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player join team string returns playerInfo");
     
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_namechange.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(array(new PlayerInfo("ǤooB", "STEAM_0:1:23384772", null)), PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player with spectator team string returns playerInfo");
+    
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(array(new PlayerInfo("Target", "STEAM_0:0:6845279", "Blue"), new PlayerInfo("FSTNG! Barncow", "STEAM_0:1:16481274", "Red")),
      PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player kill string returns 2 playerInfos");
+  }
+  
+  public function testEquals() {
+    $pi1 = new PlayerInfo("FSTNG! Barncow", "STEAM_0:1:16481274", "Blue");
+    $pi2 = new PlayerInfo("Ctrl+f Muffin!", "STEAM_0:1:9852193", "Red");
+    $pi3 = new PlayerInfo("FSTNG! Barncow", "STEAM_0:1:16481274", "Blue");
+    
+    $this->assertTrue($pi1->equals($pi1), "PI equal to itself");
+    $this->assertFalse($pi1->equals($pi2), "PI1 not equal to PI2");
+    $this->assertTrue($pi1->equals($pi3), "Diff objs, same player info, are equal");
   }
 }

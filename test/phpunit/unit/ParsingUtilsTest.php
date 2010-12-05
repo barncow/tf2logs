@@ -52,6 +52,9 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_rcon.log");
     $this->assertEquals('L 09/29/2010 - 19:05:47: rcon from "255.255.255.255:50039": command "exec cevo_stopwatch.cfg"', $this->parsingUtils->scrubLogLine($l[0]));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_connected.log");
+    $this->assertEquals('L 09/29/2010 - 19:06:32: "Cres<49><STEAM_0:0:8581157><>" connected, address "255.255.255.255:27005"', $this->parsingUtils->scrubLogLine($l[0]));
   }
   
   public function testGetPlayerLineAction() {
@@ -66,12 +69,25 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('killed', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_disconnected.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('disconnected', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_connected.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('connected, address', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+    
   }
   
   public function testGetPlayerLineActionDetail() {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_jointeam.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('Blue', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_killassist.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('kill assist', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
   }
   
   public function testProcessServerCvarLine() {
