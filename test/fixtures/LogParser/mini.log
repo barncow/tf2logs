@@ -4,3 +4,7 @@ L 09/29/2010 - 19:05:47: server_cvar: "mp_flashlight" "0"
 L 09/29/2010 - 19:05:47: "Console<0><Console><Console>" say ""CEVO TF2 stopwatch config file loaded. 08/14/10""
 L 09/29/2010 - 19:05:47: rcon from "184.58.218.223:50039": command "exec cevo_stopwatch.cfg"
 L 09/29/2010 - 19:05:54: "Target<46><STEAM_0:0:6845279><>" entered the game
+L 09/29/2010 - 19:06:13: "Target<46><STEAM_0:0:6845279><Unassigned>" joined team "Blue"
+L 09/29/2010 - 19:06:14: "Target<46><STEAM_0:0:6845279><Blue>" changed role to "scout"
+L 09/29/2010 - 19:06:27: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-704 1584 -464") (victim_position "-824 1429 -396")
+L 09/29/2010 - 19:07:05: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "pistol_scout" (attacker_position "-1513 301 -383") (victim_position "-1435 611 -383")

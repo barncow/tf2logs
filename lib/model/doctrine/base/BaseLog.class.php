@@ -45,22 +45,29 @@ abstract class BaseLog extends sfDoctrineRecord
              ));
         $this->hasColumn('name', 'string', 100, array(
              'type' => 'string',
+             'notnull' => true,
              'length' => 100,
              ));
         $this->hasColumn('redscore', 'integer', 4, array(
              'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
              'length' => 4,
              ));
         $this->hasColumn('bluescore', 'integer', 4, array(
              'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
              'length' => 4,
              ));
         $this->hasColumn('created_at', 'timestamp', 25, array(
              'type' => 'timestamp',
+             'notnull' => true,
              'length' => 25,
              ));
         $this->hasColumn('updated_at', 'timestamp', 25, array(
              'type' => 'timestamp',
+             'notnull' => true,
              'length' => 25,
              ));
     }

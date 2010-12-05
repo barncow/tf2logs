@@ -8,13 +8,13 @@ class unit_LogModelTest extends sfPHPUnitBaseTestCase
    $pi2 = new PlayerInfo("mynewname", "mynewsteamid", "mynewteam");
    
    $log = new Log();
-   $log->addUniqueStatFromPlayerInfo($pi1);
+   $log->addUpdateUniqueStatFromPlayerInfo($pi1);
    $this->assertEquals(1, count($log->Stats), "insertion of first record should have 1 stat in log");
    
-   $log->addUniqueStatFromPlayerInfo($pi1);
+   $log->addUpdateUniqueStatFromPlayerInfo($pi1);
    $this->assertEquals(1, count($log->Stats), "insertion of first record, second time should have 1 stat in log");
    
-   $log->addUniqueStatFromPlayerInfo($pi2);
+   $log->addUpdateUniqueStatFromPlayerInfo($pi2);
    $this->assertEquals(2, count($log->Stats), "insertion of second record should have 2 stats in log");
   }
   
@@ -23,9 +23,21 @@ class unit_LogModelTest extends sfPHPUnitBaseTestCase
     $pi2 = new PlayerInfo("mynewname", "mynewsteamid", "mynewteam");
 
     $log = new Log();
-    $log->addUniqueStatFromPlayerInfo($pi1);
-    $log->addUniqueStatsFromPlayerInfos(array($pi1, $pi2));
+    $log->addUpdateUniqueStatFromPlayerInfo($pi1);
+    $log->addUpdateUniqueStatsFromPlayerInfos(array($pi1, $pi2));
     $this->assertEquals(2, count($log->Stats), "insertion of array with first inserted record should only have 2");
+    
+    $pi1->setName("blah");
+    $pi2->setTeam("Blue");
+    $log->addUpdateUniqueStatsFromPlayerInfos(array($pi1, $pi2));
+    $this->assertEquals(2, count($log->Stats), "insertion of array with updated attrs should only have 2");
+    foreach($log->Stats as $s) {
+      if($s->equalsPlayerInfo($pi1)) {
+        $this->assertEquals("blah", $s->getName(), "name of PI1 should be updated");
+      } else if($s->equalsPlayerInfo($pi2)) {
+        $this->assertEquals("Blue", $s->getTeam(), "team of PI2 should be updated");
+      }
+    }
   }
   
   /**
@@ -33,6 +45,6 @@ class unit_LogModelTest extends sfPHPUnitBaseTestCase
   */
   public function testSendingNonPlayerInfosToAddUniqueStats() {
     $log = new Log();
-    $log->addUniqueStatsFromPlayerInfos(array("ghg", "asdf"));
+    $log->addUpdateUniqueStatsFromPlayerInfos(array("ghg", "asdf"));
   }
 }

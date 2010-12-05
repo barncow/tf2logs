@@ -16,7 +16,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'                      => new sfWidgetFormInputHidden(),
-      'log_id'                  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'add_empty' => true)),
+      'log_id'                  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'add_empty' => false)),
       'name'                    => new sfWidgetFormInputText(),
       'steamid'                 => new sfWidgetFormInputText(),
       'team'                    => new sfWidgetFormInputText(),
@@ -40,10 +40,10 @@ abstract class BaseStatForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'                      => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'log_id'                  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'required' => false)),
-      'name'                    => new sfValidatorString(array('max_length' => 100, 'required' => false)),
-      'steamid'                 => new sfValidatorString(array('max_length' => 30, 'required' => false)),
-      'team'                    => new sfValidatorString(array('max_length' => 4, 'required' => false)),
+      'log_id'                  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Log'))),
+      'name'                    => new sfValidatorString(array('max_length' => 100)),
+      'steamid'                 => new sfValidatorString(array('max_length' => 30)),
+      'team'                    => new sfValidatorString(array('max_length' => 4)),
       'kills'                   => new sfValidatorInteger(array('required' => false)),
       'assists'                 => new sfValidatorInteger(array('required' => false)),
       'deaths'                  => new sfValidatorInteger(array('required' => false)),

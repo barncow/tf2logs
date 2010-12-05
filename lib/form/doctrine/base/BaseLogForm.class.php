@@ -25,11 +25,11 @@ abstract class BaseLogForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'name'       => new sfValidatorString(array('max_length' => 100, 'required' => false)),
+      'name'       => new sfValidatorString(array('max_length' => 100)),
       'redscore'   => new sfValidatorInteger(array('required' => false)),
       'bluescore'  => new sfValidatorInteger(array('required' => false)),
-      'created_at' => new sfValidatorDateTime(array('required' => false)),
-      'updated_at' => new sfValidatorDateTime(array('required' => false)),
+      'created_at' => new sfValidatorDateTime(),
+      'updated_at' => new sfValidatorDateTime(),
     ));
 
     $this->widgetSchema->setNameFormat('log[%s]');

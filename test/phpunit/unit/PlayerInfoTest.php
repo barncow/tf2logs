@@ -28,6 +28,11 @@ class unit_PlayerInfoTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_jointeam.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(array('"Target<46><STEAM_0:0:6845279><Unassigned>"'), PlayerInfo::getPlayerStringsFromLogLineDetails($logLineDetails), "actual player string with unassigned team is retrieved from join team entry");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(array('"Target<46><STEAM_0:0:6845279><Blue>"', '"FSTNG! Barncow<48><STEAM_0:1:16481274><Red>"'),
+     PlayerInfo::getPlayerStringsFromLogLineDetails($logLineDetails), "should grab two players, in order, from kill line");
   }
   
   public function testGetAllPlayersFromLogLineDetails() {
@@ -42,5 +47,10 @@ class unit_PlayerInfoTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_jointeam.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(array(new PlayerInfo("Target", "STEAM_0:0:6845279", null)), PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player join team string returns playerInfo");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(array(new PlayerInfo("Target", "STEAM_0:0:6845279", "Blue"), new PlayerInfo("FSTNG! Barncow", "STEAM_0:1:16481274", "Red")),
+     PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player kill string returns 2 playerInfos");
   }
 }

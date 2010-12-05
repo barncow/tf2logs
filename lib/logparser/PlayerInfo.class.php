@@ -39,7 +39,7 @@ class PlayerInfo {
   */
   public static function getPlayerStringsFromLogLineDetails($logLineDetails) {
     $matches;
-    preg_match_all("/(\".+<\d+><[A-Za-z0-9:_]+><\w*>\")/", $logLineDetails, $matches);
+    preg_match_all("/(\".+?<\d+?><[A-Za-z0-9:_]+?><\w*?>\")/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return $matches[1];
     } else {

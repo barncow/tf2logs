@@ -7,8 +7,7 @@
  * 
  * @package    tf2logs
  * @subpackage model
- * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
+ * @author     Brian Barnekow
  */
 class Log extends BaseLog
 {
@@ -34,10 +33,12 @@ class Log extends BaseLog
   /**
   * Adds a stat record for the given player, if unique.
   */
-  public function addUniqueStatFromPlayerInfo(PlayerInfo $playerInfo) {
+  public function addUpdateUniqueStatFromPlayerInfo(PlayerInfo $playerInfo) {
     $addStat = true;
-    foreach($this->Stats as $key => $stat) {
+    foreach($this->Stats as &$stat) {
       if($stat->equalsPlayerInfo($playerInfo)) {
+        //no need to add, but will update here.
+        $stat->setPlayerInfoAttributes($playerInfo);
         $addStat = false;
         break;
       }
@@ -54,13 +55,34 @@ class Log extends BaseLog
   /**
   * For an array of given PlayerInfo objects, will add the unique players.
   */
-  public function addUniqueStatsFromPlayerInfos($playerInfos) {
+  public function addUpdateUniqueStatsFromPlayerInfos($playerInfos) {
     foreach($playerInfos as $key => $pi) {
       if(!($pi instanceof PlayerInfo)) {
         throw new InvalidArgumentException("playerInfos given to addUniqueStatsFromPlayerInfos must be of PlayerInfo type.");
       }
       
-      $this->addUniqueStatFromPlayerInfo($pi);
+      $this->addUpdateUniqueStatFromPlayerInfo($pi);
     }
+  }
+  
+  public function incrementStatFromSteamid($steamid, $statkey, $increment = 1) {
+    $stat = &$this->getStatFromSteamid($steamid);
+    if($stat === false) throw new InvalidArgumentException("steamid could not be found in incrementStatFromSteamid: $steamid, $statkey");
+    $stat->incrementStat($statkey, $increment);
+  }
+  
+  /**
+  * Gets a stat by reference by steamid. Protected since 
+  * allowing the end user of the class to update the stat
+  * outside of this class is unwise.
+  */
+  protected function &getStatFromSteamid($steamid) {
+    foreach($this->Stats as &$stat) {
+      if($stat->getSteamid() == $steamid) {
+        return $stat;
+      }
+    }
+    
+    return false;
   }
 }

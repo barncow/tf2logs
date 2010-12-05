@@ -4,16 +4,24 @@ Log:
       type: integer
       primary: true
       autoincrement: true
+      notnull: true
     name:
       type: string(100)
+      notnull: true
     redscore:
       type: integer(4)
+      notnull: true
+      default: 0
     bluescore:
       type: integer(4)
+      notnull: true
+      default: 0
     created_at:
       type: timestamp(25)
+      notnull: true
     updated_at:
       type: timestamp(25)
+      notnull: true
 
 Stat:
   columns:
@@ -21,46 +29,83 @@ Stat:
       type: integer
       primary: true
       autoincrement: true
+      notnull: true
     log_id:
       type: integer
+      notnull: true
     name:
       type: string(100)
+      notnull: true
     steamid:
       type: string(30)
+      notnull: true
     team:
       type: string(4)
+      notnull: true
     kills:
       type: integer(4)
+      notnull: true
+      default: 0
     assists:
       type: integer(4)
+      notnull: true
+      default: 0
     deaths:
       type: integer(4)
+      notnull: true
+      default: 0
     kills_per_death:
       type: integer(4)
+      notnull: true
+      default: 0
     longest_kill_streak:
       type: integer(4)
+      notnull: true
+      default: 0
     capture_points_blocked:
       type: integer(4)
+      notnull: true
+      default: 0
     capture_points_captured:
       type: integer(4)
+      notnull: true
+      default: 0
     dominations:
       type: integer(4)
+      notnull: true
+      default: 0
     times_dominated:
       type: integer(4)
+      notnull: true
+      default: 0
     revenges:
       type: integer(4)
+      notnull: true
+      default: 0
     builtobjects:
       type: integer(4)
+      notnull: true
+      default: 0
     destroyedobjects:
       type: integer(4)
+      notnull: true
+      default: 0
     extinguishes:
       type: integer(4)
+      notnull: true
+      default: 0
     ubers:
       type: integer(4)
+      notnull: true
+      default: 0
     dropped_ubers:
       type: integer(4)
+      notnull: true
+      default: 0
     ubers_per_death:
       type: integer(4)
+      notnull: true
+      default: 0
   relations:
     Log: 
       onDelete: CASCADE

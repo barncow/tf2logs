@@ -62,6 +62,16 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_enteredgame.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('entered the game', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('killed', $this->parsingUtils->getPlayerLineAction($logLineDetails));
+  }
+  
+  public function testGetPlayerLineActionDetail() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_jointeam.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('Blue', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
   }
   
   public function testProcessServerCvarLine() {

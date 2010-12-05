@@ -62,7 +62,17 @@ class ParsingUtils {
   */
   public function getPlayerLineAction($logLineDetails) {
     $matches;
-    preg_match("/^\".+<\d+><[A-Za-z0-9:_]+><\w*>\" ([\w ]+)/", $logLineDetails, $matches);
+    preg_match("/^\".+?<\d+?><[A-Za-z0-9:_]+?><\w*?>\" ([\w ]+)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return trim($matches[1]);
+    } else {
+      return false;
+    }
+  }
+  
+  public function getPlayerLineActionDetail($logLineDetails) {
+    $matches;
+    preg_match("/^\".+?<\d+?><[A-Za-z0-9:_]+?><\w*?>\" [\w ]+? \"(.+)\"/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return trim($matches[1]);
     } else {

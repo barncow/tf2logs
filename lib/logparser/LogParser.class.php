@@ -107,15 +107,24 @@ class LogParser {
 	    //Need to determine what action is being done here.
 	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
-	    $this->log->addUniqueStatsFromPlayerInfos($players);
+	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
 	    
 	    if($playerLineAction == "say"
 	    || $playerLineAction == "entered the game"
 	    || $playerLineAction == "changed role to") {
 	      return; //do nothing, just add to scrubbed log
-	    } //else if($playerLineAction == "joined team") {
-	      
-	    //}
+	    } else if($playerLineAction == "joined team") {
+	      $p = $players[0];
+	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
+	      return;
+	    } else if($playerLineAction == "killed") {
+	      $attacker = $players[0];
+	      $victim = $players[1];
+	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
+	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
+	      return;
+	    }
 	  }
 	  
 	  //still here. Did not return like expected, therefore this is an unrecognized line.
