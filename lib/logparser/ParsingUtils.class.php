@@ -70,11 +70,106 @@ class ParsingUtils {
     }
   }
   
+  /**
+  * Retrieves the value in quotes immediately following the playerLineAction
+  */
   public function getPlayerLineActionDetail($logLineDetails) {
     $matches;
     preg_match("/^\".+?<\d+?><[A-Za-z0-9:_]+?><\w*?>\" [\w ]+? \"(.+?)\"/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return trim($matches[1]);
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Retrieves whether or not the player in the "medic_death" trigger died with uber or not.
+  */
+  public function didMedicDieWithUber($logLineDetails) {
+    $matches;
+    preg_match("/\(ubercharge \"(\d)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return (boolean) $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Gets the quoted value after a world trigger
+  */
+  public function getWorldTriggerAction($logLineDetails) {
+    $matches;
+    preg_match("/\"(.+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Gets the team for a team line.
+  */
+  public function getTeamFromTeamLine($logLineDetails) {
+    $matches;
+    preg_match("/^Team \"(.+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Gets the action for a team line.
+  */
+  public function getTeamAction($logLineDetails) {
+    $matches;
+    preg_match("/^Team \"(.+?)\" (.+?) \"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[2];
+    } else {
+      return false;
+    }
+  }
+  
+
+  /**
+  * Gets the trigger action for a team line.
+  */
+  public function getTeamTriggerAction($logLineDetails) {
+    $matches;
+    preg_match("/^Team \"(.+?)\" triggered \"(.+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[2];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Gets the score for a team line.
+  */
+  public function getTeamScore($logLineDetails) {
+    $matches;
+    preg_match("/^Team \"(.+?)\" current score \"(\d+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[2];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Gets the score for a team line.
+  */
+  public function getTeamNumberPlayers($logLineDetails) {
+    $matches;
+    preg_match("/^Team \"(.+?)\" current score \"(\d+?)\" with \"(\d+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[3];
     } else {
       return false;
     }
@@ -105,6 +200,18 @@ class ParsingUtils {
       return false;
     }
   }
-
+  
+  /**
+	* this will get the actual name for the filename given.
+	*/
+	public function getNameFromFilename($filename) {
+	  $matches;
+    preg_match("/(.*)(\/)(.+)$/", $filename, $matches);
+    if(count($matches) > 0) {
+      return $matches[3];
+    } else {
+      return false;
+    }
+	}
 }
 ?>

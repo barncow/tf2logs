@@ -54,10 +54,6 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
-    kills_per_death:
-      type: integer(4)
-      notnull: true
-      default: 0
     longest_kill_streak:
       type: integer(4)
       notnull: true
@@ -99,10 +95,6 @@ Stat:
       notnull: true
       default: 0
     dropped_ubers:
-      type: integer(4)
-      notnull: true
-      default: 0
-    ubers_per_death:
       type: integer(4)
       notnull: true
       default: 0

@@ -14,6 +14,10 @@ L 09/29/2010 - 19:08:08: "do0t<47><STEAM_0:1:4433828><Unassigned>" disconnected 
 L 09/29/2010 - 19:08:41: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "world" (attacker_position "-3544 1649 -611")
 L 09/29/2010 - 19:08:55: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:55: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
+L 09/29/2010 - 19:08:56: World triggered "Round_Start"
+L 09/29/2010 - 19:08:56: World triggered "Round_Setup_Begin"
+L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
+L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:58: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "tf_projectile_rocket" (attacker_position "-3718 1821 -540")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" killed "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" with "scattergun" (attacker_position "-2419 1637 -511") (victim_position "-2605 1596 -546")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" triggered "domination" against "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>"
@@ -27,3 +31,15 @@ L 09/29/2010 - 19:20:15: "perl<57><STEAM_0:0:11710749><Red>" triggered "player_e
 L 09/29/2010 - 19:10:14: "ǤooB<54><STEAM_0:1:23384772><Unassigned>" joined team "Spectator"
 L 09/29/2010 - 19:23:30: "ǤooB<54><STEAM_0:1:23384772><Spectator>" changed name to "ǤooB's name is brandon too!!"
 L 09/29/2010 - 19:24:18: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "chargedeployed"
+L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" triggered "medic_death" against "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" (healing "160") (ubercharge "0")
+L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" committed suicide with "world" (attacker_position "-5072 1286 -511")
+L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" joined team "Spectator"
+L 09/29/2010 - 19:14:43: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" with "sniperrifle" (attacker_position "-2771 1546 -295") (victim_position "-3308 1790 -220")
+L 09/29/2010 - 19:25:18: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "medic_death" against "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" (healing "1800") (ubercharge "1")
+L 09/29/2010 - 19:27:50: Team "Blue" triggered "pointcaptured" (cp "0") (cpname "#Gravelpit_cap_A") (numcappers "3") (player1 "Target<46><STEAM_0:0:6845279><Blue>") (position1 "234 724 -183") (player2 "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Blue>") (position2 "-70 411 -191") (player3 "[!?] cheap<56><STEAM_0:0:12272740><Blue>") (position3 "136 733 -183") 
+L 09/29/2010 - 19:32:08: "`yay!<52><STEAM_0:0:973270><Red>" triggered "captureblocked" (cp "1") (cpname "#Gravelpit_cap_B") (position "-2440 4826 -579")
+L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"
+L 09/29/2010 - 19:36:42: World triggered "Round_Win" (winner "Red")
+L 09/29/2010 - 19:36:42: World triggered "Round_Length" (seconds "632.25")
+L 09/29/2010 - 19:36:42: Team "Red" current score "0" with "6" players
+L 09/29/2010 - 19:36:42: Team "Blue" current score "1" with "6" players

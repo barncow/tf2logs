@@ -17,10 +17,17 @@ require_once('PlayerInfo.class.php');
 class LogParser {
   protected $parsingUtils;
   protected $log;
+  protected $isTournamentMode;
+  
+  //GAME STATE CONSTANTS
+  const GAME_APPEARS_OVER = 0;
+  const GAME_OVER = 1;
+  const GAME_CONTINUE = 2;
   
   function __construct() {
     $this->setParsingUtils(new ParsingUtils());
     $this->log = new Log();
+    $this->isTournamentMode = false; //assume its not, until first world trigger round_start
   }
   
   public function getLog() {
@@ -47,12 +54,23 @@ class LogParser {
 	/**
 	* This will parse the entire log file.
 	*/
-	public function parseLogFile($filename) {
+	public function parseLogFile($filename, $logName = null) {
+	  if($logName == null) {
+	    $logName = $this->parsingUtils->getNameFromFilename($filename);
+	  }
+	  $this->log->setName($logName);
 	  $file = $this->getRawLogFile($filename);
+	  $game_state = null;
+	  
 	  foreach($file as $key => $logLine) {
-	    $this->parseLine($logLine);
+	    $game_state = $this->parseLine($logLine);
+	    if($game_state == self::GAME_APPEARS_OVER || $game_state == self::GAME_OVER) {
+	      break; //if game is over, no need to continue processing.
+	    }
 	  }
 	  
+    $this->finishLog();
+	  $this->log->save();
 	  return $this->log;
 	}
 	
@@ -63,13 +81,23 @@ class LogParser {
 	*/
 	public function parseLine($logLine) {
 	  $exception = null;
+	  $game_state = null;
 	  try {
-	    $this->doLine($logLine);
+	    $game_state = $this->doLine($logLine);
 	  } catch(Exception $e) {
 	    $exception = $e;
 	  }
 	  $this->afterParseLine($logLine);
 	  if($exception != null) throw $exception;
+	  return $game_state;
+	}
+	
+	/**
+	* Called after the log appears to be finished, to do any last cleanup tasks,
+	* and assign any awards. No need to save in this method.
+	*/
+	protected function finishLog() {
+	
 	}
 	
 	/**
@@ -91,17 +119,38 @@ class LogParser {
 	    throw new CorruptLogLineException($logLine);
 	  }
 	  
-	  if($this->log->get_timeStart() == null) {
-	    $this->log->set_timeStart($dt);
+	  $logLineDetails = $this->parsingUtils->getLineDetails($logLine);
+	  
+	  //check for world trigger, specifically the first round_start of the log. This indicates
+	  //that the tournament mode has started, and pregame has ended.
+	  if($this->parsingUtils->isLogLineOfType($logLine, "World triggered", $logLineDetails)) {
+	    $worldTriggerAction = $this->parsingUtils->getWorldTriggerAction($logLineDetails);
+	    if($worldTriggerAction == "Round_Start") {
+	      $this->isTournamentMode = true;
+	      if($this->log->get_timeStart() == null) {
+	        //there will likely be multiple round_start's, only need the first one for the tmsp
+	        $this->log->set_timeStart($dt);
+	      }
+	      return self::GAME_CONTINUE;
+	    } else if($worldTriggerAction == "Round_Setup_Begin"
+	      || $worldTriggerAction == "Round_Setup_End"
+	      || $worldTriggerAction == "Round_Overtime"
+	      || $worldTriggerAction == "Round_Win"
+	      || $worldTriggerAction == "Round_Length"
+	      ) {
+	      return self::GAME_CONTINUE; //no need to process
+	    }
 	  }
 	  
-	  $logLineDetails = $this->parsingUtils->getLineDetails($logLine);
+	  if(!$this->isTournamentMode) {
+	    return self::GAME_CONTINUE; //do not want to track information when not in tournament mode.
+	  }
 	  
 	  //go through line types. When complete with the line, return.
 	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
-	    return; //do nothing, just add to scrubbed log
+	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
 	    //Need to determine what action is being done here.
@@ -117,27 +166,27 @@ class LogParser {
 	    || $playerLineAction == "STEAM USERID validated"
 	    || $playerLineAction == "say_team"
 	    ) {
-	      return; //do nothing, just add to scrubbed log
+	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	    } else if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
 	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
-	      return;
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "changed name to") {
 	      $p = $players[0];
 	      $p->setName($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
 	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
-	      return;
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "killed") {
 	      $attacker = $players[0];
 	      $victim = $players[1];
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
-	      return;
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
-	      return;
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "triggered") {
 	      //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
 	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
@@ -145,17 +194,17 @@ class LogParser {
 	      if($playerLineActionDetail == "kill assist") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "domination") {
 	        $attacker = $players[0];
 	        $victim = $players[1];
 	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "dominations"); 
 	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "times_dominated"); 
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "builtobject") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "builtobjects"); 
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "killedobject") {
           $attacker = $players[0];
 	        $objowner = $players[1];
@@ -163,20 +212,52 @@ class LogParser {
 	          //do not want to count destructions by a player destroying his own stuff
 	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "destroyedobjects"); 
 	        }
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "revenge") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "revenges"); 
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "player_extinguished") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "extinguishes"); 
-	        return;
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "chargedeployed") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
-	        return;
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineActionDetail == "medic_death") {
+	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {
+	          $victim = $players[1];
+	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
+	        }
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineActionDetail == "captureblocked") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_blocked");
+	        return self::GAME_CONTINUE;
 	      }
+	    }
+	  } else if($this->parsingUtils->isLogLineOfType($logLine, 'Team', $logLineDetails)) {
+	    $team = $this->parsingUtils->getTeamFromTeamLine($logLineDetails);
+	    $teamAction = $this->parsingUtils->getTeamAction($logLineDetails);
+	    if($teamAction == "triggered") {
+	      $teamTriggerAction = $this->parsingUtils->getTeamTriggerAction($logLineDetails);
+	      if($teamTriggerAction == "pointcaptured") {
+	        $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
+	        $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
+	        
+	        foreach($players as $p) {
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_captured");
+	        }
+	        return self::GAME_CONTINUE;
+	      }
+	    } else if($teamAction == "current score") {
+	      if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
+	        //the only time there would be zero players for a team is if something screwed up.
+	        return self::GAME_APPEARS_OVER;
+	      }
+	      $this->log->setScoreForTeam($team, $this->parsingUtils->getTeamScore($logLineDetails));
+	      return self::GAME_CONTINUE;
 	    }
 	  }
 	  

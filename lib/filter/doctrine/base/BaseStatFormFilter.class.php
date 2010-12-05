@@ -20,7 +20,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'kills'                   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'assists'                 => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'deaths'                  => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'kills_per_death'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'longest_kill_streak'     => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'capture_points_blocked'  => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'capture_points_captured' => new sfWidgetFormFilterInput(array('with_empty' => false)),
@@ -32,7 +31,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'ubers'                   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'dropped_ubers'           => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'ubers_per_death'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
@@ -43,7 +41,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'kills'                   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'assists'                 => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'deaths'                  => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'kills_per_death'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'longest_kill_streak'     => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'capture_points_blocked'  => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'capture_points_captured' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
@@ -55,7 +52,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'ubers'                   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'dropped_ubers'           => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'ubers_per_death'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('stat_filters[%s]');
@@ -83,7 +79,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'kills'                   => 'Number',
       'assists'                 => 'Number',
       'deaths'                  => 'Number',
-      'kills_per_death'         => 'Number',
       'longest_kill_streak'     => 'Number',
       'capture_points_blocked'  => 'Number',
       'capture_points_captured' => 'Number',
@@ -95,7 +90,6 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => 'Number',
       'ubers'                   => 'Number',
       'dropped_ubers'           => 'Number',
-      'ubers_per_death'         => 'Number',
     );
   }
 }

@@ -23,7 +23,6 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'kills'                   => new sfWidgetFormInputText(),
       'assists'                 => new sfWidgetFormInputText(),
       'deaths'                  => new sfWidgetFormInputText(),
-      'kills_per_death'         => new sfWidgetFormInputText(),
       'longest_kill_streak'     => new sfWidgetFormInputText(),
       'capture_points_blocked'  => new sfWidgetFormInputText(),
       'capture_points_captured' => new sfWidgetFormInputText(),
@@ -35,7 +34,6 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'extinguishes'            => new sfWidgetFormInputText(),
       'ubers'                   => new sfWidgetFormInputText(),
       'dropped_ubers'           => new sfWidgetFormInputText(),
-      'ubers_per_death'         => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -47,7 +45,6 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'kills'                   => new sfValidatorInteger(array('required' => false)),
       'assists'                 => new sfValidatorInteger(array('required' => false)),
       'deaths'                  => new sfValidatorInteger(array('required' => false)),
-      'kills_per_death'         => new sfValidatorInteger(array('required' => false)),
       'longest_kill_streak'     => new sfValidatorInteger(array('required' => false)),
       'capture_points_blocked'  => new sfValidatorInteger(array('required' => false)),
       'capture_points_captured' => new sfValidatorInteger(array('required' => false)),
@@ -59,7 +56,6 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'extinguishes'            => new sfValidatorInteger(array('required' => false)),
       'ubers'                   => new sfValidatorInteger(array('required' => false)),
       'dropped_ubers'           => new sfValidatorInteger(array('required' => false)),
-      'ubers_per_death'         => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat[%s]');

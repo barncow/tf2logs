@@ -38,14 +38,17 @@ class Log extends BaseLog
     foreach($this->Stats as &$stat) {
       if($stat->equalsPlayerInfo($playerInfo)) {
         //no need to add, but will update here.
+        if($playerInfo->getTeam() == null) {
+          $playerInfo->setTeam($stat->getTeam());
+        }
         $stat->setPlayerInfoAttributes($playerInfo);
         $addStat = false;
         break;
       }
     }
     
-    //no need to track the console's stats.
-    if($addStat && $playerInfo->getSteamid() != "Console") {
+    //no need to track the console's stats, and do not add a player unless an ingame action occurs
+    if($addStat && $playerInfo->getSteamid() != "Console" && $playerInfo->getTeam() != null) {
       $stat = new Stat();
       $stat->setPlayerInfoAttributes($playerInfo);
       $this->Stats[] = $stat;
@@ -69,6 +72,15 @@ class Log extends BaseLog
     $stat = &$this->getStatFromSteamid($steamid);
     if($stat === false) throw new InvalidArgumentException("steamid could not be found in incrementStatFromSteamid: $steamid, $statkey");
     $stat->incrementStat($statkey, $increment);
+  }
+  
+  /**
+  * Sets the given team's score to the given value.
+  */
+  public function setScoreForTeam($team, $score) {
+    if($team == "Red") $this->setRedscore($score);
+    else if($team == "Blue") $this->setBluescore($score);
+    else throw new InvalidArgumentException("Invalid team '$team' given to setScoreForTeam method.");
   }
   
   /**

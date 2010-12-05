@@ -90,11 +90,66 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $this->assertEquals('kill assist', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
   }
   
+  public function testDidMedicDieWithUber() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_medicdeath.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertFalse($this->parsingUtils->didMedicDieWithUber($logLineDetails), "med did not die with uber");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_medicdeath_withuber.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertTrue($this->parsingUtils->didMedicDieWithUber($logLineDetails), "med died with uber");
+  }
+  
+  public function testGetWorldTriggerAction() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_world_triggered_roundstart.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("Round_Start", $this->parsingUtils->getWorldTriggerAction($logLineDetails), "got world trigger round_start");
+  }
+  
+  public function testGetTeamFromTeamLine() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("Red", $this->parsingUtils->getTeamFromTeamLine($logLineDetails), "got team line team");
+  }
+  
+  public function testGetTeamAction() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("triggered", $this->parsingUtils->getTeamAction($logLineDetails), "got team action 'trigger'");
+  }
+  
+  public function testGetTeamTriggerAction() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("pointcaptured", $this->parsingUtils->getTeamTriggerAction($logLineDetails), "got team trigger pointcaptured");
+  }
+  
+  public function testGetTeamScore() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(0, $this->parsingUtils->getTeamScore($logLineDetails), "got team line score");
+  }
+  
+  public function testGetTeamNumberPlayers() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore_noplayers.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(0, $this->parsingUtils->getTeamNumberPlayers($logLineDetails), "got team line number of players == 0");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(6, $this->parsingUtils->getTeamNumberPlayers($logLineDetails), "got team line number of players == 6");
+  }
+  
   public function testProcessServerCvarLine() {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_servercvar.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     
     $this->assertEquals('mp_falldamage', $this->parsingUtils->getServerCvarName($logLineDetails), "can get server cvar name");
     $this->assertEquals(0, $this->parsingUtils->getServerCvarValue($logLineDetails), "can get server cvar value");
+  }
+  
+  public function testGetNameFromFilename() {
+    $this->assertEquals('full_withGarbageAtEnd.log',
+      $this->parsingUtils->getNameFromFilename('/home/barncow/tf2logs/test/fixtures/LogParser/full_withGarbageAtEnd.log'), "can get name from filename with path");
   }
 }

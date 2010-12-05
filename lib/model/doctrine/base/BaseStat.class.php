@@ -13,7 +13,6 @@
  * @property integer $kills
  * @property integer $assists
  * @property integer $deaths
- * @property integer $kills_per_death
  * @property integer $longest_kill_streak
  * @property integer $capture_points_blocked
  * @property integer $capture_points_captured
@@ -25,7 +24,6 @@
  * @property integer $extinguishes
  * @property integer $ubers
  * @property integer $dropped_ubers
- * @property integer $ubers_per_death
  * @property Log $Log
  * 
  * @method integer getId()                      Returns the current record's "id" value
@@ -36,7 +34,6 @@
  * @method integer getKills()                   Returns the current record's "kills" value
  * @method integer getAssists()                 Returns the current record's "assists" value
  * @method integer getDeaths()                  Returns the current record's "deaths" value
- * @method integer getKillsPerDeath()           Returns the current record's "kills_per_death" value
  * @method integer getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
  * @method integer getCapturePointsBlocked()    Returns the current record's "capture_points_blocked" value
  * @method integer getCapturePointsCaptured()   Returns the current record's "capture_points_captured" value
@@ -48,7 +45,6 @@
  * @method integer getExtinguishes()            Returns the current record's "extinguishes" value
  * @method integer getUbers()                   Returns the current record's "ubers" value
  * @method integer getDroppedUbers()            Returns the current record's "dropped_ubers" value
- * @method integer getUbersPerDeath()           Returns the current record's "ubers_per_death" value
  * @method Log     getLog()                     Returns the current record's "Log" value
  * @method Stat    setId()                      Sets the current record's "id" value
  * @method Stat    setLogId()                   Sets the current record's "log_id" value
@@ -58,7 +54,6 @@
  * @method Stat    setKills()                   Sets the current record's "kills" value
  * @method Stat    setAssists()                 Sets the current record's "assists" value
  * @method Stat    setDeaths()                  Sets the current record's "deaths" value
- * @method Stat    setKillsPerDeath()           Sets the current record's "kills_per_death" value
  * @method Stat    setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
  * @method Stat    setCapturePointsBlocked()    Sets the current record's "capture_points_blocked" value
  * @method Stat    setCapturePointsCaptured()   Sets the current record's "capture_points_captured" value
@@ -70,7 +65,6 @@
  * @method Stat    setExtinguishes()            Sets the current record's "extinguishes" value
  * @method Stat    setUbers()                   Sets the current record's "ubers" value
  * @method Stat    setDroppedUbers()            Sets the current record's "dropped_ubers" value
- * @method Stat    setUbersPerDeath()           Sets the current record's "ubers_per_death" value
  * @method Stat    setLog()                     Sets the current record's "Log" value
  * 
  * @package    tf2logs
@@ -120,12 +114,6 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('deaths', 'integer', 4, array(
-             'type' => 'integer',
-             'notnull' => true,
-             'default' => 0,
-             'length' => 4,
-             ));
-        $this->hasColumn('kills_per_death', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
@@ -192,12 +180,6 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('dropped_ubers', 'integer', 4, array(
-             'type' => 'integer',
-             'notnull' => true,
-             'default' => 0,
-             'length' => 4,
-             ));
-        $this->hasColumn('ubers_per_death', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
