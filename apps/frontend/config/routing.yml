@@ -4,7 +4,12 @@
 # default rules
 homepage:
   url:   /
-  param: { module: default, action: index }
+  param: { module: log, action: index }
+  
+log_by_id:
+  url:   /log/:id
+  param: { module: log, action: show }
+  requirements: {id: \d+}
 
 # generic rules
 # please, remove them by adding more specific rules

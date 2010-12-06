@@ -11,6 +11,11 @@ test:
 dev:
   doctrine:
     param:
+      dsn:  mysql:dbname=tf2logs_dev;host=localhost
+      
+prod:
+  doctrine:
+    param:
       dsn:  mysql:dbname=tf2logs;host=localhost
  
 all:
