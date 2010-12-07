@@ -10,6 +10,10 @@ log_by_id:
   url:   /log/:id
   param: { module: log, action: show }
   requirements: {id: \d+}
+  
+log_create:
+  url:   /log/add
+  param: { module: log, action: add }
 
 # generic rules
 # please, remove them by adding more specific rules

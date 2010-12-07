@@ -22,6 +22,8 @@ class LogTable extends Doctrine_Table {
       ->innerJoin('l.Stats s')
       ->orderBy('s.team, s.name')
       ->execute();
-      return $l[0];
+     
+      if(count($l) == 0) return null;
+      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
     }
 }
