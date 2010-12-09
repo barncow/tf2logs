@@ -62,9 +62,25 @@ class LogParser {
 	  $this->log->setName($logName);
 	  $file = $this->getRawLogFile($filename);
 	  $game_state = null;
+	  $fileLength = count($file);
 	  
 	  foreach($file as $key => $logLine) {
-	    $game_state = $this->parseLine($logLine);
+	    try {
+	      $game_state = $this->parseLine($logLine);
+	    } catch(UnrecognizedLogLineException $ulle) {
+	      if($key != $fileLength-1) {
+	        //if exception was not thrown on last line, keep throwing it
+	        //last lines are generally corrupted, can just pitch them
+	        throw $ulle;
+	      }
+	    } catch(CorruptLogLineException $clle) {
+	      if($key != $fileLength-1) {
+	        //if exception was not thrown on last line, keep throwing it
+	        //last lines are generally corrupted, can just pitch them
+	        throw $clle;
+	      }
+	    }
+	    
 	    if($game_state == self::GAME_APPEARS_OVER || $game_state == self::GAME_OVER) {
 	      break; //if game is over, no need to continue processing.
 	    }
