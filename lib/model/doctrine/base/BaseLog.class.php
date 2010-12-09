@@ -12,6 +12,7 @@
  * @property timestamp $created_at
  * @property timestamp $updated_at
  * @property Doctrine_Collection $Stats
+ * @property LogFile $LogFile
  * 
  * @method integer             getId()         Returns the current record's "id" value
  * @method string              getName()       Returns the current record's "name" value
@@ -20,6 +21,7 @@
  * @method timestamp           getCreatedAt()  Returns the current record's "created_at" value
  * @method timestamp           getUpdatedAt()  Returns the current record's "updated_at" value
  * @method Doctrine_Collection getStats()      Returns the current record's "Stats" collection
+ * @method LogFile             getLogFile()    Returns the current record's "LogFile" value
  * @method Log                 setId()         Sets the current record's "id" value
  * @method Log                 setName()       Sets the current record's "name" value
  * @method Log                 setRedscore()   Sets the current record's "redscore" value
@@ -27,6 +29,7 @@
  * @method Log                 setCreatedAt()  Sets the current record's "created_at" value
  * @method Log                 setUpdatedAt()  Sets the current record's "updated_at" value
  * @method Log                 setStats()      Sets the current record's "Stats" collection
+ * @method Log                 setLogFile()    Sets the current record's "LogFile" value
  * 
  * @package    tf2logs
  * @subpackage model
@@ -76,6 +79,10 @@ abstract class BaseLog extends sfDoctrineRecord
     {
         parent::setUp();
         $this->hasMany('Stat as Stats', array(
+             'local' => 'id',
+             'foreign' => 'log_id'));
+
+        $this->hasOne('LogFile', array(
              'local' => 'id',
              'foreign' => 'log_id'));
     }

@@ -23,12 +23,10 @@ class Log extends BaseLog
   }
   
   public function appendToScrubbedLog($logLine) {
-    $this->_scrubbedLog .= $logLine."\n";
+    if($this->getLogFile() == null) $this->setLogFile(new LogFile());
+    $this->getLogFile()->appendString($logLine);
   }
   
-  public function getScrubbedLog() {
-    return $this->_scrubbedLog;
-  }
   
   /**
   * Adds a stat record for the given player, if unique.

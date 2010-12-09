@@ -102,3 +102,19 @@ Stat:
     Log: 
       onDelete: CASCADE
       foreignAlias: Stats
+      
+LogFile:
+  columns:
+    log_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    log_data:
+      type: clob(16777215)
+      notnull: true
+  relations:
+    Log:
+      onDelete: CASCADE
+      foreignAlias: LogFile
+      foreignType: one

@@ -8,7 +8,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
-    $this->assertEquals($countOfLines, count(explode("\n", $log->getScrubbedLog()))-1, "count scrubbed lines == count orig lines");
+    $this->assertEquals($countOfLines, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines == count orig lines");
     $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
     
     $this->assertEquals(0, $log->getRedscore(), "red score");

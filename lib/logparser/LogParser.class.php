@@ -3,6 +3,7 @@ require_once('exceptions/UnrecognizedLogLineException.class.php');
 require_once('exceptions/LogFileNotFoundException.class.php');
 require_once('exceptions/CorruptLogLineException.class.php');
 require_once('exceptions/InvalidPlayerStringException.class.php');
+require_once('exceptions/TournamentModeNotFoundException.class.php');
 require_once('ParsingUtils.class.php');
 require_once('PlayerInfo.class.php');
 
@@ -68,7 +69,9 @@ class LogParser {
 	      break; //if game is over, no need to continue processing.
 	    }
 	  }
-	  
+	  if(!$this->isTournamentMode) {
+	    throw new TournamentModeNotFoundException();
+	  }
     $this->finishLog();
 	  $this->log->save();
 	  return $this->log;

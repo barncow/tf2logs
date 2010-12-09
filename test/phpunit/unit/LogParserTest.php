@@ -20,4 +20,12 @@ class unit_LogParserTest extends BaseLogParserTestCase {
   public function testCorruptFileThrowsCorruptLogLineException() {
     $this->logParser->parseLogFile($this->LFIXDIR."blah.log");
   }
+  
+  /**
+  * @expectedException TournamentModeNotFoundException
+  */
+  public function testTournamentModeNotFoundException() {
+    $this->logParser->parseLogFile($this->LFIXDIR."mini_without_tourney.log");
+  }
+  
 }
