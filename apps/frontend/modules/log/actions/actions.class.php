@@ -30,7 +30,7 @@ class logActions extends sfActions {
     $this->setTemplate('new');
   }
 
-  public function executeNew(sfWebRequest $request) {
+  /*public function executeNew(sfWebRequest $request) {
     $this->form = new LogForm();
   }
 
@@ -66,7 +66,7 @@ class logActions extends sfActions {
     $log->delete();
 
     $this->redirect('log/index');
-  }
+  }*/
 
   protected function processForm(sfWebRequest $request, sfForm $form) {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));

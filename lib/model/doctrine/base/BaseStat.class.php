@@ -25,47 +25,53 @@
  * @property integer $ubers
  * @property integer $dropped_ubers
  * @property Log $Log
+ * @property Doctrine_Collection $Weapons
+ * @property Doctrine_Collection $UsedWeapons
  * 
- * @method integer getId()                      Returns the current record's "id" value
- * @method integer getLogId()                   Returns the current record's "log_id" value
- * @method string  getName()                    Returns the current record's "name" value
- * @method string  getSteamid()                 Returns the current record's "steamid" value
- * @method string  getTeam()                    Returns the current record's "team" value
- * @method integer getKills()                   Returns the current record's "kills" value
- * @method integer getAssists()                 Returns the current record's "assists" value
- * @method integer getDeaths()                  Returns the current record's "deaths" value
- * @method integer getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
- * @method integer getCapturePointsBlocked()    Returns the current record's "capture_points_blocked" value
- * @method integer getCapturePointsCaptured()   Returns the current record's "capture_points_captured" value
- * @method integer getDominations()             Returns the current record's "dominations" value
- * @method integer getTimesDominated()          Returns the current record's "times_dominated" value
- * @method integer getRevenges()                Returns the current record's "revenges" value
- * @method integer getBuiltobjects()            Returns the current record's "builtobjects" value
- * @method integer getDestroyedobjects()        Returns the current record's "destroyedobjects" value
- * @method integer getExtinguishes()            Returns the current record's "extinguishes" value
- * @method integer getUbers()                   Returns the current record's "ubers" value
- * @method integer getDroppedUbers()            Returns the current record's "dropped_ubers" value
- * @method Log     getLog()                     Returns the current record's "Log" value
- * @method Stat    setId()                      Sets the current record's "id" value
- * @method Stat    setLogId()                   Sets the current record's "log_id" value
- * @method Stat    setName()                    Sets the current record's "name" value
- * @method Stat    setSteamid()                 Sets the current record's "steamid" value
- * @method Stat    setTeam()                    Sets the current record's "team" value
- * @method Stat    setKills()                   Sets the current record's "kills" value
- * @method Stat    setAssists()                 Sets the current record's "assists" value
- * @method Stat    setDeaths()                  Sets the current record's "deaths" value
- * @method Stat    setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
- * @method Stat    setCapturePointsBlocked()    Sets the current record's "capture_points_blocked" value
- * @method Stat    setCapturePointsCaptured()   Sets the current record's "capture_points_captured" value
- * @method Stat    setDominations()             Sets the current record's "dominations" value
- * @method Stat    setTimesDominated()          Sets the current record's "times_dominated" value
- * @method Stat    setRevenges()                Sets the current record's "revenges" value
- * @method Stat    setBuiltobjects()            Sets the current record's "builtobjects" value
- * @method Stat    setDestroyedobjects()        Sets the current record's "destroyedobjects" value
- * @method Stat    setExtinguishes()            Sets the current record's "extinguishes" value
- * @method Stat    setUbers()                   Sets the current record's "ubers" value
- * @method Stat    setDroppedUbers()            Sets the current record's "dropped_ubers" value
- * @method Stat    setLog()                     Sets the current record's "Log" value
+ * @method integer             getId()                      Returns the current record's "id" value
+ * @method integer             getLogId()                   Returns the current record's "log_id" value
+ * @method string              getName()                    Returns the current record's "name" value
+ * @method string              getSteamid()                 Returns the current record's "steamid" value
+ * @method string              getTeam()                    Returns the current record's "team" value
+ * @method integer             getKills()                   Returns the current record's "kills" value
+ * @method integer             getAssists()                 Returns the current record's "assists" value
+ * @method integer             getDeaths()                  Returns the current record's "deaths" value
+ * @method integer             getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
+ * @method integer             getCapturePointsBlocked()    Returns the current record's "capture_points_blocked" value
+ * @method integer             getCapturePointsCaptured()   Returns the current record's "capture_points_captured" value
+ * @method integer             getDominations()             Returns the current record's "dominations" value
+ * @method integer             getTimesDominated()          Returns the current record's "times_dominated" value
+ * @method integer             getRevenges()                Returns the current record's "revenges" value
+ * @method integer             getBuiltobjects()            Returns the current record's "builtobjects" value
+ * @method integer             getDestroyedobjects()        Returns the current record's "destroyedobjects" value
+ * @method integer             getExtinguishes()            Returns the current record's "extinguishes" value
+ * @method integer             getUbers()                   Returns the current record's "ubers" value
+ * @method integer             getDroppedUbers()            Returns the current record's "dropped_ubers" value
+ * @method Log                 getLog()                     Returns the current record's "Log" value
+ * @method Doctrine_Collection getWeapons()                 Returns the current record's "Weapons" collection
+ * @method Doctrine_Collection getUsedWeapons()             Returns the current record's "UsedWeapons" collection
+ * @method Stat                setId()                      Sets the current record's "id" value
+ * @method Stat                setLogId()                   Sets the current record's "log_id" value
+ * @method Stat                setName()                    Sets the current record's "name" value
+ * @method Stat                setSteamid()                 Sets the current record's "steamid" value
+ * @method Stat                setTeam()                    Sets the current record's "team" value
+ * @method Stat                setKills()                   Sets the current record's "kills" value
+ * @method Stat                setAssists()                 Sets the current record's "assists" value
+ * @method Stat                setDeaths()                  Sets the current record's "deaths" value
+ * @method Stat                setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
+ * @method Stat                setCapturePointsBlocked()    Sets the current record's "capture_points_blocked" value
+ * @method Stat                setCapturePointsCaptured()   Sets the current record's "capture_points_captured" value
+ * @method Stat                setDominations()             Sets the current record's "dominations" value
+ * @method Stat                setTimesDominated()          Sets the current record's "times_dominated" value
+ * @method Stat                setRevenges()                Sets the current record's "revenges" value
+ * @method Stat                setBuiltobjects()            Sets the current record's "builtobjects" value
+ * @method Stat                setDestroyedobjects()        Sets the current record's "destroyedobjects" value
+ * @method Stat                setExtinguishes()            Sets the current record's "extinguishes" value
+ * @method Stat                setUbers()                   Sets the current record's "ubers" value
+ * @method Stat                setDroppedUbers()            Sets the current record's "dropped_ubers" value
+ * @method Stat                setLog()                     Sets the current record's "Log" value
+ * @method Stat                setWeapons()                 Sets the current record's "Weapons" collection
+ * @method Stat                setUsedWeapons()             Sets the current record's "UsedWeapons" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -194,5 +200,14 @@ abstract class BaseStat extends sfDoctrineRecord
              'local' => 'log_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
+
+        $this->hasMany('Weapon as Weapons', array(
+             'refClass' => 'UsedWeapon',
+             'local' => 'stat_id',
+             'foreign' => 'weapon_id'));
+
+        $this->hasMany('UsedWeapon as UsedWeapons', array(
+             'local' => 'id',
+             'foreign' => 'stat_id'));
     }
 }

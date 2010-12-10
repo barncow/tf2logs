@@ -152,4 +152,14 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $this->assertEquals('full_withGarbageAtEnd.log',
       $this->parsingUtils->getNameFromFilename('/home/barncow/tf2logs/test/fixtures/LogParser/full_withGarbageAtEnd.log'), "can get name from filename with path");
   }
+  
+  public function testGetWeapon() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('scattergun', $this->parsingUtils->getWeapon($logLineDetails), "can get weapon from player kill line");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_suicide_rocket.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('tf_projectile_rocket', $this->parsingUtils->getWeapon($logLineDetails), "can get weapon from player suicide line");
+  }
 }

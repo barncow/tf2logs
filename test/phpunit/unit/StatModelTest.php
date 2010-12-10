@@ -63,4 +63,14 @@ class unit_StatModelTest extends sfPHPUnitBaseTestCase {
     $stat->setDeaths(2);
     $this->assertEquals(1.5, $stat->getUbersPerDeath(), "3/2");
   }
+  
+  public function testInsertWeapon() {
+    $log = new Log();
+    $stat = new Stat();
+    $weapon = new Weapon();
+    $weapon->setKeyName('scattergun');
+    $stat->Weapons[] = $weapon;
+    $log->Stats[] = $stat;
+    $log->save();
+  }
 }

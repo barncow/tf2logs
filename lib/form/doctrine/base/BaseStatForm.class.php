@@ -34,6 +34,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'extinguishes'            => new sfWidgetFormInputText(),
       'ubers'                   => new sfWidgetFormInputText(),
       'dropped_ubers'           => new sfWidgetFormInputText(),
+      'weapons_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Weapon')),
     ));
 
     $this->setValidators(array(
@@ -56,6 +57,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'extinguishes'            => new sfValidatorInteger(array('required' => false)),
       'ubers'                   => new sfValidatorInteger(array('required' => false)),
       'dropped_ubers'           => new sfValidatorInteger(array('required' => false)),
+      'weapons_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Weapon', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat[%s]');
@@ -70,6 +72,62 @@ abstract class BaseStatForm extends BaseFormDoctrine
   public function getModelName()
   {
     return 'Stat';
+  }
+
+  public function updateDefaultsFromObject()
+  {
+    parent::updateDefaultsFromObject();
+
+    if (isset($this->widgetSchema['weapons_list']))
+    {
+      $this->setDefault('weapons_list', $this->object->Weapons->getPrimaryKeys());
+    }
+
+  }
+
+  protected function doSave($con = null)
+  {
+    $this->saveWeaponsList($con);
+
+    parent::doSave($con);
+  }
+
+  public function saveWeaponsList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['weapons_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->Weapons->getPrimaryKeys();
+    $values = $this->getValue('weapons_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('Weapons', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('Weapons', array_values($link));
+    }
   }
 
 }

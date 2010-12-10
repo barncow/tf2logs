@@ -213,5 +213,18 @@ class ParsingUtils {
       return false;
     }
 	}
+	
+	/**
+	* this will get the weapon for the loglinedetails given.
+	*/
+	public function getWeapon($logLineDetails) {
+	  $matches;
+    preg_match("/ with \"(.+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+	}
 }
 ?>

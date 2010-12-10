@@ -31,6 +31,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'ubers'                   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'dropped_ubers'           => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'weapons_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Weapon')),
     ));
 
     $this->setValidators(array(
@@ -52,6 +53,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'ubers'                   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'dropped_ubers'           => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'weapons_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Weapon', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat_filters[%s]');
@@ -61,6 +63,24 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
     $this->setupInheritance();
 
     parent::setup();
+  }
+
+  public function addWeaponsListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query
+      ->leftJoin($query->getRootAlias().'.UsedWeapon UsedWeapon')
+      ->andWhereIn('UsedWeapon.weapon_id', $values)
+    ;
   }
 
   public function getModelName()
@@ -90,6 +110,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'extinguishes'            => 'Number',
       'ubers'                   => 'Number',
       'dropped_ubers'           => 'Number',
+      'weapons_list'            => 'ManyKey',
     );
   }
 }
