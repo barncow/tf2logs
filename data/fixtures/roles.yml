@@ -1,0 +1,28 @@
+Role:
+  scout:
+    key_name: scout
+    name: Scout
+  heavyweapons:
+    key_name: heavyweapons
+    name: Heavy Weapons
+  sniper:
+    key_name: sniper
+    name: Sniper
+  medic:
+    key_name: medic
+    name: Medic
+  spy:
+    key_name: spy
+    name: Spy
+  soldier:
+    key_name: soldier
+    name: Soldier
+  demo:
+    key_name: demo
+    name: Demo
+  engineer:
+    key_name: engineer
+    name: Engineer
+  pyro:
+    key_name: pyro
+    name: Pyro

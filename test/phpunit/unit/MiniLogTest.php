@@ -35,6 +35,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->fail("Target has extra weapon: ".$w->getKeyName());
           }
         }
+        
+        foreach($stat->getRoles() as $r) {
+          if($r->getKeyName() != "scout") {
+            $this->fail("Target has extra role: ".$r->getKeyName());
+          }
+        }
       } else if($stat->getSteamid() == "STEAM_0:1:16481274") {
         //verify numbers for "Barncow"
         $this->assertEquals(2, $stat->getDeaths(), "barncow's deaths");
@@ -58,6 +64,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         foreach($stat->getWeapons() as $w) {
           if($w->getKeyName() != "tf_projectile_rocket" && $w->getKeyName() != "sniperrifle" ) {
             $this->fail("Muffin has extra weapon: ".$w->getKeyName());
+          }
+        }
+        
+        foreach($stat->getRoles() as $r) {
+          if($r->getKeyName() != "sniper") {
+            $this->fail("Muffin has extra role: ".$r->getKeyName());
           }
         }
       } else if($stat->getSteamid() == "STEAM_0:0:11710749") {

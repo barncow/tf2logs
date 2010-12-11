@@ -1,0 +1,5 @@
+Weapon:
+  scattergun:
+    key_name: scattergun
+    name: Scattergun
+    Role: scout

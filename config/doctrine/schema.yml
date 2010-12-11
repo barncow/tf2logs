@@ -101,6 +101,10 @@ Stat:
       foreignAlias: Stats
       class: Weapon
       refClass: UsedWeapon
+    Roles:
+      foreignAlias: Stats
+      class: Role
+      refClass: UsedRole
       
 LogFile:
   columns:
@@ -131,6 +135,15 @@ Weapon:
     name:
       type: string(30)
       notnull: false
+    role_id:
+      type: integer
+      primary: false
+      autoincrement: false
+      notnull: false
+  relations:
+    Role:
+      foreignAlias: Weapon
+      foreignType: one
       
 UsedWeapon:
   columns:
@@ -149,3 +162,35 @@ UsedWeapon:
       foreignAlias: UsedWeapons
     Stat:
       foreignAlias: UsedWeapons
+
+Role:
+  columns:
+    id:
+      type: integer
+      primary: true
+      autoincrement: true
+      notnull: true
+    key_name:
+      type: string(12)
+      notnull: true
+    name:
+      type: string(20)
+      notnull: false
+      
+UsedRole:
+  columns:
+    role_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    stat_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+  relations:
+    Role:
+      foreignAlias: UsedRoles
+    Stat:
+      foreignAlias: UsedRoles

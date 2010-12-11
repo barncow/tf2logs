@@ -91,4 +91,9 @@ class Stat extends BaseStat {
     }
     $this->Weapons[] = $w;
   }
+  
+  public function addRoleToPlayerFromWeapon($weapon) {
+    $role = Doctrine::getTable('Role')->getRoleFromWeapon($weapon);
+    if($role) $this->Roles[] = $role;
+  }
 }

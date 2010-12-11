@@ -26,7 +26,9 @@
  * @property integer $dropped_ubers
  * @property Log $Log
  * @property Doctrine_Collection $Weapons
+ * @property Doctrine_Collection $Roles
  * @property Doctrine_Collection $UsedWeapons
+ * @property Doctrine_Collection $UsedRoles
  * 
  * @method integer             getId()                      Returns the current record's "id" value
  * @method integer             getLogId()                   Returns the current record's "log_id" value
@@ -49,7 +51,9 @@
  * @method integer             getDroppedUbers()            Returns the current record's "dropped_ubers" value
  * @method Log                 getLog()                     Returns the current record's "Log" value
  * @method Doctrine_Collection getWeapons()                 Returns the current record's "Weapons" collection
+ * @method Doctrine_Collection getRoles()                   Returns the current record's "Roles" collection
  * @method Doctrine_Collection getUsedWeapons()             Returns the current record's "UsedWeapons" collection
+ * @method Doctrine_Collection getUsedRoles()               Returns the current record's "UsedRoles" collection
  * @method Stat                setId()                      Sets the current record's "id" value
  * @method Stat                setLogId()                   Sets the current record's "log_id" value
  * @method Stat                setName()                    Sets the current record's "name" value
@@ -71,7 +75,9 @@
  * @method Stat                setDroppedUbers()            Sets the current record's "dropped_ubers" value
  * @method Stat                setLog()                     Sets the current record's "Log" value
  * @method Stat                setWeapons()                 Sets the current record's "Weapons" collection
+ * @method Stat                setRoles()                   Sets the current record's "Roles" collection
  * @method Stat                setUsedWeapons()             Sets the current record's "UsedWeapons" collection
+ * @method Stat                setUsedRoles()               Sets the current record's "UsedRoles" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -206,7 +212,16 @@ abstract class BaseStat extends sfDoctrineRecord
              'local' => 'stat_id',
              'foreign' => 'weapon_id'));
 
+        $this->hasMany('Role as Roles', array(
+             'refClass' => 'UsedRole',
+             'local' => 'stat_id',
+             'foreign' => 'role_id'));
+
         $this->hasMany('UsedWeapon as UsedWeapons', array(
+             'local' => 'id',
+             'foreign' => 'stat_id'));
+
+        $this->hasMany('UsedRole as UsedRoles', array(
              'local' => 'id',
              'foreign' => 'stat_id'));
     }

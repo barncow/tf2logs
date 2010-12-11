@@ -91,6 +91,15 @@ class Log extends BaseLog
   }
   
   /**
+  * This will add the role, found by the weapon, to the steamid.
+  */
+  public function addRoleToSteamidFromWeapon($steamid, $weapon) {
+    $stat = &$this->getStatFromSteamid($steamid);
+    if($stat === false) throw new InvalidArgumentException("steamid could not be found in addRoleToSteamidFromWeapon: $steamid, $weapon");
+    $stat->addRoleToPlayerFromWeapon($weapon);
+  }
+  
+  /**
   * Gets a stat by reference by steamid. Protected since 
   * allowing the end user of the class to update the stat
   * outside of this class is unwise.

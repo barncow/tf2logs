@@ -35,6 +35,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'ubers'                   => new sfWidgetFormInputText(),
       'dropped_ubers'           => new sfWidgetFormInputText(),
       'weapons_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Weapon')),
+      'roles_list'              => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Role')),
     ));
 
     $this->setValidators(array(
@@ -58,6 +59,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'ubers'                   => new sfValidatorInteger(array('required' => false)),
       'dropped_ubers'           => new sfValidatorInteger(array('required' => false)),
       'weapons_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Weapon', 'required' => false)),
+      'roles_list'              => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Role', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat[%s]');
@@ -83,11 +85,17 @@ abstract class BaseStatForm extends BaseFormDoctrine
       $this->setDefault('weapons_list', $this->object->Weapons->getPrimaryKeys());
     }
 
+    if (isset($this->widgetSchema['roles_list']))
+    {
+      $this->setDefault('roles_list', $this->object->Roles->getPrimaryKeys());
+    }
+
   }
 
   protected function doSave($con = null)
   {
     $this->saveWeaponsList($con);
+    $this->saveRolesList($con);
 
     parent::doSave($con);
   }
@@ -127,6 +135,44 @@ abstract class BaseStatForm extends BaseFormDoctrine
     if (count($link))
     {
       $this->object->link('Weapons', array_values($link));
+    }
+  }
+
+  public function saveRolesList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['roles_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->Roles->getPrimaryKeys();
+    $values = $this->getValue('roles_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('Roles', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('Roles', array_values($link));
     }
   }
 

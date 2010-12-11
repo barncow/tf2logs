@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Weapon form base class.
+ * Role form base class.
  *
- * @method Weapon getObject() Returns the current form's model object
+ * @method Role getObject() Returns the current form's model object
  *
  * @package    tf2logs
  * @subpackage form
  * @author     Your name here
  * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 29553 2010-05-20 14:33:00Z Kris.Wallsmith $
  */
-abstract class BaseWeaponForm extends BaseFormDoctrine
+abstract class BaseRoleForm extends BaseFormDoctrine
 {
   public function setup()
   {
@@ -18,19 +18,17 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
       'id'         => new sfWidgetFormInputHidden(),
       'key_name'   => new sfWidgetFormInputText(),
       'name'       => new sfWidgetFormInputText(),
-      'role_id'    => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'add_empty' => true)),
       'stats_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Stat')),
     ));
 
     $this->setValidators(array(
       'id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'key_name'   => new sfValidatorString(array('max_length' => 20)),
-      'name'       => new sfValidatorString(array('max_length' => 30, 'required' => false)),
-      'role_id'    => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'required' => false)),
+      'key_name'   => new sfValidatorString(array('max_length' => 12)),
+      'name'       => new sfValidatorString(array('max_length' => 20, 'required' => false)),
       'stats_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Stat', 'required' => false)),
     ));
 
-    $this->widgetSchema->setNameFormat('weapon[%s]');
+    $this->widgetSchema->setNameFormat('role[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
@@ -41,7 +39,7 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
 
   public function getModelName()
   {
-    return 'Weapon';
+    return 'Role';
   }
 
   public function updateDefaultsFromObject()
