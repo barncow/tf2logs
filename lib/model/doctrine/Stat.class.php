@@ -77,4 +77,18 @@ class Stat extends BaseStat {
     if($deaths == 0) return $ubers;
     return (float) $ubers/$deaths;
   }
+  
+  /**
+  * This will add the given weapon to the player's stats.
+  * If the weapon does not exist in the database, a new one is created.
+  */
+  public function addWeaponToPlayer($weapon) {
+    $w = Doctrine::getTable('Weapon')->findOneByKeyName($weapon);
+    if(!$w) {
+      $w = new Weapon();
+      $w->setKeyName($weapon);
+      $w->save();
+    }
+    $this->Weapons[] = $w;
+  }
 }

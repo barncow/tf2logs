@@ -161,5 +161,9 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_suicide_rocket.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('tf_projectile_rocket', $this->parsingUtils->getWeapon($logLineDetails), "can get weapon from player suicide line");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_killed_pistolscout.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('pistol_scout', $this->parsingUtils->getWeapon($logLineDetails), "can get pistol_scout");
   }
 }

@@ -199,18 +199,22 @@ class LogParser {
 	    } else if($playerLineAction == "killed") {
 	      $attacker = $players[0];
 	      $victim = $players[1];
+	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
+	      $this->log->addWeaponToSteamid($attacker->getSteamid(), $weapon);
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];
+	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
+	      $this->log->addWeaponToSteamid($p->getSteamid(), $weapon);
 	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "triggered") {
-	      //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
+	    } else if($playerLineAction == "triggered") {	      
 	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
 	      
 	      if($playerLineActionDetail == "kill assist") {
+	        //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
 	        return self::GAME_CONTINUE;
