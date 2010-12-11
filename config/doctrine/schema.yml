@@ -203,7 +203,10 @@ Player:
     id:
       type: integer
       primary: true
-      autoincrement: false
+      autoincrement: true
+      notnull: true
+    numeric_steamid:
+      type: integer
       notnull: true
     steamid:
       type: string(30)

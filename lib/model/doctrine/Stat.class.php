@@ -14,7 +14,11 @@ class Stat extends BaseStat {
   * Sets the attributes found in the PlayerInfo object into this object.
   */
   function setPlayerInfoAttributes(PlayerInfo $playerInfo) {
-    $this->setSteamid($playerInfo->getSteamid());
+    if(!isset($this->Player)) {
+      $p = Doctrine::getTable('Player')->findOneBySteamid($playerInfo->getSteamid());
+      if($p != null) $this->setPlayer($p);
+      else $this->Player->setSteamid($playerInfo->getSteamid());
+    }
     $this->setName($playerInfo->getName());
     $this->setTeam($playerInfo->getTeam());
   }
@@ -24,7 +28,7 @@ class Stat extends BaseStat {
   * the given playerInfo.
   */
   public function equalsPlayerInfo(PlayerInfo $playerInfo) {
-    return $this->getSteamid() == $playerInfo->getSteamid();
+    return $this->getPlayer()->getSteamid() == $playerInfo->getSteamid();
   }
   
   /**

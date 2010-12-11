@@ -106,7 +106,7 @@ class Log extends BaseLog
   */
   protected function &getStatFromSteamid($steamid) {
     foreach($this->Stats as &$stat) {
-      if($stat->getSteamid() == $steamid) {
+      if($stat->getPlayer()->getSteamid() == $steamid) {
         return $stat;
       }
     }

@@ -20,7 +20,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $this->assertEquals(895, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
     
     foreach($log->getStats() as $stat) {
-      $this->assertNotNull($stat->getTeam(), $stat->getSteamid()." team is not null");
+      $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
     }
   }
 }

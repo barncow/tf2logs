@@ -13,13 +13,15 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'steamid'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'credential' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'numeric_steamid' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'steamid'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'credential'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
-      'steamid'    => new sfValidatorPass(array('required' => false)),
-      'credential' => new sfValidatorPass(array('required' => false)),
+      'numeric_steamid' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'steamid'         => new sfValidatorPass(array('required' => false)),
+      'credential'      => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('player_filters[%s]');
@@ -39,9 +41,10 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
   public function getFields()
   {
     return array(
-      'id'         => 'Number',
-      'steamid'    => 'Text',
-      'credential' => 'Text',
+      'id'              => 'Number',
+      'numeric_steamid' => 'Number',
+      'steamid'         => 'Text',
+      'credential'      => 'Text',
     );
   }
 }
