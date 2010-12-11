@@ -15,7 +15,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
     $this->setWidgets(array(
       'log_id'                  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'add_empty' => true)),
       'name'                    => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'steamid'                 => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'player_id'               => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Player'), 'add_empty' => true)),
       'team'                    => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'kills'                   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'assists'                 => new sfWidgetFormFilterInput(array('with_empty' => false)),
@@ -38,7 +38,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
     $this->setValidators(array(
       'log_id'                  => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Log'), 'column' => 'id')),
       'name'                    => new sfValidatorPass(array('required' => false)),
-      'steamid'                 => new sfValidatorPass(array('required' => false)),
+      'player_id'               => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Player'), 'column' => 'id')),
       'team'                    => new sfValidatorPass(array('required' => false)),
       'kills'                   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'assists'                 => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
@@ -114,7 +114,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'id'                      => 'Number',
       'log_id'                  => 'ForeignKey',
       'name'                    => 'Text',
-      'steamid'                 => 'Text',
+      'player_id'               => 'ForeignKey',
       'team'                    => 'Text',
       'kills'                   => 'Number',
       'assists'                 => 'Number',

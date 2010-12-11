@@ -31,8 +31,8 @@ Stat:
     name:
       type: string(100)
       notnull: true
-    steamid:
-      type: string(30)
+    player_id:
+      type: integer
       notnull: true
     team:
       type: string(4)
@@ -105,6 +105,8 @@ Stat:
       foreignAlias: Stats
       class: Role
       refClass: UsedRole
+    Player: 
+      foreignAlias: Stats
       
 LogFile:
   columns:
@@ -194,3 +196,19 @@ UsedRole:
       foreignAlias: UsedRoles
     Stat:
       foreignAlias: UsedRoles
+
+Player:
+  columns:
+    #note, this will be the 64bit steamid.
+    id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    steamid:
+      type: string(30)
+      notnull: true
+    credential:
+      type: string(10)
+      default: user
+      notnull: true

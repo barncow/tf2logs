@@ -1,0 +1,28 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: authModule, action: index }
+  
+controlpanel:
+  url:   /authModule/controlPanel
+  param: { module: authModule, action: controlPanel }
+  
+openid_finishauth:
+  url: /authModule/finish
+  param: { module: authModule, action: finish }
+  
+openid_error:
+  url: /authModule/openidError
+  param: { module: authModule, action: openidError }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

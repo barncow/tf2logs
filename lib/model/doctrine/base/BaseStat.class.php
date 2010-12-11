@@ -8,7 +8,7 @@
  * @property integer $id
  * @property integer $log_id
  * @property string $name
- * @property string $steamid
+ * @property integer $player_id
  * @property string $team
  * @property integer $kills
  * @property integer $assists
@@ -27,13 +27,14 @@
  * @property Log $Log
  * @property Doctrine_Collection $Weapons
  * @property Doctrine_Collection $Roles
+ * @property Player $Player
  * @property Doctrine_Collection $UsedWeapons
  * @property Doctrine_Collection $UsedRoles
  * 
  * @method integer             getId()                      Returns the current record's "id" value
  * @method integer             getLogId()                   Returns the current record's "log_id" value
  * @method string              getName()                    Returns the current record's "name" value
- * @method string              getSteamid()                 Returns the current record's "steamid" value
+ * @method integer             getPlayerId()                Returns the current record's "player_id" value
  * @method string              getTeam()                    Returns the current record's "team" value
  * @method integer             getKills()                   Returns the current record's "kills" value
  * @method integer             getAssists()                 Returns the current record's "assists" value
@@ -52,12 +53,13 @@
  * @method Log                 getLog()                     Returns the current record's "Log" value
  * @method Doctrine_Collection getWeapons()                 Returns the current record's "Weapons" collection
  * @method Doctrine_Collection getRoles()                   Returns the current record's "Roles" collection
+ * @method Player              getPlayer()                  Returns the current record's "Player" value
  * @method Doctrine_Collection getUsedWeapons()             Returns the current record's "UsedWeapons" collection
  * @method Doctrine_Collection getUsedRoles()               Returns the current record's "UsedRoles" collection
  * @method Stat                setId()                      Sets the current record's "id" value
  * @method Stat                setLogId()                   Sets the current record's "log_id" value
  * @method Stat                setName()                    Sets the current record's "name" value
- * @method Stat                setSteamid()                 Sets the current record's "steamid" value
+ * @method Stat                setPlayerId()                Sets the current record's "player_id" value
  * @method Stat                setTeam()                    Sets the current record's "team" value
  * @method Stat                setKills()                   Sets the current record's "kills" value
  * @method Stat                setAssists()                 Sets the current record's "assists" value
@@ -76,6 +78,7 @@
  * @method Stat                setLog()                     Sets the current record's "Log" value
  * @method Stat                setWeapons()                 Sets the current record's "Weapons" collection
  * @method Stat                setRoles()                   Sets the current record's "Roles" collection
+ * @method Stat                setPlayer()                  Sets the current record's "Player" value
  * @method Stat                setUsedWeapons()             Sets the current record's "UsedWeapons" collection
  * @method Stat                setUsedRoles()               Sets the current record's "UsedRoles" collection
  * 
@@ -103,10 +106,9 @@ abstract class BaseStat extends sfDoctrineRecord
              'notnull' => true,
              'length' => 100,
              ));
-        $this->hasColumn('steamid', 'string', 30, array(
-             'type' => 'string',
+        $this->hasColumn('player_id', 'integer', null, array(
+             'type' => 'integer',
              'notnull' => true,
-             'length' => 30,
              ));
         $this->hasColumn('team', 'string', 4, array(
              'type' => 'string',
@@ -216,6 +218,10 @@ abstract class BaseStat extends sfDoctrineRecord
              'refClass' => 'UsedRole',
              'local' => 'stat_id',
              'foreign' => 'role_id'));
+
+        $this->hasOne('Player', array(
+             'local' => 'player_id',
+             'foreign' => 'id'));
 
         $this->hasMany('UsedWeapon as UsedWeapons', array(
              'local' => 'id',
