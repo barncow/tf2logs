@@ -166,4 +166,8 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('pistol_scout', $this->parsingUtils->getWeapon($logLineDetails), "can get pistol_scout");
   }
+  
+  public function testGetNumericSteamidFromOpenID() {
+    $this->assertEquals(76561197993228277, $this->parsingUtils->getNumericSteamidFromOpenID("http://steamcommunity.com/openid/id/76561197993228277"));
+  }
 }

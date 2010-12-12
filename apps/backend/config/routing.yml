@@ -7,22 +7,22 @@ homepage:
   param: { module: authModule, action: index }
   
 controlpanel:
-  url:   /authModule/controlPanel
+  url:   /player/controlPanel
   param: { module: authModule, action: controlPanel }
   
+login:
+  url:   /player/login
+  param: { module: authModule, action: login }
+  
+logout:
+  url:   /player/logout
+  param: { module: authModule, action: logout }
+  
 openid_finishauth:
-  url: /authModule/finish
+  url: /player/finish
   param: { module: authModule, action: finish }
   
 openid_error:
-  url: /authModule/openidError
+  url: /player/openidError
   param: { module: authModule, action: openidError }
 
-# generic rules
-# please, remove them by adding more specific rules
-default_index:
-  url:   /:module
-  param: { action: index }
-
-default:
-  url:   /:module/:action/*

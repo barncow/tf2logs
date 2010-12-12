@@ -28,16 +28,27 @@ class authModuleActions extends BasesfPHPOpenIDAuthActions {
   public function executeLogout() {
     $this->getUser()->setAuthenticated(false);
     $this->getResponse()->setCookie('known_openid_identity', '');
+    $this->getUser()->clearCredentials();
     $this->getUser()->setFlash('notice', 'You were successfully logged out.');
     $this->redirect('@homepage');
   }
   
   public function openIDCallback($openid_validation_result) {
+    $parsingUtils = new ParsingUtils();
+    $steamid = $parsingUtils->getNumericSteamidFromOpenID($openid_validation_result['identity']);
+    $player = Doctrine::getTable('Player')->findOneByNumericSteamid($steamid);
+    if(!$player) {
+      $player = new Player();
+      $player->setNumericSteamid($steamid);
+      $player->save();
+    }
+    
+    $this->getUser()->addCredential($player->getCredential());
+    
+    //symfony credential system should handle what a user has access to. Just assume it's ok.
     $this->getUser()->setFlash('notice', 'Successfully logged in.');
-    //$user->addCredential('foo');
     $this->getUser()->setAuthenticated(true);
     sfContext::getInstance()->getResponse()->setCookie('known_openid_identity',$openid_validation_result['identity']);
-    $back = '@controlpanel';
-    $this->redirect($back);
+    $this->redirect('@controlpanel');
   }
 }

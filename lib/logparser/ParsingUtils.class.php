@@ -226,5 +226,18 @@ class ParsingUtils {
       return false;
     }
 	}
+	
+	/**
+	* This retrieves the numeric steam id from the open ID address given from Steam.
+	*/
+	public function getNumericSteamidFromOpenID($openid) {
+	  $matches;
+    preg_match("/\/(\d+)$/", $openid, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+	}
 }
 ?>

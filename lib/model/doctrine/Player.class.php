@@ -16,6 +16,11 @@ class Player extends BasePlayer {
     $this->_set('numeric_steamid', $this->convertStandardToNumericSteamid($steamid));
   }
   
+  public function setNumericSteamid($steamid) {
+    $this->_set('numeric_steamid', $steamid);
+    $this->_set('steamid', $this->convertNumericToStandardSteamid($steamid));
+  }
+  
   /**
   * Converts textual steamids (ie. STEAM_0:1:20348) to the numeric version (ie. 76561197993228277)
   * Code provided by: http://forums.alliedmods.net/showpost.php?p=565979&postcount=16

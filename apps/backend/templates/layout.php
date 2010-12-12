@@ -9,6 +9,10 @@
     <?php include_javascripts() ?>
   </head>
   <body>
+    <?php if ($sf_user->isAuthenticated()): ?>
+      <div class="auth_menu"><?php echo link_to('Logout', '@logout') ?> <?php echo link_to('Control Panel', '@controlpanel') ?></div>
+    <?php endif ?>
+    
     <?php if ($sf_user->hasFlash('notice')): ?>
       <div class="flash_notice"><?php echo $sf_user->getFlash('notice') ?></div>
     <?php endif ?>
@@ -18,5 +22,7 @@
     <?php endif ?>
     
     <?php echo $sf_content ?>
+    
+    <div class="footer">OpenID authentication is <a href="http://steampowered.com">Powered by Steam</a>.</div>
   </body>
 </html>

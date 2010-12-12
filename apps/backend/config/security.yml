@@ -7,5 +7,10 @@
 finish:
   is_secure: false
   
+logout:
+  is_secure: true
+  credentials: [[owner, user]]
+  
 default:
   is_secure: true
+  credentials: owner
