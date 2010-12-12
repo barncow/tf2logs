@@ -20,10 +20,31 @@ class LogTable extends Doctrine_Table {
         ->createQuery('l')
         ->where('l.id = ?', $id)
         ->innerJoin('l.Stats s')
+        ->innerJoin('s.Player p')
+        ->innerJoin('s.Weapons w')
         ->orderBy('s.team, s.name')
         ->execute();
      
       if(count($l) == 0) return null;
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
+    }
+    
+    public function getErrorLogById($id) {
+      $l = $this
+        ->createQuery('l')
+        ->where('l.id = ?', $id)
+        ->andWhere('l.error_log_name is not null')
+        ->execute();
+     
+      if(count($l) == 0) return null;
+      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
+    }
+    
+    public function listErrorLogs() {
+      return $this
+        ->createQuery('l')
+        ->where('l.error_log_name is not null')
+        ->orderBy('l.created_at ASC')
+        ->execute();
     }
 }

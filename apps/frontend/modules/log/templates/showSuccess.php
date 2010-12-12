@@ -1,4 +1,9 @@
 <?php use_helper('Log') ?>
+<?php use_stylesheet('jquery.tooltip.css'); ?>
+<?php use_javascript('jquery-1.4.4.min.js'); ?>
+<?php use_javascript('jquery.dimensions.js'); ?>
+<?php use_javascript('jquery.tooltip.min.js'); ?>
+<?php use_javascript('logshow.js'); ?>
 <div id="logName"><?php echo $log->getName() ?></div>
 
 <div id="score">
@@ -10,28 +15,28 @@
 Created  <?php echo $log->getCreatedAt() ?><br/>
 Last Generated <?php echo $log->getUpdatedAt() ?> 
      
-<table>
+<table id="statPanel">
   <thead>
     <tr>
       <th>Name</th>
       <th>Steam ID</th>
       <th>Team</th>
-      <th>Kills</th>
-      <th>Assists</th>
-      <th>Deaths</th>
-      <th>Kills/Death</th>
-      <th>Longest Kill Streak</th>
-      <th>Capture Points Blocked</th>
-      <th>Capture Points Captured</th>
-      <th>Dominations</th>
-      <th>Times Dominated</th>
-      <th>Revenges</th>
-      <th>Built Objects</th>
-      <th>Destroyed Objects</th>
-      <th>Extinguishes</th>
-      <th>Ubers</th>
-      <th>Ubers/Death</th>
-      <th>Dropped Ubers</th>
+      <th title="Kills">K</th>
+      <th title="Assists">A</th>
+      <th title="Deaths">D</th>
+      <th title="Kills/Death">KPD</th>
+      <th title="Longest Kill Streak">LKS</th>
+      <th title="Capture Points Blocked">CPB</th>
+      <th title="Capture Points Captured">CPC</th>
+      <th title="Dominations">DOM</th>
+      <th title="Times Dominated">TDM</th>
+      <th title="Revenges">R</th>
+      <th title="Built Objects">BO</th>
+      <th title="Destroyed Objects">DO</th>
+      <th title="Extinguishes">E</th>
+      <th title="Ubers">U</th>
+      <th title="Ubers/Death">UPD</th>
+      <th title="Dropped Ubers">DU</th>
     </tr>
   </thead>
   <tbody>

@@ -55,11 +55,14 @@ class LogParser {
 	/**
 	* This will parse the entire log file.
 	*/
-	public function parseLogFile($filename, $logName = null) {
+	public function parseLogFile($filename, $logName = null, Log $logObj = null) {
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
 	  }
 	  $this->log->setName($logName);
+	  if($logObj != null) {
+	    $this->log = $logObj;
+	  }
 	  $file = $this->getRawLogFile($filename);
 	  $game_state = null;
 	  $fileLength = count($file);
@@ -151,6 +154,8 @@ class LogParser {
 	        $this->log->set_timeStart($dt);
 	      }
 	      return self::GAME_CONTINUE;
+	    } else if($worldTriggerAction == "Game_Over") {
+	      return self::GAME_OVER;
 	    } else if($worldTriggerAction == "Round_Setup_Begin"
 	      || $worldTriggerAction == "Round_Setup_End"
 	      || $worldTriggerAction == "Round_Overtime"

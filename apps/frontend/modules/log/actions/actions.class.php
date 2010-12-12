@@ -10,9 +10,7 @@
 class logActions extends sfActions {
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->findAll();
-    
-    $this->form = new LogForm();
-    
+    $this->form = new LogForm(); 
   }
   
   public function executeShow(sfWebRequest $request) {
@@ -27,7 +25,7 @@ class logActions extends sfActions {
 
     $this->processForm($request, $this->form);
 
-    $this->setTemplate('new');
+    $this->setTemplate('index');
   }
 
   /*public function executeNew(sfWebRequest $request) {
@@ -74,10 +72,29 @@ class logActions extends sfActions {
     if ($this->form->isValid()) {
       $lastid = null;
       foreach ($request->getFiles($form->getName()) as $uploadedFile) {
-        $uploadDir = sfConfig::get('sf_upload_dir') . '/logs';
-        move_uploaded_file($uploadedFile["tmp_name"], $uploadDir . "/" . $uploadedFile["name"]);
+        $uploadDir = sfConfig::get('app_uploadedlogs');
+        $upload_filename = $uploadedFile["name"];
+        move_uploaded_file($uploadedFile["tmp_name"], $uploadDir . "/" . $upload_filename);
+        
         $logParser = new LogParser();
-        $log = $logParser->parseLogFile($uploadDir . "/" . $uploadedFile["name"]);
+        $log = null;
+        
+        try {
+          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $form->getValue('name'));
+        } catch(Exception $e) {
+          rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
+          //create a log record so the user can find his way back when the issue is fixed.
+          $log = new Log();
+          $log->setName($form->getValue('name'));
+          $log->setErrorLogName($upload_filename);
+          $log->save();
+          throw $e;
+        }
+        
+        if($log) {
+          unlink($uploadDir . "/" . $upload_filename);
+        }
+        
         $lastid = $log->getId();
       }
       $this->redirect('log/show?id='.$lastid);

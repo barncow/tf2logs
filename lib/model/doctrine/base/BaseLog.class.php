@@ -9,21 +9,24 @@
  * @property string $name
  * @property integer $redscore
  * @property integer $bluescore
+ * @property string $error_log_name
  * @property Doctrine_Collection $Stats
  * @property LogFile $LogFile
  * 
- * @method integer             getId()        Returns the current record's "id" value
- * @method string              getName()      Returns the current record's "name" value
- * @method integer             getRedscore()  Returns the current record's "redscore" value
- * @method integer             getBluescore() Returns the current record's "bluescore" value
- * @method Doctrine_Collection getStats()     Returns the current record's "Stats" collection
- * @method LogFile             getLogFile()   Returns the current record's "LogFile" value
- * @method Log                 setId()        Sets the current record's "id" value
- * @method Log                 setName()      Sets the current record's "name" value
- * @method Log                 setRedscore()  Sets the current record's "redscore" value
- * @method Log                 setBluescore() Sets the current record's "bluescore" value
- * @method Log                 setStats()     Sets the current record's "Stats" collection
- * @method Log                 setLogFile()   Sets the current record's "LogFile" value
+ * @method integer             getId()             Returns the current record's "id" value
+ * @method string              getName()           Returns the current record's "name" value
+ * @method integer             getRedscore()       Returns the current record's "redscore" value
+ * @method integer             getBluescore()      Returns the current record's "bluescore" value
+ * @method string              getErrorLogName()   Returns the current record's "error_log_name" value
+ * @method Doctrine_Collection getStats()          Returns the current record's "Stats" collection
+ * @method LogFile             getLogFile()        Returns the current record's "LogFile" value
+ * @method Log                 setId()             Sets the current record's "id" value
+ * @method Log                 setName()           Sets the current record's "name" value
+ * @method Log                 setRedscore()       Sets the current record's "redscore" value
+ * @method Log                 setBluescore()      Sets the current record's "bluescore" value
+ * @method Log                 setErrorLogName()   Sets the current record's "error_log_name" value
+ * @method Log                 setStats()          Sets the current record's "Stats" collection
+ * @method Log                 setLogFile()        Sets the current record's "LogFile" value
  * 
  * @package    tf2logs
  * @subpackage model
@@ -56,6 +59,11 @@ abstract class BaseLog extends sfDoctrineRecord
              'notnull' => true,
              'default' => 0,
              'length' => 4,
+             ));
+        $this->hasColumn('error_log_name', 'string', 50, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 50,
              ));
     }
 
