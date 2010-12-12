@@ -26,3 +26,11 @@ openid_error:
   url: /player/openidError
   param: { module: authModule, action: openidError }
 
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

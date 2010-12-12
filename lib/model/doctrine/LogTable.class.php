@@ -16,12 +16,12 @@ class LogTable extends Doctrine_Table {
     }
     
     public function getLogById($id) {
-      $l = Doctrine::getTable('Log')
-      ->createQuery('l')
-      ->where('l.id = ?', $id)
-      ->innerJoin('l.Stats s')
-      ->orderBy('s.team, s.name')
-      ->execute();
+      $l = $this
+        ->createQuery('l')
+        ->where('l.id = ?', $id)
+        ->innerJoin('l.Stats s')
+        ->orderBy('s.team, s.name')
+        ->execute();
      
       if(count($l) == 0) return null;
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)

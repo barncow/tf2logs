@@ -3,3 +3,11 @@ Weapon:
     key_name: scattergun
     name: Scattergun
     Role: scout
+  rocketlauncher:
+    key_name: tf_projectile_rocket
+    name: Rocket Launcher
+    Role: soldier
+  world:
+    key_name: world
+    name: World
+    #no role

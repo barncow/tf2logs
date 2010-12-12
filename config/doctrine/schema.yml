@@ -199,7 +199,6 @@ UsedRole:
 
 Player:
   columns:
-    #note, this will be the 64bit steamid.
     id:
       type: integer
       primary: true
