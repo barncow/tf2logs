@@ -50,6 +50,9 @@ class logActions extends sfActions {
     $request->checkCSRFProtection();
 
     $this->forward404Unless($log = Doctrine_Core::getTable('Log')->find(array($request->getParameter('id'))), sprintf('Object log does not exist (%s).', $request->getParameter('id')));
+    if($log->getErrorLogName() && file_exists(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName())) {
+      unlink(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
+    }
     $log->delete();
 
     $this->redirect('log/unfinished');

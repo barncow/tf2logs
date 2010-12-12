@@ -93,6 +93,18 @@ class Stat extends BaseStat {
     $this->Weapons[] = $w;
   }
   
+  /**
+  * This will add the given role to the player's stats.
+  * If the role does not exist in the database, an exception is thrown.
+  */
+  public function addRoleToPlayer($role) {
+    $r = Doctrine::getTable('Role')->findOneByKeyName($role);
+    if(!$r) {
+      throw new InvalidArgumentException("Invalid role given to addRoleToPlayer method: ".$role);
+    }
+    $this->Roles[] = $r;
+  }
+  
   public function addRoleToPlayerFromWeapon($weapon) {
     $role = Doctrine::getTable('Role')->getRoleFromWeapon($weapon);
     if($role) $this->Roles[] = $role;

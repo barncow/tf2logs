@@ -267,12 +267,14 @@ class LogParser {
 	      } else if($playerLineActionDetail == "chargedeployed") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
+	        $this->log->addRoleToSteamid($p->getSteamid(), "medic");
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "medic_death") {
-	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {
-	          $victim = $players[1];
+	        $victim = $players[1];
+	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
 	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
 	        }
+	        $this->log->addRoleToSteamid($victim->getSteamid(), "medic");
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "captureblocked") {
 	        $p = $players[0];

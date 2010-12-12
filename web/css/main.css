@@ -17,11 +17,11 @@ body {
   text-align: center;
 }
 
-#score .blue {
+#score .Blue {
   color: blue;
 }
 
-#score .red {
+#score .Red {
   color: #990000;
 }
 
@@ -29,4 +29,17 @@ body {
   font-size: 40px;
   font-weight: bold;
   text-align: center;
+}
+
+#statPanel .Blue {
+  background-color: #001A33;
+}
+
+#statPanel .Red {
+  background-color: #33001A;
+}
+
+#statPanel, #statPanel td {
+  border: 1px solid #D4D4D4;
+  border-collapse: separate;
 }

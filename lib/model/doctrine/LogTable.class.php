@@ -22,6 +22,8 @@ class LogTable extends Doctrine_Table {
         ->innerJoin('l.Stats s')
         ->innerJoin('s.Player p')
         ->innerJoin('s.Weapons w')
+        ->leftJoin('s.Roles r')
+        ->andWhere('w.key_name != ?', 'world')
         ->orderBy('s.team, s.name')
         ->execute();
      

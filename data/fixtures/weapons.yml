@@ -11,3 +11,55 @@ Weapon:
     key_name: world
     name: World
     #no role
+  sniperrifle:
+    key_name: sniperrifle
+    name: Sniper Rifle
+    Role: sniper
+  tf_projectile_pipe_remote:
+    key_name: tf_projectile_pipe_remote
+    name: Sticky Launcher
+    Role: demo
+  tf_projectile_pipe:
+    key_name: tf_projectile_pipe
+    name: Pipe Launcher
+    Role: demo
+  shotgun_soldier:
+    key_name: shotgun_soldier
+    name: Soldier's Shotgun
+    Role: soldier
+  pistol_scout:
+    key_name: pistol_scout
+    name: Scout's Pistol
+    Role: scout
+  minigun:
+    key_name: minigun
+    name: Minigun
+    Role: heavyweapons
+  gloves:
+    key_name: gloves
+    name: K.G.B.
+    Role: heavyweapons
+  revolver:
+    key_name: revolver
+    name: Revolver
+    Role: spy
+  syringegun_medic:
+    key_name: syringegun_medic
+    name: Syringe Gun
+    Role: medic
+  knife:
+    key_name: knife
+    name: Knife
+    Role: spy
+  shotgun_primary:
+    key_name: shotgun_primary
+    name: Engineer's Shotgun
+    Role: engineer
+  obj_sentrygun2:
+    key_name: obj_sentrygun2
+    name: Sentry Gun
+    Role: engineer
+  rocketlauncher_directhit
+    key_name: rocketlauncher_directhit
+    name: Direct Hit
+    Role: soldier

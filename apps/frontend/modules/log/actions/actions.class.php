@@ -44,6 +44,9 @@ class logActions extends sfActions {
         } catch(TournamentModeNotFoundException $tmnfe) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return sfView::ERROR;
+        } catch(CorruptLogLineException $clle) {
+          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
+          return sfView::ERROR;
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.
@@ -64,6 +67,9 @@ class logActions extends sfActions {
         $lastid = $log->getId();
       }
       $this->redirect('log/show?id='.$lastid);
+    } else {
+      $this->getUser()->setFlash('error', 'The file you sent was not valid.');
+      $this->setTemplate('index');
     }
   }
 }

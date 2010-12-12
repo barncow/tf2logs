@@ -99,6 +99,15 @@ class Log extends BaseLog
     $stat->addRoleToPlayerFromWeapon($weapon);
   }
   
+  /**
+  * This will add the role to the steamid.
+  */
+  public function addRoleToSteamid($steamid, $role) {
+    $stat = &$this->getStatFromSteamid($steamid);
+    if($stat === false) throw new InvalidArgumentException("steamid could not be found in addRoleToSteamid: $steamid, $weapon");
+    $stat->addRoleToPlayer($role);
+  }
+  
   public function clearStats() {
     $this->Stats->delete();
   }
