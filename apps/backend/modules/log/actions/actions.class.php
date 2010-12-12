@@ -13,7 +13,6 @@ class logActions extends sfActions {
   * Action to list unfinished logs, see what the error was, and push through if necessary.
   */
   public function executeUnfinished(sfWebRequest $request) {
-    //$this->files = $this->listUploadedLogs();
     $this->logs = Doctrine::getTable('Log')->listErrorLogs();
   }
   
@@ -27,6 +26,7 @@ class logActions extends sfActions {
     $log = $logParser->parseLogFile(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName(), null, $log);
     unlink(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
     $log->setErrorLogName(null);
+    $log->setErrorException(null);
     $log->save();
     $this->getUser()->setFlash('notice', 'Log Successfully processed.');
     $this->redirect('log/unfinished');
@@ -43,6 +43,15 @@ class logActions extends sfActions {
     $log = $logParser->parseLogFromDB($log);
     
     $this->getUser()->setFlash('notice', 'Log Successfully regenerated.');
+    $this->redirect('authModule/controlPanel');
+  }
+  
+  public function executeDelete(sfWebRequest $request) {
+    $request->checkCSRFProtection();
+
+    $this->forward404Unless($log = Doctrine_Core::getTable('Log')->find(array($request->getParameter('id'))), sprintf('Object log does not exist (%s).', $request->getParameter('id')));
+    $log->delete();
+
     $this->redirect('log/unfinished');
   }
   

@@ -23,48 +23,8 @@ class logActions extends sfActions {
 
     $this->form = new LogForm();
 
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('index');
+    return $this->processForm($request, $this->form);
   }
-
-  /*public function executeNew(sfWebRequest $request) {
-    $this->form = new LogForm();
-  }
-
-  public function executeCreate(sfWebRequest $request) {
-    $this->forward404Unless($request->isMethod(sfRequest::POST));
-
-    $this->form = new LogForm();
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('index');
-  }
-
-  public function executeEdit(sfWebRequest $request) {
-    $this->forward404Unless($log = Doctrine_Core::getTable('Log')->find(array($request->getParameter('id'))), sprintf('Object log does not exist (%s).', $request->getParameter('id')));
-    $this->form = new LogForm($log);
-  }
-
-  public function executeUpdate(sfWebRequest $request) {
-    $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $this->forward404Unless($log = Doctrine_Core::getTable('Log')->find(array($request->getParameter('id'))), sprintf('Object log does not exist (%s).', $request->getParameter('id')));
-    $this->form = new LogForm($log);
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('edit');
-  }
-
-  public function executeDelete(sfWebRequest $request) {
-    $request->checkCSRFProtection();
-
-    $this->forward404Unless($log = Doctrine_Core::getTable('Log')->find(array($request->getParameter('id'))), sprintf('Object log does not exist (%s).', $request->getParameter('id')));
-    $log->delete();
-
-    $this->redirect('log/index');
-  }*/
 
   protected function processForm(sfWebRequest $request, sfForm $form) {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
@@ -81,14 +41,20 @@ class logActions extends sfActions {
         
         try {
           $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $form->getValue('name'));
+        } catch(TournamentModeNotFoundException $tmnfe) {
+          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
+          return sfView::ERROR;
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.
           $log = new Log();
           $log->setName($form->getValue('name'));
           $log->setErrorLogName($upload_filename);
+          $log->setErrorException($e);
           $log->save();
-          throw $e;
+          $this->logid = $log->getId();
+          $this->getUser()->setFlash('error', 'An unexpected error ocurred. We have the log file that you sent, and will get the problem fixed as soon as possible.');
+          return sfView::ERROR;
         }
         
         if($log) {
