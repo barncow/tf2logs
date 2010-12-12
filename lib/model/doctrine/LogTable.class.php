@@ -47,4 +47,11 @@ class LogTable extends Doctrine_Table {
         ->orderBy('l.created_at ASC')
         ->execute();
     }
+    
+    public function deleteLog($log_id) {
+      $this->createQuery('l')
+        ->delete('Log l')
+        ->where('l.id = ?', $log_id)
+        ->execute();
+    }
 }

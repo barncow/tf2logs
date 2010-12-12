@@ -99,6 +99,10 @@ class Log extends BaseLog
     $stat->addRoleToPlayerFromWeapon($weapon);
   }
   
+  public function clearStats() {
+    $this->Stats->delete();
+  }
+  
   /**
   * Gets a stat by reference by steamid. Protected since 
   * allowing the end user of the class to update the stat

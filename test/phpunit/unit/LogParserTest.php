@@ -39,4 +39,12 @@ class unit_LogParserTest extends BaseLogParserTestCase {
     $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated_corrupt.log");
   }
   
+  public function testParseFromDB() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log");
+    $this->logParser = new LogParser();
+    $log = $this->logParser->parseLogFromDB($log);
+    
+    $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
+  }
+  
 }

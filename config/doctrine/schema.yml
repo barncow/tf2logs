@@ -20,6 +20,10 @@ Log:
     error_log_name:
       type: string(50)
       notnull: false
+  relations:
+    LogFile:
+      local: id
+      foreign: log_id
 
 Stat:
   columns:
@@ -97,7 +101,7 @@ Stat:
       notnull: true
       default: 0
   relations:
-    Log: 
+    Log:
       onDelete: CASCADE
       foreignAlias: Stats
     Weapons:
@@ -123,7 +127,6 @@ LogFile:
       notnull: true
   relations:
     Log:
-      onDelete: CASCADE
       foreignAlias: LogFile
       foreignType: one
       
@@ -166,6 +169,7 @@ UsedWeapon:
     Weapon:
       foreignAlias: UsedWeapons
     Stat:
+      onDelete: CASCADE
       foreignAlias: UsedWeapons
 
 Role:
@@ -198,6 +202,7 @@ UsedRole:
     Role:
       foreignAlias: UsedRoles
     Stat:
+      onDelete: CASCADE
       foreignAlias: UsedRoles
 
 Player:

@@ -8,8 +8,8 @@ CREATE TABLE used_weapon (weapon_id BIGINT, stat_id BIGINT, PRIMARY KEY(weapon_i
 CREATE TABLE weapon (id BIGINT AUTO_INCREMENT, key_name VARCHAR(40) NOT NULL, name VARCHAR(40), role_id BIGINT, INDEX role_id_idx (role_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 ALTER TABLE stat ADD CONSTRAINT stat_player_id_player_id FOREIGN KEY (player_id) REFERENCES player(id);
 ALTER TABLE stat ADD CONSTRAINT stat_log_id_log_id FOREIGN KEY (log_id) REFERENCES log(id) ON DELETE CASCADE;
-ALTER TABLE used_role ADD CONSTRAINT used_role_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id);
+ALTER TABLE used_role ADD CONSTRAINT used_role_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
 ALTER TABLE used_role ADD CONSTRAINT used_role_role_id_role_id FOREIGN KEY (role_id) REFERENCES role(id);
 ALTER TABLE used_weapon ADD CONSTRAINT used_weapon_weapon_id_weapon_id FOREIGN KEY (weapon_id) REFERENCES weapon(id);
-ALTER TABLE used_weapon ADD CONSTRAINT used_weapon_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id);
+ALTER TABLE used_weapon ADD CONSTRAINT used_weapon_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
 ALTER TABLE weapon ADD CONSTRAINT weapon_role_id_role_id FOREIGN KEY (role_id) REFERENCES role(id);

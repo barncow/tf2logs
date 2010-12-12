@@ -64,10 +64,24 @@ class LogParser {
 	    $this->log = $logObj;
 	  }
 	  $file = $this->getRawLogFile($filename);
+	  return $this->parseLog($file);
+	}
+	
+	/**
+	* This will parse the entire log file saved from the database.
+	*/
+	public function parseLogFromDB($log) {  
+	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($log->getId())->getLogData());
+	  $log->clearStats();
+	  $this->log = $log;
+	  return $this->parseLog($file);
+	}
+	
+	protected function parseLog($arrayLogLines) {
 	  $game_state = null;
-	  $fileLength = count($file);
+	  $fileLength = count($arrayLogLines);
 	  
-	  foreach($file as $key => $logLine) {
+	  foreach($arrayLogLines as $key => $logLine) {
 	    try {
 	      $game_state = $this->parseLine($logLine);
 	    } catch(UnrecognizedLogLineException $ulle) {

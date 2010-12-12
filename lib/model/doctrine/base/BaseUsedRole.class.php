@@ -50,6 +50,7 @@ abstract class BaseUsedRole extends sfDoctrineRecord
 
         $this->hasOne('Stat', array(
              'local' => 'stat_id',
-             'foreign' => 'id'));
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
     }
 }

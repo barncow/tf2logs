@@ -10,23 +10,23 @@
  * @property integer $redscore
  * @property integer $bluescore
  * @property string $error_log_name
- * @property Doctrine_Collection $Stats
  * @property LogFile $LogFile
+ * @property Doctrine_Collection $Stats
  * 
  * @method integer             getId()             Returns the current record's "id" value
  * @method string              getName()           Returns the current record's "name" value
  * @method integer             getRedscore()       Returns the current record's "redscore" value
  * @method integer             getBluescore()      Returns the current record's "bluescore" value
  * @method string              getErrorLogName()   Returns the current record's "error_log_name" value
- * @method Doctrine_Collection getStats()          Returns the current record's "Stats" collection
  * @method LogFile             getLogFile()        Returns the current record's "LogFile" value
+ * @method Doctrine_Collection getStats()          Returns the current record's "Stats" collection
  * @method Log                 setId()             Sets the current record's "id" value
  * @method Log                 setName()           Sets the current record's "name" value
  * @method Log                 setRedscore()       Sets the current record's "redscore" value
  * @method Log                 setBluescore()      Sets the current record's "bluescore" value
  * @method Log                 setErrorLogName()   Sets the current record's "error_log_name" value
- * @method Log                 setStats()          Sets the current record's "Stats" collection
  * @method Log                 setLogFile()        Sets the current record's "LogFile" value
+ * @method Log                 setStats()          Sets the current record's "Stats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -70,11 +70,11 @@ abstract class BaseLog extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        $this->hasMany('Stat as Stats', array(
+        $this->hasOne('LogFile', array(
              'local' => 'id',
              'foreign' => 'log_id'));
 
-        $this->hasOne('LogFile', array(
+        $this->hasMany('Stat as Stats', array(
              'local' => 'id',
              'foreign' => 'log_id'));
 

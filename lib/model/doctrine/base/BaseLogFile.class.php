@@ -43,7 +43,6 @@ abstract class BaseLogFile extends sfDoctrineRecord
         parent::setUp();
         $this->hasOne('Log', array(
              'local' => 'log_id',
-             'foreign' => 'id',
-             'onDelete' => 'CASCADE'));
+             'foreign' => 'id'));
     }
 }
