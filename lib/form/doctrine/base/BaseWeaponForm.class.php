@@ -24,8 +24,8 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'key_name'   => new sfValidatorString(array('max_length' => 20)),
-      'name'       => new sfValidatorString(array('max_length' => 30, 'required' => false)),
+      'key_name'   => new sfValidatorString(array('max_length' => 40)),
+      'name'       => new sfValidatorString(array('max_length' => 40, 'required' => false)),
       'role_id'    => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'required' => false)),
       'stats_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Stat', 'required' => false)),
     ));

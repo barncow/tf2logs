@@ -132,10 +132,10 @@ Weapon:
       autoincrement: true
       notnull: true
     key_name:
-      type: string(20)
+      type: string(40)
       notnull: true
     name:
-      type: string(30)
+      type: string(40)
       notnull: false
     role_id:
       type: integer

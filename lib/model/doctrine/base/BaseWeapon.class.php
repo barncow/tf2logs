@@ -43,15 +43,15 @@ abstract class BaseWeapon extends sfDoctrineRecord
              'primary' => true,
              'autoincrement' => true,
              ));
-        $this->hasColumn('key_name', 'string', 20, array(
+        $this->hasColumn('key_name', 'string', 40, array(
              'type' => 'string',
              'notnull' => true,
-             'length' => 20,
+             'length' => 40,
              ));
-        $this->hasColumn('name', 'string', 30, array(
+        $this->hasColumn('name', 'string', 40, array(
              'type' => 'string',
              'notnull' => false,
-             'length' => 30,
+             'length' => 40,
              ));
         $this->hasColumn('role_id', 'integer', null, array(
              'type' => 'integer',
