@@ -38,7 +38,7 @@ Last Generated <?php echo $log->getUpdatedAt() ?>
   <?php foreach ($log->getStats() as $stat): ?>
     <tr>
       <td><?php echo $stat->getName() ?></td>
-      <td><?php echo $stat->getSteamid() ?></td>
+      <td><?php echo $stat->getPlayer()->getSteamid() ?></td>
       <td><?php echo $stat->getTeam() ?></td>
       <td><?php echo $stat->getKills() ?></td>
       <td><?php echo $stat->getAssists() ?></td>

@@ -64,22 +64,19 @@ class Stat extends BaseStat {
   * Calculates the stat's kills per death ratio.
   */
   public function getKillsPerDeath() {
-    $kills = $this->getKills();
-    $deaths = $this->getDeaths();
-    
-    if($deaths == 0) return $kills;
-    return (float) $kills/$deaths;
+    return $this->doPerDeathDivision($this->getKills());
   }
   
   /**
   * Calculates the stat's ubers per death ratio.
   */
   public function getUbersPerDeath() {
-    $ubers = $this->getUbers();
-    $deaths = $this->getDeaths();
-    
-    if($deaths == 0) return $ubers;
-    return (float) $ubers/$deaths;
+    return $this->doPerDeathDivision($this->getUbers());
+  }
+  
+  protected function doPerDeathDivision($numerator) {
+    if($this->getDeaths() == 0) return $numerator;
+    return round((float) $numerator/$this->getDeaths(), 3);
   }
   
   /**
