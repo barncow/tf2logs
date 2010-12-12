@@ -31,7 +31,7 @@ body {
   text-align: center;
 }
 
-#statPanel .Blue {
+#statPanel  .Blue {
   background-color: #001A33;
 }
 
@@ -39,7 +39,7 @@ body {
   background-color: #33001A;
 }
 
-#statPanel, #statPanel td {
+#statPanel, #statPanel td, .statTable, .statTable td {
   border: 1px solid #D4D4D4;
   border-collapse: collapse;
 }

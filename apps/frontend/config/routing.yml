@@ -14,6 +14,11 @@ log_by_id:
 log_create:
   url:   /log/add
   param: { module: log, action: add }
+  
+player_by_numeric_steamid:
+  url:   /player/:id
+  param: { module: player, action: showNumericSteamId }
+  requirements: {id: \d+}
 
 # generic rules
 # please, remove them by adding more specific rules
