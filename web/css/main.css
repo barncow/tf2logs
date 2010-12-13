@@ -5,6 +5,26 @@ body {
   font-size: 14px;
 }
 
+a:link {
+  text-decoration: underline;
+  color: #D4D4D4;
+}
+
+a:visited {
+  text-decoration: underline;
+  color: #D4D4D4;
+}
+
+a:active {
+  text-decoration: underline;
+  color: #D4D4D4;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #D4D4D4;
+}
+
 #logName {
   font-size: 30px;
   font-weight: bold;
@@ -52,4 +72,9 @@ body {
 #playerName .description {
   font-size: 20px;
   font-weight: normal;
+}
+
+#header {
+  font-size: 40px;
+  font-weight: bold;
 }

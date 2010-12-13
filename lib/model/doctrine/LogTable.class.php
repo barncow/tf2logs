@@ -19,11 +19,11 @@ class LogTable extends Doctrine_Table {
       $l = $this
         ->createQuery('l')
         ->where('l.id = ?', $id)
-        ->innerJoin('l.Stats s')
-        ->innerJoin('s.Player p')
-        ->innerJoin('s.Weapons w')
+        ->leftJoin('l.Stats s')
+        ->leftJoin('s.Player p')
+        ->leftJoin('s.Weapons w with w.key_name != ?', 'world')
         ->leftJoin('s.Roles r')
-        ->andWhere('w.key_name != ?', 'world')
+        ->andWhere('l.error_log_name is null')
         ->orderBy('s.team, s.name')
         ->execute();
      
@@ -54,6 +54,14 @@ class LogTable extends Doctrine_Table {
       $this->createQuery('l')
         ->delete('Log l')
         ->where('l.id = ?', $log_id)
+        ->execute();
+    }
+    
+    public function getMostRecentLogs($num_to_retrieve = 10) {
+      return $this
+        ->createQuery('l')
+        ->orderBy('l.created_at DESC')
+        ->limit($num_to_retrieve)
         ->execute();
     }
 }

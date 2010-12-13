@@ -9,7 +9,7 @@
  */
 class logActions extends sfActions {
   public function executeIndex(sfWebRequest $request) {
-    $this->logs = Doctrine::getTable('Log')->findAll();
+    $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
     $this->form = new LogForm(); 
   }
   

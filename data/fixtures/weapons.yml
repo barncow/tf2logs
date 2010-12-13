@@ -59,7 +59,7 @@ Weapon:
     key_name: obj_sentrygun2
     name: Sentry Gun
     Role: engineer
-  rocketlauncher_directhit
+  rocketlauncher_directhit:
     key_name: rocketlauncher_directhit
     name: Direct Hit
     Role: soldier
