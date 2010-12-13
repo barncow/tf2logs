@@ -13,6 +13,7 @@ class playerActions extends sfActions {
     $this->setTemplate('show');
     $this->player = Doctrine::getTable('Player')->getPlayerStatsByNumericSteamid($request->getParameter('id'));
     $this->roles = Doctrine::getTable('Player')->getPlayerRolesByNumericSteamid($request->getParameter('id'));
+    $this->name = Doctrine::getTable('Player')->getMostUsedPlayerName($request->getParameter('id'));
     $this->forward404Unless($this->player);
   }
 }

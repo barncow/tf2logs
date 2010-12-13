@@ -43,3 +43,13 @@ body {
   border: 1px solid #D4D4D4;
   border-collapse: collapse;
 }
+
+#playerName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#playerName .description {
+  font-size: 20px;
+  font-weight: normal;
+}

@@ -41,7 +41,7 @@
   <tbody>
   <?php foreach ($log->getStats() as $stat): ?>
     <tr class="<?php echo $stat->getTeam() ?>">
-      <td><?php echo $stat->getName() ?></td>
+      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
       <td><?php echo $stat->getPlayer()->getSteamid() ?></td>
       <td><?php echo implodeCollection($stat->getRoles(), "name", "key_name") ?></td>
       <td><?php echo implodeCollection($stat->getWeapons(), "name", "key_name") ?></td>

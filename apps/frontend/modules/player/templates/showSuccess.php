@@ -1,17 +1,15 @@
-Number matches: <?php echo $player->num_matches ?><br/>
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
 <?php use_javascript('jquery.dimensions.js'); ?>
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('playershow.js'); ?>
-<div id="playerName">playername</div>
-     
-<table id="statPanel" border="0" cellspacing="0" cellpadding="3">
+<div id="playerName"><span class="description">Player Name: </span><?php echo $name ?></div>
+Number matches: <?php echo $player->num_matches ?><br/>
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
   <caption>Overall Stats</caption>
   <thead>
     <tr>
-      <th title="Weapons">W</th>
       <th title="Kills">K</th>
       <th title="Assists">A</th>
       <th title="Deaths">D</th>
@@ -32,7 +30,6 @@ Number matches: <?php echo $player->num_matches ?><br/>
   </thead>
   <tbody>
     <tr>
-      <td>< ?php echo implodeCollection($stat->getWeapons(), "name", "key_name") ?></td>
       <td><?php echo $player->kills ?></td>
       <td><?php echo $player->assists ?></td>
       <td><?php echo $player->deaths ?></td>
@@ -53,7 +50,7 @@ Number matches: <?php echo $player->num_matches ?><br/>
   </tbody>
 </table>
 
-<table id="statPanel" border="0" cellspacing="0" cellpadding="3">
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
   <caption>Classes</caption>
   <thead>
     <tr>
