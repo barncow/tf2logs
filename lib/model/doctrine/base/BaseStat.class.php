@@ -28,7 +28,7 @@
  * @property Doctrine_Collection $Weapons
  * @property Doctrine_Collection $Roles
  * @property Player $Player
- * @property Doctrine_Collection $UsedWeapons
+ * @property Doctrine_Collection $WeaponStats
  * @property Doctrine_Collection $UsedRoles
  * 
  * @method integer             getId()                      Returns the current record's "id" value
@@ -54,7 +54,7 @@
  * @method Doctrine_Collection getWeapons()                 Returns the current record's "Weapons" collection
  * @method Doctrine_Collection getRoles()                   Returns the current record's "Roles" collection
  * @method Player              getPlayer()                  Returns the current record's "Player" value
- * @method Doctrine_Collection getUsedWeapons()             Returns the current record's "UsedWeapons" collection
+ * @method Doctrine_Collection getWeaponStats()             Returns the current record's "WeaponStats" collection
  * @method Doctrine_Collection getUsedRoles()               Returns the current record's "UsedRoles" collection
  * @method Stat                setId()                      Sets the current record's "id" value
  * @method Stat                setLogId()                   Sets the current record's "log_id" value
@@ -79,7 +79,7 @@
  * @method Stat                setWeapons()                 Sets the current record's "Weapons" collection
  * @method Stat                setRoles()                   Sets the current record's "Roles" collection
  * @method Stat                setPlayer()                  Sets the current record's "Player" value
- * @method Stat                setUsedWeapons()             Sets the current record's "UsedWeapons" collection
+ * @method Stat                setWeaponStats()             Sets the current record's "WeaponStats" collection
  * @method Stat                setUsedRoles()               Sets the current record's "UsedRoles" collection
  * 
  * @package    tf2logs
@@ -210,7 +210,7 @@ abstract class BaseStat extends sfDoctrineRecord
              'onDelete' => 'CASCADE'));
 
         $this->hasMany('Weapon as Weapons', array(
-             'refClass' => 'UsedWeapon',
+             'refClass' => 'WeaponStat',
              'local' => 'stat_id',
              'foreign' => 'weapon_id'));
 
@@ -223,7 +223,7 @@ abstract class BaseStat extends sfDoctrineRecord
              'local' => 'player_id',
              'foreign' => 'id'));
 
-        $this->hasMany('UsedWeapon as UsedWeapons', array(
+        $this->hasMany('WeaponStat as WeaponStats', array(
              'local' => 'id',
              'foreign' => 'stat_id'));
 

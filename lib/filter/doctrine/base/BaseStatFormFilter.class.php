@@ -80,8 +80,8 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
     }
 
     $query
-      ->leftJoin($query->getRootAlias().'.UsedWeapon UsedWeapon')
-      ->andWhereIn('UsedWeapon.weapon_id', $values)
+      ->leftJoin($query->getRootAlias().'.WeaponStat WeaponStat')
+      ->andWhereIn('WeaponStat.weapon_id', $values)
     ;
   }
 

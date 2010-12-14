@@ -110,7 +110,7 @@ Stat:
     Weapons:
       foreignAlias: Stats
       class: Weapon
-      refClass: UsedWeapon
+      refClass: WeaponStat
     Roles:
       foreignAlias: Stats
       class: Role
@@ -156,7 +156,7 @@ Weapon:
       foreignAlias: Weapon
       foreignType: one
       
-UsedWeapon:
+WeaponStat:
   columns:
     weapon_id:
       type: integer
@@ -168,12 +168,20 @@ UsedWeapon:
       primary: true
       autoincrement: false
       notnull: true
+    kills:
+      type: integer(4)
+      notnull: true
+      default: 0
+    deaths:
+      type: integer(4)
+      notnull: true
+      default: 0
   relations:
     Weapon:
-      foreignAlias: UsedWeapons
+      foreignAlias: WeaponStats
     Stat:
       onDelete: CASCADE
-      foreignAlias: UsedWeapons
+      foreignAlias: WeaponStats
 
 Role:
   columns:

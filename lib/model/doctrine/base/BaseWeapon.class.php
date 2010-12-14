@@ -11,7 +11,7 @@
  * @property integer $role_id
  * @property Role $Role
  * @property Doctrine_Collection $Stats
- * @property Doctrine_Collection $UsedWeapons
+ * @property Doctrine_Collection $WeaponStats
  * 
  * @method integer             getId()          Returns the current record's "id" value
  * @method string              getKeyName()     Returns the current record's "key_name" value
@@ -19,14 +19,14 @@
  * @method integer             getRoleId()      Returns the current record's "role_id" value
  * @method Role                getRole()        Returns the current record's "Role" value
  * @method Doctrine_Collection getStats()       Returns the current record's "Stats" collection
- * @method Doctrine_Collection getUsedWeapons() Returns the current record's "UsedWeapons" collection
+ * @method Doctrine_Collection getWeaponStats() Returns the current record's "WeaponStats" collection
  * @method Weapon              setId()          Sets the current record's "id" value
  * @method Weapon              setKeyName()     Sets the current record's "key_name" value
  * @method Weapon              setName()        Sets the current record's "name" value
  * @method Weapon              setRoleId()      Sets the current record's "role_id" value
  * @method Weapon              setRole()        Sets the current record's "Role" value
  * @method Weapon              setStats()       Sets the current record's "Stats" collection
- * @method Weapon              setUsedWeapons() Sets the current record's "UsedWeapons" collection
+ * @method Weapon              setWeaponStats() Sets the current record's "WeaponStats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -69,11 +69,11 @@ abstract class BaseWeapon extends sfDoctrineRecord
              'foreign' => 'id'));
 
         $this->hasMany('Stat as Stats', array(
-             'refClass' => 'UsedWeapon',
+             'refClass' => 'WeaponStat',
              'local' => 'weapon_id',
              'foreign' => 'stat_id'));
 
-        $this->hasMany('UsedWeapon as UsedWeapons', array(
+        $this->hasMany('WeaponStat as WeaponStats', array(
              'local' => 'id',
              'foreign' => 'weapon_id'));
     }

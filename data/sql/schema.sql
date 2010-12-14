@@ -4,12 +4,12 @@ CREATE TABLE player (id BIGINT AUTO_INCREMENT, numeric_steamid BIGINT NOT NULL, 
 CREATE TABLE role (id BIGINT AUTO_INCREMENT, key_name VARCHAR(12) NOT NULL, name VARCHAR(20), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE stat (id BIGINT AUTO_INCREMENT, log_id BIGINT NOT NULL, name VARCHAR(100) NOT NULL, player_id BIGINT NOT NULL, team VARCHAR(4) NOT NULL, kills INT DEFAULT 0 NOT NULL, assists INT DEFAULT 0 NOT NULL, deaths INT DEFAULT 0 NOT NULL, longest_kill_streak INT DEFAULT 0 NOT NULL, capture_points_blocked INT DEFAULT 0 NOT NULL, capture_points_captured INT DEFAULT 0 NOT NULL, dominations INT DEFAULT 0 NOT NULL, times_dominated INT DEFAULT 0 NOT NULL, revenges INT DEFAULT 0 NOT NULL, builtobjects INT DEFAULT 0 NOT NULL, destroyedobjects INT DEFAULT 0 NOT NULL, extinguishes INT DEFAULT 0 NOT NULL, ubers INT DEFAULT 0 NOT NULL, dropped_ubers INT DEFAULT 0 NOT NULL, INDEX log_id_idx (log_id), INDEX player_id_idx (player_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE used_role (role_id BIGINT, stat_id BIGINT, PRIMARY KEY(role_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
-CREATE TABLE used_weapon (weapon_id BIGINT, stat_id BIGINT, PRIMARY KEY(weapon_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE weapon (id BIGINT AUTO_INCREMENT, key_name VARCHAR(40) NOT NULL, name VARCHAR(40), role_id BIGINT, INDEX role_id_idx (role_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
+CREATE TABLE weapon_stat (weapon_id BIGINT, stat_id BIGINT, kills INT DEFAULT 0 NOT NULL, deaths INT DEFAULT 0 NOT NULL, PRIMARY KEY(weapon_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 ALTER TABLE stat ADD CONSTRAINT stat_player_id_player_id FOREIGN KEY (player_id) REFERENCES player(id);
 ALTER TABLE stat ADD CONSTRAINT stat_log_id_log_id FOREIGN KEY (log_id) REFERENCES log(id) ON DELETE CASCADE;
 ALTER TABLE used_role ADD CONSTRAINT used_role_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
 ALTER TABLE used_role ADD CONSTRAINT used_role_role_id_role_id FOREIGN KEY (role_id) REFERENCES role(id);
-ALTER TABLE used_weapon ADD CONSTRAINT used_weapon_weapon_id_weapon_id FOREIGN KEY (weapon_id) REFERENCES weapon(id);
-ALTER TABLE used_weapon ADD CONSTRAINT used_weapon_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
 ALTER TABLE weapon ADD CONSTRAINT weapon_role_id_role_id FOREIGN KEY (role_id) REFERENCES role(id);
+ALTER TABLE weapon_stat ADD CONSTRAINT weapon_stat_weapon_id_weapon_id FOREIGN KEY (weapon_id) REFERENCES weapon(id);
+ALTER TABLE weapon_stat ADD CONSTRAINT weapon_stat_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
