@@ -220,15 +220,16 @@ class LogParser {
 	      $victim = $players[1];
 	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
-	      $this->log->addWeaponToSteamid($attacker->getSteamid(), $weapon);
+	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
 	      $this->log->addRoleToSteamidFromWeapon($attacker->getSteamid(), $weapon);
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
+	      $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];
 	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
-	      $this->log->addWeaponToSteamid($p->getSteamid(), $weapon);
+	      $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "triggered") {	      
 	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);

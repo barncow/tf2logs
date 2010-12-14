@@ -84,10 +84,10 @@ class Log extends BaseLog
   /**
   * This will add the weapon to the steamid.
   */
-  public function addWeaponToSteamid($steamid, $weapon) {
+  public function incrementWeaponForPlayer($steamid, $weapon, $propertyToIncrement, $increment = 1) {
     $stat = &$this->getStatFromSteamid($steamid);
     if($stat === false) throw new InvalidArgumentException("steamid could not be found in addWeaponToSteamid: $steamid, $weapon");
-    $stat->addWeaponToPlayer($weapon);
+    $stat->incrementWeaponForPlayer($weapon, $propertyToIncrement, $increment);
   }
   
   /**

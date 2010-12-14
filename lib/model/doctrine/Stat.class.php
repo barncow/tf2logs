@@ -83,14 +83,29 @@ class Stat extends BaseStat {
   * This will add the given weapon to the player's stats.
   * If the weapon does not exist in the database, a new one is created.
   */
-  public function addWeaponToPlayer($weapon) {
+  public function incrementWeaponForPlayer($weapon, $propertyToIncrement, $increment = 1) {
     $w = Doctrine::getTable('Weapon')->findOneByKeyName($weapon);
     if(!$w) {
       $w = new Weapon();
       $w->setKeyName($weapon);
       $w->save();
     }
-    $this->Weapons[] = $w;
+    
+    $addws = true;
+    foreach($this->WeaponStats as &$ws) {
+      if($ws->getWeaponId() == $w->getId()) {
+        $ws->_set($propertyToIncrement, $ws->_get($propertyToIncrement)+$increment);
+        $addws = false;
+        break;
+      }
+    }
+    if($addws) {
+      $wsadd = new WeaponStat();
+      $wsadd->setWeapon($w);
+      $wsadd->setStat($this);
+      $wsadd->_set($propertyToIncrement, $increment);
+      $this->WeaponStats[] = $wsadd;
+    }
   }
   
   /**

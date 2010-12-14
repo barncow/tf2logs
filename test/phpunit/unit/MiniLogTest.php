@@ -30,9 +30,11 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "target's point captures");
         $this->assertEquals(2, $stat->getKillsPerDeath(), "target's kd");
         
-        foreach($stat->getWeapons() as $w) {
-          if($w->getKeyName() != "scattergun") {
-            $this->fail("Target has extra weapon: ".$w->getKeyName());
+        foreach($stat->getWeaponStats() as $ws) {
+          if($ws->getWeapon()->getKeyName() == "scattergun") {
+            $this->assertEquals(2, $ws->getKills());
+          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
+            $this->assertEquals(1, $ws->getDeaths());
           }
         }
         
@@ -48,6 +50,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat->getUbers(), "barncow's ubers");
         $this->assertEquals(1, $stat->getDroppedUbers(), "Barncow dropped uber");
         $this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
+        
+        foreach($stat->getWeaponStats() as $ws) {
+          if($ws->getWeapon()->getKeyName() == "scattergun") {
+            $this->assertEquals(1, $ws->getDeaths());
+          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
+            $this->assertEquals(1, $ws->getDeaths());
+          }
+        }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat->getAssists(), "cres' assists");
@@ -61,9 +71,13 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(0, $stat->getDroppedUbers(), "Ctrl+f Muffin! did not drop uber");
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "Ctrl+f Muffin!'s point captures");
         
-        foreach($stat->getWeapons() as $w) {
-          if($w->getKeyName() != "tf_projectile_rocket" && $w->getKeyName() != "sniperrifle" ) {
-            $this->fail("Muffin has extra weapon: ".$w->getKeyName());
+        foreach($stat->getWeaponStats() as $ws) {
+          if($ws->getWeapon()->getKeyName() == "tf_projectile_rocket") {
+            $this->assertEquals(1, $ws->getDeaths());
+          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
+            $this->assertEquals(2, $ws->getKills());
+          } else if($ws->getWeapon()->getKeyName() == "scattergun") {
+            $this->assertEquals(1, $ws->getDeaths());
           }
         }
         
@@ -79,6 +93,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
         //verify numbers for "[H2K]BubbleAlan ʚϊɞ"
         $this->assertEquals(0, $stat->getDroppedUbers(), "Alan did not drop uber");
+        
+        foreach($stat->getWeaponStats() as $ws) {
+          if($ws->getWeapon()->getKeyName() == "world") {
+            $this->assertEquals(1, $ws->getDeaths());
+          }
+        }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:12272740") {
         //verify numbers for "[!?] cheap"
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "cheap's point captures");
