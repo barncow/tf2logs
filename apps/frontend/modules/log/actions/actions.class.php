@@ -15,7 +15,9 @@ class logActions extends sfActions {
   
   public function executeShow(sfWebRequest $request) {
     $this->log = Doctrine::getTable('Log')->getLogById($request->getParameter('id'));
-     $this->forward404Unless($this->log);
+    $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForLogId($request->getParameter('id'));
+    $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($request->getParameter('id'));
+    $this->forward404Unless($this->log);
   }
   
   public function executeAdd(sfWebRequest $request) {

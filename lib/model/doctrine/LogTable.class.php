@@ -21,7 +21,7 @@ class LogTable extends Doctrine_Table {
         ->where('l.id = ?', $id)
         ->leftJoin('l.Stats s')
         ->leftJoin('s.Player p')
-        ->leftJoin('s.Weapons w with w.key_name != ?', 'world')
+        ->leftJoin('s.Weapons w')
         ->leftJoin('s.Roles r')
         ->andWhere('l.error_log_name is null')
         ->orderBy('s.team, s.name')

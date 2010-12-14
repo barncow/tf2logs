@@ -13,13 +13,12 @@
    <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log->getBluescore() ?></span>
 </div>
      
-<table id="statPanel" border="0" cellspacing="0" cellpadding="3">
+<table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
   <thead>
     <tr>
       <th>Name</th>
       <th>Steam ID</th>
       <th title="Classes">C</th>
-      <th title="Weapons">W</th>
       <th title="Kills">K</th>
       <th title="Assists">A</th>
       <th title="Deaths">D</th>
@@ -44,7 +43,6 @@
       <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
       <td><?php echo $stat->getPlayer()->getSteamid() ?></td>
       <td><?php echo implodeCollection($stat->getRoles(), "name", "key_name") ?></td>
-      <td><?php echo implodeCollection($stat->getWeapons(), "name", "key_name") ?></td>
       <td><?php echo $stat->getKills() ?></td>
       <td><?php echo $stat->getAssists() ?></td>
       <td><?php echo $stat->getDeaths() ?></td>
@@ -61,6 +59,47 @@
       <td><?php echo $stat->getUbers() ?></td>
       <td><?php echo $stat->getUbersPerDeath() ?></td>
       <td><?php echo $stat->getDroppedUbers() ?></td>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Weapon Stats</caption>
+  <thead>
+    <tr>
+      <th><!--playername--></th>
+      <?php foreach($weapons as $w): ?>
+        <th colspan="2"><?php echo $w->getName() ?></th>
+      <?php endforeach ?>
+    </tr>
+    <tr>
+      <th><!--playername--></th>
+      <?php foreach($weapons as $w): ?>
+        <th title="Kills">K</th>
+        <th title="Deaths">D</th>
+      <?php endforeach ?>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($log->getStats() as $stat): ?>
+    <tr>
+      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
+      <?php foreach($weapons as $w): ?>
+        <?php $foundWS = false ?>
+        <?php foreach($weaponStats as $ws): ?>
+          <?php if($ws->getStatId() == $stat->getId() && $ws->getWeaponId() == $w->getId()): ?>
+            <td><?php echo $ws->num_kills ?></td>
+            <td><?php echo $ws->num_deaths ?></td>
+            <?php $foundWS = true ?>
+            <?php break ?>
+          <?php endif ?>
+        <?php endforeach ?>
+        <?php if(!$foundWS): ?>
+          <td>0</td>
+          <td>0</td>
+        <?php endif ?>
+      <?php endforeach ?>
     </tr>
     <?php endforeach; ?>
   </tbody>

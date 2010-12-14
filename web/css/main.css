@@ -59,9 +59,10 @@ a:hover {
   background-color: #33001A;
 }
 
-#statPanel, #statPanel td, .statTable, .statTable td {
+.statTable, .statTable td {
   border: 1px solid #D4D4D4;
   border-collapse: collapse;
+  text-align: center;
 }
 
 #playerName {

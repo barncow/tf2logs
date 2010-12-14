@@ -22,4 +22,18 @@ class WeaponTable extends Doctrine_Table {
         ->orderBy('w.name asc')
         ->execute();
     }
+    
+    /**
+    * Gets unique weapons that were used in the log
+    */
+    public function getWeaponsForLogId($logid) {
+      return $this
+        ->createQuery('w')
+        ->innerJoin('w.WeaponStat ws')
+        ->innerJoin('ws.Stat s')
+        ->innerJoin('s.Log l')
+        ->where('l.id = ?', $logid)
+        ->orderBy('w.name')
+        ->execute();
+    }
 }
