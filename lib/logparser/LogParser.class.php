@@ -19,6 +19,8 @@ class LogParser {
   protected $parsingUtils;
   protected $log;
   protected $isTournamentMode;
+  protected $weapons;
+  protected $roles;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -29,6 +31,51 @@ class LogParser {
     $this->setParsingUtils(new ParsingUtils());
     $this->log = new Log();
     $this->isTournamentMode = false; //assume its not, until first world trigger round_start
+    $this->buildWeaponCache();
+    $this->buildRoleCache();
+  }
+  
+  public function buildWeaponCache() {
+    $this->weapons = Doctrine::getTable('Weapon')->getAllWeapons();
+  }
+  
+  public function buildRoleCache() {
+    $this->roles = Doctrine::getTable('Role')->findAll();
+  }
+  
+  /**
+  * This will find a weapon from the weapon cache. If not found, one will be created
+  * and saved to the database, will be added to the cache, and returned.
+  */
+  public function getWeaponFromCache($keyName) {
+    if($keyName === false) return false;
+    foreach($this->weapons as $w) {
+      if($w->getKeyName() == $keyName) {
+        return $w;
+      }
+    }
+    
+    //still here, need to create new weapon
+    $wep = new Weapon();
+    $wep->setKeyName($keyName);
+    $wep->save();
+    $this->weapons[] = $wep;
+    return $wep;
+  }
+  
+  /**
+  * This will find a role from the role cache. This will not change, so it will not add.
+  */
+  public function getRoleFromCache($keyName) {
+    if($keyName === false) return false;
+    foreach($this->roles as $r) {
+      if($r->getKeyName() == $keyName) {
+        return $r;
+      }
+    }
+    
+    //still here, did not find.
+    throw new InvalidArgumentException("Invalid role given to getRoleFromCache method: ".$keyName);
   }
   
   public function getLog() {
@@ -218,7 +265,7 @@ class LogParser {
 	    } else if($playerLineAction == "killed") {
 	      $attacker = $players[0];
 	      $victim = $players[1];
-	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
+	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
 	      $this->log->addRoleToSteamidFromWeapon($attacker->getSteamid(), $weapon);
@@ -227,7 +274,7 @@ class LogParser {
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];
-	      $weapon = $this->parsingUtils->getWeapon($logLineDetails);
+	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
 	      $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
 	      return self::GAME_CONTINUE;
@@ -268,14 +315,14 @@ class LogParser {
 	      } else if($playerLineActionDetail == "chargedeployed") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
-	        $this->log->addRoleToSteamid($p->getSteamid(), "medic");
+	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("medic"));
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "medic_death") {
 	        $victim = $players[1];
 	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
 	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
 	        }
-	        $this->log->addRoleToSteamid($victim->getSteamid(), "medic");
+	        $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"));
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "captureblocked") {
 	        $p = $players[0];

@@ -81,19 +81,12 @@ class Stat extends BaseStat {
   
   /**
   * This will add the given weapon to the player's stats.
-  * If the weapon does not exist in the database, a new one is created.
   */
   public function incrementWeaponForPlayer($weapon, $propertyToIncrement, $increment = 1) {
-    $w = Doctrine::getTable('Weapon')->findOneByKeyName($weapon);
-    if(!$w) {
-      $w = new Weapon();
-      $w->setKeyName($weapon);
-      $w->save();
-    }
-    
+    //echo $weapon->getId();
     $addws = true;
     foreach($this->WeaponStats as &$ws) {
-      if($ws->getWeaponId() == $w->getId()) {
+      if($ws->getWeaponId() == $weapon->getId()) {
         $ws->_set($propertyToIncrement, $ws->_get($propertyToIncrement)+$increment);
         $addws = false;
         break;
@@ -101,7 +94,7 @@ class Stat extends BaseStat {
     }
     if($addws) {
       $wsadd = new WeaponStat();
-      $wsadd->setWeapon($w);
+      $wsadd->setWeaponId($weapon->getId());
       $wsadd->setStat($this);
       $wsadd->_set($propertyToIncrement, $increment);
       $this->WeaponStats[] = $wsadd;
@@ -113,15 +106,11 @@ class Stat extends BaseStat {
   * If the role does not exist in the database, an exception is thrown.
   */
   public function addRoleToPlayer($role) {
-    $r = Doctrine::getTable('Role')->findOneByKeyName($role);
-    if(!$r) {
-      throw new InvalidArgumentException("Invalid role given to addRoleToPlayer method: ".$role);
-    }
-    $this->Roles[] = $r;
+    $this->Roles[] = $role;
   }
   
   public function addRoleToPlayerFromWeapon($weapon) {
-    $role = Doctrine::getTable('Role')->getRoleFromWeapon($weapon);
+    $role = $weapon->getRole();
     if($role) $this->Roles[] = $role;
   }
 }
