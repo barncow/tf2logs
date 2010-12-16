@@ -70,7 +70,13 @@
     <tr>
       <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
-        <th colspan="2"><?php echo $w->getName() ?></th>
+        <th colspan="2">
+          <?php if($w->getName()): ?>
+            <?php echo $w->getName() ?>
+          <?php else: ?>
+            <?php echo $w->getKeyName() ?>
+          <?php endif ?>
+        </th>
       <?php endforeach ?>
     </tr>
     <tr>

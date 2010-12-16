@@ -111,6 +111,6 @@ class Stat extends BaseStat {
   
   public function addRoleToPlayerFromWeapon($weapon) {
     $role = $weapon->getRole();
-    if($role) $this->Roles[] = $role;
+    if($role && $role->getKeyName() != null) $this->Roles[] = $role;
   }
 }
