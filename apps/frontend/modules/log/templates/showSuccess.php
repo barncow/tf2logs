@@ -111,6 +111,49 @@
   </tbody>
 </table>
 
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Player Stats</caption>
+  <thead>
+    <tr>
+      <th><!--playername--></th>
+      <?php foreach($log->getStats() as $s): ?>
+        <th colspan="2">
+          <?php echo link_to($s->getName(), 'player/showNumericSteamId?id='.$s->getPlayer()->getNumericSteamid()) ?>
+        </th>
+      <?php endforeach ?>
+    </tr>
+    <tr>
+      <th><!--playername--></th>
+      <?php foreach($log->getStats() as $s): ?>
+        <th title="Kills">K</th>
+        <th title="Deaths">D</th>
+      <?php endforeach ?>
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($log->getStats() as $stat): ?>
+    <tr>
+      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
+      <?php foreach($log->getStats() as $colstat): ?>
+        <?php $foundPS = false ?>
+        <?php foreach($playerStats as $ps): ?>
+          <?php if($ps->getStatId() == $stat->getId() && $ps->getPlayerId() == $colstat->getPlayer()->getId()): ?>
+            <td><?php echo $ps->num_kills ?></td>
+            <td><?php echo $ps->num_deaths ?></td>
+            <?php $foundPS = true ?>
+            <?php break ?>
+          <?php endif ?>
+        <?php endforeach ?>
+        <?php if(!$foundPS): ?>
+          <td>0</td>
+          <td>0</td>
+        <?php endif ?>
+      <?php endforeach ?>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+
 Created  <?php echo $log->getCreatedAt() ?><br/>
 <?php if($log->getCreatedAt() != $log->getUpdatedAt()): ?>
   Last Generated <?php echo $log->getUpdatedAt() ?> 

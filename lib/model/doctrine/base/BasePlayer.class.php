@@ -10,17 +10,20 @@
  * @property string $steamid
  * @property string $credential
  * @property Doctrine_Collection $Stats
+ * @property Doctrine_Collection $PlayerStats
  * 
  * @method integer             getId()              Returns the current record's "id" value
  * @method integer             getNumericSteamid()  Returns the current record's "numeric_steamid" value
  * @method string              getSteamid()         Returns the current record's "steamid" value
  * @method string              getCredential()      Returns the current record's "credential" value
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
+ * @method Doctrine_Collection getPlayerStats()     Returns the current record's "PlayerStats" collection
  * @method Player              setId()              Sets the current record's "id" value
  * @method Player              setNumericSteamid()  Sets the current record's "numeric_steamid" value
  * @method Player              setSteamid()         Sets the current record's "steamid" value
  * @method Player              setCredential()      Sets the current record's "credential" value
  * @method Player              setStats()           Sets the current record's "Stats" collection
+ * @method Player              setPlayerStats()     Sets the current record's "PlayerStats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -58,6 +61,10 @@ abstract class BasePlayer extends sfDoctrineRecord
     {
         parent::setUp();
         $this->hasMany('Stat as Stats', array(
+             'local' => 'id',
+             'foreign' => 'player_id'));
+
+        $this->hasMany('PlayerStat as PlayerStats', array(
              'local' => 'id',
              'foreign' => 'player_id'));
     }

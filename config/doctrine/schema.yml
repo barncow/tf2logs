@@ -117,6 +117,10 @@ Stat:
       refClass: UsedRole
     Player: 
       foreignAlias: Stats
+    Players:
+      foreignAlias: Stats
+      class: Player
+      refClass: PlayerStat
       
 LogFile:
   columns:
@@ -233,3 +237,30 @@ Player:
       type: string(10)
       default: user
       notnull: true
+      
+PlayerStat:
+  columns:
+    player_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    stat_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    kills:
+      type: integer(4)
+      notnull: true
+      default: 0
+    deaths:
+      type: integer(4)
+      notnull: true
+      default: 0
+  relations:
+    Player:
+      foreignAlias: PlayerStats
+    Stat:
+      onDelete: CASCADE
+      foreignAlias: PlayerStats

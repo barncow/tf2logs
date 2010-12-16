@@ -108,6 +108,13 @@ class Log extends BaseLog
     $stat->addRoleToPlayer($role);
   }
   
+  public function addPlayerStatToSteamid($attackerSteamid, $otherSteamid, $propertyToIncrement, $increment = 1) {
+    $attackerStat = &$this->getStatFromSteamid($attackerSteamid);
+    $otherStat = $this->getStatFromSteamid($otherSteamid);
+    if($attackerStat === false || $otherStat === false) throw new InvalidArgumentException("steamid could not be found in addPlayerStatToSteamid: $attackerSteamid,  $otherSteamid, $propertyToIncrement, $increment");
+    $attackerStat->addPlayerStat($otherStat->getPlayer(), $propertyToIncrement, $increment);
+  }
+  
   public function clearStats() {
     $this->Stats->delete();
   }

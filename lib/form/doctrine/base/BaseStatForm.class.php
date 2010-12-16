@@ -36,6 +36,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'dropped_ubers'           => new sfWidgetFormInputText(),
       'weapons_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Weapon')),
       'roles_list'              => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Role')),
+      'players_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Player')),
     ));
 
     $this->setValidators(array(
@@ -60,6 +61,7 @@ abstract class BaseStatForm extends BaseFormDoctrine
       'dropped_ubers'           => new sfValidatorInteger(array('required' => false)),
       'weapons_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Weapon', 'required' => false)),
       'roles_list'              => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Role', 'required' => false)),
+      'players_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Player', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat[%s]');
@@ -90,12 +92,18 @@ abstract class BaseStatForm extends BaseFormDoctrine
       $this->setDefault('roles_list', $this->object->Roles->getPrimaryKeys());
     }
 
+    if (isset($this->widgetSchema['players_list']))
+    {
+      $this->setDefault('players_list', $this->object->Players->getPrimaryKeys());
+    }
+
   }
 
   protected function doSave($con = null)
   {
     $this->saveWeaponsList($con);
     $this->saveRolesList($con);
+    $this->savePlayersList($con);
 
     parent::doSave($con);
   }
@@ -173,6 +181,44 @@ abstract class BaseStatForm extends BaseFormDoctrine
     if (count($link))
     {
       $this->object->link('Roles', array_values($link));
+    }
+  }
+
+  public function savePlayersList($con = null)
+  {
+    if (!$this->isValid())
+    {
+      throw $this->getErrorSchema();
+    }
+
+    if (!isset($this->widgetSchema['players_list']))
+    {
+      // somebody has unset this widget
+      return;
+    }
+
+    if (null === $con)
+    {
+      $con = $this->getConnection();
+    }
+
+    $existing = $this->object->Players->getPrimaryKeys();
+    $values = $this->getValue('players_list');
+    if (!is_array($values))
+    {
+      $values = array();
+    }
+
+    $unlink = array_diff($existing, $values);
+    if (count($unlink))
+    {
+      $this->object->unlink('Players', array_values($unlink));
+    }
+
+    $link = array_diff($values, $existing);
+    if (count($link))
+    {
+      $this->object->link('Players', array_values($link));
     }
   }
 

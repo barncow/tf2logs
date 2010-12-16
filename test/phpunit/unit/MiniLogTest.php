@@ -32,10 +32,19 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "scattergun") {
-            $this->assertEquals(2, $ws->getKills());
+            $this->assertEquals(2, $ws->getKills(), "target has 2 kills with scatter");
           } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
-            $this->assertEquals(1, $ws->getDeaths());
+            $this->assertEquals(1, $ws->getDeaths(), "target has 1 death to sniperrifle");
           }
+        }
+        
+        foreach($stat->getPlayerStats() as $ps) {
+          if($ps->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
+            $this->assertEquals(1, $ps->getKills(), "target has one kill on barncow");
+          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps->getKills(), "target has one kill on muffin");
+            $this->assertEquals(1, $ps->getDeaths(), "target has one death by muffin");
+          }  
         }
         
         foreach($stat->getRoles() as $r) {
@@ -56,6 +65,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->assertEquals(1, $ws->getDeaths());
           } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
             $this->assertEquals(1, $ws->getDeaths());
+          }
+        }
+        
+        foreach($stat->getPlayerStats() as $ps) {
+          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
+            $this->assertEquals(1, $ps->getDeaths(), "barncow has one death by target");
+          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps->getDeaths(), "barncow has one death by muffin");
           }
         }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
@@ -86,6 +103,17 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->fail("Muffin has extra role: ".$r->getKeyName());
           }
         }
+        
+        foreach($stat->getPlayerStats() as $ps) {
+          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
+            $this->assertEquals(1, $ps->getDeaths(), "muffin has one death by target");
+            $this->assertEquals(1, $ps->getKills(), "muffin killed target once");
+          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps->getDeaths(), "muffin has one death by muffin");
+          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
+            $this->assertEquals(1, $ps->getKills(), "muffin killed barncow once");
+          }
+        }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:11710749") {
         //verify numbers for "perl"
         $this->assertEquals(0, $stat->getDestroyedobjects(), "perl's destroyed objects - should be zero since do not want to count own destructions");
@@ -97,6 +125,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "world") {
             $this->assertEquals(1, $ws->getDeaths());
+          }
+        }
+        
+        foreach($stat->getPlayerStats() as $ps) {
+          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
+            $this->assertEquals(1, $ps->getDeaths(), "alan has one death by alan");
           }
         }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:12272740") {

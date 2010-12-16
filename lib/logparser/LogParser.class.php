@@ -152,7 +152,7 @@ class LogParser {
 	  if(!$this->isTournamentMode) {
 	    throw new TournamentModeNotFoundException();
 	  }
-    $this->finishLog();
+    $this->finishLog();  
 	  $this->log->save();
 	  return $this->log;
 	}
@@ -266,17 +266,22 @@ class LogParser {
 	      $attacker = $players[0];
 	      $victim = $players[1];
 	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
+	      
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
 	      $this->log->addRoleToSteamidFromWeapon($attacker->getSteamid(), $weapon);
+	      $this->log->addPlayerStatToSteamid($attacker->getSteamid(), $victim->getSteamid(), "kills");
+	      
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	      $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
+	      $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];
 	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
 	      $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
+	      $this->log->addPlayerStatToSteamid($p->getSteamid(), $p->getSteamid(), "deaths");
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "triggered") {	      
 	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);

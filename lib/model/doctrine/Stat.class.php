@@ -17,7 +17,12 @@ class Stat extends BaseStat {
     if(!isset($this->Player)) {
       $p = Doctrine::getTable('Player')->findOneBySteamid($playerInfo->getSteamid());
       if($p != null) $this->setPlayer($p);
-      else $this->Player->setSteamid($playerInfo->getSteamid());
+      else {
+        $p = new Player();
+        $p->setSteamid($playerInfo->getSteamid());
+        $p->save();
+        $this->Player = $p;
+      }
     }
     $this->setName($playerInfo->getName());
     $this->setTeam($playerInfo->getTeam());
@@ -83,7 +88,6 @@ class Stat extends BaseStat {
   * This will add the given weapon to the player's stats.
   */
   public function incrementWeaponForPlayer($weapon, $propertyToIncrement, $increment = 1) {
-    //echo $weapon->getId();
     $addws = true;
     foreach($this->WeaponStats as &$ws) {
       if($ws->getWeaponId() == $weapon->getId()) {
@@ -98,6 +102,29 @@ class Stat extends BaseStat {
       $wsadd->setStat($this);
       $wsadd->_set($propertyToIncrement, $increment);
       $this->WeaponStats[] = $wsadd;
+    }
+  }
+  
+  /**
+  * This will add the given player to this player's stats.
+  */
+  public function addPlayerStat($otherPlayer, $propertyToIncrement, $increment = 1) {
+    $addps = true;
+    foreach($this->PlayerStats as &$ps) {
+      if($ps->getPlayerId() == $otherPlayer->getId()) {
+        //echo "[update ".$this->getPlayer()->getSteamid()." add '$propertyToIncrement' with player ".$otherPlayer->getSteamId()."]        ";
+        $ps->_set($propertyToIncrement, $ps->_get($propertyToIncrement)+$increment);
+        $addps = false;
+        break;
+      }
+    }
+    if($addps) {
+      //echo "[add ".$this->getPlayer()->getSteamid()." id ".$this->getPlayer()->getId()." add '$propertyToIncrement' with player ".$otherPlayer->getSteamId()." id ".$otherPlayer->getId()."]        ";
+      $psadd = new PlayerStat();
+      $psadd->setPlayerId($otherPlayer->getId());
+      $psadd->setStat($this);
+      $psadd->_set($propertyToIncrement, $increment);
+      $this->PlayerStats[] = $psadd;
     }
   }
   
