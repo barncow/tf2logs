@@ -21,6 +21,7 @@ class LogParser {
   protected $isTournamentMode;
   protected $weapons;
   protected $roles;
+  protected $currentDt;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -160,7 +161,8 @@ class LogParser {
 	  if(!$this->isTournamentMode) {
 	    throw new TournamentModeNotFoundException();
 	  }
-    $this->finishLog();  
+    $this->finishLog();
+      
 	  $this->log->save();
 	  return $this->log;
 	}
@@ -188,7 +190,7 @@ class LogParser {
 	* and assign any awards. No need to save in this method.
 	*/
 	protected function finishLog() {
-	
+	  $this->log->finishLog($this->currentDt, $this->log->get_timeStart());
 	}
 	
 	/**
@@ -209,6 +211,7 @@ class LogParser {
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
 	  }
+	  $this->currentDt = $dt;
 	  
 	  $logLineDetails = $this->parsingUtils->getLineDetails($logLine);
 	  
@@ -257,13 +260,19 @@ class LogParser {
 	    
 	    if($playerLineAction == "say"
 	    || $playerLineAction == "entered the game"
-	    || $playerLineAction == "changed role to"
-	    || $playerLineAction == "disconnected"
 	    || $playerLineAction == "connected, address"
 	    || $playerLineAction == "STEAM USERID validated"
 	    || $playerLineAction == "say_team"
 	    ) {
 	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
+	    } else if($playerLineAction == "disconnected") {
+	      $p = $players[0];
+	      $this->log->finishStatForSteamid($p->getSteamid(), $dt, $this->log->get_timeStart());
+	      return self::GAME_CONTINUE;
+	    } else if($playerLineAction == "changed role to") {
+	      $p = $players[0];
+	      $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache($this->parsingUtils->getPlayerLineActionDetail($logLineDetails)), $dt, $this->log->get_timeStart());
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
@@ -281,7 +290,7 @@ class LogParser {
 	      
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
-	      $this->log->addRoleToSteamidFromWeapon($attacker->getSteamid(), $weapon);
+	      if($weapon->getRole() != null) $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
 	      $this->log->addPlayerStatToSteamid($attacker->getSteamid(), $victim->getSteamid(), "kills");
 	      
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
@@ -294,6 +303,7 @@ class LogParser {
 	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
 	      $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
 	      $this->log->addPlayerStatToSteamid($p->getSteamid(), $p->getSteamid(), "deaths");
+	      if($weapon->getRole() != null) $this->log->addRoleToSteamid($p->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "triggered") {	      
 	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
@@ -312,6 +322,7 @@ class LogParser {
 	      } else if($playerLineActionDetail == "builtobject") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "builtobjects"); 
+	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "killedobject") {
           $attacker = $players[0];
@@ -332,14 +343,14 @@ class LogParser {
 	      } else if($playerLineActionDetail == "chargedeployed") {
 	        $p = $players[0];
 	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
-	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("medic"));
+	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "medic_death") {
 	        $victim = $players[1];
 	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
 	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
 	        }
-	        $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"));
+	        $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "captureblocked") {
 	        $p = $players[0];

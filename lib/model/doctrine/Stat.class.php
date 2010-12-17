@@ -112,14 +112,12 @@ class Stat extends BaseStat {
     $addps = true;
     foreach($this->PlayerStats as &$ps) {
       if($ps->getPlayerId() == $otherPlayer->getId()) {
-        //echo "[update ".$this->getPlayer()->getSteamid()." add '$propertyToIncrement' with player ".$otherPlayer->getSteamId()."]        ";
         $ps->_set($propertyToIncrement, $ps->_get($propertyToIncrement)+$increment);
         $addps = false;
         break;
       }
     }
     if($addps) {
-      //echo "[add ".$this->getPlayer()->getSteamid()." id ".$this->getPlayer()->getId()." add '$propertyToIncrement' with player ".$otherPlayer->getSteamId()." id ".$otherPlayer->getId()."]        ";
       $psadd = new PlayerStat();
       $psadd->setPlayerId($otherPlayer->getId());
       $psadd->setStat($this);
@@ -129,15 +127,63 @@ class Stat extends BaseStat {
   }
   
   /**
+  * Used to perform any cleanup work.
+  */
+  public function finishStat($nowDt, $logStartDt) {
+    //commit current role to the rolestat.
+    $this->addUpdateRoleStat($nowDt, $logStartDt);
+    
+    //when a player disconnects, we need to finish them early.
+    //If a player changes team, this should just start the player over after
+    //saving their current class info.
+    //todo should figure out what to do when a player switches teams, since A/D maps switch teams automatically
+    $this->currentRole = null;
+    $this->currentRoleSinceDt = null;
+  }
+  
+  protected function addUpdateRoleStat($nowDt, $logStartDt) {
+    if($this->currentRole == null) return;
+    $addrs = true;
+    $elapsedTime = $nowDt->getTimestamp()-$this->currentRoleSinceDt->getTimestamp();
+    foreach($this->RoleStats as &$rs) {
+      if($rs->getRoleId() == $this->currentRole->getId()) {
+        $rs->_set('time_played', $rs->_get('time_played')+$elapsedTime);
+        $addrs = false;
+        break;
+      }
+    }
+    if($addrs) {
+      $rsadd = new RoleStat();
+      $rsadd->setRoleId($this->currentRole->getId());
+      $rsadd->setStat($this);
+      $rsadd->_set('time_played', $elapsedTime);
+      $this->RoleStats[] = $rsadd;
+    }
+  }
+  
+  //move to top when done
+  protected $currentRole;
+  protected $currentRoleSinceDt;
+  
+  /**
   * This will add the given role to the player's stats.
   * If the role does not exist in the database, an exception is thrown.
   */
-  public function addRoleToPlayer($role) {
-    $this->Roles[] = $role;
-  }
-  
-  public function addRoleToPlayerFromWeapon($weapon) {
-    $role = $weapon->getRole();
-    if($role && $role->getKeyName() != null) $this->Roles[] = $role;
+  public function addRoleToPlayer($role, $nowDt, $logStartDt) {
+    if($this->currentRole != null) {
+      if($role->getId() == $this->currentRole->getId()) return; //same role, keep going.
+      //different role coming in, and we did not just start. Add current
+      //info to a playerstat
+     $this->addUpdateRoleStat($nowDt, $logStartDt);
+      
+      $this->currentRoleSinceDt = $nowDt;
+    } else {
+      //current role is null, therefore we are just starting.
+      //assume the user has been in the role since the start 
+      //of the match.
+      $this->currentRoleSinceDt = $logStartDt;
+    }
+    
+    $this->currentRole = $role;
   }
 }

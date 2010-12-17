@@ -45,9 +45,11 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
           }  
         }
         
-        foreach($stat->getRoles() as $r) {
-          if($r->getKeyName() != "scout") {
-            $this->fail("Target has extra role: ".$r->getKeyName());
+        foreach($stat->getRoleStats() as $r) {
+          if($r->getRole()->getKeyName() == "scout") {
+            $this->assertEquals(1666, $r->getTimePlayed(), "target's time as scout");
+          } else {
+            $this->fail("Target has extra role: ".$r->getRole()->getKeyName());
           }
         }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
@@ -73,6 +75,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->assertEquals(1, $ps->getDeaths(), "barncow has one death by muffin");
           }
         }
+        
+        foreach($stat->getRoleStats() as $r) {
+          if($r->getRole()->getKeyName() == "medic") {
+            $this->assertEquals(1666, $r->getTimePlayed(), "barncow's time as medic");
+          } else {
+            $this->fail("Barncow has extra role: ".$r->getRole()->getKeyName());
+          }
+        }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat->getAssists(), "cres' assists");
@@ -96,9 +106,15 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
           }
         }
         
-        foreach($stat->getRoles() as $r) {
-          if($r->getKeyName() != "sniper") {
-            $this->fail("Muffin has extra role: ".$r->getKeyName());
+        foreach($stat->getRoleStats() as $r) {
+          if($r->getRole()->getKeyName() == "soldier") {
+            $this->assertEquals(211, $r->getTimePlayed(), "muffin's time as soldier");
+          } else if($r->getRole()->getKeyName() == "engineer") {
+            $this->assertEquals(136, $r->getTimePlayed(), "muffin's time as engineer");
+          } else if($r->getRole()->getKeyName() == "sniper") {
+            $this->assertEquals(1045, $r->getTimePlayed(), "muffin's time as sniper (cut short due to discon)");
+          } else {
+            $this->fail("Muffin has extra role: ".$r->getRole()->getKeyName());
           }
         }
         
@@ -129,6 +145,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         foreach($stat->getPlayerStats() as $ps) {
           if($ps->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
             $this->assertEquals(1, $ps->getDeaths(), "alan has one death by alan");
+          }
+        }
+        
+        foreach($stat->getRoleStats() as $r) {
+          if($r->getRole()->getKeyName() == "medic") {
+            $this->assertEquals(1666, $r->getTimePlayed(), "alan's time as medic");
+          } else {
+            $this->fail("Alan has extra role: ".$r->getRole()->getKeyName());
           }
         }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:12272740") {

@@ -88,6 +88,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_killassist.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('kill assist', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_changerole.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('scout', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
   }
   
   public function testDidMedicDieWithUber() {

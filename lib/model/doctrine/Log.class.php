@@ -91,21 +91,12 @@ class Log extends BaseLog
   }
   
   /**
-  * This will add the role, found by the weapon, to the steamid.
-  */
-  public function addRoleToSteamidFromWeapon($steamid, $weapon) {
-    $stat = &$this->getStatFromSteamid($steamid);
-    if($stat === false) throw new InvalidArgumentException("steamid could not be found in addRoleToSteamidFromWeapon: $steamid, $weapon");
-    $stat->addRoleToPlayerFromWeapon($weapon);
-  }
-  
-  /**
   * This will add the role to the steamid.
   */
-  public function addRoleToSteamid($steamid, $role) {
+  public function addRoleToSteamid($steamid, $role, $nowDt, $logStartDt) {
     $stat = &$this->getStatFromSteamid($steamid);
-    if($stat === false) throw new InvalidArgumentException("steamid could not be found in addRoleToSteamid: $steamid, $weapon");
-    $stat->addRoleToPlayer($role);
+    if($stat === false) throw new InvalidArgumentException("steamid could not be found in addRoleToSteamid: $steamid, $role, $nowDt, $logStartDt");
+    $stat->addRoleToPlayer($role, $nowDt, $logStartDt);
   }
   
   public function addPlayerStatToSteamid($attackerSteamid, $otherSteamid, $propertyToIncrement, $increment = 1) {
@@ -113,6 +104,22 @@ class Log extends BaseLog
     $otherStat = $this->getStatFromSteamid($otherSteamid);
     if($attackerStat === false || $otherStat === false) throw new InvalidArgumentException("steamid could not be found in addPlayerStatToSteamid: $attackerSteamid,  $otherSteamid, $propertyToIncrement, $increment");
     $attackerStat->addPlayerStat($otherStat->getPlayer(), $propertyToIncrement, $increment);
+  }
+  
+  /**
+  * Used to perform any last cleanup work.
+  */
+  public function finishLog($nowDt, $logStartDt) {
+    //call finishStat for all stats.
+    foreach($this->Stats as &$stat) {
+      $stat->finishStat($nowDt, $logStartDt);
+    }
+  }
+  
+  public function finishStatForSteamid($steamid, $nowDt, $logStartDt) {
+    $stat = &$this->getStatFromSteamid($steamid);
+    if($stat === false) throw new InvalidArgumentException("steamid could not be found in finishStatForSteamid: $steamid");
+    $stat->finishStat($nowDt, $logStartDt);
   }
   
   public function clearStats() {
