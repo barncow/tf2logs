@@ -15,13 +15,15 @@ abstract class BaseRoleStatForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'role_id' => new sfWidgetFormInputHidden(),
-      'stat_id' => new sfWidgetFormInputHidden(),
+      'role_id'     => new sfWidgetFormInputHidden(),
+      'stat_id'     => new sfWidgetFormInputHidden(),
+      'time_played' => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'role_id' => new sfValidatorChoice(array('choices' => array($this->getObject()->get('role_id')), 'empty_value' => $this->getObject()->get('role_id'), 'required' => false)),
-      'stat_id' => new sfValidatorChoice(array('choices' => array($this->getObject()->get('stat_id')), 'empty_value' => $this->getObject()->get('stat_id'), 'required' => false)),
+      'role_id'     => new sfValidatorChoice(array('choices' => array($this->getObject()->get('role_id')), 'empty_value' => $this->getObject()->get('role_id'), 'required' => false)),
+      'stat_id'     => new sfValidatorChoice(array('choices' => array($this->getObject()->get('stat_id')), 'empty_value' => $this->getObject()->get('stat_id'), 'required' => false)),
+      'time_played' => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('role_stat[%s]');

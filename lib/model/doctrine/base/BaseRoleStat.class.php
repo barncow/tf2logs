@@ -7,17 +7,20 @@
  * 
  * @property integer $role_id
  * @property integer $stat_id
+ * @property integer $time_played
  * @property Role $Role
  * @property Stat $Stat
  * 
- * @method integer  getRoleId()  Returns the current record's "role_id" value
- * @method integer  getStatId()  Returns the current record's "stat_id" value
- * @method Role     getRole()    Returns the current record's "Role" value
- * @method Stat     getStat()    Returns the current record's "Stat" value
- * @method RoleStat setRoleId()  Sets the current record's "role_id" value
- * @method RoleStat setStatId()  Sets the current record's "stat_id" value
- * @method RoleStat setRole()    Sets the current record's "Role" value
- * @method RoleStat setStat()    Sets the current record's "Stat" value
+ * @method integer  getRoleId()      Returns the current record's "role_id" value
+ * @method integer  getStatId()      Returns the current record's "stat_id" value
+ * @method integer  getTimePlayed()  Returns the current record's "time_played" value
+ * @method Role     getRole()        Returns the current record's "Role" value
+ * @method Stat     getStat()        Returns the current record's "Stat" value
+ * @method RoleStat setRoleId()      Sets the current record's "role_id" value
+ * @method RoleStat setStatId()      Sets the current record's "stat_id" value
+ * @method RoleStat setTimePlayed()  Sets the current record's "time_played" value
+ * @method RoleStat setRole()        Sets the current record's "Role" value
+ * @method RoleStat setStat()        Sets the current record's "Stat" value
  * 
  * @package    tf2logs
  * @subpackage model
@@ -38,6 +41,11 @@ abstract class BaseRoleStat extends sfDoctrineRecord
              'type' => 'integer',
              'primary' => true,
              'autoincrement' => false,
+             ));
+        $this->hasColumn('time_played', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
              ));
     }
 

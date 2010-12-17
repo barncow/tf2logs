@@ -15,9 +15,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals(0, $log->getRedscore(), "red score");
     $this->assertEquals(1, $log->getBluescore(), "blue score");
     
-    //commented until figure out best way to truncate data for each test.
-    //$weapons = Doctrine::getTable('Weapon')->createQuery()->execute();
-    //$this->assertEquals(count($weapons), 4, "Has correct number of weapons");
+    $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");

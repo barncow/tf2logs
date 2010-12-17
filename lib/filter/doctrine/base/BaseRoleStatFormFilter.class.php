@@ -13,9 +13,11 @@ abstract class BaseRoleStatFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
+      'time_played' => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
+      'time_played' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('role_stat_filters[%s]');
@@ -35,8 +37,9 @@ abstract class BaseRoleStatFormFilter extends BaseFormFilterDoctrine
   public function getFields()
   {
     return array(
-      'role_id' => 'Number',
-      'stat_id' => 'Number',
+      'role_id'     => 'Number',
+      'stat_id'     => 'Number',
+      'time_played' => 'Number',
     );
   }
 }

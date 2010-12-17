@@ -46,5 +46,4 @@ class unit_LogParserTest extends BaseLogParserTestCase {
     
     $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
   }
-  
 }

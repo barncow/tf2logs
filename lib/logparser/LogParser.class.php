@@ -91,6 +91,14 @@ class LogParser {
   }
   
   /**
+  * Returns the elapsed time in milliseconds since the beginning of the match.
+  */
+  public function getElapsedTime($now) {
+    if($this->log->get_timeStart() == null) return 0;
+    return $now->getTimestamp()-$this->log->get_timeStart()->getTimestamp();
+  }
+  
+  /**
   * Will get a raw log file from the filesystem, as an array.
   */
 	public function getRawLogFile($filename) {
@@ -226,6 +234,10 @@ class LogParser {
 	      return self::GAME_CONTINUE; //no need to process
 	    }
 	  }
+	  
+	  //always set elapsed time. When the log finishes, the last timestamp set will be our elapsed time.
+	  $elapsedTime = $this->getElapsedTime($dt);
+	  $this->log->setElapsedTime($elapsedTime);
 	  
 	  if(!$this->isTournamentMode) {
 	    return self::GAME_CONTINUE; //do not want to track information when not in tournament mode.

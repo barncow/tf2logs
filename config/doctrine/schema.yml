@@ -17,6 +17,10 @@ Log:
       type: integer(4)
       notnull: true
       default: 0
+    elapsed_time:
+      type: integer
+      notnull: true
+      default: 0
     error_log_name:
       type: string(50)
       notnull: false
@@ -213,6 +217,10 @@ RoleStat:
       primary: true
       autoincrement: false
       notnull: true
+    time_played:
+      type: integer
+      notnull: true
+      default: 0
   relations:
     Role:
       foreignAlias: RoleStats
