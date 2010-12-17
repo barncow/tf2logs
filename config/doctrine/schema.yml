@@ -114,7 +114,7 @@ Stat:
     Roles:
       foreignAlias: Stats
       class: Role
-      refClass: UsedRole
+      refClass: RoleStat
     Player: 
       foreignAlias: Stats
     Players:
@@ -201,7 +201,7 @@ Role:
       type: string(20)
       notnull: false
       
-UsedRole:
+RoleStat:
   columns:
     role_id:
       type: integer
@@ -215,10 +215,10 @@ UsedRole:
       notnull: true
   relations:
     Role:
-      foreignAlias: UsedRoles
+      foreignAlias: RoleStats
     Stat:
       onDelete: CASCADE
-      foreignAlias: UsedRoles
+      foreignAlias: RoleStats
 
 Player:
   columns:

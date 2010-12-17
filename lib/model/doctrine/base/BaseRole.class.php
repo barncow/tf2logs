@@ -10,20 +10,20 @@
  * @property string $name
  * @property Doctrine_Collection $Stats
  * @property Weapon $Weapon
- * @property Doctrine_Collection $UsedRoles
+ * @property Doctrine_Collection $RoleStats
  * 
  * @method integer             getId()        Returns the current record's "id" value
  * @method string              getKeyName()   Returns the current record's "key_name" value
  * @method string              getName()      Returns the current record's "name" value
  * @method Doctrine_Collection getStats()     Returns the current record's "Stats" collection
  * @method Weapon              getWeapon()    Returns the current record's "Weapon" value
- * @method Doctrine_Collection getUsedRoles() Returns the current record's "UsedRoles" collection
+ * @method Doctrine_Collection getRoleStats() Returns the current record's "RoleStats" collection
  * @method Role                setId()        Sets the current record's "id" value
  * @method Role                setKeyName()   Sets the current record's "key_name" value
  * @method Role                setName()      Sets the current record's "name" value
  * @method Role                setStats()     Sets the current record's "Stats" collection
  * @method Role                setWeapon()    Sets the current record's "Weapon" value
- * @method Role                setUsedRoles() Sets the current record's "UsedRoles" collection
+ * @method Role                setRoleStats() Sets the current record's "RoleStats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -56,7 +56,7 @@ abstract class BaseRole extends sfDoctrineRecord
     {
         parent::setUp();
         $this->hasMany('Stat as Stats', array(
-             'refClass' => 'UsedRole',
+             'refClass' => 'RoleStat',
              'local' => 'role_id',
              'foreign' => 'stat_id'));
 
@@ -64,7 +64,7 @@ abstract class BaseRole extends sfDoctrineRecord
              'local' => 'id',
              'foreign' => 'role_id'));
 
-        $this->hasMany('UsedRole as UsedRoles', array(
+        $this->hasMany('RoleStat as RoleStats', array(
              'local' => 'id',
              'foreign' => 'role_id'));
     }

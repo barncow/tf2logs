@@ -46,8 +46,8 @@ abstract class BaseRoleFormFilter extends BaseFormFilterDoctrine
     }
 
     $query
-      ->leftJoin($query->getRootAlias().'.UsedRole UsedRole')
-      ->andWhereIn('UsedRole.stat_id', $values)
+      ->leftJoin($query->getRootAlias().'.RoleStat RoleStat')
+      ->andWhereIn('RoleStat.stat_id', $values)
     ;
   }
 
