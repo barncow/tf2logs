@@ -2,8 +2,7 @@
 require_once dirname(__FILE__).'/../bootstrap/unit.php';
 require_once 'BaseLogParserTestCase.php';
 
-class unit_MiniLogTest extends BaseLogParserTestCase {  
-  
+class unit_MiniLogTest extends BaseLogParserTestCase {    
   public function testMiniLog() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log");
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");

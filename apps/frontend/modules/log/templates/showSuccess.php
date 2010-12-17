@@ -12,6 +12,8 @@
    <span class="winSeparator"><?php echo getWinSeparator($log->getRedscore(), $log->getBluescore()) ?></span> 
    <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log->getBluescore() ?></span>
 </div>
+
+<div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log->getElapsedTime()) ?></span></div>
      
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
   <thead>
@@ -42,7 +44,13 @@
     <tr class="<?php echo $stat->getTeam() ?>">
       <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
       <td><?php echo $stat->getPlayer()->getSteamid() ?></td>
-      <td><?php echo implodeCollection($stat->getRoles(), "name", "key_name") ?></td>
+      <td>
+        <ul>
+          <?php foreach($stat->getRoleStats() as $rs): ?>
+            <li><?php echo $rs->getRole()->getName() ?> - <?php echo outputSecondsToHumanFormat($rs->getTimePlayed()) ?></li>
+          <?php endforeach ?>
+        </ul>
+      </td>
       <td><?php echo $stat->getKills() ?></td>
       <td><?php echo $stat->getAssists() ?></td>
       <td><?php echo $stat->getDeaths() ?></td>

@@ -22,9 +22,10 @@ class LogTable extends Doctrine_Table {
         ->leftJoin('l.Stats s')
         ->leftJoin('s.Player p')
         ->leftJoin('s.Weapons w')
-        ->leftJoin('s.Roles r')
+        ->leftJoin('s.RoleStats rs')
+        ->leftJoin('rs.Role r')
         ->andWhere('l.error_log_name is null')
-        ->orderBy('s.team, s.name')
+        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
         ->execute();
      
       if(count($l) == 0) return null;
