@@ -59,6 +59,8 @@ class LogParser {
     //still here, need to create new weapon
     $wep = new Weapon();
     $wep->setKeyName($keyName);
+    //setting the weapon name to keyname for easier sorting onscreen.
+    $wep->setName($keyName);
     $wep->save();
     $this->weapons[] = $wep;
     return $wep;
@@ -162,7 +164,7 @@ class LogParser {
 	    throw new TournamentModeNotFoundException();
 	  }
     $this->finishLog();
-      
+
 	  $this->log->save();
 	  return $this->log;
 	}
@@ -290,7 +292,9 @@ class LogParser {
 	      
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
-	      if($weapon->getRole() != null) $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
+	      if($weapon->getRole() != null && $weapon->getRole()->getId() != null) {
+	        $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
+	      }
 	      $this->log->addPlayerStatToSteamid($attacker->getSteamid(), $victim->getSteamid(), "kills");
 	      
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
