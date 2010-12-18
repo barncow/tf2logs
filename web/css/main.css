@@ -79,3 +79,11 @@ a:hover {
   font-size: 40px;
   font-weight: bold;
 }
+
+.zeroValue {
+  opacity: .2;
+}
+
+.nonZeroValue {
+  font-weight: bold;
+}

@@ -30,4 +30,20 @@ class WeaponStatTable extends Doctrine_Table {
         ->orderBy('s.name, w.name')
         ->execute();
     }
+    
+    /**
+    * Gets all data for use in the weapon kills,deaths
+    */
+    public function getPlayerWeaponStatsByNumericSteamid($numericSteamId) {
+      return Doctrine_Query::create()
+        ->select('ws.weapon_id, w.name, w.key_name, sum(ws.kills) as num_kills, sum(ws.deaths) as num_deaths')
+        ->from('WeaponStat ws')
+        ->innerJoin('ws.Stat s')
+        ->innerJoin('s.Player p')
+        ->innerJoin('ws.Weapon w')
+        ->where('p.numeric_steamid = ?', $numericSteamId)
+        ->groupBy('ws.weapon_id, w.name, w.key_name')
+        ->orderBy('w.name')
+        ->execute();
+    }
 }

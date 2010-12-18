@@ -51,22 +51,22 @@
           <?php endforeach ?>
         </ul>
       </td>
-      <td><?php echo $stat->getKills() ?></td>
-      <td><?php echo $stat->getAssists() ?></td>
-      <td><?php echo $stat->getDeaths() ?></td>
-      <td><?php echo $stat->getKillsPerDeath() ?></td>
-      <td><?php echo $stat->getLongestKillStreak() ?></td>
-      <td><?php echo $stat->getCapturePointsBlocked() ?></td>
-      <td><?php echo $stat->getCapturePointsCaptured() ?></td>
-      <td><?php echo $stat->getDominations() ?></td>
-      <td><?php echo $stat->getTimesDominated() ?></td>
-      <td><?php echo $stat->getRevenges() ?></td>
-      <td><?php echo $stat->getBuiltObjects() ?></td>
-      <td><?php echo $stat->getDestroyedObjects() ?></td>
-      <td><?php echo $stat->getExtinguishes() ?></td>
-      <td><?php echo $stat->getUbers() ?></td>
-      <td><?php echo $stat->getUbersPerDeath() ?></td>
-      <td><?php echo $stat->getDroppedUbers() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getKills()) ?>"><?php echo $stat->getKills() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getAssists()) ?>"><?php echo $stat->getAssists() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getDeaths()) ?>"><?php echo $stat->getDeaths() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getKillsPerDeath()) ?>"><?php echo $stat->getKillsPerDeath() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getLongestKillStreak()) ?>"><?php echo $stat->getLongestKillStreak() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getCapturePointsBlocked()) ?>"><?php echo $stat->getCapturePointsBlocked() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getCapturePointsCaptured()) ?>"><?php echo $stat->getCapturePointsCaptured() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getDominations()) ?>"><?php echo $stat->getDominations() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getTimesDominated()) ?>"><?php echo $stat->getTimesDominated() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getRevenges()) ?>"><?php echo $stat->getRevenges() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getBuiltObjects()) ?>"><?php echo $stat->getBuiltObjects() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getDestroyedObjects()) ?>"><?php echo $stat->getDestroyedObjects() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getExtinguishes()) ?>"><?php echo $stat->getExtinguishes() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getUbers()) ?>"><?php echo $stat->getUbers() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getUbersPerDeath()) ?>"><?php echo $stat->getUbersPerDeath() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat->getDroppedUbers()) ?>"><?php echo $stat->getDroppedUbers() ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>
@@ -103,15 +103,15 @@
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
           <?php if($ws->getStatId() == $stat->getId() && $ws->getWeaponId() == $w->getId()): ?>
-            <td><?php echo $ws->num_kills ?></td>
-            <td><?php echo $ws->num_deaths ?></td>
+            <td class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></td>
+            <td class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></td>
             <?php $foundWS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundWS): ?>
-          <td>0</td>
-          <td>0</td>
+          <td class="zeroValue">0</td>
+          <td class="zeroValue">0</td>
         <?php endif ?>
       <?php endforeach ?>
     </tr>
@@ -146,15 +146,15 @@
         <?php $foundPS = false ?>
         <?php foreach($playerStats as $ps): ?>
           <?php if($ps->getStatId() == $stat->getId() && $ps->getPlayerId() == $colstat->getPlayer()->getId()): ?>
-            <td><?php echo $ps->num_kills ?></td>
-            <td><?php echo $ps->num_deaths ?></td>
+            <td class="<?php echo dataCellOutputClass($ps->num_kills) ?>"><?php echo $ps->num_kills ?></td>
+            <td class="<?php echo dataCellOutputClass($ps->num_deaths) ?>"><?php echo $ps->num_deaths ?></td>
             <?php $foundPS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundPS): ?>
-          <td>0</td>
-          <td>0</td>
+          <td class="zeroValue">0</td>
+          <td class="zeroValue">0</td>
         <?php endif ?>
       <?php endforeach ?>
     </tr>

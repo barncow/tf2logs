@@ -24,4 +24,15 @@ function outputSecondsToHumanFormat($seconds) {
   if($secs != 1) $pluralsec = "s";
   return $outmins.$secs." second".$pluralsec;
 }
+
+/**
+* If the value given is zero, the output is changed
+* to a class to fade the zero number. This is to
+* draw attention more to the non-zero values.
+* If the number is not zero, normal styling is used.
+*/
+function dataCellOutputClass($value) {
+  if($value == 0) return 'zeroValue';
+  return 'nonZeroValue';
+}
 ?>

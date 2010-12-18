@@ -12,8 +12,10 @@ class playerActions extends sfActions {
   public function executeShowNumericSteamId(sfWebRequest $request) {
     $this->setTemplate('show');
     $this->player = Doctrine::getTable('Player')->getPlayerStatsByNumericSteamid($request->getParameter('id'));
+    $this->forward404Unless($this->player);
     $this->roles = Doctrine::getTable('Player')->getPlayerRolesByNumericSteamid($request->getParameter('id'));
     $this->name = Doctrine::getTable('Player')->getMostUsedPlayerName($request->getParameter('id'));
-    $this->forward404Unless($this->player);
+    $this->weapons = Doctrine::getTable('Weapon')->getAllWeapons();
+    $this->weaponStats = Doctrine::getTable('WeaponStat')->getPlayerWeaponStatsByNumericSteamid($request->getParameter('id'));
   }
 }
