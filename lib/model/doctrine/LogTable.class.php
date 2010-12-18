@@ -61,6 +61,7 @@ class LogTable extends Doctrine_Table {
     public function getMostRecentLogs($num_to_retrieve = 10) {
       return $this
         ->createQuery('l')
+        ->where('l.error_log_name is null')
         ->orderBy('l.created_at DESC')
         ->limit($num_to_retrieve)
         ->execute();
