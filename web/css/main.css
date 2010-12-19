@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "TF2 Build";
+  src: url("/css/fonts/tf2build.ttf");
+}
+
 body {
   background-color: #2A2725;
   color: #D4D4D4;
@@ -66,10 +71,22 @@ a:hover {
   font-size: 10px;
 }
 
+.statTable {
+  margin-bottom: 2em;
+}
+
 .statTable ul, .statTable li {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.statTable caption {
+  text-align: left;
+  font-weight: normal;
+  font-family: 'TF2 Build';
+  text-transform: uppercase;
+  font-size: 25px;
 }
 
 #playerName {
@@ -84,7 +101,9 @@ a:hover {
 
 #header {
   font-size: 40px;
-  font-weight: bold;
+  font-weight: normal;
+  font-family: 'TF2 Build';
+  text-transform: uppercase;
 }
 
 .zeroValue {
