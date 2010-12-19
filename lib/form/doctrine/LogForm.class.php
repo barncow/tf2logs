@@ -16,9 +16,9 @@ class LogForm extends sfForm
     ));
     
     $this->setValidators(array(
-      'name'       => new sfValidatorString(array('max_length' => 100)),
+      'name'       => new sfValidatorString(array('max_length' => 100, 'required'   => false)),
       'logfile'    => new sfValidatorFile(array(
-                        'required'   => false,
+                        'required'   => true,
                         'path'       => sfConfig::get('sf_upload_dir').'/logs',
                         'mime_types' => array('text/plain'),
                       ))

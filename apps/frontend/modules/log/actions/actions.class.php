@@ -71,8 +71,8 @@ class logActions extends sfActions {
       }
       $this->redirect('log/show?id='.$lastid);
     } else {
-      $this->getUser()->setFlash('error', 'The file you sent was not valid.');
-      $this->setTemplate('index');
+      $this->getUser()->setFlash('error', 'The file you sent was not valid. Be sure that you choose a TF2 server log file to upload.');
+      $this->redirect('log/index');
     }
   }
 }
