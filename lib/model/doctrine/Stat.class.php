@@ -67,6 +67,7 @@ class Stat extends BaseStat {
   
   /**
   * Calculates the stat's kills per death ratio.
+  * @deprecated Calculation done in view since we are converting this to array, and this method will not be there.
   */
   public function getKillsPerDeath() {
     return $this->doPerDeathDivision($this->getKills());
@@ -74,11 +75,15 @@ class Stat extends BaseStat {
   
   /**
   * Calculates the stat's ubers per death ratio.
+  * @deprecated Calculation done in view since we are converting this to array, and this method will not be there.
   */
   public function getUbersPerDeath() {
     return $this->doPerDeathDivision($this->getUbers());
   }
   
+  /**
+  * @deprecated Calculation done in view since we are converting this to array, and this method will not be there.
+  */
   protected function doPerDeathDivision($numerator) {
     if($this->getDeaths() == 0) return $numerator;
     return round((float) $numerator/$this->getDeaths(), 3);

@@ -5,15 +5,15 @@
 <?php use_javascript('jquery.dimensions.js'); ?>
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('logshow.js'); ?>
-<div id="logName"><?php echo $log->getName() ?></div>
+<div id="logName"><?php echo $log['name'] ?></div>
 
 <div id="score">
-  <span class="Red teamName">Red</span> <span class="red"><?php echo $log->getRedscore() ?></span>
-   <span class="winSeparator"><?php echo getWinSeparator($log->getRedscore(), $log->getBluescore()) ?></span> 
-   <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log->getBluescore() ?></span>
+  <span class="Red teamName">Red</span> <span class="red"><?php echo $log['redscore'] ?></span>
+   <span class="winSeparator"><?php echo getWinSeparator($log['redscore'], $log['bluescore']) ?></span> 
+   <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log['bluescore'] ?></span>
 </div>
 
-<div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log->getElapsedTime()) ?></span></div>
+<div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>
      
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
   <thead>
@@ -40,33 +40,33 @@
     </tr>
   </thead>
   <tbody>
-  <?php foreach ($log->getStats() as $stat): ?>
-    <tr class="<?php echo $stat->getTeam() ?>">
-      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
-      <td><?php echo $stat->getPlayer()->getSteamid() ?></td>
+  <?php foreach ($log['Stats'] as $stat): ?>
+    <tr class="<?php echo $stat['team'] ?>">
+      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td><?php echo $stat['Player']['steamid'] ?></td>
       <td>
         <ul>
-          <?php foreach($stat->getRoleStats() as $rs): ?>
-            <li><?php echo $rs->getRole()->getName() ?> - <?php echo outputSecondsToHumanFormat($rs->getTimePlayed()) ?></li>
+          <?php foreach($stat['RoleStats'] as $rs): ?>
+            <li><?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?></li>
           <?php endforeach ?>
         </ul>
       </td>
-      <td class="<?php echo dataCellOutputClass($stat->getKills()) ?>"><?php echo $stat->getKills() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getAssists()) ?>"><?php echo $stat->getAssists() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getDeaths()) ?>"><?php echo $stat->getDeaths() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getKillsPerDeath()) ?>"><?php echo $stat->getKillsPerDeath() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getLongestKillStreak()) ?>"><?php echo $stat->getLongestKillStreak() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getCapturePointsBlocked()) ?>"><?php echo $stat->getCapturePointsBlocked() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getCapturePointsCaptured()) ?>"><?php echo $stat->getCapturePointsCaptured() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getDominations()) ?>"><?php echo $stat->getDominations() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getTimesDominated()) ?>"><?php echo $stat->getTimesDominated() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getRevenges()) ?>"><?php echo $stat->getRevenges() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getBuiltObjects()) ?>"><?php echo $stat->getBuiltObjects() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getDestroyedObjects()) ?>"><?php echo $stat->getDestroyedObjects() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getExtinguishes()) ?>"><?php echo $stat->getExtinguishes() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getUbers()) ?>"><?php echo $stat->getUbers() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getUbersPerDeath()) ?>"><?php echo $stat->getUbersPerDeath() ?></td>
-      <td class="<?php echo dataCellOutputClass($stat->getDroppedUbers()) ?>"><?php echo $stat->getDroppedUbers() ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['kills']) ?>"><?php echo $stat['kills'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['assists']) ?>"><?php echo $stat['assists'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></td>
+      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills'], $stat['deaths']) ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['dominations']) ?>"><?php echo $stat['dominations'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['times_dominated']) ?>"><?php echo $stat['times_dominated'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['revenges']) ?>"><?php echo $stat['revenges'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['builtobjects']) ?>"><?php echo $stat['builtobjects'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['destroyedobjects']) ?>"><?php echo $stat['destroyedobjects'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></td>
+      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>
@@ -96,13 +96,13 @@
     </tr>
   </thead>
   <tbody>
-  <?php foreach ($log->getStats() as $stat): ?>
+  <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
+      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <?php foreach($weapons as $w): ?>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
-          <?php if($ws['stat_id'] == $stat->getId() && $ws['weapon_id'] == $w['id']): ?>
+          <?php if($ws['stat_id'] == $stat['id'] && $ws['weapon_id'] == $w['id']): ?>
             <td class="<?php echo dataCellOutputClass($ws['num_kills']) ?>"><?php echo $ws['num_kills'] ?></td>
             <td class="<?php echo dataCellOutputClass($ws['num_deaths']) ?>"><?php echo $ws['num_deaths'] ?></td>
             <?php $foundWS = true ?>
@@ -124,21 +124,21 @@
   <thead>
     <tr>
       <th><!--playername--></th>
-      <?php foreach($log->getStats() as $s): ?>
+      <?php foreach($log['Stats'] as $s): ?>
         <th>
-          <?php echo link_to($s->getName(), 'player/showNumericSteamId?id='.$s->getPlayer()->getNumericSteamid()) ?>
+          <?php echo link_to($s['name'], 'player/showNumericSteamId?id='.$s['Player']['numeric_steamid']) ?>
         </th>
       <?php endforeach ?>
     </tr>
   </thead>
   <tbody>
-  <?php foreach ($log->getStats() as $stat): ?>
+  <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><?php echo link_to($stat->getName(), 'player/showNumericSteamId?id='.$stat->getPlayer()->getNumericSteamid()) ?></td>
-      <?php foreach($log->getStats() as $colstat): ?>
+      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <?php foreach($log['Stats'] as $colstat): ?>
         <?php $foundPS = false ?>
         <?php foreach($playerStats as $ps): ?>
-          <?php if($ps['stat_id'] == $stat->getId() && $ps['player_id'] == $colstat->getPlayer()->getId()): ?>
+          <?php if($ps['stat_id'] == $stat['id'] && $ps['player_id'] == $colstat['Player']['id']): ?>
             <td class="<?php echo dataCellOutputClass($ps['num_kills']) ?>"><?php echo $ps['num_kills'] ?></td>
             <?php $foundPS = true ?>
             <?php break ?>
@@ -153,7 +153,7 @@
   </tbody>
 </table>
 
-Created  <?php echo $log->getCreatedAt() ?><br/>
-<?php if($log->getCreatedAt() != $log->getUpdatedAt()): ?>
-  Last Generated <?php echo $log->getUpdatedAt() ?> 
+Created  <?php echo $log['created_at'] ?><br/>
+<?php if($log['created_at'] != $log['updated_at']): ?>
+  Last Generated <?php echo $log['updated_at'] ?> 
 <?php endif ?>

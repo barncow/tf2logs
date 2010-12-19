@@ -34,6 +34,7 @@ class WeaponTable extends Doctrine_Table {
         ->innerJoin('s.Log l')
         ->where('l.id = ?', $logid)
         ->orderBy('w.name')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
 }

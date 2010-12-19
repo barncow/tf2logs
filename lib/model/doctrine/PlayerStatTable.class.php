@@ -29,7 +29,7 @@ class PlayerStatTable extends Doctrine_Table
         ->innerJoin('ps.Player p')
         ->where('l.id = ?', $logid)
         ->groupBy('s.name, p.id')
-        //->orderBy('s.name, w.name')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
 }

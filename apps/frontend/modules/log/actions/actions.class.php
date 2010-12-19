@@ -14,10 +14,10 @@ class logActions extends sfActions {
   }
   
   public function executeShow(sfWebRequest $request) {
-    $this->log = Doctrine::getTable('Log')->getLogById($request->getParameter('id'));
-    $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForLogId($request->getParameter('id'))->toArray(false);
-    $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($request->getParameter('id'))->toArray(false);
-    $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($request->getParameter('id'))->toArray(false);
+    $this->log = Doctrine::getTable('Log')->getLogByIdAsArray($request->getParameter('id'));
+    $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForLogId($request->getParameter('id'));
+    $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($request->getParameter('id'));
+    $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($request->getParameter('id'));
     $this->forward404Unless($this->log);
   }
   

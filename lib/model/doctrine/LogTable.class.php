@@ -32,6 +32,24 @@ class LogTable extends Doctrine_Table {
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
     }
     
+    public function getLogByIdAsArray($id) {
+      $l = $this
+        ->createQuery('l')
+        ->where('l.id = ?', $id)
+        ->leftJoin('l.Stats s')
+        ->leftJoin('s.Player p')
+        ->leftJoin('s.Weapons w')
+        ->leftJoin('s.RoleStats rs')
+        ->leftJoin('rs.Role r')
+        ->andWhere('l.error_log_name is null')
+        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+     
+      if(count($l) == 0) return null;
+      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
+    }
+    
     public function getErrorLogById($id) {
       $l = $this
         ->createQuery('l')

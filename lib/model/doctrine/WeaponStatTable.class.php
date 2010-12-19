@@ -28,6 +28,7 @@ class WeaponStatTable extends Doctrine_Table {
         ->where('l.id = ?', $logid)
         ->groupBy('s.name, w.name')
         ->orderBy('s.name, w.name')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
     

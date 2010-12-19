@@ -35,4 +35,9 @@ function dataCellOutputClass($value) {
   if($value == 0) return 'zeroValue';
   return 'nonZeroValue';
 }
+
+function doPerDeathDivision($numerator, $deaths) {
+  if($deaths == 0) return $numerator;
+  return round((float) $numerator/$deaths, 3);
+}
 ?>
