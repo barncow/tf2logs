@@ -259,7 +259,8 @@ class LogParser {
 	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)
-	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)) {
+	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.

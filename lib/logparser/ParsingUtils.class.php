@@ -43,7 +43,7 @@ class ParsingUtils {
   public function isLogLineOfType($logLine, $type, $lineDetails = null) {
     if($lineDetails == null) $lineDetails = $this->getLineDetails($logLine);
     $matches;
-    preg_match("/^$type/", $lineDetails, $matches);
+    preg_match("/^".quotemeta($type)."/", $lineDetails, $matches);
     return count($matches) > 0;
   }
   
