@@ -63,6 +63,13 @@ a:hover {
   border: 1px solid #D4D4D4;
   border-collapse: collapse;
   text-align: center;
+  font-size: 10px;
+}
+
+.statTable ul, .statTable li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 #playerName {

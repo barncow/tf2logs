@@ -125,16 +125,9 @@
     <tr>
       <th><!--playername--></th>
       <?php foreach($log->getStats() as $s): ?>
-        <th colspan="2">
+        <th>
           <?php echo link_to($s->getName(), 'player/showNumericSteamId?id='.$s->getPlayer()->getNumericSteamid()) ?>
         </th>
-      <?php endforeach ?>
-    </tr>
-    <tr>
-      <th><!--playername--></th>
-      <?php foreach($log->getStats() as $s): ?>
-        <th title="Kills">K</th>
-        <th title="Deaths">D</th>
       <?php endforeach ?>
     </tr>
   </thead>
@@ -147,13 +140,11 @@
         <?php foreach($playerStats as $ps): ?>
           <?php if($ps->getStatId() == $stat->getId() && $ps->getPlayerId() == $colstat->getPlayer()->getId()): ?>
             <td class="<?php echo dataCellOutputClass($ps->num_kills) ?>"><?php echo $ps->num_kills ?></td>
-            <td class="<?php echo dataCellOutputClass($ps->num_deaths) ?>"><?php echo $ps->num_deaths ?></td>
             <?php $foundPS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundPS): ?>
-          <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
         <?php endif ?>
       <?php endforeach ?>
