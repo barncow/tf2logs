@@ -58,6 +58,15 @@ class logActions extends sfActions {
     $this->redirect('log/unfinished');
   }
   
+  public function executeLogfile(sfWebRequest $request) {
+    $log = Doctrine::getTable('Log')->getErrorLogById($request->getParameter('id'));
+    $this->forward404Unless($log);
+    $logParser = new LogParser();
+    $log = file_get_contents(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
+    $this->getResponse()->setHttpHeader("content-type", 'text-plain');
+    return $this->renderText($log);
+  }
+  
   protected function listUploadedLogs() {
     $files = array();
     if ($handle = opendir(sfConfig::get('app_errorlogs'))) {

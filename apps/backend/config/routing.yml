@@ -25,6 +25,11 @@ openid_finishauth:
 openid_error:
   url: /player/openidError
   param: { module: authModule, action: openidError }
+  
+logfile:
+  url: /log/logfile/:id
+  param: { module: log, action: logfile }
+  requirements: {id: \d+}
 
 # generic rules
 # please, remove them by adding more specific rules
