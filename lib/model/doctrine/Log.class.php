@@ -36,9 +36,9 @@ class Log extends BaseLog
     foreach($this->Stats as &$stat) {
       if($stat->equalsPlayerInfo($playerInfo)) {
         //no need to add, but will update here.
-        if($playerInfo->getTeam() == null) {
+        //if($playerInfo->getTeam() == null) {
           $playerInfo->setTeam($stat->getTeam());
-        }
+        //}
         $stat->setPlayerInfoAttributes($playerInfo);
         $addStat = false;
         break;
