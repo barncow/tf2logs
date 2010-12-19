@@ -55,11 +55,67 @@ Weapon:
     key_name: shotgun_primary
     name: Engineer's Shotgun
     Role: engineer
+  obj_sentrygun:
+    key_name: obj_sentrygun
+    name: Sentry Gun Level 1
+    Role: engineer
   obj_sentrygun2:
     key_name: obj_sentrygun2
-    name: Sentry Gun
+    name: Sentry Gun Level 2
+    Role: engineer
+  obj_sentrygun3:
+    key_name: obj_sentrygun3
+    name: Sentry Gun Level 3
     Role: engineer
   rocketlauncher_directhit:
     key_name: rocketlauncher_directhit
     name: Direct Hit
     Role: soldier
+  bonesaw:
+    key_name: bonesaw
+    name: Bonesaw
+    Role: medic
+  deflect_rocket:
+    key_name: deflect_rocket
+    name: Rocket Deflect
+    Role: pyro
+  flamethrower:
+    key_name: flamethrower
+    name: Flamethrower
+    Role: pyro
+  maxgun:
+    key_name: maxgun
+    name: Lugermorph
+    #can be used by engy and scout - its a pistol
+  natascha:
+    key_name: natascha
+    name: Natascha
+    Role: heavyweapons
+  player:
+    key_name: player
+    name: Player
+    #no role (not sure what this is)
+  robot_arm:
+    key_name: robot_arm
+    name: Gunslinger
+    Role: engineer
+  shotgun_pyro:
+    key_name: shotgun_pyro
+    name: Pyro's Shotgun
+    Role: pyro
+  smg:
+    key_name: smg
+    name: SMG
+    Role: sniper
+  southern_hospitality:
+    key_name: southern_hospitality
+    name: Southern Hospitality
+    Role: engineer
+  sword:
+    key_name: sword
+    name: Eyelander
+    Role: demo
+  ubersaw:
+    key_name: ubersaw
+    name: Ubersaw
+    Role: medic
