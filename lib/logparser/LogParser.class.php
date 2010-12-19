@@ -238,6 +238,10 @@ class LogParser {
 	      || $worldTriggerAction == "Round_Overtime"
 	      || $worldTriggerAction == "Round_Win"
 	      || $worldTriggerAction == "Round_Length"
+	      || $worldTriggerAction == "Mini_Round_Selected" //not sure what mini rounds are (discovered in 1911 log)
+	      || $worldTriggerAction == "Mini_Round_Start"
+	      || $worldTriggerAction == "Mini_Round_Length"
+	      || $worldTriggerAction == "Mini_Round_Win"
 	      ) {
 	      return self::GAME_CONTINUE; //no need to process
 	    }
@@ -254,7 +258,8 @@ class LogParser {
 	  //go through line types. When complete with the line, return.
 	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
-	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
+	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
@@ -268,7 +273,6 @@ class LogParser {
 	    || $playerLineAction == "connected, address"
 	    || $playerLineAction == "STEAM USERID validated"
 	    || $playerLineAction == "say_team"
-	    || $playerLineAction == "Log file closed"
 	    ) {
 	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	    } else if($playerLineAction == "disconnected") {

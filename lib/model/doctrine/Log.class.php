@@ -118,8 +118,7 @@ class Log extends BaseLog
   
   public function finishStatForSteamid($steamid, $nowDt, $logStartDt) {
     $stat = &$this->getStatFromSteamid($steamid);
-    if($stat === false) throw new InvalidArgumentException("steamid could not be found in finishStatForSteamid: $steamid");
-    $stat->finishStat($nowDt, $logStartDt);
+    if($stat !== false) $stat->finishStat($nowDt, $logStartDt);
   }
   
   public function clearStats() {
