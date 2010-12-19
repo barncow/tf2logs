@@ -79,10 +79,10 @@
       <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
         <th colspan="2">
-          <?php if($w->getName()): ?>
-            <?php echo $w->getName() ?>
+          <?php if($w['name']): ?>
+            <?php echo $w['name'] ?>
           <?php else: ?>
-            <?php echo $w->getKeyName() ?>
+            <?php echo $w['key_name'] ?>
           <?php endif ?>
         </th>
       <?php endforeach ?>
@@ -102,9 +102,9 @@
       <?php foreach($weapons as $w): ?>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
-          <?php if($ws->getStatId() == $stat->getId() && $ws->getWeaponId() == $w->getId()): ?>
-            <td class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></td>
-            <td class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></td>
+          <?php if($ws['stat_id'] == $stat->getId() && $ws['weapon_id'] == $w['id']): ?>
+            <td class="<?php echo dataCellOutputClass($ws['num_kills']) ?>"><?php echo $ws['num_kills'] ?></td>
+            <td class="<?php echo dataCellOutputClass($ws['num_deaths']) ?>"><?php echo $ws['num_deaths'] ?></td>
             <?php $foundWS = true ?>
             <?php break ?>
           <?php endif ?>
