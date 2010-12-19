@@ -17,7 +17,7 @@ class logActions extends sfActions {
     $this->log = Doctrine::getTable('Log')->getLogById($request->getParameter('id'));
     $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForLogId($request->getParameter('id'))->toArray(false);
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($request->getParameter('id'))->toArray(false);
-    $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($request->getParameter('id'));
+    $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($request->getParameter('id'))->toArray(false);
     $this->forward404Unless($this->log);
   }
   

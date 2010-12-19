@@ -138,8 +138,8 @@
       <?php foreach($log->getStats() as $colstat): ?>
         <?php $foundPS = false ?>
         <?php foreach($playerStats as $ps): ?>
-          <?php if($ps->getStatId() == $stat->getId() && $ps->getPlayerId() == $colstat->getPlayer()->getId()): ?>
-            <td class="<?php echo dataCellOutputClass($ps->num_kills) ?>"><?php echo $ps->num_kills ?></td>
+          <?php if($ps['stat_id'] == $stat->getId() && $ps['player_id'] == $colstat->getPlayer()->getId()): ?>
+            <td class="<?php echo dataCellOutputClass($ps['num_kills']) ?>"><?php echo $ps['num_kills'] ?></td>
             <?php $foundPS = true ?>
             <?php break ?>
           <?php endif ?>
