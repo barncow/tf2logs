@@ -69,9 +69,10 @@ class PlayerTable extends Doctrine_Table {
     $query = 'select s.name, count(s.id) num_times '
       .'from stat s '
       .'inner join player p on p.id = s.player_id '
+      .'inner join log l on l.id = s.log_id '
       .'where p.numeric_steamid = ? '
       .'group by s.name '
-      .'order by num_times desc '
+      .'order by num_times, l.created_at desc '
       .'limit 0, 1 ';
     $statement = $connection->execute($query, array($id));
     $row = $statement->fetch(PDO::FETCH_OBJ);

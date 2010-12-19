@@ -23,4 +23,8 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
     }
   }
+  
+  public function testFull_1123dwidgranary() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log");
+  }
 }

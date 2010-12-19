@@ -18,7 +18,7 @@ Role:
     key_name: soldier
     name: Soldier
   demo:
-    key_name: demo
+    key_name: demoman
     name: Demo
   engineer:
     key_name: engineer

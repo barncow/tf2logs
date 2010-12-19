@@ -209,6 +209,9 @@ class LogParser {
 	* @see public function parseLine($logLine)
 	*/
 	protected function doLine($logLine) {
+	  //doing a ltrim here to remove any extraneous characters that may corrupt the log.
+	  $logLine = substr($logLine, strpos($logLine, "L"));
+	  
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
@@ -265,6 +268,7 @@ class LogParser {
 	    || $playerLineAction == "connected, address"
 	    || $playerLineAction == "STEAM USERID validated"
 	    || $playerLineAction == "say_team"
+	    || $playerLineAction == "Log file closed"
 	    ) {
 	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	    } else if($playerLineAction == "disconnected") {
@@ -375,6 +379,8 @@ class LogParser {
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_captured");
 	        }
 	        return self::GAME_CONTINUE;
+	      } else if($teamTriggerAction == "Intermission_Win_Limit") {
+	        return self::GAME_CONTINUE;//skip processing.
 	      }
 	    } else if($teamAction == "current score") {
 	      if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {

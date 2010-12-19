@@ -8,6 +8,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_initialline.log");
     $this->assertEquals("09/29/2010 - 19:05:47", $this->parsingUtils->getTimestamp($l[0])->format("m/d/Y - H:i:s"));
     
+    //sunny case
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_initialline2.log");
+    $this->assertEquals("11/23/2010 - 16:28:49", $this->parsingUtils->getTimestamp($l[0])->format("m/d/Y - H:i:s"));
+    
     //too short, method should return false
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_truncated_duringdate.log");
     $this->assertFalse($this->parsingUtils->getTimestamp($l[0]));
