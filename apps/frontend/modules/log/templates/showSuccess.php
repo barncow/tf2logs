@@ -1,7 +1,13 @@
 <?php use_helper('Log') ?>
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
+<?php use_stylesheet('./ui-lightness/jquery-ui-1.8.7.custom.css'); ?>
+<?php use_stylesheet('canvas.css'); ?>
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
+<?php use_javascript('jquery-ui-1.8.7.custom.min.js'); ?>
+<?php use_javascript('class.js'); ?>
+<?php use_javascript('mapviewer.js'); ?>
+<?php use_javascript('/maps/cp_badlands/map.js'); ?>
 <?php use_javascript('jquery.dimensions.js'); ?>
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('logshow.js'); ?>
@@ -12,6 +18,14 @@
    <span class="winSeparator"><?php echo getWinSeparator($log['redscore'], $log['bluescore']) ?></span> 
    <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log['bluescore'] ?></span>
 </div>
+
+<canvas id="mapViewer"></canvas>
+<div id="mapViewerControls">
+	<button id="playPauseButton"></button>
+	<div id="playbackProgress"><span id="totalTime"></span></div>
+	<div style="clear: both"></div>
+</div>
+<div id="chatBox"><ul></ul></div>
 
 <div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>
      
@@ -157,3 +171,46 @@ Created  <?php echo $log['created_at'] ?><br/>
 <?php if($log['created_at'] != $log['updated_at']): ?>
   Last Generated <?php echo $log['updated_at'] ?> 
 <?php endif ?>
+
+<script type="application/x-javascript">
+var gameMapObj;
+var mapViewerObj;
+
+var playerCollection = new PlayerCollection([
+	new PlayerDrawable(1, "Barncow", "blue")
+	,new PlayerDrawable(2, "BC 2", "red")
+	,new PlayerDrawable(3, "BC 3", "red")
+	,new PlayerDrawable(4, "BC 4", "red")
+	,new PlayerDrawable(5, "BC 5", "red")
+	,new PlayerDrawable(6, "BC 6", "red")
+	,new PlayerDrawable(7, "BC 7", "red")
+	,new PlayerDrawable(8, "BC 8", "red")
+	,new PlayerDrawable(9, "BC 9", "red")
+]);
+
+var logEventCollection = new LogEventCollection([
+	new LogEvent(1).k(1, new Coordinate(-1702, -2685), 2, new Coordinate(-1673, -2932))
+	,new LogEvent(1).s(1, "y4 bl0w")
+	,new LogEvent(2).k(1, new Coordinate(-1702, -2685), 3, new Coordinate(-1000, -2800))
+	,new LogEvent(3).ts(1, "i'm such a prick")
+	,new LogEvent(7).k(1, new Coordinate(-1702, -2685), 2, new Coordinate(-2200, -2932))
+	,new LogEvent(7).s(1, "goml")
+	,new LogEvent(7).pc("#Badlands_cap_cp3", "red", [1,2,3,4,5])
+	,new LogEvent(8).s(6, "just capped your point; get good")
+	,new LogEvent(10).s(2, "herp derp good at tf2")
+	,new LogEvent(10).ts(2, "what a jackass")
+	,new LogEvent(12).ts(5, "we really don't care about your love for Barncow")
+	,new LogEvent(15).s(9, "can't we all just get along?")
+	,new LogEvent(16).s(1, "GOML scrubs!!!")
+	,new LogEvent(18).s(1, "ZOMG really huge block of text I wonder what will happen when this reaches the screen? Will the universe cease to be as we once knew it? Or will something better occur? Worse?")
+	,new LogEvent(20).pc("#Badlands_cap_cp3", "blue", [6,7,8,9])
+]);
+
+/////////////////////////////////////////////////////////////////////////////////////
+// Doc ready
+/////////////////////////////////////////////////////////////////////////////////////
+$(function (){  
+	mvc = $("#mapViewerControls");
+	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"));
+});
+</script>

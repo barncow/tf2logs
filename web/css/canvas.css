@@ -1,0 +1,59 @@
+
+
+#totalTime {
+	font-size: 10px;
+	opacity: .7;
+	font-weight: bold;
+}
+
+#playbackProgress {
+	text-align: right;
+}
+
+#playbackProgress .ui-slider-handle {
+	text-decoration: none;
+	text-align: center;
+	font-size: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	width: 3em;
+}
+
+#playPauseButton {
+	font-weight: bold;
+}
+
+#playPauseButton {
+	float: left;
+}
+
+#playbackProgress {
+	float: right;
+	margin-top: 5px;
+}
+
+#chatBox {
+	overflow: auto;
+	height: 100px;
+	border: 1px solid white;
+	//width set dynamically
+}
+
+#chatBox ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 3px;
+	font-size: 10px;
+}
+
+#chatBox .chatUser {
+	font-weight: bold;
+}
+
+#chatBox .red {
+	color: rgb(255,0,0);
+}
+
+#chatBox .blue {
+	color: rgb(0,0,255);
+}
