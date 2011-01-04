@@ -11,12 +11,14 @@ class LogForm extends sfForm
 {
   public function configure() {
     $this->setWidgets(array(
-      'name'    => new sfWidgetFormInputText(),
+      'name'      => new sfWidgetFormInputText(),
+      'map_name'  => new sfWidgetFormInputText(),
       'logfile'   => new sfWidgetFormInputFile()
     ));
     
     $this->setValidators(array(
       'name'       => new sfValidatorString(array('max_length' => 100, 'required'   => false)),
+      'map_name'   => new sfValidatorString(array('max_length' => 50, 'required' => false)),
       'logfile'    => new sfValidatorFile(array(
                         'required'   => true,
                         'path'       => sfConfig::get('sf_upload_dir').'/logs',

@@ -40,4 +40,8 @@ function doPerDeathDivision($numerator, $deaths) {
   if($deaths == 0) return $numerator;
   return round((float) $numerator/$deaths, 3);
 }
+
+function mapExists($map) {
+  return $map != null && is_dir(sfConfig::get('sf_web_dir').'/maps/'.$map);
+}
 ?>

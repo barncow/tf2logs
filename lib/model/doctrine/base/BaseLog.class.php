@@ -10,6 +10,7 @@
  * @property integer $redscore
  * @property integer $bluescore
  * @property integer $elapsed_time
+ * @property string $map_name
  * @property string $error_log_name
  * @property string $error_exception
  * @property LogFile $LogFile
@@ -20,6 +21,7 @@
  * @method integer             getRedscore()        Returns the current record's "redscore" value
  * @method integer             getBluescore()       Returns the current record's "bluescore" value
  * @method integer             getElapsedTime()     Returns the current record's "elapsed_time" value
+ * @method string              getMapName()         Returns the current record's "map_name" value
  * @method string              getErrorLogName()    Returns the current record's "error_log_name" value
  * @method string              getErrorException()  Returns the current record's "error_exception" value
  * @method LogFile             getLogFile()         Returns the current record's "LogFile" value
@@ -29,6 +31,7 @@
  * @method Log                 setRedscore()        Sets the current record's "redscore" value
  * @method Log                 setBluescore()       Sets the current record's "bluescore" value
  * @method Log                 setElapsedTime()     Sets the current record's "elapsed_time" value
+ * @method Log                 setMapName()         Sets the current record's "map_name" value
  * @method Log                 setErrorLogName()    Sets the current record's "error_log_name" value
  * @method Log                 setErrorException()  Sets the current record's "error_exception" value
  * @method Log                 setLogFile()         Sets the current record's "LogFile" value
@@ -70,6 +73,11 @@ abstract class BaseLog extends sfDoctrineRecord
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
+             ));
+        $this->hasColumn('map_name', 'string', 50, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 50,
              ));
         $this->hasColumn('error_log_name', 'string', 50, array(
              'type' => 'string',

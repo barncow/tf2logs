@@ -113,11 +113,12 @@ class LogParser {
 	/**
 	* This will parse the entire log file.
 	*/
-	public function parseLogFile($filename, $logName = null, Log $logObj = null) {
+	public function parseLogFile($filename, $logName = null, $logMapName = null, Log $logObj = null) {
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
 	  }
 	  $this->log->setName($logName);
+	  $this->log->setMapName($logMapName);
 	  if($logObj != null) {
 	    $this->log = $logObj;
 	  }

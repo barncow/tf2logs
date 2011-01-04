@@ -1,13 +1,18 @@
 <?php use_helper('Log') ?>
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
+<?php use_javascript('jquery-1.4.4.min.js'); ?>
+
+<?php if(mapExists($log['map_name'])): ?>
 <?php use_stylesheet('./ui-lightness/jquery-ui-1.8.7.custom.css'); ?>
 <?php use_stylesheet('canvas.css'); ?>
-<?php use_javascript('jquery-1.4.4.min.js'); ?>
 <?php use_javascript('jquery-ui-1.8.7.custom.min.js'); ?>
 <?php use_javascript('class.js'); ?>
 <?php use_javascript('mapviewer.js'); ?>
-<?php use_javascript('/maps/cp_badlands/map.js'); ?>
+<?php use_javascript('/maps/'.$log['map_name'].'/map.js'); ?>
+<?php endif ?>
+
+
 <?php use_javascript('jquery.dimensions.js'); ?>
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('logshow.js'); ?>
@@ -19,6 +24,7 @@
    <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log['bluescore'] ?></span>
 </div>
 
+<?php if(mapExists($log['map_name'])): ?>
 <canvas id="mapViewer"></canvas>
 <div id="mapViewerControls">
 	<button id="playPauseButton"></button>
@@ -26,6 +32,7 @@
 	<div style="clear: both"></div>
 </div>
 <div id="chatBox"><ul></ul></div>
+<?php endif ?>
 
 <div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>
      
@@ -172,6 +179,7 @@ Created  <?php echo $log['created_at'] ?><br/>
   Last Generated <?php echo $log['updated_at'] ?> 
 <?php endif ?>
 
+<?php if(mapExists($log['map_name'])): ?>
 <script type="application/x-javascript">
 var gameMapObj;
 var mapViewerObj;
@@ -214,3 +222,4 @@ $(function (){
 	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"));
 });
 </script>
+<?php endif ?>
