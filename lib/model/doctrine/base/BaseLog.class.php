@@ -15,6 +15,7 @@
  * @property string $error_exception
  * @property LogFile $LogFile
  * @property Doctrine_Collection $Stats
+ * @property Doctrine_Collection $Events
  * 
  * @method integer             getId()              Returns the current record's "id" value
  * @method string              getName()            Returns the current record's "name" value
@@ -26,6 +27,7 @@
  * @method string              getErrorException()  Returns the current record's "error_exception" value
  * @method LogFile             getLogFile()         Returns the current record's "LogFile" value
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
+ * @method Doctrine_Collection getEvents()          Returns the current record's "Events" collection
  * @method Log                 setId()              Sets the current record's "id" value
  * @method Log                 setName()            Sets the current record's "name" value
  * @method Log                 setRedscore()        Sets the current record's "redscore" value
@@ -36,6 +38,7 @@
  * @method Log                 setErrorException()  Sets the current record's "error_exception" value
  * @method Log                 setLogFile()         Sets the current record's "LogFile" value
  * @method Log                 setStats()           Sets the current record's "Stats" collection
+ * @method Log                 setEvents()          Sets the current record's "Events" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -99,6 +102,10 @@ abstract class BaseLog extends sfDoctrineRecord
              'foreign' => 'log_id'));
 
         $this->hasMany('Stat as Stats', array(
+             'local' => 'id',
+             'foreign' => 'log_id'));
+
+        $this->hasMany('Event as Events', array(
              'local' => 'id',
              'foreign' => 'log_id'));
 

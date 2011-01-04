@@ -270,13 +270,18 @@ class LogParser {
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
 	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
 	    
-	    if($playerLineAction == "say"
-	    || $playerLineAction == "entered the game"
+	    if($playerLineAction == "entered the game"
 	    || $playerLineAction == "connected, address"
 	    || $playerLineAction == "STEAM USERID validated"
-	    || $playerLineAction == "say_team"
 	    ) {
 	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
+	    } else if($playerLineAction == "say" || $playerLineAction == "say_team") {
+	      if($players[0]->getSteamid() != "Console") {
+	        $p = $players[0];
+	        $this->log->addChatEvent($elapsedTime, $playerLineAction, $p, $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	      }
+	      
+	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "disconnected") {
 	      $p = $players[0];
 	      $this->log->finishStatForSteamid($p->getSteamid(), $dt, $this->log->get_timeStart());
@@ -310,6 +315,10 @@ class LogParser {
 	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	      $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
 	      $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
+	      
+	      $this->log->addKillEvent($elapsedTime, $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
+	        ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
+	      
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "committed suicide with") {
 	      $p = $players[0];

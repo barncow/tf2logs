@@ -96,6 +96,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_changerole.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('scout', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_teamsay.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('I can also play pyro. I have been doing that a lot on 2fort and doublecross.', $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
   }
   
   public function testDidMedicDieWithUber() {
@@ -173,6 +177,13 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_killed_pistolscout.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('pistol_scout', $this->parsingUtils->getWeapon($logLineDetails), "can get pistol_scout");
+  }
+  
+  public function testGetKillCoords() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('-704 1584 -464', $this->parsingUtils->getKillCoords("attacker", $logLineDetails), "can get attacker coords");
+    $this->assertEquals('-824 1429 -396', $this->parsingUtils->getKillCoords("victim", $logLineDetails), "can get victim coords");
   }
   
   public function testGetNumericSteamidFromOpenID() {

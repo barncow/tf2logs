@@ -106,6 +106,25 @@ class Log extends BaseLog
     $attackerStat->addPlayerStat($otherStat->getPlayer(), $propertyToIncrement, $increment);
   }
   
+  public function addKillEvent($elapsedSeconds, $attackerSteamid, $attackerCoord, $victimSteamid, $victimCoord) {
+    $e = new Event();
+    $attackerStat = $this->getStatFromSteamid($attackerSteamid);
+    $victimStat = $this->getStatFromSteamid($victimSteamid);
+    $e->kill($elapsedSeconds, $attackerStat->getPlayer()->getId(), $attackerCoord, $victimStat->getPlayer()->getId(), $victimCoord);
+    $this->Events[] = $e;
+  }
+  
+  public function addChatEvent($elapsedSeconds, $chatType, $chatPlayer, $text) {
+    $e = new Event();
+    $chatStat = $this->getStatFromSteamid($chatPlayer->getSteamid());
+    if($chatStat == null) {
+      $this->addUpdateUniqueStatFromPlayerInfo($chatPlayer);
+      $chatStat = $this->getStatFromSteamid($chatPlayer->getSteamid());
+    }
+    $e->chat($elapsedSeconds, $chatType, $chatStat->getPlayer()->getId(), $text);
+    $this->Events[] = $e;
+  }
+  
   /**
   * Used to perform any last cleanup work.
   */

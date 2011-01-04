@@ -239,5 +239,18 @@ class ParsingUtils {
       return false;
     }
 	}
+	
+	/**
+  * Retrieves the "attacker" or "victim" coordinates in a kill line.
+  */
+  public function getKillCoords($type, $logLineDetails) {
+    $matches;
+    preg_match("/\(".$type."_position \"([\d- ]+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

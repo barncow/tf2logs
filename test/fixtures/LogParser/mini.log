@@ -34,7 +34,7 @@ L 09/29/2010 - 19:24:18: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggere
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" triggered "medic_death" against "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" (healing "160") (ubercharge "0")
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" committed suicide with "world" (attacker_position "-5072 1286 -511")
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" joined team "Spectator"
-L 09/29/2010 - 19:14:43: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" with "sniperrifle" (attacker_position "-2771 1546 -295") (victim_position "-3308 1790 -220")
+L 09/29/2010 - 19:25:18: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" with "sniperrifle" (attacker_position "-2771 1546 -295") (victim_position "-3308 1790 -220")
 L 09/29/2010 - 19:25:18: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "medic_death" against "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" (healing "1800") (ubercharge "1")
 L 09/29/2010 - 19:27:50: Team "Blue" triggered "pointcaptured" (cp "0") (cpname "#Gravelpit_cap_A") (numcappers "3") (player1 "Target<46><STEAM_0:0:6845279><Blue>") (position1 "234 724 -183") (player2 "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Blue>") (position2 "-70 411 -191") (player3 "[!?] cheap<56><STEAM_0:0:12272740><Blue>") (position3 "136 733 -183") 
 L 09/29/2010 - 19:32:08: "`yay!<52><STEAM_0:0:973270><Red>" triggered "captureblocked" (cp "1") (cpname "#Gravelpit_cap_B") (position "-2440 4826 -579")

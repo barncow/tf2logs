@@ -275,3 +275,43 @@ PlayerStat:
     Stat:
       onDelete: CASCADE
       foreignAlias: PlayerStats
+      
+Event:
+  columns:
+    log_id:
+      type: integer
+      notnull: true
+    event_type:
+      type: string(10)
+      notnull: true
+    elapsed_seconds:
+      type: integer(4)
+      notnull: true
+    attacker:
+      type: integer
+      notnull: false
+    attacker_coord:
+      type: string(17)
+      notnull: false
+    victim:
+      type: integer
+      notnull: false
+    victim_coord:
+      type: string(17)
+      notnull: false
+    assist:
+      type: integer
+      notnull: false
+    assist_coord:
+      type: string(17)
+      notnull: false
+    player_id:
+      type: integer
+      notnull: false
+    text:
+      type: string(255)
+      notnull: false
+  relations:
+    Log:
+      onDelete: CASCADE
+      foreignAlias: Events

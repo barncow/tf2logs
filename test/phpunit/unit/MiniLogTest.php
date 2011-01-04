@@ -16,6 +16,15 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
     
+    $events = $log->getEvents()->toArray(false);
+    $this->assertEquals(2, $events[0]['attacker'], "first event has attacker 2");
+    $this->assertEquals(1, $events[0]['elapsed_seconds'], "first event has elapsed seconds");
+    $this->assertEquals("-2419 1637 -511", $events[1]['attacker_coord'], "second event has attacker_coord ");
+    $this->assertEquals(2, $events[2]['victim'], "third event has victim ");
+    $this->assertEquals('I can also play pyro. I have been doing that a lot on 2fort and doublecross.', $events[3]['text'], "fourth event has text ");
+    $this->assertEquals('say_team', $events[3]['event_type'], "fourth event has event_type ");
+    $this->assertEquals("-3308 1790 -220", $events[4]['victim_coord'], "fifth event has victim_coord ");
+    
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
       if($stat->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {

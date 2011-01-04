@@ -197,23 +197,21 @@ var playerCollection = new PlayerCollection([
 ]);
 
 var logEventCollection = new LogEventCollection([
-
-	new LogEvent(1).k(2, new Coordinate(-1702, -2685), 2, new Coordinate(-1673, -2932))
-	,new LogEvent(1).s(3, "y4 bl0w")
-	,new LogEvent(2).k(3, new Coordinate(-1702, -2685), 3, new Coordinate(-1000, -2800))
-	,new LogEvent(3).ts(3, "i'm such a prick")
-	,new LogEvent(7).k(3, new Coordinate(-1702, -2685), 2, new Coordinate(-2200, -2932))
-	,new LogEvent(7).s(3, "goml")
-	,new LogEvent(7).pc("#Badlands_cap_cp3", "red", [2,3,4,5])
-	,new LogEvent(8).s(6, "just capped your point; get good")
-	,new LogEvent(10).s(2, "herp derp good at tf2")
-	,new LogEvent(10).ts(2, "what a jackass")
-	,new LogEvent(12).ts(5, "we really don't care about your love for Barncow")
-	,new LogEvent(15).s(9, "can't we all just get along?")
-	,new LogEvent(16).s(2, "GOML scrubs!!!")
-	,new LogEvent(18).s(2, "ZOMG really huge block of text I wonder what will happen when this reaches the screen? Will the universe cease to be as we once knew it? Or will something better occur? Worse?")
-	,new LogEvent(20).pc("#Badlands_cap_cp3", "blue", [6,7,8,9])
-	
+<?php $isFirst = true; ?>
+<?php foreach ($log['Events'] as $event): ?>
+  <?php $comma = "," ?>
+  <?php if($isFirst): ?>
+    <?php $comma = ""; ?>
+    <?php $isFirst = false; ?>
+  <?php endif ?>
+  <?php if($event['event_type'] == "kill"): ?>
+<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['attacker'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim'].",new Coordinate(".getCoords($event['victim_coord'])."))\n" ?>
+  <?php elseif($event['event_type'] == "say"): ?>
+<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['player_id'].",\"".addslashes($event['text'])."\")\n" ?>
+  <?php elseif($event['event_type'] == "say_team"): ?>
+<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").ts(".$event['player_id'].",\"".addslashes($event['text'])."\")\n" ?>
+  <?php endif ?>
+<?php endforeach; ?>
 ]);
 
 /////////////////////////////////////////////////////////////////////////////////////

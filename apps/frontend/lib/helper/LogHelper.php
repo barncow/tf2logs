@@ -44,4 +44,9 @@ function doPerDeathDivision($numerator, $deaths) {
 function mapExists($map) {
   return $map != null && is_dir(sfConfig::get('sf_web_dir').'/maps/'.$map);
 }
+
+function getCoords($coord) {
+  $a = explode(" ", $coord);
+  return $a[0].",".$a[1];
+}
 ?>
