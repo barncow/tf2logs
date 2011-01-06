@@ -19,6 +19,26 @@ player_by_numeric_steamid:
   url:   /player/:id
   param: { module: player, action: showNumericSteamId }
   requirements: {id: \d+}
+  
+controlpanel:
+  url:   /player/controlPanel
+  param: { module: player, action: controlPanel }
+  
+autoLogin:
+  url:   /player/autoLogin
+  param: { module: player, action: autoLogin }
+  
+logout:
+  url:   /player/logout
+  param: { module: player, action: logout }
+  
+openid_finishauth:
+  url: /player/finish
+  param: { module: player, action: finish }
+  
+openid_error:
+  url: /player/openidError
+  param: { module: player, action: openidError }
 
 # generic rules
 # please, remove them by adding more specific rules

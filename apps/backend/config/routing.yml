@@ -14,6 +14,10 @@ login:
   url:   /player/login
   param: { module: authModule, action: login }
   
+autoLogin:
+  url:   /player/autoLogin
+  param: { module: authModule, action: autoLogin }
+  
 logout:
   url:   /player/logout
   param: { module: authModule, action: logout }

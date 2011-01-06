@@ -9,6 +9,9 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class authModuleActions extends BasesfPHPOpenIDAuthActions {
+  //todo move to app config
+  const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
+  
   public function executeOpenidError() {
     $this->error = $this->getRequest()->getErrors();
     $this->getResponse()->setCookie('known_openid_identity', '');
@@ -21,8 +24,16 @@ class authModuleActions extends BasesfPHPOpenIDAuthActions {
   
   }
   
+  //this will send the user directly to the url, instead of bringing up a page first.
+  public function executeAutoLogin() {
+    $this->getUser()->setAttribute('openid_real_back_url', $this->getRequest()->getReferer());
+    $this->openID = $this->getRedirectHtml(self::STEAM_OPENID_URL);
+    $this->redirect($this->openID['url']);
+  }
+  
+  //this will bring up a page to login.
   public function executeLogin() {
-    $this->openID = $this->getRedirectHtml("http://steamcommunity.com/openid");
+    $this->openID = $this->getRedirectHtml(self::STEAM_OPENID_URL);
   }
   
   public function executeLogout() {
@@ -49,6 +60,10 @@ class authModuleActions extends BasesfPHPOpenIDAuthActions {
     $this->getUser()->setFlash('notice', 'Successfully logged in.');
     $this->getUser()->setAuthenticated(true);
     sfContext::getInstance()->getResponse()->setCookie('known_openid_identity',$openid_validation_result['identity']);
-    $this->redirect('@controlpanel');
+    
+    $back = $this->getUser()->getAttribute('openid_real_back_url');
+    $this->getUser()->getAttributeHolder()->remove('openid_real_back_url');
+    if (empty($back)) $back = '@controlpanel';
+    $this->redirect($back);
   }
 }

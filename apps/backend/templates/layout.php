@@ -23,6 +23,6 @@
     
     <?php echo $sf_content ?>
     
-    <div class="footer">OpenID authentication is <a href="http://steampowered.com">Powered by Steam</a>.</div>
+    <div class="footer"><a href="http://steampowered.com">Powered by Steam</a></div>
   </body>
 </html>
