@@ -13,21 +13,21 @@ class Event extends BaseEvent {
   public function kill($elapsedSeconds, $attackerPlayerId, $attackerCoord, $victimPlayerId, $victimCoord) {
     $this->event_type = "kill";
     $this->elapsed_seconds = $elapsedSeconds;
-    $this->attacker = $attackerPlayerId;
+    $this->Attacker = $attackerPlayerId;
     $this->attacker_coord = $attackerCoord;
-    $this->victim = $victimPlayerId;
+    $this->Victim = $victimPlayerId;
     $this->victim_coord = $victimCoord;
   }
   
   public function assist($assistPlayerId, $assistCoord) {
-    $this->assist = $assistPlayerId;
+    $this->assist_player_id = $assistPlayerId;
     $this->assist_coord = $assistCoord;
   }
   
   public function chat($elapsedSeconds, $chatType, $playerId, $text) {
     $this->elapsed_seconds = $elapsedSeconds;
     $this->event_type = $chatType;
-    $this->player_id = $playerId;
+    $this->chat_player_id = $playerId;
     $this->text = $text;
   }
 }

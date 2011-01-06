@@ -13,31 +13,31 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'log_id'          => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'add_empty' => true)),
-      'event_type'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'elapsed_seconds' => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'attacker'        => new sfWidgetFormFilterInput(),
-      'attacker_coord'  => new sfWidgetFormFilterInput(),
-      'victim'          => new sfWidgetFormFilterInput(),
-      'victim_coord'    => new sfWidgetFormFilterInput(),
-      'assist'          => new sfWidgetFormFilterInput(),
-      'assist_coord'    => new sfWidgetFormFilterInput(),
-      'player_id'       => new sfWidgetFormFilterInput(),
-      'text'            => new sfWidgetFormFilterInput(),
+      'log_id'             => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Log'), 'add_empty' => true)),
+      'event_type'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'elapsed_seconds'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'attacker_player_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Attacker'), 'add_empty' => true)),
+      'attacker_coord'     => new sfWidgetFormFilterInput(),
+      'victim_player_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Victim'), 'add_empty' => true)),
+      'victim_coord'       => new sfWidgetFormFilterInput(),
+      'assist_player_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Assist'), 'add_empty' => true)),
+      'assist_coord'       => new sfWidgetFormFilterInput(),
+      'chat_player_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Chat'), 'add_empty' => true)),
+      'text'               => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
-      'log_id'          => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Log'), 'column' => 'id')),
-      'event_type'      => new sfValidatorPass(array('required' => false)),
-      'elapsed_seconds' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'attacker'        => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'attacker_coord'  => new sfValidatorPass(array('required' => false)),
-      'victim'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'victim_coord'    => new sfValidatorPass(array('required' => false)),
-      'assist'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'assist_coord'    => new sfValidatorPass(array('required' => false)),
-      'player_id'       => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'text'            => new sfValidatorPass(array('required' => false)),
+      'log_id'             => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Log'), 'column' => 'id')),
+      'event_type'         => new sfValidatorPass(array('required' => false)),
+      'elapsed_seconds'    => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'attacker_player_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Attacker'), 'column' => 'id')),
+      'attacker_coord'     => new sfValidatorPass(array('required' => false)),
+      'victim_player_id'   => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Victim'), 'column' => 'id')),
+      'victim_coord'       => new sfValidatorPass(array('required' => false)),
+      'assist_player_id'   => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Assist'), 'column' => 'id')),
+      'assist_coord'       => new sfValidatorPass(array('required' => false)),
+      'chat_player_id'     => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Chat'), 'column' => 'id')),
+      'text'               => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('event_filters[%s]');
@@ -57,18 +57,18 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
   public function getFields()
   {
     return array(
-      'id'              => 'Number',
-      'log_id'          => 'ForeignKey',
-      'event_type'      => 'Text',
-      'elapsed_seconds' => 'Number',
-      'attacker'        => 'Number',
-      'attacker_coord'  => 'Text',
-      'victim'          => 'Number',
-      'victim_coord'    => 'Text',
-      'assist'          => 'Number',
-      'assist_coord'    => 'Text',
-      'player_id'       => 'Number',
-      'text'            => 'Text',
+      'id'                 => 'Number',
+      'log_id'             => 'ForeignKey',
+      'event_type'         => 'Text',
+      'elapsed_seconds'    => 'Number',
+      'attacker_player_id' => 'ForeignKey',
+      'attacker_coord'     => 'Text',
+      'victim_player_id'   => 'ForeignKey',
+      'victim_coord'       => 'Text',
+      'assist_player_id'   => 'ForeignKey',
+      'assist_coord'       => 'Text',
+      'chat_player_id'     => 'ForeignKey',
+      'text'               => 'Text',
     );
   }
 }

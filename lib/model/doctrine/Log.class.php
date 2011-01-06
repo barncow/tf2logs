@@ -36,9 +36,12 @@ class Log extends BaseLog
     foreach($this->Stats as &$stat) {
       if($stat->equalsPlayerInfo($playerInfo)) {
         //no need to add, but will update here.
-        //if($playerInfo->getTeam() == null) {
+        
+        //if the player is now on team null (discon, spec, etc) keep old team designation.
+        if($playerInfo->getTeam() == null) {
           $playerInfo->setTeam($stat->getTeam());
-        //}
+        }
+        
         $stat->setPlayerInfoAttributes($playerInfo);
         $addStat = false;
         break;
@@ -110,7 +113,7 @@ class Log extends BaseLog
     $e = new Event();
     $attackerStat = $this->getStatFromSteamid($attackerSteamid);
     $victimStat = $this->getStatFromSteamid($victimSteamid);
-    $e->kill($elapsedSeconds, $attackerStat->getPlayer()->getId(), $attackerCoord, $victimStat->getPlayer()->getId(), $victimCoord);
+    $e->kill($elapsedSeconds, $attackerStat->getPlayer(), $attackerCoord, $victimStat->getPlayer(), $victimCoord);
     $this->Events[] = $e;
   }
   
@@ -121,8 +124,12 @@ class Log extends BaseLog
       $this->addUpdateUniqueStatFromPlayerInfo($chatPlayer);
       $chatStat = $this->getStatFromSteamid($chatPlayer->getSteamid());
     }
-    $e->chat($elapsedSeconds, $chatType, $chatStat->getPlayer()->getId(), $text);
-    $this->Events[] = $e;
+    
+    //if we still don't have a chatStat, its because it could not be added, due to it being Console or not on team.
+    if($chatStat != null) {
+      $e->chat($elapsedSeconds, $chatType, $chatStat->getPlayer(), $text);
+      $this->Events[] = $e;
+    }
   }
   
   /**

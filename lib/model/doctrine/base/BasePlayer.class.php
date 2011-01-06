@@ -11,6 +11,7 @@
  * @property string $credential
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $PlayerStats
+ * @property Doctrine_Collection $Event
  * 
  * @method integer             getId()              Returns the current record's "id" value
  * @method integer             getNumericSteamid()  Returns the current record's "numeric_steamid" value
@@ -18,12 +19,14 @@
  * @method string              getCredential()      Returns the current record's "credential" value
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
  * @method Doctrine_Collection getPlayerStats()     Returns the current record's "PlayerStats" collection
+ * @method Doctrine_Collection getEvent()           Returns the current record's "Event" collection
  * @method Player              setId()              Sets the current record's "id" value
  * @method Player              setNumericSteamid()  Sets the current record's "numeric_steamid" value
  * @method Player              setSteamid()         Sets the current record's "steamid" value
  * @method Player              setCredential()      Sets the current record's "credential" value
  * @method Player              setStats()           Sets the current record's "Stats" collection
  * @method Player              setPlayerStats()     Sets the current record's "PlayerStats" collection
+ * @method Player              setEvent()           Sets the current record's "Event" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -43,10 +46,12 @@ abstract class BasePlayer extends sfDoctrineRecord
         $this->hasColumn('numeric_steamid', 'integer', null, array(
              'type' => 'integer',
              'notnull' => true,
+             'unique' => true,
              ));
         $this->hasColumn('steamid', 'string', 30, array(
              'type' => 'string',
              'notnull' => true,
+             'unique' => true,
              'length' => 30,
              ));
         $this->hasColumn('credential', 'string', 10, array(
@@ -67,5 +72,9 @@ abstract class BasePlayer extends sfDoctrineRecord
         $this->hasMany('PlayerStat as PlayerStats', array(
              'local' => 'id',
              'foreign' => 'player_id'));
+
+        $this->hasMany('Event', array(
+             'local' => 'id',
+             'foreign' => 'attacker_player_id'));
     }
 }

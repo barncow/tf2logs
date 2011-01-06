@@ -28,6 +28,13 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'credential'      => new sfValidatorString(array('max_length' => 10, 'required' => false)),
     ));
 
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorAnd(array(
+        new sfValidatorDoctrineUnique(array('model' => 'Player', 'column' => array('numeric_steamid'))),
+        new sfValidatorDoctrineUnique(array('model' => 'Player', 'column' => array('steamid'))),
+      ))
+    );
+
     $this->widgetSchema->setNameFormat('player[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

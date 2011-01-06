@@ -67,7 +67,7 @@ class unit_StatModelTest extends sfPHPUnitBaseTestCase {
   public function testInsertWeapon() {
     $log = new Log();
     $stat = new Stat();
-    $stat->getPlayer()->setSteamid("STEAM_0:0:6845279");
+    $stat->getPlayer()->setSteamid("STEAM_0:0:23547");
     $weapon = new Weapon();
     $weapon->setKeyName('scattergun');
     $stat->Weapons[] = $weapon;

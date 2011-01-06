@@ -241,9 +241,11 @@ Player:
     numeric_steamid:
       type: integer
       notnull: true
+      unique: true
     steamid:
       type: string(30)
       notnull: true
+      unique: true
     credential:
       type: string(10)
       default: user
@@ -287,25 +289,25 @@ Event:
     elapsed_seconds:
       type: integer(4)
       notnull: true
-    attacker:
+    attacker_player_id:
       type: integer
       notnull: false
     attacker_coord:
       type: string(17)
       notnull: false
-    victim:
+    victim_player_id:
       type: integer
       notnull: false
     victim_coord:
       type: string(17)
       notnull: false
-    assist:
+    assist_player_id:
       type: integer
       notnull: false
     assist_coord:
       type: string(17)
       notnull: false
-    player_id:
+    chat_player_id:
       type: integer
       notnull: false
     text:
@@ -315,3 +317,15 @@ Event:
     Log:
       onDelete: CASCADE
       foreignAlias: Events
+    Attacker:
+      local: attacker_player_id
+      class: Player
+    Victim:
+      local: victim_player_id
+      class: Player
+    Assist:
+      local: assist_player_id
+      class: Player
+    Chat:
+      local: chat_player_id
+      class: Player

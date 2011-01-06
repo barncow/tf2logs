@@ -16,8 +16,9 @@ class Stat extends BaseStat {
   function setPlayerInfoAttributes(PlayerInfo $playerInfo) {
     if(!isset($this->Player)) {
       $p = Doctrine::getTable('Player')->findOneBySteamid($playerInfo->getSteamid());
-      if($p != null) $this->setPlayer($p);
-      else {
+      if($p != null && $p !== false) {
+        $this->setPlayer($p);
+      } else {
         $p = new Player();
         $p->setSteamid($playerInfo->getSteamid());
         $p->save();

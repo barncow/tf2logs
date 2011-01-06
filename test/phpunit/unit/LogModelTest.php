@@ -4,8 +4,8 @@ require_once dirname(__FILE__).'/../bootstrap/unit.php';
 class unit_LogModelTest extends sfPHPUnitBaseTestCase
 {
   public function testAddUniqueStatForPlayerInfo() {
-   $pi1 = new PlayerInfo("myname", "steamid", "team");
-   $pi2 = new PlayerInfo("mynewname", "mynewsteamid", "mynewteam");
+   $pi1 = new PlayerInfo("myname", "STEAM_0:0:123456", "team");
+   $pi2 = new PlayerInfo("mynewname", "STEAM_0:0:78901", "mynewteam");
    
    $log = new Log();
    $log->addUpdateUniqueStatFromPlayerInfo($pi1);
@@ -18,10 +18,11 @@ class unit_LogModelTest extends sfPHPUnitBaseTestCase
    $this->assertEquals(2, count($log->Stats), "insertion of second record should have 2 stats in log");
   }
   
+  //this will add garbage players, since add/update will create player objects in the database so later objects have an id to ref
   public function testAddUniqueStatsForPlayerInfos() {
-    $pi1 = new PlayerInfo("myname", "steamid", "team");
-    $pi2 = new PlayerInfo("mynewname", "mynewsteamid", "mynewteam");
-    $pi3 = new PlayerInfo("notonteam", "notonteamsid", null);
+    $pi1 = new PlayerInfo("myname", "STEAM_0:0:123456", "team");
+    $pi2 = new PlayerInfo("mynewname", "STEAM_0:0:78901", "mynewteam");
+    $pi3 = new PlayerInfo("notonteam", "STEAM_0:0:1234", null);
 
     $log = new Log();
     $log->addUpdateUniqueStatFromPlayerInfo($pi1);
