@@ -19,28 +19,28 @@ class unit_LogParserTest extends BaseLogParserTestCase {
   */
   //may want to deal with this as corrupt log file exception
   public function testCorruptFileThrowsCorruptLogLineException() {
-    $this->logParser->parseLogFile($this->LFIXDIR."blah.log");
+    $this->logParser->parseLogFile($this->LFIXDIR."blah.log", 1);
   }
   
   /**
   * @expectedException TournamentModeNotFoundException
   */
   public function testTournamentModeNotFoundException() {
-    $this->logParser->parseLogFile($this->LFIXDIR."mini_without_tourney.log");
+    $this->logParser->parseLogFile($this->LFIXDIR."mini_without_tourney.log", 1);
   }
   
   //the last line of the log file is usually truncated, and corrupt. Ignore exceptions for that line.
   public function testIgnoreUnrecognizedExceptionOnLastLine() {
-    $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated.log");
+    $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated.log", 1);
   }
   
   //the last line of the log file is usually truncated, and corrupt. Ignore exceptions for that line.
   public function testIgnoreCorruptExceptionOnLastLine() {
-    $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated_corrupt.log");
+    $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated_corrupt.log", 1);
   }
   
   public function testParseFromDB() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log");
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $this->logParser = new LogParser();
     $log = $this->logParser->parseLogFromDB($log);
     

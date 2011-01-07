@@ -15,7 +15,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   }
   
   public function testFull_withGarbageAtEnd() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log");
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     
     $this->assertEquals(895, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
     
@@ -25,6 +25,6 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   }
   
   public function testFull_1123dwidgranary() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log");
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
   }
 }

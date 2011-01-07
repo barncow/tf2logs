@@ -8,6 +8,10 @@
  * @author     Brian Barnekow
  */
 class logActions extends sfActions {
+  //todo move to app config
+  const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
+  const PLAYER_ID_ATTR = "playerId";
+  
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
     $this->form = new LogForm(); 
@@ -43,7 +47,7 @@ class logActions extends sfActions {
         $log = null;
         
         try {
-          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $form->getValue('name'), $form->getValue('map_name'));
+          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(self::PLAYER_ID_ATTR), $form->getValue('name'), $form->getValue('map_name'));
         } catch(TournamentModeNotFoundException $tmnfe) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return sfView::ERROR;

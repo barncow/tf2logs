@@ -4,7 +4,7 @@ require_once 'BaseLogParserTestCase.php';
 
 class unit_MiniLogTest extends BaseLogParserTestCase {    
   public function testMiniLog() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log");
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
@@ -24,6 +24,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals('I can also play pyro. I have been doing that a lot on 2fort and doublecross.', $events[3]['text'], "fourth event has text ");
     $this->assertEquals('say_team', $events[3]['event_type'], "fourth event has event_type ");
     $this->assertEquals("-3308 1790 -220", $events[4]['victim_coord'], "fifth event has victim_coord ");
+    $this->assertEquals(1, $log->getSubmitterPlayerId(), "submitter has correct ID.");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");

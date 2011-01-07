@@ -11,34 +11,40 @@
  * @property integer $bluescore
  * @property integer $elapsed_time
  * @property string $map_name
+ * @property integer $submitter_player_id
  * @property string $error_log_name
  * @property string $error_exception
  * @property LogFile $LogFile
+ * @property Player $Submitter
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $Events
  * 
- * @method integer             getId()              Returns the current record's "id" value
- * @method string              getName()            Returns the current record's "name" value
- * @method integer             getRedscore()        Returns the current record's "redscore" value
- * @method integer             getBluescore()       Returns the current record's "bluescore" value
- * @method integer             getElapsedTime()     Returns the current record's "elapsed_time" value
- * @method string              getMapName()         Returns the current record's "map_name" value
- * @method string              getErrorLogName()    Returns the current record's "error_log_name" value
- * @method string              getErrorException()  Returns the current record's "error_exception" value
- * @method LogFile             getLogFile()         Returns the current record's "LogFile" value
- * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
- * @method Doctrine_Collection getEvents()          Returns the current record's "Events" collection
- * @method Log                 setId()              Sets the current record's "id" value
- * @method Log                 setName()            Sets the current record's "name" value
- * @method Log                 setRedscore()        Sets the current record's "redscore" value
- * @method Log                 setBluescore()       Sets the current record's "bluescore" value
- * @method Log                 setElapsedTime()     Sets the current record's "elapsed_time" value
- * @method Log                 setMapName()         Sets the current record's "map_name" value
- * @method Log                 setErrorLogName()    Sets the current record's "error_log_name" value
- * @method Log                 setErrorException()  Sets the current record's "error_exception" value
- * @method Log                 setLogFile()         Sets the current record's "LogFile" value
- * @method Log                 setStats()           Sets the current record's "Stats" collection
- * @method Log                 setEvents()          Sets the current record's "Events" collection
+ * @method integer             getId()                  Returns the current record's "id" value
+ * @method string              getName()                Returns the current record's "name" value
+ * @method integer             getRedscore()            Returns the current record's "redscore" value
+ * @method integer             getBluescore()           Returns the current record's "bluescore" value
+ * @method integer             getElapsedTime()         Returns the current record's "elapsed_time" value
+ * @method string              getMapName()             Returns the current record's "map_name" value
+ * @method integer             getSubmitterPlayerId()   Returns the current record's "submitter_player_id" value
+ * @method string              getErrorLogName()        Returns the current record's "error_log_name" value
+ * @method string              getErrorException()      Returns the current record's "error_exception" value
+ * @method LogFile             getLogFile()             Returns the current record's "LogFile" value
+ * @method Player              getSubmitter()           Returns the current record's "Submitter" value
+ * @method Doctrine_Collection getStats()               Returns the current record's "Stats" collection
+ * @method Doctrine_Collection getEvents()              Returns the current record's "Events" collection
+ * @method Log                 setId()                  Sets the current record's "id" value
+ * @method Log                 setName()                Sets the current record's "name" value
+ * @method Log                 setRedscore()            Sets the current record's "redscore" value
+ * @method Log                 setBluescore()           Sets the current record's "bluescore" value
+ * @method Log                 setElapsedTime()         Sets the current record's "elapsed_time" value
+ * @method Log                 setMapName()             Sets the current record's "map_name" value
+ * @method Log                 setSubmitterPlayerId()   Sets the current record's "submitter_player_id" value
+ * @method Log                 setErrorLogName()        Sets the current record's "error_log_name" value
+ * @method Log                 setErrorException()      Sets the current record's "error_exception" value
+ * @method Log                 setLogFile()             Sets the current record's "LogFile" value
+ * @method Log                 setSubmitter()           Sets the current record's "Submitter" value
+ * @method Log                 setStats()               Sets the current record's "Stats" collection
+ * @method Log                 setEvents()              Sets the current record's "Events" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -82,6 +88,10 @@ abstract class BaseLog extends sfDoctrineRecord
              'notnull' => false,
              'length' => 50,
              ));
+        $this->hasColumn('submitter_player_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
+             ));
         $this->hasColumn('error_log_name', 'string', 50, array(
              'type' => 'string',
              'notnull' => false,
@@ -100,6 +110,10 @@ abstract class BaseLog extends sfDoctrineRecord
         $this->hasOne('LogFile', array(
              'local' => 'id',
              'foreign' => 'log_id'));
+
+        $this->hasOne('Player as Submitter', array(
+             'local' => 'submitter_player_id',
+             'foreign' => 'id'));
 
         $this->hasMany('Stat as Stats', array(
              'local' => 'id',

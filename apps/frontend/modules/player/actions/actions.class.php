@@ -24,6 +24,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
   
   //todo move to app config
   const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
+  const PLAYER_ID_ATTR = "playerId";
   
   public function executeOpenidError() {
     $this->error = $this->getRequest()->getErrors();
@@ -45,6 +46,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
   public function executeLogout() {
     $this->getUser()->setAuthenticated(false);
     $this->getResponse()->setCookie('known_openid_identity', '');
+    $this->getUser()->setAttribute(self::PLAYER_ID_ATTR, '');
     $this->getUser()->clearCredentials();
     $this->getUser()->setFlash('notice', 'You were successfully logged out.');
     $this->redirect('@homepage');
@@ -61,6 +63,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     }
     
     $this->getUser()->addCredential($player->getCredential());
+    $this->getUser()->setAttribute(self::PLAYER_ID_ATTR, (int)$player->getId());
     
     //symfony credential system should handle what a user has access to. Just assume it's ok.
     $this->getUser()->setFlash('notice', 'Successfully logged in.');

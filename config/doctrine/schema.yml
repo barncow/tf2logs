@@ -24,6 +24,9 @@ Log:
     map_name:
       type: string(50)
       notnull: false
+    submitter_player_id:
+      type: integer
+      notnull: false
     error_log_name:
       type: string(50)
       notnull: false
@@ -34,6 +37,9 @@ Log:
     LogFile:
       local: id
       foreign: log_id
+    Submitter:
+      local: submitter_player_id
+      class: Player
 
 Stat:
   columns:

@@ -113,12 +113,13 @@ class LogParser {
 	/**
 	* This will parse the entire log file.
 	*/
-	public function parseLogFile($filename, $logName = null, $logMapName = null, Log $logObj = null) {
+	public function parseLogFile($filename, $logSubmitterId, $logName = null, $logMapName = null, Log $logObj = null) {
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
 	  }
 	  $this->log->setName($logName);
 	  $this->log->setMapName($logMapName);
+	  $this->log->setSubmitterPlayerId($logSubmitterId);
 	  if($logObj != null) {
 	    $this->log = $logObj;
 	  }
@@ -165,7 +166,6 @@ class LogParser {
 	    throw new TournamentModeNotFoundException();
 	  }
     $this->finishLog();
-
 	  $this->log->save();
 	  return $this->log;
 	}

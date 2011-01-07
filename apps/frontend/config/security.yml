@@ -1,5 +1,22 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/08-Security
 
-default:
+finish:
   is_secure: false
+  
+autoLogin:
+  is_secure: false
+  
+showNumericSteamId:
+  is_secure: false
+  
+show:
+  is_secure: false
+  
+index:
+  is_secure: false
+
+#defaulting to secure for owners and users. This will only contain user level operations.
+default:
+  is_secure: true
+  credentials: [[owner, user]]
