@@ -49,4 +49,40 @@ function getCoords($coord) {
   $a = explode(" ", $coord);
   return $a[0].",".$a[1];
 }
+
+function outputPlayerCollection($statsArray) {
+  $s = "var playerCollection = new PlayerCollection([\n";
+  $isFirst = true;
+  foreach ($statsArray as $stat) {
+    $comma = ",";
+    if($isFirst) {
+      $comma = ""; 
+      $isFirst = false;
+    }
+    $s .= $comma."new PlayerDrawable(".$stat['Player']['id'].",\"".addslashes($stat['name'])."\",\"".strtolower($stat['team'])."\")\n";
+  }
+  $s .= "]);";
+  return $s;
+}
+
+function outputEventsCollection($eventsArray) {
+  $s = "var logEventCollection = new LogEventCollection([\n";
+  $isFirst = true;
+  foreach ($eventsArray as $event) {
+    $comma = ",";
+    if($isFirst) {
+      $comma = "";
+      $isFirst = false;
+    }
+    if($event['event_type'] == "kill") {
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['attacker_player_id'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim_player_id'].",new Coordinate(".getCoords($event['victim_coord'])."))\n";
+    } elseif($event['event_type'] == "say") {
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
+    } elseif($event['event_type'] == "say_team") {
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").ts(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
+    }
+  }
+  $s .= "]);";
+  return $s;
+}
 ?>

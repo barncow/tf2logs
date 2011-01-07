@@ -184,35 +184,9 @@ Created  <?php echo $log['created_at'] ?><br/>
 var gameMapObj;
 var mapViewerObj;
 
-var playerCollection = new PlayerCollection([
-<?php $isFirst = true; ?>
-<?php foreach ($log['Stats'] as $stat): ?>
-  <?php $comma = "," ?>
-  <?php if($isFirst): ?>
-    <?php $comma = ""; ?>
-    <?php $isFirst = false; ?>
-  <?php endif ?>
-<?php echo $comma."new PlayerDrawable(".$stat['Player']['id'].",\"".addslashes($stat['name'])."\",\"".strtolower($stat['team'])."\")\n" ?>
-<?php endforeach; ?>
-]);
+<?php echo outputPlayerCollection($log['Stats']); ?>
 
-var logEventCollection = new LogEventCollection([
-<?php $isFirst = true; ?>
-<?php foreach ($log['Events'] as $event): ?>
-  <?php $comma = "," ?>
-  <?php if($isFirst): ?>
-    <?php $comma = ""; ?>
-    <?php $isFirst = false; ?>
-  <?php endif ?>
-  <?php if($event['event_type'] == "kill"): ?>
-<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['attacker_player_id'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim_player_id'].",new Coordinate(".getCoords($event['victim_coord'])."))\n" ?>
-  <?php elseif($event['event_type'] == "say"): ?>
-<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n" ?>
-  <?php elseif($event['event_type'] == "say_team"): ?>
-<?php echo $comma."new LogEvent(".$event['elapsed_seconds'].").ts(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n" ?>
-  <?php endif ?>
-<?php endforeach; ?>
-]);
+<?php echo outputEventsCollection($log['Events']); ?>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Doc ready
