@@ -4,6 +4,8 @@
     <?php include_http_metas() ?>
     <?php include_metas() ?>
     <?php include_title() ?>
+    <?php include_stylesheets() ?>
+    <?php include_javascripts() ?>
     <link rel="shortcut icon" href="/favicon.ico" />
   </head>
   <body>
@@ -21,6 +23,5 @@
     
     <div class="footer"><a href="http://steampowered.com">Powered by Steam</a></div>
   </body>
-   <?php include_stylesheets() ?>
-   <?php include_javascripts() ?>
+  
 </html>
