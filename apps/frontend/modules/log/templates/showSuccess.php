@@ -63,7 +63,7 @@
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
     <tr class="<?php echo $stat['team'] ?>">
-      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td><img src="<?php echo $stat['Player']['avatar_url'] ?>" class="avatar avatarImage" id="avatar<?php echo $stat['Player']['id'] ?>"/> <?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <td><?php echo $stat['Player']['steamid'] ?></td>
       <td>
         <ul>
@@ -119,7 +119,7 @@
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td><img src="<?php echo $stat['Player']['avatar_url'] ?>" class="avatarImage"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <?php foreach($weapons as $w): ?>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
@@ -140,14 +140,14 @@
   </tbody>
 </table>
 
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+<table class="statTable" id="playerStats" border="0" cellspacing="0" cellpadding="3">
   <caption>Player Stats</caption>
   <thead>
     <tr>
       <th><!--playername--></th>
       <?php foreach($log['Stats'] as $s): ?>
         <th>
-          <?php echo link_to($s['name'], 'player/showNumericSteamId?id='.$s['Player']['numeric_steamid']) ?>
+          <a href="<?php echo url_for('player/showNumericSteamId?id='.$s['Player']['numeric_steamid']) ?>"><img src="<?php echo $s['Player']['avatar_url'] ?>" class="avatarImage" title="<?php echo $s['name'] ?>"/></a>
         </th>
       <?php endforeach ?>
     </tr>
@@ -155,7 +155,7 @@
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td><img src="<?php echo $stat['Player']['avatar_url'] ?>" class="avatarImage"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <?php foreach($log['Stats'] as $colstat): ?>
         <?php $foundPS = false ?>
         <?php foreach($playerStats as $ps): ?>

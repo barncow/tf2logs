@@ -128,3 +128,13 @@ a:hover {
   padding: 5px;
 }
 
+.avatarImage {
+  float: left;
+  margin-right: 5px;
+}
+
+#playerStats thead .avatarImage {
+  float: none;
+  margin: 0;
+}
+

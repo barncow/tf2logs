@@ -256,6 +256,9 @@ Player:
       type: string(10)
       default: user
       notnull: true
+    avatar_url:
+      type: string(255)
+      notnull: false
       
 PlayerStat:
   columns:

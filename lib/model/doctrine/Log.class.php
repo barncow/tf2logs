@@ -140,6 +140,25 @@ class Log extends BaseLog
     foreach($this->Stats as &$stat) {
       $stat->finishStat($nowDt, $logStartDt);
     }
+    
+    //update player avatar for stats.
+    $steamids = array();
+    foreach($this->Stats as $stat) {
+      $steamids[] = $stat->getPlayer()->getNumericSteamid();
+    }
+    $swapi = new SteamWebAPI();
+    $a = $swapi->getAvatarUrlsFromSteamids($steamids);
+    foreach($this->Stats as &$stat) {
+      foreach($a as $avatarurl) {
+        $steamid = array_keys($avatarurl);
+        $steamid = $steamid[0];
+        if($stat->getPlayer()->getNumericSteamid() == $steamid) {
+          $url = $avatarurl[$steamid];
+          $stat->getPlayer()->setAvatarUrl($url);
+          break;
+        }
+      }
+    }
   }
   
   public function finishStatForSteamid($steamid, $nowDt, $logStartDt) {

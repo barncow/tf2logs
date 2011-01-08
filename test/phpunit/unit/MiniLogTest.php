@@ -92,6 +92,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->fail("Barncow has extra role: ".$r->getRole()->getKeyName());
           }
         }
+        
+        $this->assertEquals("http://media.steampowered.com/steamcommunity/public/images/avatars/84/8424071dd599cc63a9ca2f217cf70b7c943855f1.jpg", $stat->getPlayer()->getAvatarUrl());
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat->getAssists(), "cres' assists");

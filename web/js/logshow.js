@@ -1,5 +1,5 @@
 $(function() {
-  $('.statTable th').tooltip({ 
+  $('.statTable th, #playerStats thead .avatarImage').tooltip({ 
     track: true, 
     delay: 0, 
     showURL: false, 
