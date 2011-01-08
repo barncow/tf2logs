@@ -11,6 +11,17 @@ class unit_SteamWebAPITest extends sfPHPUnitBaseTestCase {
     $this->assertTrue(in_array($aresult, $a), "check that a result was found");
   }
   
+  public function testDownloadAvatar() {
+    $swapi = new SteamWebAPI();
+    $fullpath = sfConfig::get('sf_web_dir')."/avatars/1.jpg";
+    if(file_exists($fullpath)){
+        unlink($fullpath);
+    }
+    $swapi->downloadAvatar("http://media.steampowered.com/steamcommunity/public/images/avatars/84/8424071dd599cc63a9ca2f217cf70b7c943855f1.jpg", 1);
+    $this->assertTrue(file_exists($fullpath), "check that file was downloaded");
+    $this->assertTrue(filesize($fullpath) > 0, "jpg has bytes");
+  }
+  
   public function testChangeJSONIntsToStrings() {
   $swapi = new SteamWebAPI();
   $rawjson = <<<JSON

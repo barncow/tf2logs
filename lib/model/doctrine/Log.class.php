@@ -154,7 +154,7 @@ class Log extends BaseLog
         $steamid = $steamid[0];
         if($stat->getPlayer()->getNumericSteamid() == $steamid) {
           $url = $avatarurl[$steamid];
-          $stat->getPlayer()->setAvatarUrl($url);
+          $swapi->downloadAvatar($url, $stat->getPlayer()->getId());
           break;
         }
       }

@@ -16,14 +16,12 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'numeric_steamid' => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'steamid'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'credential'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'avatar_url'      => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
       'numeric_steamid' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'steamid'         => new sfValidatorPass(array('required' => false)),
       'credential'      => new sfValidatorPass(array('required' => false)),
-      'avatar_url'      => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('player_filters[%s]');
@@ -47,7 +45,6 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'numeric_steamid' => 'Number',
       'steamid'         => 'Text',
       'credential'      => 'Text',
-      'avatar_url'      => 'Text',
     );
   }
 }

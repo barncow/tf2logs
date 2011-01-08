@@ -19,7 +19,6 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'numeric_steamid' => new sfWidgetFormInputText(),
       'steamid'         => new sfWidgetFormInputText(),
       'credential'      => new sfWidgetFormInputText(),
-      'avatar_url'      => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -27,7 +26,6 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'numeric_steamid' => new sfValidatorInteger(),
       'steamid'         => new sfValidatorString(array('max_length' => 30)),
       'credential'      => new sfValidatorString(array('max_length' => 10, 'required' => false)),
-      'avatar_url'      => new sfValidatorString(array('max_length' => 255, 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(
