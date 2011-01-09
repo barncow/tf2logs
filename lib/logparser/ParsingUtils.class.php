@@ -252,5 +252,18 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves cpname from a point captured line.
+  */
+  public function getCapturePointName($logLineDetails) {
+    $matches;
+    preg_match("/\(cpname \"([\w #]+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

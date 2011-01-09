@@ -21,6 +21,7 @@ class EventTable extends Doctrine_Table
       return $this
         ->createQuery('e')
         ->leftJoin('e.Log l')
+        ->leftJoin('e.EventPlayers ep')
         ->where('l.id = ?', $id)
         ->orderBy('e.elapsed_seconds asc, e.id asc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)

@@ -393,6 +393,10 @@ class LogParser {
 	        foreach($players as $p) {
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_captured");
 	        }
+	        
+	        $cpname = $this->parsingUtils->getCapturePointName($logLineDetails);
+	        
+	        $this->log->addPointCaptureEvent($elapsedTime, $players, $team, $cpname);
 	        return self::GAME_CONTINUE;
 	      } else if($teamTriggerAction == "Intermission_Win_Limit") {
 	        return self::GAME_CONTINUE;//skip processing.

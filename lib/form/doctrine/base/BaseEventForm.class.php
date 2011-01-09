@@ -27,6 +27,8 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'assist_coord'       => new sfWidgetFormInputText(),
       'chat_player_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Chat'), 'add_empty' => true)),
       'text'               => new sfWidgetFormInputText(),
+      'team'               => new sfWidgetFormInputText(),
+      'capture_point'      => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -42,6 +44,8 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'assist_coord'       => new sfValidatorString(array('max_length' => 17, 'required' => false)),
       'chat_player_id'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Chat'), 'required' => false)),
       'text'               => new sfValidatorString(array('max_length' => 255, 'required' => false)),
+      'team'               => new sfValidatorString(array('max_length' => 4, 'required' => false)),
+      'capture_point'      => new sfValidatorString(array('max_length' => 30, 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('event[%s]');

@@ -24,6 +24,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'assist_coord'       => new sfWidgetFormFilterInput(),
       'chat_player_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Chat'), 'add_empty' => true)),
       'text'               => new sfWidgetFormFilterInput(),
+      'team'               => new sfWidgetFormFilterInput(),
+      'capture_point'      => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -38,6 +40,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'assist_coord'       => new sfValidatorPass(array('required' => false)),
       'chat_player_id'     => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Chat'), 'column' => 'id')),
       'text'               => new sfValidatorPass(array('required' => false)),
+      'team'               => new sfValidatorPass(array('required' => false)),
+      'capture_point'      => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('event_filters[%s]');
@@ -69,6 +73,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'assist_coord'       => 'Text',
       'chat_player_id'     => 'ForeignKey',
       'text'               => 'Text',
+      'team'               => 'Text',
+      'capture_point'      => 'Text',
     );
   }
 }

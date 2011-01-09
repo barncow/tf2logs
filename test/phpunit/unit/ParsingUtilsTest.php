@@ -189,4 +189,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
   public function testGetNumericSteamidFromOpenID() {
     $this->assertEquals(76561197993228277, $this->parsingUtils->getNumericSteamidFromOpenID("http://steamcommunity.com/openid/id/76561197993228277"));
   }
+  
+  public function testGetCapturePointName() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("#Gravelpit_cap_A", $this->parsingUtils->getCapturePointName($logLineDetails), "got cpname from point captured line");
+  }
 }

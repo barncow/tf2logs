@@ -319,6 +319,12 @@ Event:
     text:
       type: string(255)
       notnull: false
+    team:
+      type: string(4)
+      notnull: false
+    capture_point:
+      type: string(30)
+      notnull: false
   relations:
     Log:
       onDelete: CASCADE
@@ -335,3 +341,22 @@ Event:
     Chat:
       local: chat_player_id
       class: Player
+      
+EventPlayer:
+  columns:
+    event_id:
+      type: integer
+      notnull: true
+    event_player_type:
+      type: string(1)
+      notnull: true
+    player_id:
+      type: integer
+      notnull: true
+  relations:
+    Player:
+      onDelete: CASCADE
+      foreignAlias: EventPlayers
+    Event:
+      onDelete: CASCADE
+      foreignAlias: EventPlayers

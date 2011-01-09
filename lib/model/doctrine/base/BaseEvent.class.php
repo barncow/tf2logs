@@ -16,44 +16,53 @@
  * @property string $assist_coord
  * @property integer $chat_player_id
  * @property string $text
+ * @property string $team
+ * @property string $capture_point
  * @property Log $Log
  * @property Player $Attacker
  * @property Player $Victim
  * @property Player $Assist
  * @property Player $Chat
+ * @property Doctrine_Collection $EventPlayers
  * 
- * @method integer getLogId()              Returns the current record's "log_id" value
- * @method string  getEventType()          Returns the current record's "event_type" value
- * @method integer getElapsedSeconds()     Returns the current record's "elapsed_seconds" value
- * @method integer getAttackerPlayerId()   Returns the current record's "attacker_player_id" value
- * @method string  getAttackerCoord()      Returns the current record's "attacker_coord" value
- * @method integer getVictimPlayerId()     Returns the current record's "victim_player_id" value
- * @method string  getVictimCoord()        Returns the current record's "victim_coord" value
- * @method integer getAssistPlayerId()     Returns the current record's "assist_player_id" value
- * @method string  getAssistCoord()        Returns the current record's "assist_coord" value
- * @method integer getChatPlayerId()       Returns the current record's "chat_player_id" value
- * @method string  getText()               Returns the current record's "text" value
- * @method Log     getLog()                Returns the current record's "Log" value
- * @method Player  getAttacker()           Returns the current record's "Attacker" value
- * @method Player  getVictim()             Returns the current record's "Victim" value
- * @method Player  getAssist()             Returns the current record's "Assist" value
- * @method Player  getChat()               Returns the current record's "Chat" value
- * @method Event   setLogId()              Sets the current record's "log_id" value
- * @method Event   setEventType()          Sets the current record's "event_type" value
- * @method Event   setElapsedSeconds()     Sets the current record's "elapsed_seconds" value
- * @method Event   setAttackerPlayerId()   Sets the current record's "attacker_player_id" value
- * @method Event   setAttackerCoord()      Sets the current record's "attacker_coord" value
- * @method Event   setVictimPlayerId()     Sets the current record's "victim_player_id" value
- * @method Event   setVictimCoord()        Sets the current record's "victim_coord" value
- * @method Event   setAssistPlayerId()     Sets the current record's "assist_player_id" value
- * @method Event   setAssistCoord()        Sets the current record's "assist_coord" value
- * @method Event   setChatPlayerId()       Sets the current record's "chat_player_id" value
- * @method Event   setText()               Sets the current record's "text" value
- * @method Event   setLog()                Sets the current record's "Log" value
- * @method Event   setAttacker()           Sets the current record's "Attacker" value
- * @method Event   setVictim()             Sets the current record's "Victim" value
- * @method Event   setAssist()             Sets the current record's "Assist" value
- * @method Event   setChat()               Sets the current record's "Chat" value
+ * @method integer             getLogId()              Returns the current record's "log_id" value
+ * @method string              getEventType()          Returns the current record's "event_type" value
+ * @method integer             getElapsedSeconds()     Returns the current record's "elapsed_seconds" value
+ * @method integer             getAttackerPlayerId()   Returns the current record's "attacker_player_id" value
+ * @method string              getAttackerCoord()      Returns the current record's "attacker_coord" value
+ * @method integer             getVictimPlayerId()     Returns the current record's "victim_player_id" value
+ * @method string              getVictimCoord()        Returns the current record's "victim_coord" value
+ * @method integer             getAssistPlayerId()     Returns the current record's "assist_player_id" value
+ * @method string              getAssistCoord()        Returns the current record's "assist_coord" value
+ * @method integer             getChatPlayerId()       Returns the current record's "chat_player_id" value
+ * @method string              getText()               Returns the current record's "text" value
+ * @method string              getTeam()               Returns the current record's "team" value
+ * @method string              getCapturePoint()       Returns the current record's "capture_point" value
+ * @method Log                 getLog()                Returns the current record's "Log" value
+ * @method Player              getAttacker()           Returns the current record's "Attacker" value
+ * @method Player              getVictim()             Returns the current record's "Victim" value
+ * @method Player              getAssist()             Returns the current record's "Assist" value
+ * @method Player              getChat()               Returns the current record's "Chat" value
+ * @method Doctrine_Collection getEventPlayers()       Returns the current record's "EventPlayers" collection
+ * @method Event               setLogId()              Sets the current record's "log_id" value
+ * @method Event               setEventType()          Sets the current record's "event_type" value
+ * @method Event               setElapsedSeconds()     Sets the current record's "elapsed_seconds" value
+ * @method Event               setAttackerPlayerId()   Sets the current record's "attacker_player_id" value
+ * @method Event               setAttackerCoord()      Sets the current record's "attacker_coord" value
+ * @method Event               setVictimPlayerId()     Sets the current record's "victim_player_id" value
+ * @method Event               setVictimCoord()        Sets the current record's "victim_coord" value
+ * @method Event               setAssistPlayerId()     Sets the current record's "assist_player_id" value
+ * @method Event               setAssistCoord()        Sets the current record's "assist_coord" value
+ * @method Event               setChatPlayerId()       Sets the current record's "chat_player_id" value
+ * @method Event               setText()               Sets the current record's "text" value
+ * @method Event               setTeam()               Sets the current record's "team" value
+ * @method Event               setCapturePoint()       Sets the current record's "capture_point" value
+ * @method Event               setLog()                Sets the current record's "Log" value
+ * @method Event               setAttacker()           Sets the current record's "Attacker" value
+ * @method Event               setVictim()             Sets the current record's "Victim" value
+ * @method Event               setAssist()             Sets the current record's "Assist" value
+ * @method Event               setChat()               Sets the current record's "Chat" value
+ * @method Event               setEventPlayers()       Sets the current record's "EventPlayers" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -115,6 +124,16 @@ abstract class BaseEvent extends sfDoctrineRecord
              'notnull' => false,
              'length' => 255,
              ));
+        $this->hasColumn('team', 'string', 4, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 4,
+             ));
+        $this->hasColumn('capture_point', 'string', 30, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 30,
+             ));
     }
 
     public function setUp()
@@ -140,5 +159,9 @@ abstract class BaseEvent extends sfDoctrineRecord
         $this->hasOne('Player as Chat', array(
              'local' => 'chat_player_id',
              'foreign' => 'id'));
+
+        $this->hasMany('EventPlayer as EventPlayers', array(
+             'local' => 'id',
+             'foreign' => 'event_id'));
     }
 }

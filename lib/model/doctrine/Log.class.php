@@ -117,6 +117,18 @@ class Log extends BaseLog
     $this->Events[] = $e;
   }
   
+  public function addPointCaptureEvent($elapsedSeconds, $players, $team, $capturePoint) {
+    $e = new Event();
+    $pids = array();
+    foreach($players as $p) {
+      $stat = $this->getStatFromSteamid($p->getSteamid());
+      $pids[] = $stat->getPlayer()->getId();
+    }
+    
+    $e->pointCapture($elapsedSeconds, $pids, $team, $capturePoint);
+    $this->Events[] = $e;
+  }
+  
   public function addChatEvent($elapsedSeconds, $chatType, $chatPlayer, $text) {
     $e = new Event();
     $chatStat = $this->getStatFromSteamid($chatPlayer->getSteamid());

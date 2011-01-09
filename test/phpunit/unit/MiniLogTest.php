@@ -16,7 +16,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
     
-    $events = $log->getEvents()->toArray(false);
+    $events = $log->getEvents()->toArray();
     $this->assertTrue($events[0]['attacker_player_id'] > 0, "first event has attacker 2");
     $this->assertEquals(1, $events[0]['elapsed_seconds'], "first event has elapsed seconds");
     $this->assertEquals("-2419 1637 -511", $events[1]['attacker_coord'], "second event has attacker_coord ");
@@ -25,6 +25,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals('say_team', $events[3]['event_type'], "fourth event has event_type ");
     $this->assertEquals("-3308 1790 -220", $events[4]['victim_coord'], "fifth event has victim_coord ");
     $this->assertEquals(1, $log->getSubmitterPlayerId(), "submitter has correct ID.");
+    
+    $pce = $events[5]; //pointcapture event
+    $this->assertEquals('blue', $pce['team'], "point capture team");
+    $this->assertEquals('#Gravelpit_cap_A', $pce['capture_point'], "map capture point");
+    $this->assertEquals(3, count($pce['EventPlayers']), "point capture has 3 players");
+    $this->assertEquals("C", $pce['EventPlayers'][0]['event_player_type'], "point capture player type is C");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");

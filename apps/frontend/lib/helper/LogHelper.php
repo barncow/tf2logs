@@ -80,6 +80,12 @@ function outputEventsCollection($eventsArray) {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
     } elseif($event['event_type'] == "say_team") {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").ts(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
+    } elseif($event['event_type'] == "pointCap") {
+      $pids = array();
+      foreach($event['EventPlayers'] as $ep) {
+        $pids[] = $ep['player_id'];
+      }
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").pc(\"".$event['capture_point']."\",\"".$event['team']."\",[".implode(",", $pids)."])\n";
     }
   }
   $s .= "]);";

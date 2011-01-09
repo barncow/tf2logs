@@ -30,4 +30,17 @@ class Event extends BaseEvent {
     $this->chat_player_id = $playerId;
     $this->text = $text;
   }
+  
+  public function pointCapture($elapsedSeconds, $playerIds, $team, $capturePoint) {
+    $this->elapsed_seconds = $elapsedSeconds;
+    $this->event_type = 'pointCap';
+    $this->team = strtolower($team);
+    $this->capture_point = $capturePoint;
+    foreach($playerIds as $id) {
+      $ep = new EventPlayer();
+      $ep->setEventPlayerType('C');
+      $ep->setPlayerId($id);
+      $this->EventPlayers[] = $ep;
+    }
+  }
 }
