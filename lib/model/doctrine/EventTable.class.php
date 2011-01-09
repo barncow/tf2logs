@@ -16,4 +16,14 @@ class EventTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('Event');
     }
+    
+    public function getEventsByIdAsArray($id) {
+      return $this
+        ->createQuery('e')
+        ->leftJoin('e.Log l')
+        ->where('l.id = ?', $id)
+        ->orderBy('e.elapsed_seconds asc, e.id asc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }

@@ -10,6 +10,7 @@
 <?php use_javascript('class.js'); ?>
 <?php use_javascript('mapviewer.js'); ?>
 <?php use_javascript('/maps/'.$log['map_name'].'/map.js'); ?>
+<?php use_dynamic_javascript(url_for('@events_by_id?id='.$log['id'])); ?>
 <?php endif ?>
 
 
@@ -188,8 +189,6 @@ var gameMapObj;
 var mapViewerObj;
 
 <?php echo outputPlayerCollection($log['Stats']); ?>
-
-<?php echo outputEventsCollection($log['Events']); ?>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Doc ready

@@ -26,6 +26,10 @@ class logActions extends sfActions {
     $this->forward404Unless($this->log);
   }
   
+  public function executeEvents(sfWebRequest $request) {
+    $this->events = Doctrine::getTable('Event')->getEventsByIdAsArray($request->getParameter('id'));
+  }
+  
   public function executeAdd(sfWebRequest $request) {
     $this->forward404Unless($request->isMethod(sfRequest::POST));
 

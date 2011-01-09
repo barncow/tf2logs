@@ -13,6 +13,9 @@ showNumericSteamId:
 show:
   is_secure: false
   
+events:
+  is_secure: false
+  
 index:
   is_secure: false
 

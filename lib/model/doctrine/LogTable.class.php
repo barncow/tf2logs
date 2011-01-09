@@ -24,9 +24,8 @@ class LogTable extends Doctrine_Table {
         ->leftJoin('s.Weapons w')
         ->leftJoin('s.RoleStats rs')
         ->leftJoin('rs.Role r')
-        ->leftJoin('l.Events e')
         ->andWhere('l.error_log_name is null')
-        ->orderBy('s.team asc, s.name asc, rs.time_played desc, e.elapsed_seconds asc, e.id asc')
+        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
         ->execute();
      
       if(count($l) == 0) return null;
@@ -42,9 +41,8 @@ class LogTable extends Doctrine_Table {
         ->leftJoin('s.Weapons w')
         ->leftJoin('s.RoleStats rs')
         ->leftJoin('rs.Role r')
-        ->leftJoin('l.Events e')
         ->andWhere('l.error_log_name is null')
-        ->orderBy('s.team asc, s.name asc, rs.time_played desc, e.elapsed_seconds asc, e.id asc')
+        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
      
