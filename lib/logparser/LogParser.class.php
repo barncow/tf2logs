@@ -133,6 +133,7 @@ class LogParser {
 	public function parseLogFromDB($log) {  
 	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($log->getId())->getLogData());
 	  $log->clearStats();
+	  $log->clearEvents();
 	  $this->log = $log;
 	  return $this->parseLog($file);
 	}

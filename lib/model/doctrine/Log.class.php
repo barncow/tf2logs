@@ -188,6 +188,10 @@ class Log extends BaseLog
     $this->Stats->delete();
   }
   
+  public function clearEvents() {
+    $this->Events->delete();
+  }
+  
   /**
   * Gets a stat by reference by steamid. Protected since 
   * allowing the end user of the class to update the stat
