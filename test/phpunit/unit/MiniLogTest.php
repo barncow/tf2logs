@@ -16,21 +16,24 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
     
-    $events = $log->getEvents()->toArray();
-    $this->assertTrue($events[0]['attacker_player_id'] > 0, "first event has attacker 2");
-    $this->assertEquals(1, $events[0]['elapsed_seconds'], "first event has elapsed seconds");
-    $this->assertEquals("-2419 1637 -511", $events[1]['attacker_coord'], "second event has attacker_coord ");
-    $this->assertTrue($events[2]['victim_player_id'] > 0, "third event has victim ");
-    $this->assertEquals('I can also play pyro. I have been doing that a lot on 2fort and doublecross.', $events[3]['text'], "fourth event has text ");
-    $this->assertEquals('say_team', $events[3]['event_type'], "fourth event has event_type ");
-    $this->assertEquals("-3308 1790 -220", $events[4]['victim_coord'], "fifth event has victim_coord ");
     $this->assertEquals(1, $log->getSubmitterPlayerId(), "submitter has correct ID.");
+    
+    $events = $log->getEvents()->toArray();
+    $this->assertTrue($events[0]['attacker_player_id'] > 0, "first kill event has attacker 2");
+    $this->assertEquals(1, $events[0]['elapsed_seconds'], "first kill event has elapsed seconds");
+    $this->assertEquals("-2419 1637 -511", $events[1]['attacker_coord'], "second kill event has attacker_coord ");
+    $this->assertTrue($events[2]['victim_player_id'] > 0, "third kill event has victim ");
+    $this->assertEquals('I can also play pyro. I have been doing that a lot on 2fort and doublecross.', $events[3]['text'], "fifth event has text ");
+    $this->assertEquals('say_team', $events[3]['event_type'], "fifth event has event_type ");
+    $this->assertEquals("-3308 1790 -220", $events[4]['victim_coord'], "sixth event has victim_coord ");
     
     $pce = $events[5]; //pointcapture event
     $this->assertEquals('blue', $pce['team'], "point capture team");
     $this->assertEquals('#Gravelpit_cap_A', $pce['capture_point'], "map capture point");
     $this->assertEquals(3, count($pce['EventPlayers']), "point capture has 3 players");
     $this->assertEquals("C", $pce['EventPlayers'][0]['event_player_type'], "point capture player type is C");
+    
+    $this->assertEquals(1, $events[6]['blue_score'], "sixth event has blue score 1");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");

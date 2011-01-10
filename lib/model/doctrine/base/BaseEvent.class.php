@@ -18,6 +18,8 @@
  * @property string $text
  * @property string $team
  * @property string $capture_point
+ * @property integer $blue_score
+ * @property integer $red_score
  * @property Log $Log
  * @property Player $Attacker
  * @property Player $Victim
@@ -38,6 +40,8 @@
  * @method string              getText()               Returns the current record's "text" value
  * @method string              getTeam()               Returns the current record's "team" value
  * @method string              getCapturePoint()       Returns the current record's "capture_point" value
+ * @method integer             getBlueScore()          Returns the current record's "blue_score" value
+ * @method integer             getRedScore()           Returns the current record's "red_score" value
  * @method Log                 getLog()                Returns the current record's "Log" value
  * @method Player              getAttacker()           Returns the current record's "Attacker" value
  * @method Player              getVictim()             Returns the current record's "Victim" value
@@ -57,6 +61,8 @@
  * @method Event               setText()               Sets the current record's "text" value
  * @method Event               setTeam()               Sets the current record's "team" value
  * @method Event               setCapturePoint()       Sets the current record's "capture_point" value
+ * @method Event               setBlueScore()          Sets the current record's "blue_score" value
+ * @method Event               setRedScore()           Sets the current record's "red_score" value
  * @method Event               setLog()                Sets the current record's "Log" value
  * @method Event               setAttacker()           Sets the current record's "Attacker" value
  * @method Event               setVictim()             Sets the current record's "Victim" value
@@ -133,6 +139,16 @@ abstract class BaseEvent extends sfDoctrineRecord
              'type' => 'string',
              'notnull' => false,
              'length' => 30,
+             ));
+        $this->hasColumn('blue_score', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => false,
+             'length' => 4,
+             ));
+        $this->hasColumn('red_score', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => false,
+             'length' => 4,
              ));
     }
 

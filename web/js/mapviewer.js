@@ -125,6 +125,9 @@ var MapDrawer = Class.extend({
 		//draw everything in the stack
 		this.drawableStack.drawAll(this.mapViewerCanvas, this.mapViewerContext);
 		
+		//draw scores
+		this.drawScores(this.mapViewerCanvas, this.mapViewerContext, mapViewerObj.redScore, mapViewerObj.blueScore);
+		
 		//draw tooltip if needed
 		if(hoveredObj != null && hoveredObj.tooltip.tooltipEnabled()) {
 			this.drawTooltip(hoveredObj.tooltip);
@@ -132,6 +135,39 @@ var MapDrawer = Class.extend({
 		
 		//schedule next frame
 		this.scheduleNextFrame();
+	},
+	
+	drawScores: function(canvas, context, redScore, blueScore) {
+	  boxwidth = 20;
+	  boxheight = 15;
+	  boxbotmargin = 10;
+	  boxspacing = 10;
+	  boxleftmargin = 10;
+	  boxY = canvas.height - boxbotmargin - boxheight;
+	  boxX = boxleftmargin;
+	  leftPadding = 2;
+	  topPadding = 2;
+	  strokecolor = "#fff";
+	  fontStyle = "bold 10px Arial";
+	  
+	  //red box
+	  context.fillStyle = "rgb(200,0,0)";
+	  context.strokeStyle = strokecolor;
+	  this.roundRect(context, boxX, boxY, boxwidth, boxheight, 5, true, true);
+	  context.fillStyle = strokecolor;
+	  context.textBaseline = "top";
+	  context.font = fontStyle;
+		context.fillText(redScore,boxX+leftPadding,boxY);
+	  
+	  
+	  //blue box
+	  boxX += boxwidth+boxspacing;
+	  context.fillStyle = "rgb(0,0,200)";
+	  this.roundRect(context, boxX, boxY, boxwidth, boxheight, 5, true, true);
+	  context.fillStyle = strokecolor;
+	  context.textBaseline = "top";
+	  context.font = fontStyle;
+		context.fillText(blueScore,boxX+leftPadding,boxY);
 	},
 	
 	/**
@@ -259,7 +295,7 @@ var MapViewer = Class.extend({
 		this.mapDrawer = null;
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
-		this.canvasOffset = this.jqMapViewerCanvas.offset();
+		this.canvasOffset = this.jqMapViewerCanvas.offset();this.eventType = "team_say";
 		this.gameMap = gameMap; //GameMap child object
 		this.dataTimeout = null;
 		this.mapImgDrawable = null;
@@ -276,6 +312,8 @@ var MapViewer = Class.extend({
 		this.playbackMax = this.logEventCollection.getDuration(); //duration in seconds
 		this.areAvatarsLoaded = false;
 		this.isMapImgLoaded = false;
+		this.blueScore = 0;
+		this.redScore = 0;
 		
 		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
@@ -997,6 +1035,7 @@ var LogEvent = Class.extend({
 		return this;//used for chaining.
 	},
 	
+	//kill
 	k: function(attackerPlayerId, attackerCoord, victimPlayerId, victimCoord, assistPlayerId, assistCoord) {
 		this.eventType = "kill";
 		this.attackerPlayerId = attackerPlayerId;
@@ -1008,6 +1047,7 @@ var LogEvent = Class.extend({
 		return this; // used for chaining
 	},
 	
+	//point capture
 	pc: function(cp, team, players) {
 		this.eventType = "pointCaptured";
 		this.cp = cp;
@@ -1016,6 +1056,7 @@ var LogEvent = Class.extend({
 		return this; // used for chaining
 	},
 	
+	//say (chat)
 	s: function(playerId, text) {
 		this.eventType = "say";
 		this.playerId = playerId;
@@ -1023,11 +1064,20 @@ var LogEvent = Class.extend({
 		return this; // used for chaining
 	},
 	
+	//team_say (chat)
 	ts: function(playerId, text) {
 		this.eventType = "team_say";
 		this.playerId = playerId;
 		this.text = text;
 		return this; // used for chaining
+	},
+	
+	//round start
+	rs: function(redScore, blueScore) {
+	  this.eventType = "rndStart";
+	  this.redScore = redScore;
+	  this.blueScore = blueScore;
+	  return this;
 	},
 	
 	getAsDrawables: function(playerCollection, gameMap, capturePoints, isDrawableCurrent) {
@@ -1075,6 +1125,9 @@ var LogEvent = Class.extend({
 			teamtxt = "";
 			if(this.eventType == "team_say") teamtxt = "(team)";
 			mapViewerObj.appendToChatBox("<span class=\"chatTime\">"+mapViewerObj.getSecondsAsString(this.elapsedSeconds)+"</span> <span class=\"chatUser "+p.team+"\">"+p.name+teamtxt+":</span> "+this.text);
+		} else if(this.eventType == "rndStart") {
+		  mapViewerObj.blueScore = this.blueScore;
+		  mapViewerObj.redScore = this.redScore;
 		}
 		
 		return a;
@@ -1097,6 +1150,7 @@ var LogEventCollection = Class.extend({
 		this.logEvents = [];
 		this.capEvents = [];
 		this.chatEvents = [];
+		this.roundEvents = [];
 	},
 	
 	//adds the object given, if it is a Drawable.
@@ -1106,6 +1160,8 @@ var LogEventCollection = Class.extend({
 				this.capEvents.push(logEvent);
 			} else if(logEvent.eventType == "say" || logEvent.eventType == "team_say") {
 				this.chatEvents.push(logEvent);
+			} else if(logEvent.eventType == "rndStart") {
+			  this.roundEvents.push(logEvent);
 			} else {
 				this.logEvents.push(logEvent);
 			}
@@ -1132,9 +1188,18 @@ var LogEventCollection = Class.extend({
 				}
 			}
 		}
+		lastRoundStartElapsedSeconds = 0;
+		for(r in this.roundEvents) {
+			l = this.roundEvents[r];
+			if(l.elapsedSeconds <= endSeconds) {
+				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				lastRoundStartElapsedSeconds = l.elapsedSeconds;
+			}
+		}
+		//only want the caps starting from the last round start for the duration.
 		for(c in this.capEvents) {
 			l = this.capEvents[c];
-			if(l.elapsedSeconds <= endSeconds) {
+			if(l.elapsedSeconds >= lastRoundStartElapsedSeconds && l.elapsedSeconds <= endSeconds) {
 				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 			}
 		}

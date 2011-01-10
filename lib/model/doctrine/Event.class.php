@@ -43,4 +43,11 @@ class Event extends BaseEvent {
       $this->EventPlayers[] = $ep;
     }
   }
+  
+  public function roundStart($elapsedSeconds, $blueScore, $redScore) {
+    $this->elapsed_seconds = $elapsedSeconds;
+    $this->event_type = 'rndStart';
+    $this->blue_score = $blueScore;
+    $this->red_score = $redScore;
+  }
 }

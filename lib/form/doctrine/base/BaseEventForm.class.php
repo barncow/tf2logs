@@ -29,6 +29,8 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'text'               => new sfWidgetFormInputText(),
       'team'               => new sfWidgetFormInputText(),
       'capture_point'      => new sfWidgetFormInputText(),
+      'blue_score'         => new sfWidgetFormInputText(),
+      'red_score'          => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -46,6 +48,8 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'text'               => new sfValidatorString(array('max_length' => 255, 'required' => false)),
       'team'               => new sfValidatorString(array('max_length' => 4, 'required' => false)),
       'capture_point'      => new sfValidatorString(array('max_length' => 30, 'required' => false)),
+      'blue_score'         => new sfValidatorInteger(array('required' => false)),
+      'red_score'          => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('event[%s]');

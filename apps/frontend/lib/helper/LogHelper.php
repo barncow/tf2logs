@@ -86,6 +86,8 @@ function outputEventsCollection($eventsArray) {
         $pids[] = $ep['player_id'];
       }
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").pc(\"".$event['capture_point']."\",\"".$event['team']."\",[".implode(",", $pids)."])\n";
+    } elseif($event['event_type'] == "rndStart") {
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").rs(".$event['red_score'].",".$event['blue_score'].")\n";
     }
   }
   $s .= "]);";

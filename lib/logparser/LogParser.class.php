@@ -221,6 +221,10 @@ class LogParser {
 	  
 	  $logLineDetails = $this->parsingUtils->getLineDetails($logLine);
 	  
+	  //always set elapsed time. When the log finishes, the last timestamp set will be our elapsed time.
+	  $elapsedTime = $this->getElapsedTime($dt);
+	  $this->log->setElapsedTime($elapsedTime);
+	  
 	  //check for world trigger, specifically the first round_start of the log. This indicates
 	  //that the tournament mode has started, and pregame has ended.
 	  if($this->parsingUtils->isLogLineOfType($logLine, "World triggered", $logLineDetails)) {
@@ -231,6 +235,7 @@ class LogParser {
 	        //there will likely be multiple round_start's, only need the first one for the tmsp
 	        $this->log->set_timeStart($dt);
 	      }
+	      
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Game_Over") {
 	      return self::GAME_OVER;
@@ -246,11 +251,7 @@ class LogParser {
 	      ) {
 	      return self::GAME_CONTINUE; //no need to process
 	    }
-	  }
-	  
-	  //always set elapsed time. When the log finishes, the last timestamp set will be our elapsed time.
-	  $elapsedTime = $this->getElapsedTime($dt);
-	  $this->log->setElapsedTime($elapsedTime);
+	  }	  
 	  
 	  if(!$this->isTournamentMode) {
 	    return self::GAME_CONTINUE; //do not want to track information when not in tournament mode.
@@ -407,6 +408,10 @@ class LogParser {
 	        return self::GAME_APPEARS_OVER;
 	      }
 	      $this->log->setScoreForTeam($team, $this->parsingUtils->getTeamScore($logLineDetails));
+	      if($team == "Blue") {
+	        //this line will be the last of the team score lines, and will likely always be the last line in a game.
+	        $this->log->addRoundStartEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
+	      }
 	      return self::GAME_CONTINUE;
 	    }
 	  }

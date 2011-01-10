@@ -26,6 +26,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'text'               => new sfWidgetFormFilterInput(),
       'team'               => new sfWidgetFormFilterInput(),
       'capture_point'      => new sfWidgetFormFilterInput(),
+      'blue_score'         => new sfWidgetFormFilterInput(),
+      'red_score'          => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -42,6 +44,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'text'               => new sfValidatorPass(array('required' => false)),
       'team'               => new sfValidatorPass(array('required' => false)),
       'capture_point'      => new sfValidatorPass(array('required' => false)),
+      'blue_score'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'red_score'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('event_filters[%s]');
@@ -75,6 +79,8 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'text'               => 'Text',
       'team'               => 'Text',
       'capture_point'      => 'Text',
+      'blue_score'         => 'Number',
+      'red_score'          => 'Number',
     );
   }
 }

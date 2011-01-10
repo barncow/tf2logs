@@ -144,6 +144,12 @@ class Log extends BaseLog
     }
   }
   
+  public function addRoundStartEvent($elapsedSeconds, $blueScore, $redScore) {
+    $e = new Event();
+    $e->roundStart($elapsedSeconds, $blueScore, $redScore);
+    $this->Events[] = $e;
+  }
+  
   /**
   * Used to perform any last cleanup work.
   */

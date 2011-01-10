@@ -325,6 +325,12 @@ Event:
     capture_point:
       type: string(30)
       notnull: false
+    blue_score:
+      type: integer(4)
+      notnull: false
+    red_score:
+      type: integer(4)
+      notnull: false
   relations:
     Log:
       onDelete: CASCADE
