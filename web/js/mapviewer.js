@@ -554,7 +554,10 @@ var MapViewer = Class.extend({
 /////////////////////////////////////////////////////////////////////////////////////
 var ToolTip = Class.extend({
 	init: function(text) {
-		this.text = "";
+		this.text = "";this.logEvents = [];
+		this.capEvents = [];
+		this.chatEvents = [];
+		this.roundEvents = [];
 		if(text != null && text != "") this.text = text;
 		this.offset = new Coordinate(15,15);
 		this.padding = 5;
@@ -1213,20 +1216,25 @@ var LogEventCollection = Class.extend({
 	},
 	
 	getDuration: function() {
-		d = 0;
-		for(c in this.logEvents) {
-			l = this.logEvents[c];
-			if(l.elapsedSeconds > d) {
-				d = l.elapsedSeconds;
-			}
+	  //need to find the max elapsedSeconds for each array, if any.
+		logEventsLast = 0;
+		if(this.logEvents && this.logEvents.length-1 >= 0) {
+		  logEventsLast = (this.logEvents[this.logEvents.length-1]).elapsedSeconds;
 		}
-		for(c in this.capEvents) {
-			l = this.capEvents[c];
-			if(l.elapsedSeconds > d) {
-				d = l.elapsedSeconds;
-			}
+		capEventsLast = 0;
+		if(this.capEvents && this.capEvents.length-1 >= 0) {
+		  capEventsLast = (this.capEvents[this.capEvents.length-1]).elapsedSeconds;
 		}
-		return d;
+		chatEventsLast = 0;
+		if(this.chatEvents && this.chatEvents.length-1 >= 0) {
+		  chatEventsLast = (this.chatEvents[this.chatEvents.length-1]).elapsedSeconds;
+		}
+		roundEventsLast = 0;
+		if(this.roundEvents && this.roundEvents.length-1 >= 0) {
+		  roundEventsLast = (this.roundEvents[this.roundEvents.length-1]).elapsedSeconds;
+		}
+		
+		return Math.max(logEventsLast,capEventsLast,chatEventsLast,roundEventsLast);
 	}
 });
 
