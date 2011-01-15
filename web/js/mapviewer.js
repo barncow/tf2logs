@@ -292,9 +292,9 @@ var MapDrawer = Class.extend({
 /////////////////////////////////////////////////////////////////////////////////////
 var MapViewer = Class.extend({
 	init: function(gameMap, playerCollection, logEventCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox) {
-		this.mapDrawer = null;
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
+		this.mapDrawer = new MapDrawer(this.mapViewerCanvas);
 		this.canvasOffset = this.jqMapViewerCanvas.offset();this.eventType = "team_say";
 		this.gameMap = gameMap; //GameMap child object
 		this.dataTimeout = null;
@@ -447,8 +447,6 @@ var MapViewer = Class.extend({
 			id = new ImageDrawable(this.mapImg, new Coordinate(0,0));
 			id.onTopIfHovered = false;
 			this.mapImgDrawable = id;
-			
-			this.mapDrawer = new MapDrawer(this.mapViewerCanvas);
 			
 			//starting the data iteration
 			this.iterateData(false);
