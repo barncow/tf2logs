@@ -1198,6 +1198,11 @@ var LogEventCollection = Class.extend({
 			}
 		}
 		//only want the caps starting from the last round start for the duration.
+		if(Math.abs(lastRoundStartElapsedSeconds-startSeconds) <= mapViewerObj.numberOfSecondsKeepEventOnScreen) {
+		  //if our duration is within the amount of seconds to keep on screen, we want to display the last cap. 
+		  //otherwise the caps reset right away.
+		  lastRoundStartElapsedSeconds -= 1;
+		}
 		for(c in this.capEvents) {
 			l = this.capEvents[c];
 			if(l.elapsedSeconds > lastRoundStartElapsedSeconds && l.elapsedSeconds <= endSeconds) {
