@@ -1200,7 +1200,7 @@ var LogEventCollection = Class.extend({
 		//only want the caps starting from the last round start for the duration.
 		for(c in this.capEvents) {
 			l = this.capEvents[c];
-			if(l.elapsedSeconds >= lastRoundStartElapsedSeconds && l.elapsedSeconds <= endSeconds) {
+			if(l.elapsedSeconds > lastRoundStartElapsedSeconds && l.elapsedSeconds <= endSeconds) {
 				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 			}
 		}
