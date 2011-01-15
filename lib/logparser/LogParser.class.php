@@ -235,6 +235,9 @@ class LogParser {
 	      if($this->log->get_timeStart() == null) {
 	        //there will likely be multiple round_start's, only need the first one for the tmsp
 	        $this->log->set_timeStart($dt);
+	        
+	        //adding a round start event for the first round.
+	        $this->log->addRoundStartEvent($elapsedTime, 0, 0);
 	      }
 	      
 	      return self::GAME_CONTINUE;
