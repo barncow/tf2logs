@@ -199,3 +199,4 @@ $(function (){
 });
 </script>
 <?php endif ?>
+<div id="canvasTooltip"></div>

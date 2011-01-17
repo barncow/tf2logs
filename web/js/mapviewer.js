@@ -89,7 +89,8 @@ var Coordinate = Class.extend({
 /////////////////////////////////////////////////////////////////////////////////////
 var MapDrawer = Class.extend({
 	init: function(mapViewerCanvas) {
-		this.mapViewerCanvas = mapViewerCanvas; //raw canvas object (doc.getEById())
+		this.jqMapViewerCanvas = mapViewerCanvas;
+		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
 		this.mapViewerContext = null;
 		this.fps = 30;
 		this.interval = 1000/this.fps;
@@ -130,7 +131,14 @@ var MapDrawer = Class.extend({
 		
 		//draw tooltip if needed
 		if(hoveredObj != null && hoveredObj.tooltip.tooltipEnabled()) {
-			this.drawTooltip(hoveredObj.tooltip);
+			//this.drawTooltip(hoveredObj.tooltip);
+			$("#canvasTooltip")
+			  .html(hoveredObj.tooltip.text)
+			  .show()
+			  .css('top', this.mouseLocation.y+this.jqMapViewerCanvas.offset().top+hoveredObj.tooltip.offset.y)
+			  .css('left',this.mouseLocation.x+this.jqMapViewerCanvas.offset().left+hoveredObj.tooltip.offset.x);
+		} else {
+		  $("#canvasTooltip").hide().html("");
 		}
 		
 		//schedule next frame
@@ -209,81 +217,6 @@ var MapDrawer = Class.extend({
 	  if (fill) {
 		ctx.fill();
 	  }        
-	},
-	
-	drawTooltip: function(tooltip) {
-		lines = tooltip.text.split("\n");
-		
-		//find the widest line, use it as width of tooltip.
-		boxWidth = 0;
-		for(i in lines) {
-			fontStyle = "";
-			t = lines[i];
-			if(t.startsWith("%b")) {
-				t = t.replace("%b", "");
-				fontStyle = "bold ";
-			}
-			if(t.startsWith("%s")) {
-				t = t.replace("%s", "");
-				fontStyle += tooltip.smallFontStyle();
-			} else {
-				fontStyle += tooltip.fontStyle();
-			}
-			this.mapViewerContext.font = fontStyle;
-			w = this.mapViewerContext.measureText(t).width;
-			if(w > boxWidth) {
-				boxWidth = w;
-			}
-		}
-		
-		boxWidth += tooltip.padding*2;
-		boxHeight = tooltip.fontSize*lines.length + tooltip.padding*2;
-		x = this.mouseLocation.x;
-		y = this.mouseLocation.y;
-		//adjust position of box, if tip will move past edge of canvas.
-		if(x+boxWidth+tooltip.offset.x > this.mapViewerCanvas.width) {
-			//box goes past right side of canvas
-			//adjust x so that the tooltip ends on the left side of mouse + offset.
-			x = x-boxWidth-tooltip.offset.x;
-		} else {
-			//no collision issues, just keep x as it should be, with offset.
-			x += tooltip.offset.x;
-		}
-		if(y+boxHeight+tooltip.offset.y > this.mapViewerCanvas.height) {
-			//box goes below bottom of canvas.
-			//adjust y so that the tooltip ends on the top side of mouse + offset.
-			y = y-boxHeight-tooltip.offset.y;
-		} else {
-			//no collision issues, just keep y as it should be, with offset.
-			y += tooltip.offset.y;
-		}
-		
-		//draw the background box
-		this.mapViewerContext.fillStyle = tooltip.backgroundColor;
-		this.mapViewerContext.strokeStyle = tooltip.fontColor;
-		this.roundRect(this.mapViewerContext, x, y, boxWidth, boxHeight, 5, true, true);
-		
-		//draw the text of the tooltip
-		this.mapViewerContext.fillStyle = tooltip.fontColor;
-		this.mapViewerContext.textBaseline = "top";
-		for(i in lines) {
-			fontStyle = "";
-			t = lines[i];
-			if(t.startsWith("%b")) {
-				t = t.replace("%b", "");
-				fontStyle = "bold ";
-			}
-			if(t.startsWith("%s")) {
-				t = t.replace("%s", "");
-				fontStyle += tooltip.smallFontStyle();
-			} else {
-				fontStyle += tooltip.fontStyle();
-			}
-			this.mapViewerContext.font = fontStyle;
-			
-			this.mapViewerContext.fillText(t,x+tooltip.padding,y+(i*tooltip.fontSize)+tooltip.padding);
-		}
-		
 	}
 });
 
@@ -294,7 +227,7 @@ var MapViewer = Class.extend({
 	init: function(gameMap, playerCollection, logEventCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox) {
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
-		this.mapDrawer = new MapDrawer(this.mapViewerCanvas);
+		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
 		this.canvasOffset = this.jqMapViewerCanvas.offset();this.eventType = "team_say";
 		this.gameMap = gameMap; //GameMap child object
 		this.dataTimeout = null;
@@ -552,10 +485,7 @@ var MapViewer = Class.extend({
 /////////////////////////////////////////////////////////////////////////////////////
 var ToolTip = Class.extend({
 	init: function(text) {
-		this.text = "";this.logEvents = [];
-		this.capEvents = [];
-		this.chatEvents = [];
-		this.roundEvents = [];
+		this.text = "";
 		if(text != null && text != "") this.text = text;
 		this.offset = new Coordinate(15,15);
 		this.padding = 5;
@@ -747,17 +677,17 @@ var PlayerDrawable = ImageDrawable.extend({
 	},
 	
 	setVictimTooltip: function(textFromArrow){
-		a = textFromArrow.split("\n");
+		a = textFromArrow.split("<br/>");
 		//bold third line
-		a[2] = "%b"+a[2];
-		this.tooltip.text = a.join("\n");
+		a[2] = "<b>"+a[2]+"</b>";
+		this.tooltip.text = a.join("<br/>");
 	},
 	
 	setAttackerTooltip: function(textFromArrow){
-		a = textFromArrow.split("\n");
+		a = textFromArrow.split("<br/>");
 		//bold first line
-		a[0] = "%b"+a[0];
-		this.tooltip.text = a.join("\n");
+		a[0] = "<b>"+a[0]+"</b>";
+		this.tooltip.text = a.join("<br/>");
 	},
 	
 	setCoordinate: function(coord) {
@@ -838,7 +768,7 @@ var KillArrowDrawable = Drawable.extend({
 		this.onTopIfHovered = false;
 		this.finLength = 5;
 		this.calculateDimensions();
-		this.tooltip.text = this.attacker.name+"\nkilled\n"+this.victim.name;
+		this.tooltip.text = this.attacker.name+"<br/>killed<br/>"+this.victim.name;
 	},
 	
 	//helper method to calculate width, height, x, y
@@ -1115,10 +1045,11 @@ var LogEvent = Class.extend({
 					}
 					point.owningTeam = this.team;
 					point.resetTooltip();
-					point.tooltip.text += "\n%sCaptured By:";
+					point.tooltip.text += "<span class=\"details\"><br/>Captured By:";
 					for(p in this.players) {
-						point.tooltip.text += "\n%s"+playerCollection.getPlayerById(this.players[p]).name;
+						point.tooltip.text += "<br/>"+playerCollection.getPlayerById(this.players[p]).name;
 					}
+					point.tooltip.text += "</span>";
 				}
 			}
 		} else if(this.eventType == "say" || this.eventType == "team_say") {

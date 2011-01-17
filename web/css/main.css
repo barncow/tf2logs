@@ -138,3 +138,15 @@ a:hover {
   margin: 0;
 }
 
+#canvasTooltip {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border: 1px solid white;
+}
+
+#canvasTooltip .details {
+  font-size: 8px;
+}
+
