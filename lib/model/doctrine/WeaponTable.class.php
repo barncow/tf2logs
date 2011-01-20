@@ -37,4 +37,19 @@ class WeaponTable extends Doctrine_Table {
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
+    
+    /**
+    * Gets unique weapons that a player died or killed with
+    */
+    public function getWeaponsForPlayerId($playerId) {
+      return $this
+        ->createQuery('w')
+        ->innerJoin('w.WeaponStat ws')
+        ->innerJoin('ws.Stat s')
+        ->innerJoin('s.Player p')
+        ->where('p.numeric_steamid = ?', $playerId)
+        ->orderBy('w.name')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }

@@ -84,15 +84,15 @@ Number matches: <?php echo $player->num_matches ?><br/>
     <?php foreach($weapons as $w): ?>
       <tr>
         <td>
-          <?php if($w->getName()): ?>
-            <?php echo $w->getName() ?>
+          <?php if($w['name']): ?>
+            <?php echo $w['name'] ?>
           <?php else: ?>
-            <?php echo $w->getKeyName() ?>
+            <?php echo $w['key_name'] ?>
           <?php endif ?>
         </td>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
-          <?php if($ws->getWeaponId() == $w->getId()): ?>
+          <?php if($ws->getWeaponId() == $w['id']): ?>
             <td class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></td>
             <td class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></td>
             <?php $foundWS = true ?>
