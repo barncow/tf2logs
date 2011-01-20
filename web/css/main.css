@@ -69,6 +69,7 @@ a:hover {
   border-collapse: collapse;
   text-align: center;
   font-size: 10px;
+  white-space:nowrap;
 }
 
 .statTable {
