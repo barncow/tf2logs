@@ -18,6 +18,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->name = Doctrine::getTable('Player')->getMostUsedPlayerName($request->getParameter('id'));
     $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForPlayerId($request->getParameter('id'));
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getPlayerWeaponStatsByNumericSteamid($request->getParameter('id'));
+    $this->participatedLogs = Doctrine::getTable('Log')->getParticipantLogsByPlayerNumericSteamid($request->getParameter('id'));
   }
   
   //////////////////////AUTH ACTIONS///////////////////////////////

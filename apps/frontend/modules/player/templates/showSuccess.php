@@ -6,7 +6,6 @@
 <?php use_javascript('playershow.js'); ?>
 <?php use_helper('Log') ?>
 <div id="playerName"><span class="description">Player Name: </span><?php echo $name ?></div>
-Number matches: <?php echo $player->num_matches ?><br/>
 <table class="statTable" border="0" cellspacing="0" cellpadding="3">
   <caption>Overall Stats</caption>
   <thead>
@@ -103,6 +102,26 @@ Number matches: <?php echo $player->num_matches ?><br/>
           <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
         <?php endif ?>
+      </tr>
+    <?php endforeach ?>
+  </tbody>
+</table>
+
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Logs Played - <?php echo $player->num_matches ?></caption>
+  <thead>
+    <tr>
+      <th>Log Name</th>
+      <th>Map Name</th>
+      <th>Date Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach($participatedLogs as $pl): ?>
+      <tr>
+        <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
+        <td><?php echo $pl['map_name'] ?></td>
+        <td><?php echo $pl['created_at'] ?></td>
       </tr>
     <?php endforeach ?>
   </tbody>

@@ -84,4 +84,16 @@ class LogTable extends Doctrine_Table {
         ->limit($num_to_retrieve)
         ->execute();
     }
+    
+    //retrieves logs that the user participated in, not submitted
+    public function getParticipantLogsByPlayerNumericSteamid($playerId) {
+      return $this
+        ->createQuery('l')
+        ->leftJoin('l.Stats s')
+        ->leftJoin('s.Player p')
+        ->where('p.numeric_steamid = ?', $playerId)
+        ->orderBy('l.created_at desc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }
