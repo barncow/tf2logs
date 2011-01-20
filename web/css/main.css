@@ -87,6 +87,7 @@ a:hover {
   font-family: 'TF2 Build';
   text-transform: uppercase;
   font-size: 25px;
+  white-space:nowrap;
 }
 
 #playerName {
