@@ -117,12 +117,40 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach($participatedLogs as $pl): ?>
-      <tr>
-        <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
-        <td><?php echo $pl['map_name'] ?></td>
-        <td><?php echo $pl['created_at'] ?></td>
-      </tr>
-    <?php endforeach ?>
+    <?php if($player->num_matches == 0): ?>
+      <tr><td colspan="3">This player has not played in any logs.</td></tr>
+    <?php else: ?>
+      <?php foreach($participatedLogs as $pl): ?>
+        <tr>
+          <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
+          <td><?php echo $pl['map_name'] ?></td>
+          <td><?php echo $pl['created_at'] ?></td>
+        </tr>
+      <?php endforeach ?>
+    <?php endif ?>
+  </tbody>
+</table>
+
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Logs Submitted - <?php echo $numSubmittedLogs ?></caption>
+  <thead>
+    <tr>
+      <th>Log Name</th>
+      <th>Map Name</th>
+      <th>Date Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php if($numSubmittedLogs == 0): ?>
+      <tr><td colspan="3">This player has not submitted any logs.</td></tr>
+    <?php else: ?>
+      <?php foreach($submittedLogs as $sl): ?>
+        <tr>
+          <td><?php echo link_to($sl['name'], 'log/show?id='.$sl['id']) ?></td>
+          <td><?php echo $sl['map_name'] ?></td>
+          <td><?php echo $sl['created_at'] ?></td>
+        </tr>
+      <?php endforeach ?>
+    <?php endif ?>
   </tbody>
 </table>
