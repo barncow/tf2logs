@@ -38,7 +38,7 @@
 <span class="title">Top Uploaders</span>
 <ol>
   <?php foreach($topuploaders as $p): ?>
-    <li><?php echo link_to($p->name, 'player/showNumericSteamId?id='.$p->numeric_steamid) ?></li>
+    <li><?php echo link_to($p->name, 'player/showNumericSteamId?id='.$p->numeric_steamid) ?> - <?php echo $p->num_logs ?></li>
   <?php endforeach ?>
 </ol>
 </div>
