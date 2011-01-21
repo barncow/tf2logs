@@ -26,6 +26,7 @@ class Stat extends BaseStat {
       }
     }
     $this->setName($playerInfo->getName());
+    $this->Player->setName($playerInfo->getName());
     $this->setTeam($playerInfo->getTeam());
   }
   

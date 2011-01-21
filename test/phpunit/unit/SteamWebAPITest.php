@@ -22,6 +22,11 @@ class unit_SteamWebAPITest extends sfPHPUnitBaseTestCase {
     $this->assertTrue(filesize($fullpath) > 0, "jpg has bytes");
   }
   
+  public function testGetName() {
+    $swapi = new SteamWebAPI();
+    $this->assertEquals("Barncow", $swapi->getPlayerName("76561197993228277"), "check that can get current name");
+  }
+  
   public function testChangeJSONIntsToStrings() {
   $swapi = new SteamWebAPI();
   $rawjson = <<<JSON

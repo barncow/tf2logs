@@ -5,7 +5,7 @@
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('playershow.js'); ?>
 <?php use_helper('Log') ?>
-<div id="playerName"><span class="description">Player Name: </span><?php echo $name ?></div>
+<div id="playerName"><span class="description">Player Name: </span><?php echo $player->name ?></div>
 
 <?php if($player->num_matches == 0): ?>
   <tr><td colspan="3">This player has not played in any logs.</td></tr>

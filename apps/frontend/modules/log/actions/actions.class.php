@@ -14,6 +14,7 @@ class logActions extends sfActions {
   
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
+    $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
     $this->form = new LogForm(); 
   }
   

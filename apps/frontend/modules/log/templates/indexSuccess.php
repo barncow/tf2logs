@@ -25,11 +25,20 @@
 </div>
 <?php endif ?>
 
-<div id="recentlyAdded">
-Recently Added
+<div id="recentlyAdded" class="statBox">
+<span class="title">Recently Added</span>
 <ul>
   <?php foreach($logs as $l): ?>
     <li><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></li>
   <?php endforeach ?>
 </ul>
+</div>
+
+<div id="topUploaders" class="statBox">
+<span class="title">Top Uploaders</span>
+<ol>
+  <?php foreach($topuploaders as $p): ?>
+    <li><?php echo link_to($p->name, 'player/showNumericSteamId?id='.$p->numeric_steamid) ?></li>
+  <?php endforeach ?>
+</ol>
 </div>

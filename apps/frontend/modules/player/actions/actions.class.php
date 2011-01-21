@@ -15,7 +15,6 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->player = Doctrine::getTable('Player')->getPlayerStatsByNumericSteamid($request->getParameter('id'));
     $this->forward404Unless($this->player);
     $this->roles = Doctrine::getTable('Player')->getPlayerRolesByNumericSteamid($request->getParameter('id'));
-    $this->name = Doctrine::getTable('Player')->getMostUsedPlayerName($request->getParameter('id'));
     $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForPlayerId($request->getParameter('id'));
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getPlayerWeaponStatsByNumericSteamid($request->getParameter('id'));
     $this->participatedLogs = Doctrine::getTable('Log')->getParticipantLogsByPlayerNumericSteamid($request->getParameter('id'));
@@ -97,8 +96,10 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     if(!$player) {
       $player = new Player();
       $player->setNumericSteamid($steamid);
-      $player->save();
     }
+    $steamwebapi = new SteamWebAPI();
+    $player->setName($steamwebapi->getPlayerName($steamid));
+    $player->save();
     
     $this->getUser()->addCredential($player->getCredential());
     $this->getUser()->setAttribute(self::PLAYER_ID_ATTR, (int)$player->getId());

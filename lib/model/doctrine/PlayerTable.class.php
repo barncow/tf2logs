@@ -64,22 +64,6 @@ class PlayerTable extends Doctrine_Table {
     return $ret;
   }
   
-  public function getMostUsedPlayerName($id) {
-    $connection = Doctrine_Manager::connection();
-    $query = 'select s.name, count(s.id) num_times '
-      .'from stat s '
-      .'inner join player p on p.id = s.player_id '
-      .'inner join log l on l.id = s.log_id '
-      .'where p.numeric_steamid = ? '
-      .'group by s.name '
-      .'order by num_times, l.created_at desc '
-      .'limit 0, 1 ';
-    $statement = $connection->execute($query, array($id));
-    $row = $statement->fetch(PDO::FETCH_OBJ);
-    if(!$row) return "No Name Found";
-    return $row->name;
-  }
-  
   public function findPlayerForGivenNamePartial($name) {
     return $this
         ->createQuery('p')
@@ -88,4 +72,22 @@ class PlayerTable extends Doctrine_Table {
         ->orderBy('s.name asc')
         ->execute();
   }
+  
+  public function getTopUploaders($num_to_retrieve = 10) {
+      $connection = Doctrine_Manager::connection();
+      $query = 'select p.numeric_steamid as numeric_steamid, p.name as name, count(l.submitter_player_id) as num_logs '
+        .'from log l '
+        .'left join player p on l.submitter_player_id = p.id '
+        .'group by p.numeric_steamid, p.name '
+        .'having num_logs > 0 '
+        .'limit 0, '.$num_to_retrieve;
+      $statement = $connection->execute($query);
+      $ret = array();
+      while($row = $statement->fetch(PDO::FETCH_OBJ)) {
+        $ret[] = $row;
+      }
+      return $ret;
+    }
+    
+    
 }
