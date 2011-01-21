@@ -205,6 +205,14 @@ abstract class BaseStat extends sfDoctrineRecord
              'default' => 0,
              'length' => 4,
              ));
+
+
+        $this->index('name_idx', array(
+             'fields' => 
+             array(
+              0 => 'name',
+             ),
+             ));
     }
 
     public function setUp()

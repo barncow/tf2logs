@@ -37,7 +37,7 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.dropped_ubers) as dropped_ubers'
       )
       ->from('Player p')
-      ->innerJoin('p.Stats s')
+      ->leftJoin('p.Stats s')
       ->where('p.numeric_steamid = ?', $id)
       ->groupBy('p.numeric_steamid')
       ->execute();
@@ -76,6 +76,16 @@ class PlayerTable extends Doctrine_Table {
       .'limit 0, 1 ';
     $statement = $connection->execute($query, array($id));
     $row = $statement->fetch(PDO::FETCH_OBJ);
+    if(!$row) return "No Name Found";
     return $row->name;
+  }
+  
+  public function findPlayerForGivenNamePartial($name) {
+    return $this
+        ->createQuery('p')
+        ->leftJoin('p.Stats s')
+        ->where('s.name LIKE ?', '%'.$name.'%')
+        ->orderBy('s.name asc')
+        ->execute();
   }
 }

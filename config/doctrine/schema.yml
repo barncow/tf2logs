@@ -134,6 +134,9 @@ Stat:
       foreignAlias: Stats
       class: Player
       refClass: PlayerStat
+  indexes:
+    name_idx:
+      fields: [name]
       
 LogFile:
   columns:

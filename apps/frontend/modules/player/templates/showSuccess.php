@@ -6,6 +6,10 @@
 <?php use_javascript('playershow.js'); ?>
 <?php use_helper('Log') ?>
 <div id="playerName"><span class="description">Player Name: </span><?php echo $name ?></div>
+
+<?php if($player->num_matches == 0): ?>
+  <tr><td colspan="3">This player has not played in any logs.</td></tr>
+<?php else: ?>
 <table class="statTable" border="0" cellspacing="0" cellpadding="3">
   <caption>Overall Stats</caption>
   <thead>
@@ -116,20 +120,17 @@
       <th>Date Submitted</th>
     </tr>
   </thead>
-  <tbody>
-    <?php if($player->num_matches == 0): ?>
-      <tr><td colspan="3">This player has not played in any logs.</td></tr>
-    <?php else: ?>
-      <?php foreach($participatedLogs as $pl): ?>
-        <tr>
-          <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
-          <td><?php echo $pl['map_name'] ?></td>
-          <td><?php echo $pl['created_at'] ?></td>
-        </tr>
-      <?php endforeach ?>
-    <?php endif ?>
+  <tbody>    
+    <?php foreach($participatedLogs as $pl): ?>
+      <tr>
+        <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
+        <td><?php echo $pl['map_name'] ?></td>
+        <td><?php echo $pl['created_at'] ?></td>
+      </tr>
+    <?php endforeach ?>
   </tbody>
 </table>
+<?php endif ?>
 
 <table class="statTable" border="0" cellspacing="0" cellpadding="3">
   <caption>Logs Submitted - <?php echo $numSubmittedLogs ?></caption>

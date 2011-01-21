@@ -23,6 +23,41 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->numSubmittedLogs = Doctrine::getTable('Log')->getNumberSubmittedLogsByPlayerNumericSteamid($request->getParameter('id'));
   }
   
+  public function executeSearch(sfWebRequest $request) {
+    $param = $request->getParameter('param');
+    if($param == null || $param == "") {
+      $this->param = "";
+      return; //no param set, just go to search form.
+    } else if(is_numeric($param) && strpos($param, "7656119") == 0) {
+      //numeric steam id given - it is numeric and starts with above string.
+      $p = Doctrine::getTable('Player')->findOneByNumericSteamid($param);
+      if($p) {
+        $this->redirect('@player_by_numeric_steamid?id='.$p->getNumericSteamid());
+      } else {
+        $this->getUser()->setFlash('error', 'The player specified could not be found.');
+      }
+    } else if(strpos($param, "STEAM_") === 0) {
+      //steam id string
+      $p = Doctrine::getTable('Player')->findOneBySteamid($param);
+      if($p) {
+        $this->redirect('@player_by_numeric_steamid?id='.$p->getNumericSteamid());
+      } else {
+        $this->getUser()->setFlash('error', 'The player specified could not be found.');
+      }
+    } else {
+      //just do a name search.
+      
+      $players = Doctrine::getTable('Player')->findPlayerForGivenNamePartial($param);
+      if($players && count($players) > 0) {
+        $this->results = $players;
+      } else {
+        $this->getUser()->setFlash('error', 'No player could be found for the given search.');
+      }
+    }
+    
+    $this->param = $param;
+  }
+  
   //////////////////////AUTH ACTIONS///////////////////////////////
   
   //todo move to app config
