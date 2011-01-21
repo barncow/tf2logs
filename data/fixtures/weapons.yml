@@ -119,3 +119,59 @@ Weapon:
     key_name: ubersaw
     name: Ubersaw
     Role: medic
+  iron_curtain:
+    key_name: iron_curtain
+    name: Iron Curtain
+    Role: heavyweapons
+  flaregun:
+    key_name: flaregun
+    name: Flaregun
+    Role: pyro
+  axtinguisher:
+    key_name: axtinguisher
+    name: Axtinguisher
+    Role: pyro
+  shotgun_hwg:
+    key_name: shotgun_hwg
+    name: Heavy's Shotgun
+    Role: heavyweapons
+  bottle:
+    key_name: bottle
+    name: Bottle
+    Role: demo
+  blutsauger:
+    key_name: blutsauger
+    name: Blutsauger
+    Role: medic
+  unique_pickaxe:
+    key_name: unique_pickaxe
+    name: Unique Equalizer
+    Role: soldier
+  ambassador:
+    key_name: ambassador
+    name: Ambassador
+    Role: spy
+  degreaser:
+    key_name: degreaser
+    name: Degreaser
+    Role: pyro
+  club:
+    key_name: club
+    name: Kukri
+    Role: sniper
+  wrangler_kill:
+    key_name: wrangler_kill
+    name: Wrangler
+    Role: engineer
+  backburner:
+    key_name: backburner
+    name: Backburner
+    Role: pyro
+  frontier_justice:
+    key_name: frontier_justice
+    name: Frontier Justice
+    Role: engineer
+  bat:
+    key_name: bat
+    name: Bat
+    Role: scout
