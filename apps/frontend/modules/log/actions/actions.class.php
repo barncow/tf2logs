@@ -15,7 +15,7 @@ class logActions extends sfActions {
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
     $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
-    $this->form = new LogForm(); 
+    $this->form = new LogForm();
   }
   
   public function executeShow(sfWebRequest $request) {
@@ -37,6 +37,21 @@ class logActions extends sfActions {
     $this->form = new LogForm();
 
     return $this->processForm($request, $this->form);
+  }
+  
+  public function executeSearch(sfWebRequest $request) {
+    $this->form = new LogSearchForm();
+    if($request->isMethod(sfRequest::POST)) {
+      $this->form->bind($request->getParameter($this->form->getName()));
+      if ($this->form->isValid()) {
+        $this->results = Doctrine::getTable('Log')->getLogsFromSearch($this->form->getValue('name'), $this->form->getValue('map_name'), $this->form->getValue('from_date'), $this->form->getValue('to_date'));
+        if(count($this->results) == 1) {
+          $this->redirect('log/show?id='.$this->results[0]['id']);
+        }
+      } else {
+        $this->getUser()->setFlash('error', 'There was an error with your search.');
+      }
+    }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form) {

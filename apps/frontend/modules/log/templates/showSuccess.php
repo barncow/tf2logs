@@ -4,9 +4,9 @@
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
 
 <?php if(mapExists($log['map_name'])): ?>
-<?php use_stylesheet('./ui-lightness/jquery-ui-1.8.7.custom.css'); ?>
+<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
 <?php use_stylesheet('canvas.css'); ?>
-<?php use_javascript('jquery-ui-1.8.7.custom.min.js'); ?>
+<?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
 <?php use_javascript('class.js'); ?>
 <?php use_javascript('mapviewer.js'); ?>
 <?php use_javascript('/maps/'.$log['map_name'].'/map.js'); ?>

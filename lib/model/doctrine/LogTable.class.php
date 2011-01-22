@@ -119,4 +119,49 @@ class LogTable extends Doctrine_Table {
       if(count($p) != 1) return 0;
       return $p[0]['num_logs'];
     }
+    
+    //retrieves an array of distinct maps
+    public function getMapsAsList(&$ret = array()) {
+      $m = Doctrine_Query::create()
+      ->select('l.map_name as map_name')
+      ->from('Log l')
+      ->where('l.map_name is not null')
+      ->distinct(true)
+      ->setHydrationMode(Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ->execute();
+      if(!is_array($m)){
+        $ret[$m] = $m;
+      }
+      foreach($m as $map) {
+        $ret[$map] = $map;
+      }
+      return $ret;
+    }
+    
+    //retrieves logs based on search criteria
+    public function getLogsFromSearch($logName, $mapName, $fromDate, $toDate) {
+      $q = $this
+        ->createQuery('l')
+        ->orderBy('l.created_at desc, l.name asc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
+      if($logName && strlen($logName) > 0) {
+        $q->andWhere('l.name LIKE ?', '%'.$logName.'%');
+      }
+      
+      if($mapName && strlen($mapName) > 0) {
+        $q->andWhere('l.map_name = ?', $mapName);
+      }
+      
+      if($fromDate && strlen($fromDate) > 0) {
+        $q->andWhere('l.created_at >= ?', $fromDate);
+      }
+      
+      if($toDate && strlen($toDate) > 0) {
+        //add one to the date in order to compare all dates and times before this date.
+        $toDate = date("Y-m-d", strtotime($toDate." +1 day"));
+        $q->andWhere('l.created_at < ?', $toDate);
+      }
+        
+      return $q->execute();
+    }
 }
