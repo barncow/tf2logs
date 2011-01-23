@@ -224,7 +224,7 @@ var MapDrawer = Class.extend({
 // MapViewer class - class that handles everything for the mapviewer.
 /////////////////////////////////////////////////////////////////////////////////////
 var MapViewer = Class.extend({
-	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox) {
+	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox, jqPlaybackSpeed) {
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
 		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
@@ -248,6 +248,8 @@ var MapViewer = Class.extend({
 		this.blueScore = 0;
 		this.redScore = 0;
 		this.weaponCollection = weaponCollection;
+		this.jqPlaybackSpeed = jqPlaybackSpeed;
+		this.playbackSpeed = parseInt(this.jqPlaybackSpeed.val());
 		
 		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
@@ -310,6 +312,11 @@ var MapViewer = Class.extend({
 				}
 				mapViewerObj.playbackStateBeforeSlide = null;
 			}
+		});
+		
+		//playback speed dropdown
+		this.jqPlaybackSpeed.change(function(event){
+			mapViewerObj.playbackSpeed = parseInt(mapViewerObj.jqPlaybackSpeed.val());
 		});
 	},
 	
@@ -393,7 +400,7 @@ var MapViewer = Class.extend({
 	//depending on what data should be displayed in this frame.
 	iterateData: function(iterateSlider) {
 		if(iterateSlider && this.playbackPosition < this.playbackMax) {
-			++this.playbackPosition;
+			this.playbackPosition += this.playbackSpeed;
 			this.jqPlaybackProgress.slider("option", "value", this.playbackPosition);
 		}
 		
@@ -411,7 +418,7 @@ var MapViewer = Class.extend({
 		this.resetChatBox();
 		
 		//get all events pertinent for this frame
-		events = this.logEventCollection.getDrawablesForDuration(this.playbackPosition-this.numberOfSecondsKeepEventOnScreen, this.playbackPosition
+		events = this.logEventCollection.getDrawablesForDuration(this.playbackPosition-this.numberOfSecondsKeepEventOnScreen*this.playbackSpeed, this.playbackPosition
 				, this.playerCollection, this.weaponCollection, this.gameMap, cps);
 				
 		//scroll chat log to bottom

@@ -30,7 +30,14 @@
 <div id="mapViewerControls">
 	<button id="playPauseButton"></button>
 	<div id="playbackProgress"><span id="totalTime"></span></div>
-	<div style="clear: both"></div>
+	<div style="clear: both">
+	  <label for="playbackSpeed">Playback Speed</label>
+	  <select id="playbackSpeed">
+	    <option value="1">1x</option>
+	    <option value="5" selected>5x</option>
+	    <option value="20">20x</option>
+	  </select>
+	</div>
 </div>
 <div id="chatBox"><ul></ul></div>
 <?php endif ?>
@@ -231,7 +238,7 @@ var mapViewerObj;
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
 	mvc = $("#mapViewerControls");
-	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"));
+	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"));
 });
 </script>
 <?php endif ?>
