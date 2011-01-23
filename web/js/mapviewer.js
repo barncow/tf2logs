@@ -758,18 +758,18 @@ var PlayerDrawable = ImageDrawable.extend({
 		x = this.coordinate.x;
 		y = this.coordinate.y;
 		
-		if(fromCoord.y > this.coordinate.y) {
+		if(fromCoord.y > this.coordinate.y+this.height) {
 			//attacker below vic
 			y = y+this.height/2+this.highlightWidth;
-		} else if (fromCoord.y < this.coordinate.y) {
+		} else if (fromCoord.y < this.coordinate.y-this.height) {
 			//attacker above vic
 			y = y-this.height/2-this.highlightWidth;
 		}
 		
-		if(fromCoord.x > this.coordinate.x) {
+		if(fromCoord.x > this.coordinate.x+this.width) {
 			//attacker right of vic
 			x = x+this.width/2+this.highlightWidth;
-		} else if (fromCoord.x < this.coordinate.x) {
+		} else if (fromCoord.x < this.coordinate.x-this.width) {
 			//attacker left of vic
 			x = x-this.width/2-this.highlightWidth;
 		}
