@@ -98,7 +98,10 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
       $player->setNumericSteamid($steamid);
     }
     $steamwebapi = new SteamWebAPI();
-    $player->setName($steamwebapi->getPlayerName($steamid));
+    $name = $steamwebapi->getPlayerName($steamid);
+    if($name && trim($name) != "") {
+      $player->setName($name);
+    }
     $player->save();
     
     $this->getUser()->addCredential($player->getCredential());
