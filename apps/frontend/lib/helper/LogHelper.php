@@ -108,4 +108,19 @@ function outputWeaponCollection($weaponsArray) {
   $s .= "]);";
   return $s;
 }
+
+function outputAsJSArray($a) {
+  $s = "[";
+  $isFirst = true;
+  foreach ($a as $item) {
+    $comma = ",";
+    if($isFirst) {
+      $comma = "";
+      $isFirst = false;
+    }
+    $s .= $comma.'"'.addslashes($item).'"';
+  }
+  $s .= "]";
+  return $s;
+}
 ?>

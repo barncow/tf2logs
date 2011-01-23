@@ -1,5 +1,9 @@
 <?php use_stylesheets_for_form($form) ?>
 <?php use_javascripts_for_form($form) ?>
+<?php use_javascript('jquery-1.4.4.min.js'); ?>
+<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
+<?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
+<?php use_helper('Log') ?>
 
 <?php if(!$sf_user->isAuthenticated()): ?>
 <div id="pageLogin">
@@ -42,3 +46,11 @@
   <?php endforeach ?>
 </ol>
 </div>
+
+<script type="application/x-javascript">
+$(function(){
+  $("#log_map_name").autocomplete({
+    source: <?php echo outputAsJSArray($mapNames); ?>
+  });
+});
+</script>

@@ -11,10 +11,33 @@ class logActions extends sfActions {
   //todo move to app config
   const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
   const PLAYER_ID_ATTR = "playerId";
+  protected static $SEED_MAPS = array(
+    "cp_badlands" => "cp_badlands"
+    ,"cp_coldfront" => "cp_coldfront"
+    ,"cp_fastlane" => "cp_fastlane"
+    ,"cp_freight_final1" => "cp_freight_final1"
+    ,"cp_5gorge" => "cp_5gorge"
+    ,"cp_gorge" => "cp_gorge"
+    ,"cp_granary" => "cp_granary"
+    ,"cp_gravelpit" => "cp_gravelpit"
+    ,"cp_steel" => "cp_steel"
+    ,"cp_yukon_final" => "cp_yukon_final"
+    ,"cp_well" => "cp_well"
+    ,"ctf_doublecross" => "ctf_doublecross"
+    ,"ctf_turbine" => "ctf_turbine"
+    ,"koth_sawmill" => "koth_sawmill"
+    ,"koth_viaduct" => "koth_viaduct"
+    ,"pl_badwater" => "pl_badwater"
+    ,"pl_goldrush" => "pl_goldrush"
+    ,"pl_hoodoo_final" => "pl_hoodoo_final"
+    ,"pl_upward" => "pl_upward"
+  );
   
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
     $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
+    $this->mapNames = array();
+    Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);
     $this->form = new LogForm();
   }
   

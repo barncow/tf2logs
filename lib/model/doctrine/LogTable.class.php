@@ -121,19 +121,29 @@ class LogTable extends Doctrine_Table {
     }
     
     //retrieves an array of distinct maps
-    public function getMapsAsList(&$ret = array()) {
+    //first variable allows you to put in an array to prepopulate (for instance, a blank Pick One value)
+    //you can optionally put in a seedMaps variable.
+    //This allows you to return more maps (unique and sorted)
+    //than there currently are in the DB.
+    //$seedMaps should follow same structure as return value.
+    public function getMapsAsList(&$ret = array(), $seedMaps = null) {
       $m = Doctrine_Query::create()
       ->select('l.map_name as map_name')
       ->from('Log l')
       ->where('l.map_name is not null')
       ->distinct(true)
       ->setHydrationMode(Doctrine_Core::HYDRATE_SINGLE_SCALAR)
+      ->orderBy('l.map_name asc')
       ->execute();
       if(!is_array($m)){
         $ret[$m] = $m;
       }
       foreach($m as $map) {
         $ret[$map] = $map;
+      }
+      if($seedMaps != null && count($seedMaps)) {
+        $ret = array_merge($ret, $seedMaps);
+        sort($ret);
       }
       return $ret;
     }
