@@ -321,7 +321,7 @@ class LogParser {
 	      $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
 	      $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
 	      
-	      $this->log->addKillEvent($elapsedTime, $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
+	      $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
 	        ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
 	      
 	      return self::GAME_CONTINUE;

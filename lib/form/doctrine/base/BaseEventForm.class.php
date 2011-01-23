@@ -31,6 +31,7 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'capture_point'      => new sfWidgetFormInputText(),
       'blue_score'         => new sfWidgetFormInputText(),
       'red_score'          => new sfWidgetFormInputText(),
+      'weapon_id'          => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Weapon'), 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
@@ -50,6 +51,7 @@ abstract class BaseEventForm extends BaseFormDoctrine
       'capture_point'      => new sfValidatorString(array('max_length' => 30, 'required' => false)),
       'blue_score'         => new sfValidatorInteger(array('required' => false)),
       'red_score'          => new sfValidatorInteger(array('required' => false)),
+      'weapon_id'          => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Weapon'), 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('event[%s]');

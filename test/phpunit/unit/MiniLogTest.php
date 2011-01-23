@@ -20,6 +20,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $events = $log->getEvents()->toArray();
     $this->assertTrue($events[1]['attacker_player_id'] > 0, "first kill event has attacker 2");
+    $this->assertEquals(1, $events[1]['weapon_id'], "first kill event has scattergun");
+    
     $this->assertEquals(1, $events[1]['elapsed_seconds'], "first kill event has elapsed seconds");
     $this->assertEquals("-2419 1637 -511", $events[2]['attacker_coord'], "second kill event has attacker_coord ");
     $this->assertTrue($events[3]['victim_player_id'] > 0, "third kill event has victim ");

@@ -10,13 +10,14 @@
  * @author     Brian Barnekow
  */
 class Event extends BaseEvent {
-  public function kill($elapsedSeconds, $attackerPlayerId, $attackerCoord, $victimPlayerId, $victimCoord) {
+  public function kill($elapsedSeconds, $weaponId, $attackerPlayerId, $attackerCoord, $victimPlayerId, $victimCoord) {
     $this->event_type = "kill";
     $this->elapsed_seconds = $elapsedSeconds;
     $this->Attacker = $attackerPlayerId;
     $this->attacker_coord = $attackerCoord;
     $this->Victim = $victimPlayerId;
     $this->victim_coord = $victimCoord;
+    $this->weapon_id = $weaponId;
   }
   
   public function assist($assistPlayerId, $assistCoord) {

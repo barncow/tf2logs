@@ -75,7 +75,7 @@ function outputEventsCollection($eventsArray) {
       $isFirst = false;
     }
     if($event['event_type'] == "kill") {
-      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['attacker_player_id'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim_player_id'].",new Coordinate(".getCoords($event['victim_coord'])."))\n";
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['weapon_id'].",".$event['attacker_player_id'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim_player_id'].",new Coordinate(".getCoords($event['victim_coord'])."))\n";
     } elseif($event['event_type'] == "say") {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
     } elseif($event['event_type'] == "say_team") {
@@ -89,6 +89,21 @@ function outputEventsCollection($eventsArray) {
     } elseif($event['event_type'] == "rndStart") {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").rs(".$event['red_score'].",".$event['blue_score'].")\n";
     }
+  }
+  $s .= "]);";
+  return $s;
+}
+
+function outputWeaponCollection($weaponsArray) {
+  $s = "var weaponCollection = new WeaponCollection([\n";
+  $isFirst = true;
+  foreach ($weaponsArray as $w) {
+    $comma = ",";
+    if($isFirst) {
+      $comma = ""; 
+      $isFirst = false;
+    }
+    $s .= $comma."new Weapon(".$w['id'].",\"".$w['key_name']."\",\"".addslashes($w['name'])."\")\n";
   }
   $s .= "]);";
   return $s;

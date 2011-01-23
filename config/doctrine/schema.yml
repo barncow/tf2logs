@@ -171,6 +171,7 @@ Weapon:
     key_name:
       type: string(40)
       notnull: true
+      unique: true
     name:
       type: string(40)
       notnull: false
@@ -349,6 +350,9 @@ Event:
     red_score:
       type: integer(4)
       notnull: false
+    weapon_id:
+      type: integer
+      notnull: false
   relations:
     Log:
       onDelete: CASCADE
@@ -365,6 +369,9 @@ Event:
     Chat:
       local: chat_player_id
       class: Player
+    Weapon:
+      onDelete: CASCADE
+      foreignAlias: Weapons
       
 EventPlayer:
   columns:

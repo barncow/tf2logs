@@ -30,6 +30,10 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
       'stats_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Stat', 'required' => false)),
     ));
 
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorDoctrineUnique(array('model' => 'Weapon', 'column' => array('key_name')))
+    );
+
     $this->widgetSchema->setNameFormat('weapon[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

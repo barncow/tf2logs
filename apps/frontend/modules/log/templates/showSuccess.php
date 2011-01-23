@@ -228,12 +228,14 @@ var mapViewerObj;
 
 <?php echo outputPlayerCollection($log['Stats']); ?>
 
+<?php echo outputWeaponCollection($weapons); ?>
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Doc ready
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
 	mvc = $("#mapViewerControls");
-	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"));
+	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"));
 });
 </script>
 <?php endif ?>

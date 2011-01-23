@@ -224,7 +224,7 @@ var MapDrawer = Class.extend({
 // MapViewer class - class that handles everything for the mapviewer.
 /////////////////////////////////////////////////////////////////////////////////////
 var MapViewer = Class.extend({
-	init: function(gameMap, playerCollection, logEventCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox) {
+	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox) {
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
 		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
@@ -247,6 +247,7 @@ var MapViewer = Class.extend({
 		this.isMapImgLoaded = false;
 		this.blueScore = 0;
 		this.redScore = 0;
+		this.weaponCollection = weaponCollection;
 		
 		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
@@ -411,7 +412,7 @@ var MapViewer = Class.extend({
 		
 		//get all events pertinent for this frame
 		events = this.logEventCollection.getDrawablesForDuration(this.playbackPosition-this.numberOfSecondsKeepEventOnScreen, this.playbackPosition
-				, this.playerCollection, this.gameMap, cps);
+				, this.playerCollection, this.weaponCollection, this.gameMap, cps);
 				
 		//scroll chat log to bottom
 		this.scrollChatBox();
@@ -760,7 +761,7 @@ var PlayerDrawable = ImageDrawable.extend({
 // Be sure that the PlayerDrawables given have the correct coordinates supplied.
 /////////////////////////////////////////////////////////////////////////////////////
 var KillArrowDrawable = Drawable.extend({
-	init: function(attackerPlayerDrawable, victimPlayerDrawable) {
+	init: function(attackerPlayerDrawable, victimPlayerDrawable, weapon) {
 		this._super();
 		
 		this.attacker = attackerPlayerDrawable;
@@ -768,7 +769,7 @@ var KillArrowDrawable = Drawable.extend({
 		this.onTopIfHovered = false;
 		this.finLength = 5;
 		this.calculateDimensions();
-		this.tooltip.text = this.attacker.name+"<br/>killed<br/>"+this.victim.name;
+		this.tooltip.text = this.attacker.name+"<br/>killed<br/>"+this.victim.name+"<br/>with "+weapon.name_;
 	},
 	
 	//helper method to calculate width, height, x, y
@@ -967,7 +968,7 @@ var LogEvent = Class.extend({
 	},
 	
 	//kill
-	k: function(attackerPlayerId, attackerCoord, victimPlayerId, victimCoord, assistPlayerId, assistCoord) {
+	k: function(weaponId, attackerPlayerId, attackerCoord, victimPlayerId, victimCoord, assistPlayerId, assistCoord) {
 		this.eventType = "kill";
 		this.attackerPlayerId = attackerPlayerId;
 		this.attackerCoord = attackerCoord;
@@ -975,6 +976,7 @@ var LogEvent = Class.extend({
 		this.victimCoord = victimCoord;
 		this.assistPlayerId = assistPlayerId;
 		this.assistCoord = assistCoord;
+		this.weaponId = weaponId;
 		return this; // used for chaining
 	},
 	
@@ -1011,7 +1013,7 @@ var LogEvent = Class.extend({
 	  return this;
 	},
 	
-	getAsDrawables: function(playerCollection, gameMap, capturePoints, isDrawableCurrent) {
+	getAsDrawables: function(playerCollection, weaponCollection, gameMap, capturePoints, isDrawableCurrent) {
 		a = [];
 		if(this.eventType == "kill") {
 			 
@@ -1021,7 +1023,7 @@ var LogEvent = Class.extend({
 			vic = playerCollection.getPlayerById(this.victimPlayerId);
 			vic.coordinate = gameMap.generateImageCoordinate(this.victimCoord);
 			
-			ka = new KillArrowDrawable(att,vic);
+			ka = new KillArrowDrawable(att,vic,weaponCollection.getWeaponById(this.weaponId));
 			vic.setVictimTooltip(ka.tooltip.text);
 			att.setAttackerTooltip(ka.tooltip.text);
 			a.push(ka);
@@ -1109,12 +1111,12 @@ var LogEventCollection = Class.extend({
 		}			
 	},
 	
-	getDrawablesForDuration: function(startSeconds, endSeconds, playerCollection, gameMap, capturePoints) {
+	getDrawablesForDuration: function(startSeconds, endSeconds, playerCollection, weaponCollection, gameMap, capturePoints) {
 		drawevents = [];
 		for(c in this.logEvents) {
 			l = this.logEvents[c];
 			if(l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds) {
-				d = l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				d = l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 				for(i in d) {
 					drawevents.push(d[i]);
 				}
@@ -1124,7 +1126,7 @@ var LogEventCollection = Class.extend({
 		for(r in this.roundEvents) {
 			l = this.roundEvents[r];
 			if(l.elapsedSeconds <= endSeconds) {
-				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 				lastRoundStartElapsedSeconds = l.elapsedSeconds;
 			}
 		}
@@ -1137,13 +1139,13 @@ var LogEventCollection = Class.extend({
 		for(c in this.capEvents) {
 			l = this.capEvents[c];
 			if(l.elapsedSeconds > lastRoundStartElapsedSeconds && l.elapsedSeconds <= endSeconds) {
-				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 			}
 		}
 		for(c in this.chatEvents) {
 			l = this.chatEvents[c];
 			if(l.elapsedSeconds <= endSeconds) {
-				l.getAsDrawables(playerCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 			}
 		}
 		return drawevents;
@@ -1194,7 +1196,6 @@ var PlayerCollection = Class.extend({
 		}
 	},
 	
-	//adds the logevents given, either in a simple array form or another LogEventCollection.
 	addAll: function(p) {
 		if(p instanceof Array) {
 			for(i in p) {
@@ -1210,6 +1211,60 @@ var PlayerCollection = Class.extend({
 			player = this.players[i];
 			if(parseInt(player.playerId) == parseInt(id)) {
 				return player;
+			}
+		}
+		return null;
+	}
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+// Weapon class - Holds information about a weapon.
+/////////////////////////////////////////////////////////////////////////////////////
+var Weapon = Class.extend({
+	init: function(id, key_name, name_) {
+		this.id = id;
+		this.key_name = key_name;
+		this.name_ = name_;
+	}
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+// WeaponCollection class - ArrayList style class usable for Weapons.
+/////////////////////////////////////////////////////////////////////////////////////
+var WeaponCollection = Class.extend({
+	init: function(w) {
+		this.clear();
+		if(w) {
+			this.addAll(w);
+		}
+	},
+	
+	clear: function() {
+		this.weapons = [];
+	},
+	
+	//adds the object given, if it is a Drawable.
+	add: function(w) {
+		if(w instanceof Weapon) {
+			this.weapons.push(w);
+		}
+	},
+	
+	addAll: function(w) {
+		if(w instanceof Array) {
+			for(i in w) {
+				this.add(w[i]);
+			}
+		} else if(w instanceof WeaponCollection) {
+			this.weapons.concat(p.weapons);
+		}		
+	},
+	
+	getWeaponById: function(id) {
+		for(i in this.weapons) {
+			weapon = this.weapons[i];
+			if(parseInt(weapon.id) == parseInt(id)) {
+				return weapon;
 			}
 		}
 		return null;

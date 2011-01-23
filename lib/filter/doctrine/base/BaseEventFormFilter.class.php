@@ -28,6 +28,7 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'capture_point'      => new sfWidgetFormFilterInput(),
       'blue_score'         => new sfWidgetFormFilterInput(),
       'red_score'          => new sfWidgetFormFilterInput(),
+      'weapon_id'          => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Weapon'), 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
@@ -46,6 +47,7 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'capture_point'      => new sfValidatorPass(array('required' => false)),
       'blue_score'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'red_score'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'weapon_id'          => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Weapon'), 'column' => 'id')),
     ));
 
     $this->widgetSchema->setNameFormat('event_filters[%s]');
@@ -81,6 +83,7 @@ abstract class BaseEventFormFilter extends BaseFormFilterDoctrine
       'capture_point'      => 'Text',
       'blue_score'         => 'Number',
       'red_score'          => 'Number',
+      'weapon_id'          => 'ForeignKey',
     );
   }
 }

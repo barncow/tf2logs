@@ -20,11 +20,13 @@
  * @property string $capture_point
  * @property integer $blue_score
  * @property integer $red_score
+ * @property integer $weapon_id
  * @property Log $Log
  * @property Player $Attacker
  * @property Player $Victim
  * @property Player $Assist
  * @property Player $Chat
+ * @property Weapon $Weapon
  * @property Doctrine_Collection $EventPlayers
  * 
  * @method integer             getLogId()              Returns the current record's "log_id" value
@@ -42,11 +44,13 @@
  * @method string              getCapturePoint()       Returns the current record's "capture_point" value
  * @method integer             getBlueScore()          Returns the current record's "blue_score" value
  * @method integer             getRedScore()           Returns the current record's "red_score" value
+ * @method integer             getWeaponId()           Returns the current record's "weapon_id" value
  * @method Log                 getLog()                Returns the current record's "Log" value
  * @method Player              getAttacker()           Returns the current record's "Attacker" value
  * @method Player              getVictim()             Returns the current record's "Victim" value
  * @method Player              getAssist()             Returns the current record's "Assist" value
  * @method Player              getChat()               Returns the current record's "Chat" value
+ * @method Weapon              getWeapon()             Returns the current record's "Weapon" value
  * @method Doctrine_Collection getEventPlayers()       Returns the current record's "EventPlayers" collection
  * @method Event               setLogId()              Sets the current record's "log_id" value
  * @method Event               setEventType()          Sets the current record's "event_type" value
@@ -63,11 +67,13 @@
  * @method Event               setCapturePoint()       Sets the current record's "capture_point" value
  * @method Event               setBlueScore()          Sets the current record's "blue_score" value
  * @method Event               setRedScore()           Sets the current record's "red_score" value
+ * @method Event               setWeaponId()           Sets the current record's "weapon_id" value
  * @method Event               setLog()                Sets the current record's "Log" value
  * @method Event               setAttacker()           Sets the current record's "Attacker" value
  * @method Event               setVictim()             Sets the current record's "Victim" value
  * @method Event               setAssist()             Sets the current record's "Assist" value
  * @method Event               setChat()               Sets the current record's "Chat" value
+ * @method Event               setWeapon()             Sets the current record's "Weapon" value
  * @method Event               setEventPlayers()       Sets the current record's "EventPlayers" collection
  * 
  * @package    tf2logs
@@ -150,6 +156,10 @@ abstract class BaseEvent extends sfDoctrineRecord
              'notnull' => false,
              'length' => 4,
              ));
+        $this->hasColumn('weapon_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
+             ));
     }
 
     public function setUp()
@@ -175,6 +185,11 @@ abstract class BaseEvent extends sfDoctrineRecord
         $this->hasOne('Player as Chat', array(
              'local' => 'chat_player_id',
              'foreign' => 'id'));
+
+        $this->hasOne('Weapon', array(
+             'local' => 'weapon_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
 
         $this->hasMany('EventPlayer as EventPlayers', array(
              'local' => 'id',

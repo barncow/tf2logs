@@ -109,11 +109,11 @@ class Log extends BaseLog
     $attackerStat->addPlayerStat($otherStat->getPlayer(), $propertyToIncrement, $increment);
   }
   
-  public function addKillEvent($elapsedSeconds, $attackerSteamid, $attackerCoord, $victimSteamid, $victimCoord) {
+  public function addKillEvent($elapsedSeconds, $weaponId, $attackerSteamid, $attackerCoord, $victimSteamid, $victimCoord) {
     $e = new Event();
     $attackerStat = $this->getStatFromSteamid($attackerSteamid);
     $victimStat = $this->getStatFromSteamid($victimSteamid);
-    $e->kill($elapsedSeconds, $attackerStat->getPlayer(), $attackerCoord, $victimStat->getPlayer(), $victimCoord);
+    $e->kill($elapsedSeconds, $weaponId, $attackerStat->getPlayer(), $attackerCoord, $victimStat->getPlayer(), $victimCoord);
     $this->Events[] = $e;
   }
   
