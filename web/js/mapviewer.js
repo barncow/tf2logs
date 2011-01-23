@@ -224,7 +224,7 @@ var MapDrawer = Class.extend({
 // MapViewer class - class that handles everything for the mapviewer.
 /////////////////////////////////////////////////////////////////////////////////////
 var MapViewer = Class.extend({
-	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox, jqPlaybackSpeed) {
+	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox, jqPlaybackSpeed, jqIsCumulitive) {
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
 		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
@@ -250,6 +250,8 @@ var MapViewer = Class.extend({
 		this.weaponCollection = weaponCollection;
 		this.jqPlaybackSpeed = jqPlaybackSpeed;
 		this.playbackSpeed = parseInt(this.jqPlaybackSpeed.val());
+		this.jqIsCumulitive = jqIsCumulitive;
+		this.isCumulitive = this.jqIsCumulitive.is(':checked');
 		
 		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
@@ -317,6 +319,15 @@ var MapViewer = Class.extend({
 		//playback speed dropdown
 		this.jqPlaybackSpeed.change(function(event){
 			mapViewerObj.playbackSpeed = parseInt(mapViewerObj.jqPlaybackSpeed.val());
+		});
+		
+		//cumulitive checkbox
+		this.jqIsCumulitive.click(function(event){
+			mapViewerObj.isCumulitive = mapViewerObj.jqIsCumulitive.is(':checked');
+			if(!mapViewerObj.isThisPlaying()) {
+			  //if paused, refresh data on canvas. Otherwise, a tick will do a refresh for us.
+			  mapViewerObj.iterateData(false);
+			}
 		});
 	},
 	
@@ -418,7 +429,11 @@ var MapViewer = Class.extend({
 		this.resetChatBox();
 		
 		//get all events pertinent for this frame
-		events = this.logEventCollection.getDrawablesForDuration(this.playbackPosition-this.numberOfSecondsKeepEventOnScreen*this.playbackSpeed, this.playbackPosition
+		startSeconds = 0;
+		if(!this.isCumulitive) {
+		  startSeconds = this.playbackPosition-this.numberOfSecondsKeepEventOnScreen*this.playbackSpeed;
+		}
+		events = this.logEventCollection.getDrawablesForDuration(startSeconds, this.playbackPosition
 				, this.playerCollection, this.weaponCollection, this.gameMap, cps);
 				
 		//scroll chat log to bottom

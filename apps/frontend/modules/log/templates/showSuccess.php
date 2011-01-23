@@ -37,6 +37,9 @@
 	    <option value="5" selected>5x</option>
 	    <option value="20">20x</option>
 	  </select>
+	  
+	  <label for="isCumulitive">Cumulitive</label>
+	  <input type="checkbox" id="isCumulitive"/>
 	</div>
 </div>
 <div id="chatBox"><ul></ul></div>
@@ -238,7 +241,7 @@ var mapViewerObj;
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
 	mvc = $("#mapViewerControls");
-	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"));
+	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
 });
 </script>
 <?php endif ?>
