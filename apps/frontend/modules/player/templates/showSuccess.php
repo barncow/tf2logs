@@ -30,6 +30,7 @@
       <th title="Ubers">U</th>
       <th title="Ubers/Death">UPD</th>
       <th title="Dropped Ubers">DU</th>
+      <th title="Healing">H</th>
     </tr>
   </thead>
   <tbody>
@@ -50,6 +51,7 @@
       <td class="<?php echo dataCellOutputClass($player->ubers) ?>"><?php echo $player->ubers ?></td>
       <td class="<?php echo dataCellOutputClass($player->ubers_per_death) ?>"><?php echo $player->ubers_per_death ?></td>
       <td class="<?php echo dataCellOutputClass($player->dropped_ubers) ?>"><?php echo $player->dropped_ubers ?></td>
+      <td class="<?php echo dataCellOutputClass($player->healing) ?>"><?php echo $player->healing ?></td>
     </tr>
   </tbody>
 </table>

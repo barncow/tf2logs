@@ -378,7 +378,12 @@ class LogParser {
 	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
 	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
 	        }
+	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
 	        $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineActionDetail == "healed") {
+	        $p = $players[0];
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "captureblocked") {
 	        $p = $players[0];

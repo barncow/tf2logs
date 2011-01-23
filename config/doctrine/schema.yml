@@ -116,6 +116,10 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
+    healing:
+      type: integer(4)
+      notnull: true
+      default: 0
   relations:
     Log:
       onDelete: CASCADE

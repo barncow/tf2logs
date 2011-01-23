@@ -24,6 +24,7 @@
  * @property integer $extinguishes
  * @property integer $ubers
  * @property integer $dropped_ubers
+ * @property integer $healing
  * @property Log $Log
  * @property Doctrine_Collection $Weapons
  * @property Doctrine_Collection $Roles
@@ -52,6 +53,7 @@
  * @method integer             getExtinguishes()            Returns the current record's "extinguishes" value
  * @method integer             getUbers()                   Returns the current record's "ubers" value
  * @method integer             getDroppedUbers()            Returns the current record's "dropped_ubers" value
+ * @method integer             getHealing()                 Returns the current record's "healing" value
  * @method Log                 getLog()                     Returns the current record's "Log" value
  * @method Doctrine_Collection getWeapons()                 Returns the current record's "Weapons" collection
  * @method Doctrine_Collection getRoles()                   Returns the current record's "Roles" collection
@@ -79,6 +81,7 @@
  * @method Stat                setExtinguishes()            Sets the current record's "extinguishes" value
  * @method Stat                setUbers()                   Sets the current record's "ubers" value
  * @method Stat                setDroppedUbers()            Sets the current record's "dropped_ubers" value
+ * @method Stat                setHealing()                 Sets the current record's "healing" value
  * @method Stat                setLog()                     Sets the current record's "Log" value
  * @method Stat                setWeapons()                 Sets the current record's "Weapons" collection
  * @method Stat                setRoles()                   Sets the current record's "Roles" collection
@@ -200,6 +203,12 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('dropped_ubers', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 4,
+             ));
+        $this->hasColumn('healing', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

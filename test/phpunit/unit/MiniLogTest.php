@@ -78,6 +78,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat->getUbers(), "barncow's ubers");
         $this->assertEquals(1, $stat->getDroppedUbers(), "Barncow dropped uber");
         $this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
+        $this->assertEquals(2310, $stat->getHealing(), "Barncow's healing amount");
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "scattergun") {

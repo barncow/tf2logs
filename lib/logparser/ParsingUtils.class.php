@@ -265,5 +265,23 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves the healing value for a medic_death event.
+  */
+  public function getHealing($logLineDetails) {
+    $matches;
+    preg_match("/\(healing \"(\d+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return (int) $matches[1];
+    }
+    //still here, did not get the healing value. Try the superlogs version.
+    preg_match("/\(heal \"(\d+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return (int) $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

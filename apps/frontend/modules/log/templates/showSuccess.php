@@ -59,6 +59,7 @@
       <th title="Ubers">U</th>
       <th title="Ubers/Death">UPD</th>
       <th title="Dropped Ubers">DU</th>
+      <th title="Healing">H</th>
     </tr>
   </thead>
   <tbody>
@@ -92,6 +93,7 @@
       <td class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></td>
       <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></td>
       <td class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
     </tr>
     <?php endforeach; ?>
   </tbody>

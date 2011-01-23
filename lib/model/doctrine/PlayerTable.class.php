@@ -35,6 +35,7 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.ubers) as ubers'
         .', round(sum(s.ubers)/sum(s.deaths), 3) as ubers_per_death'
         .', sum(s.dropped_ubers) as dropped_ubers'
+        .', sum(s.healing) as healing'
       )
       ->from('Player p')
       ->leftJoin('p.Stats s')
