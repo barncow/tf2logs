@@ -1193,7 +1193,13 @@ var PlayerCollection = Class.extend({
 		for(i in this.players) {
 			player = this.players[i];
 			if(parseInt(player.playerId) == parseInt(id)) {
-				return player;
+			  //return new deep copy of the player, otherwise only one copy of the player is used.
+			  newplayer = {};
+			  tt = {};
+			  $.extend(true, newplayer, player);
+			  $.extend(true, tt, player.tooltip);
+			  newplayer.tooltip = tt;
+				return newplayer;
 			}
 		}
 		return null;
