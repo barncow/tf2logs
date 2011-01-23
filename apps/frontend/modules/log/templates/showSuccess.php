@@ -46,7 +46,7 @@
       <th title="Kills">K</th>
       <th title="Assists">A</th>
       <th title="Deaths">D</th>
-      <th title="Kills/Death">KPD</th>
+      <th title="Kills+Assists/Death">KAPD</th>
       <th title="Longest Kill Streak">LKS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
@@ -56,9 +56,6 @@
       <th title="Built Objects">BO</th>
       <th title="Destroyed Objects">DO</th>
       <th title="Extinguishes">E</th>
-      <th title="Ubers">U</th>
-      <th title="Ubers/Death">UPD</th>
-      <th title="Dropped Ubers">DU</th>
       <th title="Healing">H</th>
     </tr>
   </thead>
@@ -80,7 +77,7 @@
       <td class="<?php echo dataCellOutputClass($stat['kills']) ?>"><?php echo $stat['kills'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['assists']) ?>"><?php echo $stat['assists'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></td>
-      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills'], $stat['deaths']) ?></td>
+      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
       <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
@@ -90,11 +87,45 @@
       <td class="<?php echo dataCellOutputClass($stat['builtobjects']) ?>"><?php echo $stat['builtobjects'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['destroyedobjects']) ?>"><?php echo $stat['destroyedobjects'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></td>
-      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
     </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+
+<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Medic Comparison</caption>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th title="Kills+Assists/Death">KAPD</th>
+      <th title="Extinguishes">E</th>
+      <th title="Ubers">U</th>
+      <th title="Ubers/Death">UPD</th>
+      <th title="Dropped Ubers">DU</th>
+      <th title="Healing">H</th>
+      <th title="Healing/Death">HPD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($log['Stats'] as $stat): ?>
+      <?php foreach($stat['RoleStats'] as $rs): ?>
+        <?php if($rs['Role']['key_name'] == "medic" && $rs['time_played'] > 1): ?>
+          <tr>
+            <td>
+              <img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="avatar avatarImage" id="avatar<?php echo $stat['Player']['id'] ?>"/>
+              <?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?>
+            </td>
+            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
+            <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
+            <td class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></td>
+            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></td>
+            <td class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></td>
+            <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
+            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['healing'], $stat['deaths']) ?></td>
+          </tr>
+        <?php endif ?>
+      <?php endforeach ?>
     <?php endforeach; ?>
   </tbody>
 </table>
