@@ -19,6 +19,7 @@ abstract class BaseWeaponStatForm extends BaseFormDoctrine
       'stat_id'   => new sfWidgetFormInputHidden(),
       'kills'     => new sfWidgetFormInputText(),
       'deaths'    => new sfWidgetFormInputText(),
+      'damage'    => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -26,6 +27,7 @@ abstract class BaseWeaponStatForm extends BaseFormDoctrine
       'stat_id'   => new sfValidatorChoice(array('choices' => array($this->getObject()->get('stat_id')), 'empty_value' => $this->getObject()->get('stat_id'), 'required' => false)),
       'kills'     => new sfValidatorInteger(array('required' => false)),
       'deaths'    => new sfValidatorInteger(array('required' => false)),
+      'damage'    => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('weapon_stat[%s]');

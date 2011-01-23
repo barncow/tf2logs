@@ -222,6 +222,12 @@ class ParsingUtils {
     preg_match("/ with \"(.+?)\"/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return $matches[1];
+    }
+    
+    //still here, try getting weapon from (weapon "scattergun")
+    preg_match("/\(weapon \"(.+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
     } else {
       return false;
     }
@@ -277,6 +283,19 @@ class ParsingUtils {
     }
     //still here, did not get the healing value. Try the superlogs version.
     preg_match("/\(heal \"(\d+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return (int) $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Retrieves the damage value for a weaponstats event.
+  */
+  public function getDamage($logLineDetails) {
+    $matches;
+    preg_match("/\(damage \"(\d+?)\"\)/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return (int) $matches[1];
     } else {

@@ -72,6 +72,10 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
+    damage:
+      type: integer(4)
+      notnull: true
+      default: 0
     longest_kill_streak:
       type: integer(4)
       notnull: true
@@ -197,6 +201,10 @@ WeaponStat:
       notnull: true
       default: 0
     deaths:
+      type: integer(4)
+      notnull: true
+      default: 0
+    damage:
       type: integer(4)
       notnull: true
       default: 0

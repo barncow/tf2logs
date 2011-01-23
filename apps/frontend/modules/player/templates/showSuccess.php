@@ -18,6 +18,7 @@
       <th title="Assists">A</th>
       <th title="Deaths">D</th>
       <th title="Kills/Death">KPD</th>
+      <th title="Damage">DA</th>
       <th title="Longest Kill Streak">LKS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
@@ -39,6 +40,7 @@
       <td class="<?php echo dataCellOutputClass($player->assists) ?>"><?php echo $player->assists ?></td>
       <td class="<?php echo dataCellOutputClass($player->deaths) ?>"><?php echo $player->deaths ?></td>
       <td class="<?php echo dataCellOutputClass($player->kills_per_death) ?>"><?php echo $player->kills_per_death ?></td>
+      <td class="<?php echo dataCellOutputClass($player->damage) ?>"><?php echo $player->damage ?></td>
       <td class="<?php echo dataCellOutputClass($player->longest_kill_streak) ?>"><?php echo $player->longest_kill_streak ?></td>
       <td class="<?php echo dataCellOutputClass($player->capture_points_blocked) ?>"><?php echo $player->capture_points_blocked ?></td>
       <td class="<?php echo dataCellOutputClass($player->capture_points_captured) ?>"><?php echo $player->capture_points_captured ?></td>
@@ -82,6 +84,7 @@
     <tr>
       <th>Weapon</th>
       <th>Kills</th>
+      <th>Damage</th>
       <th>Deaths</th>
     </tr>
   </thead>
@@ -99,12 +102,14 @@
         <?php foreach($weaponStats as $ws): ?>
           <?php if($ws->getWeaponId() == $w['id']): ?>
             <td class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></td>
+            <td class="<?php echo dataCellOutputClass($ws->damage) ?>"><?php echo $ws->damage ?></td>
             <td class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></td>
             <?php $foundWS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundWS): ?>
+          <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
         <?php endif ?>

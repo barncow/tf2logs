@@ -126,8 +126,10 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->assertEquals(2, $ws->getKills());
           } else if($ws->getWeapon()->getKeyName() == "scattergun") {
             $this->assertEquals(1, $ws->getDeaths());
+            $this->assertEquals(375, $ws->getDamage());
           }
         }
+        $this->assertEquals(375, $stat->getDamage(), "stat has same damage");
         
         foreach($stat->getRoleStats() as $r) {
           if($r->getRole()->getKeyName() == "soldier") {

@@ -177,6 +177,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_killed_pistolscout.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('pistol_scout', $this->parsingUtils->getWeapon($logLineDetails), "can get pistol_scout");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_weaponstats_superlogs.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('scattergun', $this->parsingUtils->getWeapon($logLineDetails), "can get scattergun from weaponstats");
   }
   
   public function testGetKillCoords() {
@@ -205,5 +209,13 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(510, $this->parsingUtils->getHealing($logLineDetails), "med had 510 healing from SuperLogs");
   }
+  
+  public function testGetDamage() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_weaponstats_superlogs.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(375, $this->parsingUtils->getDamage($logLineDetails), "player did 375 damage");
+  }
+  
+  
   
 }
