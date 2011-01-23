@@ -20,8 +20,6 @@
  * @property integer $dominations
  * @property integer $times_dominated
  * @property integer $revenges
- * @property integer $builtobjects
- * @property integer $destroyedobjects
  * @property integer $extinguishes
  * @property integer $ubers
  * @property integer $dropped_ubers
@@ -50,8 +48,6 @@
  * @method integer             getDominations()             Returns the current record's "dominations" value
  * @method integer             getTimesDominated()          Returns the current record's "times_dominated" value
  * @method integer             getRevenges()                Returns the current record's "revenges" value
- * @method integer             getBuiltobjects()            Returns the current record's "builtobjects" value
- * @method integer             getDestroyedobjects()        Returns the current record's "destroyedobjects" value
  * @method integer             getExtinguishes()            Returns the current record's "extinguishes" value
  * @method integer             getUbers()                   Returns the current record's "ubers" value
  * @method integer             getDroppedUbers()            Returns the current record's "dropped_ubers" value
@@ -79,8 +75,6 @@
  * @method Stat                setDominations()             Sets the current record's "dominations" value
  * @method Stat                setTimesDominated()          Sets the current record's "times_dominated" value
  * @method Stat                setRevenges()                Sets the current record's "revenges" value
- * @method Stat                setBuiltobjects()            Sets the current record's "builtobjects" value
- * @method Stat                setDestroyedobjects()        Sets the current record's "destroyedobjects" value
  * @method Stat                setExtinguishes()            Sets the current record's "extinguishes" value
  * @method Stat                setUbers()                   Sets the current record's "ubers" value
  * @method Stat                setDroppedUbers()            Sets the current record's "dropped_ubers" value
@@ -182,18 +176,6 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('revenges', 'integer', 4, array(
-             'type' => 'integer',
-             'notnull' => true,
-             'default' => 0,
-             'length' => 4,
-             ));
-        $this->hasColumn('builtobjects', 'integer', 4, array(
-             'type' => 'integer',
-             'notnull' => true,
-             'default' => 0,
-             'length' => 4,
-             ));
-        $this->hasColumn('destroyedobjects', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

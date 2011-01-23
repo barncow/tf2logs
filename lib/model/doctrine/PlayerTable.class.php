@@ -30,8 +30,6 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.dominations) as dominations'
         .', sum(s.times_dominated) as times_dominated'
         .', sum(s.revenges) as revenges'
-        .', sum(s.builtobjects) as built_objects'
-        .', sum(s.destroyedobjects) as destroyed_objects'
         .', sum(s.extinguishes) as extinguishes'
         .', sum(s.ubers) as ubers'
         .', round(sum(s.ubers)/sum(s.deaths), 3) as ubers_per_death'

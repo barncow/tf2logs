@@ -100,14 +100,6 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
-    builtobjects:
-      type: integer(4)
-      notnull: true
-      default: 0
-    destroyedobjects:
-      type: integer(4)
-      notnull: true
-      default: 0
     extinguishes:
       type: integer(4)
       notnull: true

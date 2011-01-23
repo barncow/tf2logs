@@ -25,8 +25,6 @@
       <th title="Dominations">DOM</th>
       <th title="Times Dominated">TDM</th>
       <th title="Revenges">R</th>
-      <th title="Built Objects">BO</th>
-      <th title="Destroyed Objects">DO</th>
       <th title="Extinguishes">E</th>
       <th title="Ubers">U</th>
       <th title="Ubers/Death">UPD</th>
@@ -47,8 +45,6 @@
       <td class="<?php echo dataCellOutputClass($player->dominations) ?>"><?php echo $player->dominations ?></td>
       <td class="<?php echo dataCellOutputClass($player->times_dominated) ?>"><?php echo $player->times_dominated ?></td>
       <td class="<?php echo dataCellOutputClass($player->revenges) ?>"><?php echo $player->revenges ?></td>
-      <td class="<?php echo dataCellOutputClass($player->built_objects) ?>"><?php echo $player->built_objects ?></td>
-      <td class="<?php echo dataCellOutputClass($player->destroyed_objects) ?>"><?php echo $player->destroyed_objects ?></td>
       <td class="<?php echo dataCellOutputClass($player->extinguishes) ?>"><?php echo $player->extinguishes ?></td>
       <td class="<?php echo dataCellOutputClass($player->ubers) ?>"><?php echo $player->ubers ?></td>
       <td class="<?php echo dataCellOutputClass($player->ubers_per_death) ?>"><?php echo $player->ubers_per_death ?></td>

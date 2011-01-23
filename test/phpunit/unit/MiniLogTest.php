@@ -76,7 +76,6 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
         //verify numbers for "Barncow"
         $this->assertEquals(2, $stat->getDeaths(), "barncow's deaths");
-        $this->assertEquals(1, $stat->getDestroyedobjects(), "barncow's destroyed objects");
         $this->assertEquals(1, $stat->getUbers(), "barncow's ubers");
         $this->assertEquals(1, $stat->getDroppedUbers(), "Barncow dropped uber");
         $this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
@@ -116,7 +115,6 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(2, $stat->getDeaths(), "Ctrl+f Muffin!'s deaths");
         $this->assertEquals(1, $stat->getTimesDominated(), "Ctrl+f Muffin!'s times dominated");
         $this->assertEquals(1, $stat->getRevenges(), "Ctrl+f Muffin!'s revenges");
-        $this->assertEquals(1, $stat->getBuiltobjects(), "Ctrl+f Muffin!'s built objects");
         $this->assertEquals(2, $stat->getKills(), "Ctrl+f Muffin!'s kills");
         $this->assertEquals(0, $stat->getDroppedUbers(), "Ctrl+f Muffin! did not drop uber");
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "Ctrl+f Muffin!'s point captures");
@@ -157,7 +155,6 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         }
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:11710749") {
         //verify numbers for "perl"
-        $this->assertEquals(0, $stat->getDestroyedobjects(), "perl's destroyed objects - should be zero since do not want to count own destructions");
         $this->assertEquals(1, $stat->getExtinguishes(), "perl's extinguishes");
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
         //verify numbers for "[H2K]BubbleAlan ʚϊɞ"

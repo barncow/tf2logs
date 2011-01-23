@@ -349,16 +349,10 @@ class LogParser {
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "builtobject") {
 	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "builtobjects"); 
 	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "killedobject") {
-          $attacker = $players[0];
-	        $objowner = $players[1];
-	        if(!$attacker->equals($objowner)) {
-	          //do not want to count destructions by a player destroying his own stuff
-	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "destroyedobjects"); 
-	        }
+          //just ignore
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "revenge") {
 	        $p = $players[0];

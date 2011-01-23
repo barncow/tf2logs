@@ -54,8 +54,6 @@
       <th title="Dominations">DOM</th>
       <th title="Times Dominated">TDM</th>
       <th title="Revenges">R</th>
-      <th title="Built Objects">BO</th>
-      <th title="Destroyed Objects">DO</th>
       <th title="Extinguishes">E</th>
       <th title="Healing">H</th>
     </tr>
@@ -86,8 +84,6 @@
       <td class="<?php echo dataCellOutputClass($stat['dominations']) ?>"><?php echo $stat['dominations'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['times_dominated']) ?>"><?php echo $stat['times_dominated'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['revenges']) ?>"><?php echo $stat['revenges'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['builtobjects']) ?>"><?php echo $stat['builtobjects'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['destroyedobjects']) ?>"><?php echo $stat['destroyedobjects'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
     </tr>
