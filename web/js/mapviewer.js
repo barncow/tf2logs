@@ -855,31 +855,7 @@ var KillArrowDrawable = Drawable.extend({
 	
 	//overriding the checkCollision handler to better detect a hover on the arrow path.
 	checkCollision: function(coord) {
-		if(!this._super(coord)) return false;
-		
-		//we are in the boundary of this arrow. Do a per-pix calc.
-		/*
-		Because isPointInPath seems unreliable, the below method is used.
-		The way this works, is we draw an enlarged version of the arrow that we will draw later.
-		It is enlarged so that the user has a little bit larger field to actually hover the 
-		element instead of the tiny arrow. The arrow is drawn in black. This will be
-		the only drawing at the time, because collision detection is done before drawing. So,
-		the only black color on the screen, will be the new arrow. So we get the pixel at the
-		mouse location. If it is black, the object is being hovered. If not, it is not being 
-		hovered. We then clear the frame to prevent false positives for other objects.
-		*/
-		canvasContext = mapViewerObj.mapDrawer.mapViewerContext;
-		lw = canvasContext.lineWidth;
-		canvasContext.lineWidth = 10;
-		this.sketchArrow(this.attacker.coordinate, this.victim.getEdgeCoordinate(this.attacker.coordinate), canvasContext);
-		canvasContext.strokeStyle = "#000";
-		canvasContext.stroke();
-		myImageData = canvasContext.getImageData(coord.x, coord.y, 1, 1);
-		b = myImageData.data[0] == 0;
-		canvasContext.clearRect(0,0,mapViewerObj.mapViewerCanvas.width, mapViewerObj.mapViewerCanvas.height);
-		canvasContext.lineWidth = lw;
-
-		return b;
+		return false; //disabling since isPointInPath is unreliable, and don't want to getImageData.
 	}
 });
 
