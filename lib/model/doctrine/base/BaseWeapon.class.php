@@ -9,6 +9,7 @@
  * @property string $key_name
  * @property string $name
  * @property integer $role_id
+ * @property string $image_name
  * @property Role $Role
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $WeaponStats
@@ -18,6 +19,7 @@
  * @method string              getKeyName()     Returns the current record's "key_name" value
  * @method string              getName()        Returns the current record's "name" value
  * @method integer             getRoleId()      Returns the current record's "role_id" value
+ * @method string              getImageName()   Returns the current record's "image_name" value
  * @method Role                getRole()        Returns the current record's "Role" value
  * @method Doctrine_Collection getStats()       Returns the current record's "Stats" collection
  * @method Doctrine_Collection getWeaponStats() Returns the current record's "WeaponStats" collection
@@ -26,6 +28,7 @@
  * @method Weapon              setKeyName()     Sets the current record's "key_name" value
  * @method Weapon              setName()        Sets the current record's "name" value
  * @method Weapon              setRoleId()      Sets the current record's "role_id" value
+ * @method Weapon              setImageName()   Sets the current record's "image_name" value
  * @method Weapon              setRole()        Sets the current record's "Role" value
  * @method Weapon              setStats()       Sets the current record's "Stats" collection
  * @method Weapon              setWeaponStats() Sets the current record's "WeaponStats" collection
@@ -62,6 +65,11 @@ abstract class BaseWeapon extends sfDoctrineRecord
              'primary' => false,
              'autoincrement' => false,
              'notnull' => false,
+             ));
+        $this->hasColumn('image_name', 'string', 50, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 50,
              ));
     }
 

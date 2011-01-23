@@ -87,13 +87,7 @@
   <tbody>
     <?php foreach($weapons as $w): ?>
       <tr>
-        <td>
-          <?php if($w['name']): ?>
-            <?php echo $w['name'] ?>
-          <?php else: ?>
-            <?php echo $w['key_name'] ?>
-          <?php endif ?>
-        </td>
+        <td><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
           <?php if($ws->getWeaponId() == $w['id']): ?>

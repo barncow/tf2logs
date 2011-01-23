@@ -79,7 +79,7 @@
       <td>
         <ul>
           <?php foreach($stat['RoleStats'] as $rs): ?>
-            <li><?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?></li>
+            <li><img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$rs['Role']['key_name']?>.png" class="classIcon" title="<?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?>" alt="<?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?>"/></li>
           <?php endforeach ?>
         </ul>
       </td>
@@ -144,13 +144,7 @@
     <tr>
       <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
-        <th colspan="3">
-          <?php if($w['name']): ?>
-            <?php echo $w['name'] ?>
-          <?php else: ?>
-            <?php echo $w['key_name'] ?>
-          <?php endif ?>
-        </th>
+        <th colspan="3"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></th>
       <?php endforeach ?>
     </tr>
     <tr>

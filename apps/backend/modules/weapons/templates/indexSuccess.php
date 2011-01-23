@@ -4,6 +4,7 @@
     <th>Name</th>
     <th>Key</th>
     <th>Role</th>
+    <th>Image</th>
     <th></th>
   </thead>
   <tbody>
@@ -23,6 +24,10 @@
         <td>      
           <?php echo $newWeapon['role_id']->renderError() ?>
           <?php echo $newWeapon['role_id'] ?>
+        </td>
+        <td>      
+          <?php echo $newWeapon['image_name']->renderError() ?>
+          <?php echo $newWeapon['image_name'] ?>
         </td>
         <td>
           <input type="submit" value="Save New Weapon"/>
@@ -48,6 +53,10 @@
           <td>      
             <?php echo $weapon['role_id']->renderError() ?>
             <?php echo $weapon['role_id'] ?>
+          </td>
+          <td>      
+            <?php echo $weapon['image_name']->renderError() ?>
+            <?php echo $weapon['image_name'] ?>
           </td>
           <td>
             <input type="submit" value="Save"/>

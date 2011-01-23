@@ -175,3 +175,4 @@ Weapon:
     key_name: bat
     name: Bat
     Role: scout
+    image_name: bat.png

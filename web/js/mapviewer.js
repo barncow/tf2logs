@@ -700,17 +700,17 @@ var PlayerDrawable = ImageDrawable.extend({
 	},
 	
 	setVictimTooltip: function(textFromArrow){
-		a = textFromArrow.split("<br/>");
+		a = textFromArrow.split("&nbsp;");
 		//bold third line
 		a[2] = "<b>"+a[2]+"</b>";
-		this.tooltip.text = a.join("<br/>");
+		this.tooltip.text = a.join("&nbsp;");
 	},
 	
 	setAttackerTooltip: function(textFromArrow){
-		a = textFromArrow.split("<br/>");
+		a = textFromArrow.split("&nbsp;");
 		//bold first line
 		a[0] = "<b>"+a[0]+"</b>";
-		this.tooltip.text = a.join("<br/>");
+		this.tooltip.text = a.join("&nbsp;");
 	},
 	
 	setCoordinate: function(coord) {
@@ -791,7 +791,7 @@ var KillArrowDrawable = Drawable.extend({
 		this.onTopIfHovered = false;
 		this.finLength = 5;
 		this.calculateDimensions();
-		this.tooltip.text = this.attacker.name+"<br/>killed<br/>"+this.victim.name+"<br/>with "+weapon.name_;
+		this.tooltip.text = this.attacker.name+"&nbsp;"+weapon.toString()+"&nbsp;"+this.victim.name;
 	},
 	
 	//helper method to calculate width, height, x, y
@@ -1225,10 +1225,31 @@ var PlayerCollection = Class.extend({
 // Weapon class - Holds information about a weapon.
 /////////////////////////////////////////////////////////////////////////////////////
 var Weapon = Class.extend({
-	init: function(id, key_name, name_) {
+	init: function(id, key_name, name_, image_name) {
 		this.id = id;
 		this.key_name = key_name;
 		this.name_ = name_;
+		this.image_name = image_name;
+	},
+	
+	getFullImageName: function() {
+	  return weaponCollection.baseImgUrl+"/"+this.image_name;
+	},
+	
+	toString: function() {
+    s = "";
+    t = "";
+    if(this.name_) {
+      t = this.name_;
+    } else {
+      t = this.key_name;
+    }
+    if(this.image_name) {
+      s += "<img class=\"killIcon\" src=\""+this.getFullImageName()+"\" title=\""+t+"\" alt=\""+t+"\"/>";
+    } else {
+      s += "using "+t+" killed";
+    }
+    return s;
 	}
 });
 
@@ -1236,8 +1257,9 @@ var Weapon = Class.extend({
 // WeaponCollection class - ArrayList style class usable for Weapons.
 /////////////////////////////////////////////////////////////////////////////////////
 var WeaponCollection = Class.extend({
-	init: function(w) {
+	init: function(baseImgUrl, w) {
 		this.clear();
+		this.baseImgUrl = baseImgUrl;
 		if(w) {
 			this.addAll(w);
 		}

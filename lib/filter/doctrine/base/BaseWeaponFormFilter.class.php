@@ -16,6 +16,7 @@ abstract class BaseWeaponFormFilter extends BaseFormFilterDoctrine
       'key_name'   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'name'       => new sfWidgetFormFilterInput(),
       'role_id'    => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'add_empty' => true)),
+      'image_name' => new sfWidgetFormFilterInput(),
       'stats_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Stat')),
     ));
 
@@ -23,6 +24,7 @@ abstract class BaseWeaponFormFilter extends BaseFormFilterDoctrine
       'key_name'   => new sfValidatorPass(array('required' => false)),
       'name'       => new sfValidatorPass(array('required' => false)),
       'role_id'    => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Role'), 'column' => 'id')),
+      'image_name' => new sfValidatorPass(array('required' => false)),
       'stats_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Stat', 'required' => false)),
     ));
 
@@ -65,6 +67,7 @@ abstract class BaseWeaponFormFilter extends BaseFormFilterDoctrine
       'key_name'   => 'Text',
       'name'       => 'Text',
       'role_id'    => 'ForeignKey',
+      'image_name' => 'Text',
       'stats_list' => 'ManyKey',
     );
   }

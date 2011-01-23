@@ -19,6 +19,7 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
       'key_name'   => new sfWidgetFormInputText(),
       'name'       => new sfWidgetFormInputText(),
       'role_id'    => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'add_empty' => true)),
+      'image_name' => new sfWidgetFormInputText(),
       'stats_list' => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Stat')),
     ));
 
@@ -27,6 +28,7 @@ abstract class BaseWeaponForm extends BaseFormDoctrine
       'key_name'   => new sfValidatorString(array('max_length' => 40)),
       'name'       => new sfValidatorString(array('max_length' => 40, 'required' => false)),
       'role_id'    => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Role'), 'required' => false)),
+      'image_name' => new sfValidatorString(array('max_length' => 50, 'required' => false)),
       'stats_list' => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Stat', 'required' => false)),
     ));
 

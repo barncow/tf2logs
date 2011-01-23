@@ -1,5 +1,5 @@
 $(function() {
-  $('.statTable th').tooltip({ 
+  $('.statTable th, .killIcon').tooltip({ 
     track: true, 
     delay: 0, 
     showURL: false, 

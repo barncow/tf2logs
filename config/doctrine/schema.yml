@@ -172,6 +172,9 @@ Weapon:
       primary: false
       autoincrement: false
       notnull: false
+    image_name:
+      type: string(50)
+      notnull: false
   relations:
     Role:
       foreignAlias: Weapon

@@ -95,7 +95,7 @@ function outputEventsCollection($eventsArray) {
 }
 
 function outputWeaponCollection($weaponsArray) {
-  $s = "var weaponCollection = new WeaponCollection([\n";
+  $s = "var weaponCollection = new WeaponCollection(\"".sfConfig::get('app_kill_icon_base_url')."\",[\n";
   $isFirst = true;
   foreach ($weaponsArray as $w) {
     $comma = ",";
@@ -103,7 +103,7 @@ function outputWeaponCollection($weaponsArray) {
       $comma = ""; 
       $isFirst = false;
     }
-    $s .= $comma."new Weapon(".$w['id'].",\"".$w['key_name']."\",\"".addslashes($w['name'])."\")\n";
+    $s .= $comma."new Weapon(".$w['id'].",\"".$w['key_name']."\",\"".addslashes($w['name'])."\",\"".addslashes($w['image_name'])."\")\n";
   }
   $s .= "]);";
   return $s;
@@ -122,5 +122,21 @@ function outputAsJSArray($a) {
   }
   $s .= "]";
   return $s;
+}
+
+function outputWeapon($name, $key_name, $image_name) {
+ $s = "";
+ $t = "";
+ if($name) {
+  $t = $name;
+ } else {
+  $t = $key_name;
+ }
+ if($image_name) {
+  $s .= '<img class="killIcon" src="'.sfConfig::get('app_kill_icon_base_url').'/'.$image_name.'" title="'.$t.'" alt="'.$t.'"/>';
+ } else {
+  $s .= $t;
+ }
+ return $s;
 }
 ?>
