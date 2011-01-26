@@ -23,7 +23,6 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.assists) as assists'
         .', sum(s.deaths) as deaths'
         .', round(sum(s.kills)/sum(s.deaths), 3) as kills_per_death'
-        .', sum(s.damage) as damage'
         .', sum(s.longest_kill_streak) as longest_kill_streak'
         .', sum(s.capture_points_blocked) as capture_points_blocked'
         .', sum(s.capture_points_captured) as capture_points_captured'

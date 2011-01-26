@@ -38,7 +38,6 @@ L 09/29/2010 - 19:25:18: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "FS
 L 09/29/2010 - 19:25:18: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "medic_death" against "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" (healing "1800") (ubercharge "1")
 L 09/29/2010 - 19:27:50: Team "Blue" triggered "pointcaptured" (cp "0") (cpname "#Gravelpit_cap_A") (numcappers "3") (player1 "Target<46><STEAM_0:0:6845279><Blue>") (position1 "234 724 -183") (player2 "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Blue>") (position2 "-70 411 -191") (player3 "[!?] cheap<56><STEAM_0:0:12272740><Blue>") (position3 "136 733 -183") 
 L 09/29/2010 - 19:32:08: "`yay!<52><STEAM_0:0:973270><Red>" triggered "captureblocked" (cp "1") (cpname "#Gravelpit_cap_B") (position "-2440 4826 -579")
-L 09/29/2010 - 19:32:08: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "weaponstats" (weapon "scattergun") (shots "9") (hits "6") (kills "2") (headshots "0") (tks "0") (damage "375") (deaths "0")
 L 09/29/2010 - 19:32:08: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" disconnected (reason "Kicked by Console")
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" (heal "510")
 L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"

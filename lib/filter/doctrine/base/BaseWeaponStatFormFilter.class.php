@@ -15,13 +15,11 @@ abstract class BaseWeaponStatFormFilter extends BaseFormFilterDoctrine
     $this->setWidgets(array(
       'kills'     => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'deaths'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'damage'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
       'kills'     => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'deaths'    => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
-      'damage'    => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('weapon_stat_filters[%s]');
@@ -45,7 +43,6 @@ abstract class BaseWeaponStatFormFilter extends BaseFormFilterDoctrine
       'stat_id'   => 'Number',
       'kills'     => 'Number',
       'deaths'    => 'Number',
-      'damage'    => 'Number',
     );
   }
 }

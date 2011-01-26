@@ -9,7 +9,6 @@
  * @property integer $stat_id
  * @property integer $kills
  * @property integer $deaths
- * @property integer $damage
  * @property Weapon $Weapon
  * @property Stat $Stat
  * 
@@ -17,14 +16,12 @@
  * @method integer    getStatId()    Returns the current record's "stat_id" value
  * @method integer    getKills()     Returns the current record's "kills" value
  * @method integer    getDeaths()    Returns the current record's "deaths" value
- * @method integer    getDamage()    Returns the current record's "damage" value
  * @method Weapon     getWeapon()    Returns the current record's "Weapon" value
  * @method Stat       getStat()      Returns the current record's "Stat" value
  * @method WeaponStat setWeaponId()  Sets the current record's "weapon_id" value
  * @method WeaponStat setStatId()    Sets the current record's "stat_id" value
  * @method WeaponStat setKills()     Sets the current record's "kills" value
  * @method WeaponStat setDeaths()    Sets the current record's "deaths" value
- * @method WeaponStat setDamage()    Sets the current record's "damage" value
  * @method WeaponStat setWeapon()    Sets the current record's "Weapon" value
  * @method WeaponStat setStat()      Sets the current record's "Stat" value
  * 
@@ -55,12 +52,6 @@ abstract class BaseWeaponStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('deaths', 'integer', 4, array(
-             'type' => 'integer',
-             'notnull' => true,
-             'default' => 0,
-             'length' => 4,
-             ));
-        $this->hasColumn('damage', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

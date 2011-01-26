@@ -20,7 +20,7 @@ class WeaponStatTable extends Doctrine_Table {
     */
     public function getWeaponStatsForLogId($logid) {
       return Doctrine_Query::create()
-        ->select('ws.stat_id, ws.weapon_id, sum(ws.kills) as num_kills, sum(ws.damage) as num_damage, sum(ws.deaths) as num_deaths')
+        ->select('ws.stat_id, ws.weapon_id, sum(ws.kills) as num_kills, sum(ws.deaths) as num_deaths')
         ->from('WeaponStat ws')
         ->innerJoin('ws.Stat s')
         ->innerJoin('s.Log l')

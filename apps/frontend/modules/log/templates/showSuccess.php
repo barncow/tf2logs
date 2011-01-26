@@ -87,7 +87,6 @@
       <td class="<?php echo dataCellOutputClass($stat['assists']) ?>"><?php echo $stat['assists'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></td>
       <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['damage']) ?>"><?php echo $stat['damage'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
@@ -165,14 +164,12 @@
         <?php foreach($weaponStats as $ws): ?>
           <?php if($ws['stat_id'] == $stat['id'] && $ws['weapon_id'] == $w['id']): ?>
             <td class="<?php echo dataCellOutputClass($ws['num_kills']) ?>"><?php echo $ws['num_kills'] ?></td>
-            <td class="<?php echo dataCellOutputClass($ws['num_damage']) ?>"><?php echo $ws['num_damage'] ?></td>
             <td class="<?php echo dataCellOutputClass($ws['num_deaths']) ?>"><?php echo $ws['num_deaths'] ?></td>
             <?php $foundWS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundWS): ?>
-          <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
           <td class="zeroValue">0</td>
         <?php endif ?>

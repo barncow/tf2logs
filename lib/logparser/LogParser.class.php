@@ -385,10 +385,6 @@ class LogParser {
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineActionDetail == "weaponstats") {
 	        //superlogs specific trigger
-	        $p = $players[0];
-	        $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
-	        $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'damage', $this->parsingUtils->getDamage($logLineDetails));
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "damage", $this->parsingUtils->getDamage($logLineDetails));
 	        return self::GAME_CONTINUE;
 	      }
 	    }
