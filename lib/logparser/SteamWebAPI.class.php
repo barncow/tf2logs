@@ -12,6 +12,7 @@ class SteamWebAPI {
   public function getAvatarUrlsFromSteamids($numericalSteamids) {
     $a = $this->getPlayerSummaries($numericalSteamids);
     $ret = array();
+    if(!$a || count($a) <= 0) return $ret;
     foreach($a['response']['players']['player'] as $p) {
       $ret[] = array($p['steamid'] => $p['avatar']);
     }
