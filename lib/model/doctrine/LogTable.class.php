@@ -137,9 +137,10 @@ class LogTable extends Doctrine_Table {
       ->execute();
       if(!is_array($m)){
         $ret[$m] = $m;
-      }
-      foreach($m as $map) {
-        $ret[$map] = $map;
+      } else {
+        foreach($m as $map) {
+          $ret[$map] = $map;
+        }
       }
       if($seedMaps != null && count($seedMaps)) {
         $ret = array_merge($ret, $seedMaps);

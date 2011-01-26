@@ -3,94 +3,117 @@ Weapon:
     key_name: scattergun
     name: Scattergun
     Role: scout
+    image_name: scattergun.png
   rocketlauncher:
     key_name: tf_projectile_rocket
     name: Rocket Launcher
     Role: soldier
+    image_name: tf_projectile_rocket.png
   world:
     key_name: world
     name: World
+    image_name: world.png
     #no role
   sniperrifle:
     key_name: sniperrifle
     name: Sniper Rifle
     Role: sniper
+    image_name: sniperrifle.png
   tf_projectile_pipe_remote:
     key_name: tf_projectile_pipe_remote
     name: Sticky Launcher
     Role: demo
+    image_name: tf_projectile_pipe_remote.png
   tf_projectile_pipe:
     key_name: tf_projectile_pipe
     name: Pipe Launcher
     Role: demo
+    image_name: tf_projectile_pipe.png
   shotgun_soldier:
     key_name: shotgun_soldier
     name: Soldier's Shotgun
     Role: soldier
+    image_name: shotgun.png
   pistol_scout:
     key_name: pistol_scout
     name: Scout's Pistol
     Role: scout
+    image_name: pistol.png
   minigun:
     key_name: minigun
     name: Minigun
     Role: heavyweapons
+    image_name: minigun.png
   gloves:
     key_name: gloves
     name: K.G.B.
     Role: heavyweapons
+    image_name: gloves.png
   revolver:
     key_name: revolver
     name: Revolver
     Role: spy
+    image_name: revolver.png
   syringegun_medic:
     key_name: syringegun_medic
     name: Syringe Gun
     Role: medic
+    image_name: syringegun_medic.png
   knife:
     key_name: knife
     name: Knife
     Role: spy
+    image_name: knife.png
   shotgun_primary:
     key_name: shotgun_primary
     name: Engineer's Shotgun
     Role: engineer
+    image_name: shotgun.png
   obj_sentrygun:
     key_name: obj_sentrygun
     name: Sentry Gun Level 1
     Role: engineer
+    image_name: obj_sentrygun.png
   obj_sentrygun2:
     key_name: obj_sentrygun2
     name: Sentry Gun Level 2
     Role: engineer
+    image_name: obj_sentrygun2.png
   obj_sentrygun3:
     key_name: obj_sentrygun3
     name: Sentry Gun Level 3
     Role: engineer
+    image_name: obj_sentrygun3.png
   rocketlauncher_directhit:
     key_name: rocketlauncher_directhit
     name: Direct Hit
     Role: soldier
+    image_name: rocketlauncher_directhit.png
   bonesaw:
     key_name: bonesaw
     name: Bonesaw
     Role: medic
+    image_name: bonesaw.png
   deflect_rocket:
     key_name: deflect_rocket
     name: Rocket Deflect
     Role: pyro
+    image_name: deflect_rocket.png
   flamethrower:
     key_name: flamethrower
     name: Flamethrower
     Role: pyro
+    image_name: flamethrower.png
   maxgun:
     key_name: maxgun
     name: Lugermorph
+    image_name: lugermorph.png
     #can be used by engy and scout - its a pistol
   natascha:
     key_name: natascha
     name: Natascha
     Role: heavyweapons
+    image_name: natascha.png
   player:
     key_name: player
     name: Player
@@ -99,80 +122,139 @@ Weapon:
     key_name: robot_arm
     name: Gunslinger
     Role: engineer
+    image_name: robot_arm.png
   shotgun_pyro:
     key_name: shotgun_pyro
     name: Pyro's Shotgun
     Role: pyro
+    image_name: shotgun.png
   smg:
     key_name: smg
     name: SMG
     Role: sniper
+    image_name: smg.png
   southern_hospitality:
     key_name: southern_hospitality
     name: Southern Hospitality
     Role: engineer
+    image_name: southern_hospitality.png
   sword:
     key_name: sword
     name: Eyelander
     Role: demo
+    image_name: sword.png
   ubersaw:
     key_name: ubersaw
     name: Ubersaw
     Role: medic
+    image_name: ubersaw.png
   iron_curtain:
     key_name: iron_curtain
     name: Iron Curtain
     Role: heavyweapons
+    image_name: iron_curtain.png
   flaregun:
     key_name: flaregun
     name: Flaregun
     Role: pyro
+    image_name: flaregun.png
   axtinguisher:
     key_name: axtinguisher
     name: Axtinguisher
     Role: pyro
+    image_name: axtinguisher.png
   shotgun_hwg:
     key_name: shotgun_hwg
     name: Heavy's Shotgun
     Role: heavyweapons
+    image_name: shotgun.png
   bottle:
     key_name: bottle
     name: Bottle
     Role: demo
+    image_name: bottle.png
   blutsauger:
     key_name: blutsauger
     name: Blutsauger
     Role: medic
+    image_name: blutsauger.png
   unique_pickaxe:
     key_name: unique_pickaxe
     name: Unique Equalizer
     Role: soldier
+    image_name: equalizer.png
   ambassador:
     key_name: ambassador
     name: Ambassador
     Role: spy
+    image_name: ambassador.png
   degreaser:
     key_name: degreaser
     name: Degreaser
     Role: pyro
+    image_name: degreaser.png
   club:
     key_name: club
     name: Kukri
     Role: sniper
+    image_name: club.png
   wrangler_kill:
     key_name: wrangler_kill
     name: Wrangler
     Role: engineer
+    image_name: wrangler_kill.png
   backburner:
     key_name: backburner
     name: Backburner
     Role: pyro
+    image_name: backburner.png
   frontier_justice:
     key_name: frontier_justice
     name: Frontier Justice
     Role: engineer
+    image_name: frontier_justice.png
   bat:
     key_name: bat
     name: Bat
     Role: scout
     image_name: bat.png
+  bushwacka:
+    key_name: bushwacka
+    name: Bushwacka
+    Role: sniper
+    image_name: bushwacka.png
+  crusaders_crossbow:
+    key_name: crusaders_crossbow
+    name: Crusader's Crossbow
+    Role: medic
+    image_name: crusaders_crossbow.png
+  force_a_nature:
+    key_name: force_a_nature
+    name: Force-A-Nature
+    Role: scout
+    image_name: force_a_nature.png
+  holy_mackerel:
+    key_name: holy_mackerel
+    name: Holy Mackerel
+    Role: scout
+    image_name: holy_mackerel.png
+  tf_projectile_arrow:
+    key_name: tf_projectile_arrow
+    name: Huntsman
+    Role: sniper
+    image_name: tf_projectile_arrow.png
+  ullapool_caber:
+    key_name: ullapool_caber
+    name: Ullapool Caber
+    Role: demo
+    image_name: ullapool_caber.png
+  ullapool_caber_explosion:
+    key_name: ullapool_caber_explosion
+    name: Ullapool Caber (Explosion)
+    Role: demo
+    image_name: ullapool_caber_explosion.png
+  wrench:
+    key_name: wrench
+    name: Wrench
+    Role: engineer
+    image_name: wrench.png
