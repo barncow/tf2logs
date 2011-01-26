@@ -48,6 +48,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat->getDeaths(), "target's deaths");
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "target's point captures");
         $this->assertEquals(2, $stat->getKillsPerDeath(), "target's kd");
+        $this->assertEquals(1, $stat->getFlagCaptures(), "target's flag captures");
+        $this->assertEquals(1, $stat->getFlagDefends(), "target's flag defends");
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "scattergun") {

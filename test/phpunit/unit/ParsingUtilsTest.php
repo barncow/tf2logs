@@ -140,6 +140,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(0, $this->parsingUtils->getTeamScore($logLineDetails), "got team line score");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_finalscore_9players.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(2, $this->parsingUtils->getTeamScore($logLineDetails), "got team line final score");
   }
   
   public function testGetTeamNumberPlayers() {
@@ -150,6 +154,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_currentscore.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(6, $this->parsingUtils->getTeamNumberPlayers($logLineDetails), "got team line number of players == 6");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_finalscore_9players.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(9, $this->parsingUtils->getTeamNumberPlayers($logLineDetails), "got team line number of players == 9");
   }
   
   public function testProcessServerCvarLine() {
@@ -216,6 +224,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $this->assertEquals(375, $this->parsingUtils->getDamage($logLineDetails), "player did 375 damage");
   }
   
-  
+  public function testGetFlagEvent() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_flagevent_defended.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("defended", $this->parsingUtils->getFlagEvent($logLineDetails), "player defended the flag");
+  }
   
 }

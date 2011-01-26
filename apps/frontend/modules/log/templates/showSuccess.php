@@ -57,10 +57,11 @@
       <th title="Assists">A</th>
       <th title="Deaths">D</th>
       <th title="Kills+Assists/Death">KAPD</th>
-      <th title="Damage">DA</th>
       <th title="Longest Kill Streak">LKS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
+      <th title="Flag Defends">FD</th>
+      <th title="Flag Captures">FC</th>
       <th title="Dominations">DOM</th>
       <th title="Times Dominated">TDM</th>
       <th title="Revenges">R</th>
@@ -90,6 +91,8 @@
       <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['flag_defends']) ?>"><?php echo $stat['flag_defends'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['flag_captures']) ?>"><?php echo $stat['flag_captures'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['dominations']) ?>"><?php echo $stat['dominations'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['times_dominated']) ?>"><?php echo $stat['times_dominated'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['revenges']) ?>"><?php echo $stat['revenges'] ?></td>
@@ -143,14 +146,13 @@
     <tr>
       <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
-        <th colspan="3"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></th>
+        <th colspan="2"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></th>
       <?php endforeach ?>
     </tr>
     <tr>
       <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
         <th title="Kills">K</th>
-        <th title="Damage">DA</th>
         <th title="Deaths">D</th>
       <?php endforeach ?>
     </tr>

@@ -154,9 +154,9 @@ class ParsingUtils {
   */
   public function getTeamScore($logLineDetails) {
     $matches;
-    preg_match("/^Team \"(.+?)\" current score \"(\d+?)\"/", $logLineDetails, $matches);
+    preg_match("/^Team \"(.+?)\" (current|final) score \"(\d+?)\"/", $logLineDetails, $matches);
     if(count($matches) > 1) {
-      return $matches[2];
+      return $matches[3];
     } else {
       return false;
     }
@@ -167,9 +167,9 @@ class ParsingUtils {
   */
   public function getTeamNumberPlayers($logLineDetails) {
     $matches;
-    preg_match("/^Team \"(.+?)\" current score \"(\d+?)\" with \"(\d+?)\"/", $logLineDetails, $matches);
+    preg_match("/^Team \"(.+?)\" (current|final) score \"(\d+?)\" with \"(\d+?)\"/", $logLineDetails, $matches);
     if(count($matches) > 1) {
-      return $matches[3];
+      return $matches[4];
     } else {
       return false;
     }
@@ -298,6 +298,19 @@ class ParsingUtils {
     preg_match("/\(damage \"(\d+?)\"\)/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return (int) $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+  * Retrieves the event value for a flagevent.
+  */
+  public function getFlagEvent($logLineDetails) {
+    $matches;
+    preg_match("/\(event \"(.+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
     } else {
       return false;
     }

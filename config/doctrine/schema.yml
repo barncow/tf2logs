@@ -84,6 +84,14 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
+    flag_defends:
+      type: integer(4)
+      notnull: true
+      default: 0
+    flag_captures:
+      type: integer(4)
+      notnull: true
+      default: 0
     dominations:
       type: integer(4)
       notnull: true

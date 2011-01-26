@@ -21,6 +21,8 @@
       <th title="Longest Kill Streak">LKS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
+      <th title="Flag Defends">FD</th>
+      <th title="Flag Captures">FC</th>
       <th title="Dominations">DOM</th>
       <th title="Times Dominated">TDM</th>
       <th title="Revenges">R</th>
@@ -40,6 +42,8 @@
       <td class="<?php echo dataCellOutputClass($player->longest_kill_streak) ?>"><?php echo $player->longest_kill_streak ?></td>
       <td class="<?php echo dataCellOutputClass($player->capture_points_blocked) ?>"><?php echo $player->capture_points_blocked ?></td>
       <td class="<?php echo dataCellOutputClass($player->capture_points_captured) ?>"><?php echo $player->capture_points_captured ?></td>
+      <td class="<?php echo dataCellOutputClass($player->flag_defends) ?>"><?php echo $player->flag_defends ?></td>
+      <td class="<?php echo dataCellOutputClass($player->flag_captures) ?>"><?php echo $player->flag_captures ?></td>
       <td class="<?php echo dataCellOutputClass($player->dominations) ?>"><?php echo $player->dominations ?></td>
       <td class="<?php echo dataCellOutputClass($player->times_dominated) ?>"><?php echo $player->times_dominated ?></td>
       <td class="<?php echo dataCellOutputClass($player->revenges) ?>"><?php echo $player->revenges ?></td>
@@ -78,7 +82,6 @@
     <tr>
       <th>Weapon</th>
       <th>Kills</th>
-      <th>Damage</th>
       <th>Deaths</th>
     </tr>
   </thead>

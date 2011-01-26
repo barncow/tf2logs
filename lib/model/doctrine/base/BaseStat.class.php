@@ -16,6 +16,8 @@
  * @property integer $longest_kill_streak
  * @property integer $capture_points_blocked
  * @property integer $capture_points_captured
+ * @property integer $flag_defends
+ * @property integer $flag_captures
  * @property integer $dominations
  * @property integer $times_dominated
  * @property integer $revenges
@@ -43,6 +45,8 @@
  * @method integer             getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
  * @method integer             getCapturePointsBlocked()    Returns the current record's "capture_points_blocked" value
  * @method integer             getCapturePointsCaptured()   Returns the current record's "capture_points_captured" value
+ * @method integer             getFlagDefends()             Returns the current record's "flag_defends" value
+ * @method integer             getFlagCaptures()            Returns the current record's "flag_captures" value
  * @method integer             getDominations()             Returns the current record's "dominations" value
  * @method integer             getTimesDominated()          Returns the current record's "times_dominated" value
  * @method integer             getRevenges()                Returns the current record's "revenges" value
@@ -69,6 +73,8 @@
  * @method Stat                setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
  * @method Stat                setCapturePointsBlocked()    Sets the current record's "capture_points_blocked" value
  * @method Stat                setCapturePointsCaptured()   Sets the current record's "capture_points_captured" value
+ * @method Stat                setFlagDefends()             Sets the current record's "flag_defends" value
+ * @method Stat                setFlagCaptures()            Sets the current record's "flag_captures" value
  * @method Stat                setDominations()             Sets the current record's "dominations" value
  * @method Stat                setTimesDominated()          Sets the current record's "times_dominated" value
  * @method Stat                setRevenges()                Sets the current record's "revenges" value
@@ -149,6 +155,18 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('capture_points_captured', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 4,
+             ));
+        $this->hasColumn('flag_defends', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 4,
+             ));
+        $this->hasColumn('flag_captures', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

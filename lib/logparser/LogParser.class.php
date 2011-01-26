@@ -22,6 +22,7 @@ class LogParser {
   protected $weapons;
   protected $roles;
   protected $currentDt;
+  protected $gameOver;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -34,6 +35,7 @@ class LogParser {
     $this->isTournamentMode = false; //assume its not, until first world trigger round_start
     $this->buildWeaponCache();
     $this->buildRoleCache();
+    $this->gameOver = false;
   }
   
   public function buildWeaponCache() {
@@ -159,8 +161,11 @@ class LogParser {
 	      }
 	    }
 	    
-	    if($game_state == self::GAME_APPEARS_OVER || $game_state == self::GAME_OVER) {
-	      break; //if game is over, no need to continue processing.
+	    if($game_state == self::GAME_APPEARS_OVER) {
+	      break; //do not keep going, something screwed up.
+	    } else if($game_state == self::GAME_OVER) {
+	      $this->gameOver = true;
+	      //keep going, try to get final score.
 	    }
 	  }
 	  if(!$this->isTournamentMode) {
@@ -266,10 +271,15 @@ class LogParser {
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "Your server will be restarted on map change.", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
+	    if($this->gameOver) {
+	      //the game is over. do not want to track information. Just looking for team score lines.
+	      return self::GAME_OVER;
+	    }
 	    //Need to determine what action is being done here.
 	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
@@ -386,6 +396,21 @@ class LogParser {
 	      } else if($playerLineActionDetail == "weaponstats") {
 	        //superlogs specific trigger
 	        return self::GAME_CONTINUE;
+	      } else if($playerLineActionDetail == "flagevent") {
+	        $p = $players[0];
+	        $event = $this->parsingUtils->getFlagEvent($logLineDetails);
+	        if($event == "defended") {
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_defends");
+	          return self::GAME_CONTINUE;
+	        } else if($event == "captured") {
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_captures");
+	          //team trigger line will carry score, no need to track it here.
+	          return self::GAME_CONTINUE;
+	        } else if($event == "picked up"
+	          || $event == "dropped") {
+	          //ignore
+	          return self::GAME_CONTINUE;
+	        }
 	      }
 	    }
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, 'Team', $logLineDetails)) {
@@ -408,7 +433,7 @@ class LogParser {
 	      } else if($teamTriggerAction == "Intermission_Win_Limit") {
 	        return self::GAME_CONTINUE;//skip processing.
 	      }
-	    } else if($teamAction == "current score") {
+	    } else if($teamAction == "current score" || $teamAction == "final score") {
 	      if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
 	        //the only time there would be zero players for a team is if something screwed up.
 	        return self::GAME_APPEARS_OVER;

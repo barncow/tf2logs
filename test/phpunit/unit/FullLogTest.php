@@ -27,4 +27,11 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   public function testFull_1123dwidgranary() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
   }
+  
+  public function testFull_ctfdoublecross() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
+    //var_dump($log->getLogFile()->toArray(false));
+    $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
+    $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
+  }
 }
