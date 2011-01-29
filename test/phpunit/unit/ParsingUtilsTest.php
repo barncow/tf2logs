@@ -230,4 +230,9 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $this->assertEquals("defended", $this->parsingUtils->getFlagEvent($logLineDetails), "player defended the flag");
   }
   
+  public function testGetRoundWinTeam() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_world_triggered_roundwin.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("Red", $this->parsingUtils->getRoundWinTeam($logLineDetails), "red team won the round");
+  }  
 }

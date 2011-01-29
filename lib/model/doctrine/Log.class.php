@@ -85,6 +85,15 @@ class Log extends BaseLog
   }
   
   /**
+  * Increments the given team's score
+  */
+  public function incrementScoreForTeam($team, $increment = 1) {
+    if($team == "Red") $this->setRedscore($this->getRedscore()+$increment);
+    else if($team == "Blue") $this->setBluescore($this->getBluescore()+$increment);
+    else throw new InvalidArgumentException("Invalid team '$team' given to incrementScoreForTeam method.");
+  }
+  
+  /**
   * This will add the weapon to the steamid.
   */
   public function incrementWeaponForPlayer($steamid, $weapon, $propertyToIncrement, $increment = 1) {

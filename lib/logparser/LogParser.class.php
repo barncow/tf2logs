@@ -23,6 +23,7 @@ class LogParser {
   protected $roles;
   protected $currentDt;
   protected $gameOver;
+  protected $isCtf;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -36,6 +37,7 @@ class LogParser {
     $this->buildWeaponCache();
     $this->buildRoleCache();
     $this->gameOver = false;
+    $this->isCtf = false;
   }
   
   public function buildWeaponCache() {
@@ -248,10 +250,16 @@ class LogParser {
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Game_Over") {
 	      return self::GAME_OVER;
+	    } else if($worldTriggerAction == "Round_Win") {
+	      //increment score for the team that won the round, if the map is not ctf (ctf has own scoring)
+	      if(!$this->isCtf) {
+	        $team = $this->parsingUtils->getRoundWinTeam($logLineDetails);
+	        $this->log->incrementScoreForTeam($team);
+	      }
+	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Round_Setup_Begin"
 	      || $worldTriggerAction == "Round_Setup_End"
 	      || $worldTriggerAction == "Round_Overtime"
-	      || $worldTriggerAction == "Round_Win"
 	      || $worldTriggerAction == "Round_Length"
 	      || $worldTriggerAction == "Mini_Round_Selected" //not sure what mini rounds are (discovered in 1911 log)
 	      || $worldTriggerAction == "Mini_Round_Start"
@@ -399,12 +407,13 @@ class LogParser {
 	      } else if($playerLineActionDetail == "flagevent") {
 	        $p = $players[0];
 	        $event = $this->parsingUtils->getFlagEvent($logLineDetails);
+	        $this->isCtf = true;
 	        if($event == "defended") {
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_defends");
 	          return self::GAME_CONTINUE;
 	        } else if($event == "captured") {
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_captures");
-	          //team trigger line will carry score, no need to track it here.
+	          $this->log->incrementScoreForTeam($p->getTeam());
 	          return self::GAME_CONTINUE;
 	        } else if($event == "picked up"
 	          || $event == "dropped") {
@@ -438,7 +447,7 @@ class LogParser {
 	        //the only time there would be zero players for a team is if something screwed up.
 	        return self::GAME_APPEARS_OVER;
 	      }
-	      $this->log->setScoreForTeam($team, $this->parsingUtils->getTeamScore($logLineDetails));
+	      //$this->log->setScoreForTeam($team, $this->parsingUtils->getTeamScore($logLineDetails));
 	      if($team == "Blue") {
 	        //this line will be the last of the team score lines, and will likely always be the last line in a game.
 	        $this->log->addRoundStartEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());

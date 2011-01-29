@@ -315,5 +315,18 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves team name from round_win event
+  */
+  public function getRoundWinTeam($logLineDetails) {
+    $matches;
+    preg_match("/\(winner \"(.+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>
