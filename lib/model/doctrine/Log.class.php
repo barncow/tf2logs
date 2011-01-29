@@ -94,6 +94,15 @@ class Log extends BaseLog
   }
   
   /**
+  * This will switch the red and blue scores around. Used when teams are switched.
+  */
+  public function switchScores() {
+    $red = $this->getRedscore();
+    $this->setRedscore($this->getBluescore());
+    $this->setBluescore($red);
+  }
+  
+  /**
   * This will add the weapon to the steamid.
   */
   public function incrementWeaponForPlayer($steamid, $weapon, $propertyToIncrement, $increment = 1) {

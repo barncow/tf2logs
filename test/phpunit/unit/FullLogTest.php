@@ -32,8 +32,15 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   
   public function testFull_ctfdoublecross() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
-    //var_dump($log->getLogFile()->toArray(false));
     $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
     $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
+  }
+  
+  public function testFull_plupward() {
+    //note, this file was changed from original to make sure at the end the teams are on opposite teams from the beginning.
+    //this is to ensure that team switching is being found.
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_plupward.log", 1);
+    $this->assertEquals(4, $log->getBluescore(), "blue score of plupward");
+    $this->assertEquals(0, $log->getRedscore(), "red score of plupward");
   }
 }

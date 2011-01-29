@@ -24,6 +24,7 @@ class LogParser {
   protected $currentDt;
   protected $gameOver;
   protected $isCtf;
+  protected $playerChangeTeams;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -38,6 +39,9 @@ class LogParser {
     $this->buildRoleCache();
     $this->gameOver = false;
     $this->isCtf = false;
+    
+    //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
+    $this->playerChangeTeams = array(); 
   }
   
   public function buildWeaponCache() {
@@ -247,6 +251,8 @@ class LogParser {
 	        $this->log->addRoundStartEvent($elapsedTime, 0, 0);
 	      }
 	      
+	      $this->playerChangeTeams = array(); //resetting change teams. assuming players are at where they need to be.
+	      
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Game_Over") {
 	      return self::GAME_OVER;
@@ -317,6 +323,12 @@ class LogParser {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
 	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
+	      $this->playerChangeTeams[$p->getSteamid()] = 1;
+	      if(count($this->playerChangeTeams) >= count($this->log->getStats())) {
+	        //teams have switched, switch scores
+	        $this->log->switchScores();
+	        $this->playerChangeTeams = array();
+	      }
 	      return self::GAME_CONTINUE;
 	    } else if($playerLineAction == "changed name to") {
 	      $p = $players[0];
