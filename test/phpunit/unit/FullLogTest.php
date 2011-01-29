@@ -43,4 +43,9 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $this->assertEquals(4, $log->getBluescore(), "blue score of plupward");
     $this->assertEquals(0, $log->getRedscore(), "red score of plupward");
   }
+  
+  /* commenting for now since nothing really to test at this point.
+  public function testFull_viaduct() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_2038viaduct.log", 1);
+  }*/
 }

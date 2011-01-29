@@ -149,7 +149,7 @@ class Stat extends BaseStat {
   }
   
   protected function addUpdateRoleStat($nowDt, $logStartDt) {
-    if($this->currentRole == null) return;
+    if($this->currentRole == null || $this->currentRole->getId() == null) return;
     $addrs = true;
     $elapsedTime = $nowDt->getTimestamp()-$this->currentRoleSinceDt->getTimestamp();
     foreach($this->RoleStats as &$rs) {
