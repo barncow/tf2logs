@@ -42,6 +42,7 @@ L 09/29/2010 - 19:32:08: "Target<46><STEAM_0:0:6845279><Blue>" triggered "flagev
 L 09/29/2010 - 19:32:08: "Target<46><STEAM_0:0:6845279><Blue>" triggered "flagevent" (event "captured") (position "-1841 -1776 -30")
 L 09/29/2010 - 19:32:08: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" disconnected (reason "Kicked by Console")
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" (heal "510")
+L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" say "!sm_cvar sv_password secret"
 L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"
 L 09/29/2010 - 19:36:42: World triggered "Round_Win" (winner "Red")
 L 09/29/2010 - 19:36:42: World triggered "Round_Length" (seconds "632.25")

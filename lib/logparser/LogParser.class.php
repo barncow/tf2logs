@@ -25,6 +25,7 @@ class LogParser {
   protected $gameOver;
   protected $isCtf;
   protected $playerChangeTeams;
+  protected $addToScrubbedLog;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -39,6 +40,7 @@ class LogParser {
     $this->buildRoleCache();
     $this->gameOver = false;
     $this->isCtf = false;
+    $this->addToScrubbedLog = true;
     
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
@@ -213,7 +215,11 @@ class LogParser {
 	* for the saved log version.
 	*/
 	protected function afterParseLine($logLine) {
-	  $this->log->appendToScrubbedLog($this->parsingUtils->scrubLogLine($logLine));
+	  if($this->addToScrubbedLog) {
+	    $this->log->appendToScrubbedLog($this->parsingUtils->scrubLogLine($logLine));
+	  } else {
+	    $this->addToScrubbedLog = true;
+	  }
 	}
 	
 	/**
@@ -305,9 +311,18 @@ class LogParser {
 	    ) {
 	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	    } else if($playerLineAction == "say" || $playerLineAction == "say_team") {
+	      $txt = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
+	      
+	      if(strpos($txt, "!") === 0 || strpos($txt, "/") === 0) {
+	        //lines beginning with ! or / generally are Sourcemod commands, which could hold sensitive info.
+	        //do not include in scrubbed log, nor in events.
+	        $this->addToScrubbedLog = false;
+	        return self::GAME_CONTINUE;
+	      }
+	      
 	      if($players[0]->getSteamid() != "Console") {
 	        $p = $players[0];
-	        $this->log->addChatEvent($elapsedTime, $playerLineAction, $p, $this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	        $this->log->addChatEvent($elapsedTime, $playerLineAction, $p, $txt);
 	      }
 	      
 	      return self::GAME_CONTINUE;

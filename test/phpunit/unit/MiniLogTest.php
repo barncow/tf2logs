@@ -8,7 +8,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
-    $this->assertEquals($countOfLines, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines == count orig lines");
+    //$countOfLines-1 represents the lack of chat line with SM command.
+    $this->assertEquals($countOfLines-1, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines == count orig lines subtract line with SM command");
     $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
     
     $this->assertEquals(0, $log->getRedscore(), "red score");
@@ -50,6 +51,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(2, $stat->getKillsPerDeath(), "target's kd");
         $this->assertEquals(1, $stat->getFlagCaptures(), "target's flag captures");
         $this->assertEquals(1, $stat->getFlagDefends(), "target's flag defends");
+        $this->assertEquals(2, $stat->getLongestKillStreak(), "target's longest kill streak");
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "scattergun") {

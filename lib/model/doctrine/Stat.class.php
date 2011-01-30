@@ -10,6 +10,8 @@
  * @author     Brian Barnekow
  */
 class Stat extends BaseStat {  
+  protected $currentLongestKillStreak = 0;
+  
   /**
   * Sets the attributes found in the PlayerInfo object into this object.
   */
@@ -65,6 +67,14 @@ class Stat extends BaseStat {
     }
     
     $this->_set($statkey, $this->_get($statkey)+$increment);
+    if($statkey == "kills") {
+      ++$this->currentLongestKillStreak;
+    } else if($statkey == "deaths") {
+      if($this->currentLongestKillStreak > $this->getLongestKillStreak()) {
+        $this->setLongestKillStreak($this->currentLongestKillStreak);
+      }
+      $this->currentLongestKillStreak = 0;
+    }
   }
   
   /**
