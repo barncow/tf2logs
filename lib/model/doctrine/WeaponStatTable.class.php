@@ -37,7 +37,7 @@ class WeaponStatTable extends Doctrine_Table {
     */
     public function getPlayerWeaponStatsByNumericSteamid($numericSteamId) {
       return Doctrine_Query::create()
-        ->select('ws.weapon_id, w.name, w.key_name, sum(ws.kills) as num_kills, sum(ws.damage) as num_damage, sum(ws.deaths) as num_deaths')
+        ->select('ws.weapon_id, w.name, w.key_name, sum(ws.kills) as num_kills, sum(ws.deaths) as num_deaths')
         ->from('WeaponStat ws')
         ->innerJoin('ws.Stat s')
         ->innerJoin('s.Player p')
