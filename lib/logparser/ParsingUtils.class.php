@@ -328,5 +328,18 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves customkill from kill event
+  */
+  public function getCustomKill($logLineDetails) {
+    $matches;
+    preg_match("/\(customkill \"(.+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

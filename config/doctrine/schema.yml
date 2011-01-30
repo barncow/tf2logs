@@ -76,6 +76,10 @@ Stat:
       type: integer(4)
       notnull: true
       default: 0
+    headshots:
+      type: integer(4)
+      notnull: true
+      default: 0
     capture_points_blocked:
       type: integer(4)
       notnull: true

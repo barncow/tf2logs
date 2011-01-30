@@ -122,12 +122,15 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(2, $stat->getKills(), "Ctrl+f Muffin!'s kills");
         $this->assertEquals(0, $stat->getDroppedUbers(), "Ctrl+f Muffin! did not drop uber");
         $this->assertEquals(1, $stat->getCapturePointsCaptured(), "Ctrl+f Muffin!'s point captures");
+        $this->assertEquals(1, $stat->getHeadshots(), "Ctrl+f Muffin!'s headshots");
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "tf_projectile_rocket") {
             $this->assertEquals(1, $ws->getDeaths());
           } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
-            $this->assertEquals(2, $ws->getKills());
+            $this->assertEquals(1, $ws->getKills());
+          } else if($ws->getWeapon()->getKeyName() == "sniperrifle_hs") {
+            $this->assertEquals(1, $ws->getKills());
           } else if($ws->getWeapon()->getKeyName() == "scattergun") {
             $this->assertEquals(1, $ws->getDeaths());
           }

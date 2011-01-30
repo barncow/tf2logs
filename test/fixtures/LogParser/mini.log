@@ -24,7 +24,7 @@ L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" triggered "domina
 L 09/29/2010 - 19:12:27: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "builtobject" (object "OBJ_SENTRYGUN") (position "-4015 1821 -511")
 L 09/29/2010 - 19:12:31: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "killedobject" (object "OBJ_SENTRYGUN") (weapon "minigun") (objectowner "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>") (attacker_position "-2715 1945 -383")
 L 09/29/2010 - 19:12:49: "perl<57><STEAM_0:0:11710749><Red>" triggered "killedobject" (object "OBJ_TELEPORTER") (weapon "pda_engineer") (objectowner "perl<57><STEAM_0:0:11710749><Red>") (attacker_position "-4234 1128 -511")
-L 09/29/2010 - 19:14:43: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "Target<46><STEAM_0:0:6845279><Blue>" with "sniperrifle" (attacker_position "-2771 1546 -295") (victim_position "-3308 1790 -220")
+L 09/29/2010 - 19:14:43: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" killed "Target<46><STEAM_0:0:6845279><Blue>" with "sniperrifle" (customkill "headshot") (attacker_position "-2771 1546 -295") (victim_position "-3308 1790 -220")
 L 09/29/2010 - 19:14:43: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" triggered "revenge" against "Target<46><STEAM_0:0:6845279><Blue>"
 L 09/29/2010 - 19:18:03: "[!?] cheap<56><STEAM_0:0:12272740><Blue>" say_team "I can also play pyro. I have been doing that a lot on 2fort and doublecross."
 L 09/29/2010 - 19:20:15: "perl<57><STEAM_0:0:11710749><Red>" triggered "player_extinguished" against "`yay!<52><STEAM_0:0:973270><Red>" with "tf_weapon_medigun" (attacker_position "-4192 1397 -511") (victim_position "-4109 1635 -511")

@@ -353,7 +353,16 @@ class LogParser {
 	    } else if($playerLineAction == "killed") {
 	      $attacker = $players[0];
 	      $victim = $players[1];
-	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
+	      $w = $this->parsingUtils->getWeapon($logLineDetails);
+	      $ck = $this->parsingUtils->getCustomKill($logLineDetails);
+	      
+	      if(($w == "sniperrifle" || $w == "tf_projectile_arrow" || $w == "ambassador") && $ck == "headshot") {
+	        //if a headshot occurred, edit the weapon to be the normal weapon's headshot variant.
+	        //also, add headshot score
+	        $w .= "_hs";
+	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "headshots");
+	      }
+	      $weapon = $this->getWeaponFromCache($w);
 	      
 	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
 	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');

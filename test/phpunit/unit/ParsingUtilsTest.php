@@ -235,4 +235,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals("Red", $this->parsingUtils->getRoundWinTeam($logLineDetails), "red team won the round");
   }  
+  
+  public function testGetCustomKill() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_kill_headshot.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("headshot", $this->parsingUtils->getCustomKill($logLineDetails), "can grab headshot from customkill kill event");
+  }  
 }

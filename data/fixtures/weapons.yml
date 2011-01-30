@@ -16,9 +16,14 @@ Weapon:
     #no role
   sniperrifle:
     key_name: sniperrifle
-    name: Sniper Rifle
+    name: Sniper Rifle (Bodyshot)
     Role: sniper
     image_name: sniperrifle.png
+  sniperrifle_hs:
+    key_name: sniperrifle_hs
+    name: Sniper Rifle (Headshot)
+    Role: sniper
+    image_name: sniperrifle_hs.png
   tf_projectile_pipe_remote:
     key_name: tf_projectile_pipe_remote
     name: Sticky Launcher
@@ -185,9 +190,14 @@ Weapon:
     image_name: equalizer.png
   ambassador:
     key_name: ambassador
-    name: Ambassador
+    name: Ambassador (Bodyshot)
     Role: spy
     image_name: ambassador.png
+  ambassador_hs:
+    key_name: ambassador_hs
+    name: Ambassador (Bodyshot)
+    Role: spy
+    image_name: ambassador_hs.png
   degreaser:
     key_name: degreaser
     name: Degreaser
@@ -240,9 +250,14 @@ Weapon:
     image_name: holy_mackerel.png
   tf_projectile_arrow:
     key_name: tf_projectile_arrow
-    name: Huntsman
+    name: Huntsman (Bodyshot)
     Role: sniper
     image_name: tf_projectile_arrow.png
+  tf_projectile_arrow_hs:
+    key_name: tf_projectile_arrow_hs
+    name: Huntsman (Headshot)
+    Role: sniper
+    image_name: tf_projectile_arrow_hs.png
   ullapool_caber:
     key_name: ullapool_caber
     name: Ullapool Caber

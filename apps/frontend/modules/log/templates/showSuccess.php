@@ -58,6 +58,7 @@
       <th title="Deaths">D</th>
       <th title="Kills+Assists/Death">KAPD</th>
       <th title="Longest Kill Streak">LKS</th>
+      <th title="Headshots">HS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
       <th title="Flag Defends">FD</th>
@@ -89,6 +90,7 @@
       <td class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></td>
       <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
       <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
+      <td class="<?php echo dataCellOutputClass($stat['headshots']) ?>"><?php echo $stat['headshots'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
       <td class="<?php echo dataCellOutputClass($stat['flag_defends']) ?>"><?php echo $stat['flag_defends'] ?></td>
