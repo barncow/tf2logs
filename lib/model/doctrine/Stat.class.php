@@ -67,6 +67,7 @@ class Stat extends BaseStat {
     }
     
     $this->_set($statkey, $this->_get($statkey)+$increment);
+    
     if($statkey == "kills") {
       ++$this->currentLongestKillStreak;
     } else if($statkey == "deaths") {
@@ -156,6 +157,11 @@ class Stat extends BaseStat {
     //todo should figure out what to do when a player switches teams, since A/D maps switch teams automatically
     $this->currentRole = null;
     $this->currentRoleSinceDt = null;
+    
+    //check if cLKS is greater
+    if($this->currentLongestKillStreak > $this->getLongestKillStreak()) {
+        $this->setLongestKillStreak($this->currentLongestKillStreak);
+    }
   }
   
   protected function addUpdateRoleStat($nowDt, $logStartDt) {
