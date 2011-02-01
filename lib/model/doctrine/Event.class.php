@@ -51,4 +51,11 @@ class Event extends BaseEvent {
     $this->blue_score = $blueScore;
     $this->red_score = $redScore;
   }
+  
+  public function scoreChange($elapsedSeconds, $blueScore, $redScore) {
+    $this->elapsed_seconds = $elapsedSeconds;
+    $this->event_type = 'scrChng';
+    $this->blue_score = $blueScore;
+    $this->red_score = $redScore;
+  }
 }

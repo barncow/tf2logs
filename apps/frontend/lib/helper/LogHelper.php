@@ -88,6 +88,8 @@ function outputEventsCollection($eventsArray) {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").pc(\"".$event['capture_point']."\",\"".$event['team']."\",[".implode(",", $pids)."])\n";
     } elseif($event['event_type'] == "rndStart") {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").rs(".$event['red_score'].",".$event['blue_score'].")\n";
+    } elseif($event['event_type'] == "scrChng") {
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").sc(".$event['red_score'].",".$event['blue_score'].")\n";
     }
   }
   $s .= "]);";

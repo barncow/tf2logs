@@ -450,6 +450,7 @@ class LogParser {
 	        } else if($event == "captured") {
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_captures");
 	          $this->log->incrementScoreForTeam($p->getTeam());
+	          $this->log->addScoreChangeEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
 	          return self::GAME_CONTINUE;
 	        } else if($event == "picked up"
 	          || $event == "dropped") {

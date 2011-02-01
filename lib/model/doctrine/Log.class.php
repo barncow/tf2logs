@@ -168,6 +168,12 @@ class Log extends BaseLog
     $this->Events[] = $e;
   }
   
+  public function addScoreChangeEvent($elapsedSeconds, $blueScore, $redScore) {
+    $e = new Event();
+    $e->scoreChange($elapsedSeconds, $blueScore, $redScore);
+    $this->Events[] = $e;
+  }
+  
   /**
   * Used to perform any last cleanup work.
   */

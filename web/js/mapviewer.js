@@ -62,10 +62,10 @@ var GameMap = Class.extend({
 			coordinate = new Coordinate(coordinate.y, coordinate.x);
 		}
 		if(this.negX) {
-			coordinate.x = coordinate.x*-1;
+			coordinate = new Coordinate(coordinate.x*-1, coordinate.y);
 		}
 		if(this.negY) {
-			coordinate.y = coordinate.y*-1;
+			coordinate = new Coordinate(coordinate.x,coordinate.y*-1);
 		}
 
 		xImg = Math.floor(coordinate.x-this.minX)/this.getCellWidth();
@@ -1011,6 +1011,14 @@ var LogEvent = Class.extend({
 	  return this;
 	},
 	
+	//score changed
+	sc: function(redScore, blueScore) {
+	  this.eventType = "scrChng";
+	  this.redScore = redScore;
+	  this.blueScore = blueScore;
+	  return this;
+	},
+	
 	getAsDrawables: function(playerCollection, weaponCollection, gameMap, capturePoints, isDrawableCurrent) {
 		a = [];
 		if(this.eventType == "kill") {
@@ -1057,7 +1065,7 @@ var LogEvent = Class.extend({
 			teamtxt = "";
 			if(this.eventType == "team_say") teamtxt = "(team)";
 			mapViewerObj.appendToChatBox("<span class=\"chatTime\">"+mapViewerObj.getSecondsAsString(this.elapsedSeconds)+"</span> <span class=\"chatUser "+p.team+"\">"+p.name+teamtxt+":</span> "+this.text);
-		} else if(this.eventType == "rndStart") {
+		} else if(this.eventType == "rndStart" || this.eventType == "scrChng") {
 		  mapViewerObj.blueScore = this.blueScore;
 		  mapViewerObj.redScore = this.redScore;
 		}
@@ -1092,7 +1100,7 @@ var LogEventCollection = Class.extend({
 				this.capEvents.push(logEvent);
 			} else if(logEvent.eventType == "say" || logEvent.eventType == "team_say") {
 				this.chatEvents.push(logEvent);
-			} else if(logEvent.eventType == "rndStart") {
+			} else if(logEvent.eventType == "rndStart" || logEvent.eventType == "scrChng") {
 			  this.roundEvents.push(logEvent);
 			} else {
 				this.logEvents.push(logEvent);
