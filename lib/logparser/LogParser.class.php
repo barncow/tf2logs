@@ -22,7 +22,6 @@ class LogParser {
   protected $weapons;
   protected $roles;
   protected $currentDt;
-  protected $gameOver;
   protected $isCtf;
   protected $playerChangeTeams;
   protected $addToScrubbedLog;
@@ -38,7 +37,6 @@ class LogParser {
     $this->isTournamentMode = false; //assume its not, until first world trigger round_start
     $this->buildWeaponCache();
     $this->buildRoleCache();
-    $this->gameOver = false;
     $this->isCtf = false;
     $this->addToScrubbedLog = true;
     
@@ -142,8 +140,7 @@ class LogParser {
 	*/
 	public function parseLogFromDB($log) {  
 	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($log->getId())->getLogData());
-	  $log->clearStats();
-	  $log->clearEvents();
+	  $log->clearLog();
 	  $this->log = $log;
 	  return $this->parseLog($file);
 	}
@@ -169,11 +166,8 @@ class LogParser {
 	      }
 	    }
 	    
-	    if($game_state == self::GAME_APPEARS_OVER) {
-	      break; //do not keep going, something screwed up.
-	    } else if($game_state == self::GAME_OVER) {
-	      $this->gameOver = true;
-	      //keep going, try to get final score.
+	    if($game_state == self::GAME_APPEARS_OVER || $game_state == self::GAME_OVER) {
+	      break; //do not keep going
 	    }
 	  }
 	  if(!$this->isTournamentMode) {
@@ -296,10 +290,6 @@ class LogParser {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
-	    if($this->gameOver) {
-	      //the game is over. do not want to track information. Just looking for team score lines.
-	      return self::GAME_OVER;
-	    }
 	    //Need to determine what action is being done here.
 	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
@@ -342,6 +332,7 @@ class LogParser {
 	      if(count($this->playerChangeTeams) >= count($this->log->getStats())) {
 	        //teams have switched, switch scores
 	        $this->log->switchScores();
+	        $this->log->addScoreChangeEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
 	        $this->playerChangeTeams = array();
 	      }
 	      return self::GAME_CONTINUE;
@@ -484,7 +475,7 @@ class LogParser {
 	        //the only time there would be zero players for a team is if something screwed up.
 	        return self::GAME_APPEARS_OVER;
 	      }
-	      //$this->log->setScoreForTeam($team, $this->parsingUtils->getTeamScore($logLineDetails));
+	      
 	      if($team == "Blue") {
 	        //this line will be the last of the team score lines, and will likely always be the last line in a game.
 	        $this->log->addRoundStartEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());

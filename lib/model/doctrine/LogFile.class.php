@@ -12,6 +12,8 @@
  */
 class LogFile extends BaseLogFile {
   public function appendString($string) {
-    $this->setLogData($this->getLogData().$string."\n");
+    if($this->log_data == null) $this->log_data = "";
+    if($this->log_data != "") $this->log_data .= "\n";
+    $this->log_data .= $string;
   }
 }

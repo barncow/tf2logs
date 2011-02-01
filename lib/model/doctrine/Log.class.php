@@ -208,6 +208,17 @@ class Log extends BaseLog
     if($stat !== false) $stat->finishStat($nowDt, $logStartDt);
   }
   
+  public function clearLog() {
+    $this->redscore = 0;
+    $this->bluescore = 0;
+    $this->elapsed_time = 0;
+    $this->error_log_name = null;
+    $this->error_exception = null;
+    $this->LogFile->log_data = "";
+    $this->clearStats();
+    $this->clearEvents();
+  }
+  
   public function clearStats() {
     $this->Stats->delete();
   }
