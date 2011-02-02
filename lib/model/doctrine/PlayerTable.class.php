@@ -66,13 +66,12 @@ class PlayerTable extends Doctrine_Table {
     return $ret;
   }
   
-  public function findPlayerForGivenNamePartial($name) {
+  public function findPlayerForGivenNamePartialQuery($name) {
     return $this
         ->createQuery('p')
         ->leftJoin('p.Stats s')
         ->where('s.name LIKE ?', '%'.$name.'%')
-        ->orderBy('s.name asc')
-        ->execute();
+        ->orderBy('s.name asc');
   }
   
   public function getTopUploaders($num_to_retrieve = 10) {

@@ -46,10 +46,15 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     } else {
       //just do a name search.
       
-      $players = Doctrine::getTable('Player')->findPlayerForGivenNamePartial($param);
-      if($players && count($players) > 0) {
-        $this->results = $players;
-      } else {
+      $this->pager = new sfDoctrinePager(
+          'Player',
+          sfConfig::get('app_max_results_per_page')
+        );
+      $this->pager->setQuery(Doctrine::getTable('Player')->findPlayerForGivenNamePartialQuery($param));
+      $this->pager->setPage($request->getParameter('page', 1));
+      $this->pager->init();
+      
+      if(count($this->pager->getResults()) == 0) {
         $this->getUser()->setFlash('error', 'No player could be found for the given search.');
       }
     }
