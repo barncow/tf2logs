@@ -9,6 +9,7 @@
  */
 class LogSearchForm extends BaseForm { 
   public function configure() {
+    $this->disableLocalCSRFProtection();
     $maps = array();
     $maps[""] = "Any Map";
     Doctrine::getTable('Log')->getMapsAsList($maps);

@@ -78,12 +78,21 @@ class logActions extends sfActions {
   
   public function executeSearch(sfWebRequest $request) {
     $this->form = new LogSearchForm();
-    if($request->isMethod(sfRequest::POST)) {
+    if($request->getParameter('page')) {
       $this->form->bind($request->getParameter($this->form->getName()));
       if ($this->form->isValid()) {
-        $this->results = Doctrine::getTable('Log')->getLogsFromSearch($this->form->getValue('name'), $this->form->getValue('map_name'), $this->form->getValue('from_date'), $this->form->getValue('to_date'));
-        if(count($this->results) == 1) {
-          $this->redirect('log/show?id='.$this->results[0]['id']);
+        $this->pager = new sfDoctrinePager(
+          'Log',
+          sfConfig::get('app_max_results_per_page')
+        );
+        $this->pager->setQuery(Doctrine::getTable('Log')->getLogsFromSearch($this->form->getValue('name'), $this->form->getValue('map_name'), $this->form->getValue('from_date'), $this->form->getValue('to_date')));
+        $this->pager->setPage($request->getParameter('page', 1));
+        $this->pager->init();
+        
+        if(count($this->pager->getResults()) == 1) {
+          $r = $this->pager->getResults();
+          $this->getUser()->setFlash('notice', 'Since your search returned only one result, you were automatically sent to it.');
+          $this->redirect('log/show?id='.$r[0]['id']);
         }
       } else {
         $this->getUser()->setFlash('error', 'There was an error with your search.');

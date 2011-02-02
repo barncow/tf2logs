@@ -173,6 +173,6 @@ class LogTable extends Doctrine_Table {
         $q->andWhere('l.created_at < ?', $toDate);
       }
         
-      return $q->execute();
+      return $q;
     }
 }
