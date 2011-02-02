@@ -5,6 +5,7 @@
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('playershow.js'); ?>
 <?php use_helper('Log') ?>
+<?php use_helper('Search') ?>
 <div id="playerName"><span class="description">Player Name: </span><?php echo $player->name ?></div>
 
 <?php if($player->num_matches == 0): ?>
@@ -118,14 +119,56 @@
       <th>Date Submitted</th>
     </tr>
   </thead>
-  <tbody>    
-    <?php foreach($participatedLogs as $pl): ?>
+  <tbody>   
+    <?php if ($plPager->haveToPaginate()): ?>
+      <tr><td colspan="3">
+          <div class="pagination">
+            <a href="<?php echo replacePageParam($sf_request->getUri(),1,'plPage') ?>">First page</a>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getPreviousPage(),'plPage') ?>">Previous page</a>
+         
+            <?php foreach ($plPager->getLinks() as $page): ?>
+              <?php if ($page == $plPager->getPage()): ?>
+                <?php echo $page ?>
+              <?php else: ?>
+                <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'plPage') ?>"><?php echo $page ?></a>
+              <?php endif; ?>
+            <?php endforeach; ?>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getNextPage(),'plPage') ?>">Next page</a>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getLastPage(),'plPage') ?>">Last page</a>
+          </div>
+      </td></tr>
+    <?php endif; ?> 
+    <?php foreach($plPager->getResults() as $pl): ?>
       <tr>
         <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
         <td><?php echo $pl['map_name'] ?></td>
         <td><?php echo $pl['created_at'] ?></td>
       </tr>
     <?php endforeach ?>
+    <?php if ($plPager->haveToPaginate()): ?>
+      <tr><td colspan="3">
+          <div class="pagination">
+            <a href="<?php echo replacePageParam($sf_request->getUri(),1,'plPage') ?>">First page</a>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getPreviousPage(),'plPage') ?>">Previous page</a>
+         
+            <?php foreach ($plPager->getLinks() as $page): ?>
+              <?php if ($page == $plPager->getPage()): ?>
+                <?php echo $page ?>
+              <?php else: ?>
+                <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'plPage') ?>"><?php echo $page ?></a>
+              <?php endif; ?>
+            <?php endforeach; ?>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getNextPage(),'plPage') ?>">Next page</a>
+         
+            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getLastPage(),'plPage') ?>">Last page</a>
+          </div>
+      </td></tr>
+    <?php endif; ?> 
   </tbody>
 </table>
 <?php endif ?>
@@ -143,13 +186,55 @@
     <?php if($numSubmittedLogs == 0): ?>
       <tr><td colspan="3">This player has not submitted any logs.</td></tr>
     <?php else: ?>
-      <?php foreach($submittedLogs as $sl): ?>
+      <?php if ($slPager->haveToPaginate()): ?>
+        <tr><td colspan="3">
+            <div class="pagination">
+              <a href="<?php echo replacePageParam($sf_request->getUri(),1,'slPage') ?>">First page</a>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getPreviousPage(),'slPage') ?>">Previous page</a>
+           
+              <?php foreach ($slPager->getLinks() as $page): ?>
+                <?php if ($page == $slPager->getPage()): ?>
+                  <?php echo $page ?>
+                <?php else: ?>
+                  <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'slPage') ?>"><?php echo $page ?></a>
+                <?php endif; ?>
+              <?php endforeach; ?>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getNextPage(),'slPage') ?>">Next page</a>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getLastPage(),'slPage') ?>">Last page</a>
+            </div>
+        </td></tr>
+      <?php endif; ?>
+      <?php foreach($slPager->getResults() as $sl): ?>
         <tr>
           <td><?php echo link_to($sl['name'], 'log/show?id='.$sl['id']) ?></td>
           <td><?php echo $sl['map_name'] ?></td>
           <td><?php echo $sl['created_at'] ?></td>
         </tr>
       <?php endforeach ?>
+      <?php if ($slPager->haveToPaginate()): ?>
+        <tr><td colspan="3">
+            <div class="pagination">
+              <a href="<?php echo replacePageParam($sf_request->getUri(),1,'slPage') ?>">First page</a>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getPreviousPage(),'slPage') ?>">Previous page</a>
+           
+              <?php foreach ($slPager->getLinks() as $page): ?>
+                <?php if ($page == $slPager->getPage()): ?>
+                  <?php echo $page ?>
+                <?php else: ?>
+                  <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'slPage') ?>"><?php echo $page ?></a>
+                <?php endif; ?>
+              <?php endforeach; ?>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getNextPage(),'slPage') ?>">Next page</a>
+           
+              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getLastPage(),'slPage') ?>">Last page</a>
+            </div>
+        </td></tr>
+      <?php endif; ?>
     <?php endif ?>
   </tbody>
 </table>

@@ -17,9 +17,23 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->roles = Doctrine::getTable('Player')->getPlayerRolesByNumericSteamid($request->getParameter('id'));
     $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForPlayerId($request->getParameter('id'));
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getPlayerWeaponStatsByNumericSteamid($request->getParameter('id'));
-    $this->participatedLogs = Doctrine::getTable('Log')->getParticipantLogsByPlayerNumericSteamid($request->getParameter('id'));
-    $this->submittedLogs = Doctrine::getTable('Log')->getSubmittedLogsByPlayerNumericSteamid($request->getParameter('id'));
-    $this->numSubmittedLogs = Doctrine::getTable('Log')->getNumberSubmittedLogsByPlayerNumericSteamid($request->getParameter('id'));
+    
+    $this->slPager = new sfDoctrinePager(
+      'Log',
+      sfConfig::get('app_max_results_per_page')
+    );
+    $this->slPager->setQuery(Doctrine::getTable('Log')->getSubmittedLogsByPlayerNumericSteamidQuery($request->getParameter('id')));
+    $this->slPager->setPage($request->getParameter('slPage', 1));
+    $this->slPager->init();
+    $this->numSubmittedLogs = count($this->slPager);
+    
+    $this->plPager = new sfDoctrinePager(
+      'Log',
+      sfConfig::get('app_max_results_per_page')
+    );
+    $this->plPager->setQuery(Doctrine::getTable('Log')->getParticipantLogsByPlayerNumericSteamidQuery($request->getParameter('id')));
+    $this->plPager->setPage($request->getParameter('plPage', 1));
+    $this->plPager->init();
   }
   
   public function executeSearch(sfWebRequest $request) {
@@ -54,6 +68,13 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
       $this->pager->setPage($request->getParameter('page', 1));
       $this->pager->init();
       
+      if(count($this->pager->getResults()) == 1) {
+        $r = $this->pager->getResults();
+        $r = $r[0];
+        $this->getUser()->setFlash('notice', 'Since your search returned only one result, you were automatically sent to it.');
+        $this->redirect('@player_by_numeric_steamid?id='.$r->getNumericSteamid());
+      }
+        
       if(count($this->pager->getResults()) == 0) {
         $this->getUser()->setFlash('error', 'No player could be found for the given search.');
       }

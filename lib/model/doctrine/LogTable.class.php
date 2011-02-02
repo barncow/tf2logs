@@ -86,26 +86,24 @@ class LogTable extends Doctrine_Table {
     }
     
     //retrieves logs that the user participated in, not submitted
-    public function getParticipantLogsByPlayerNumericSteamid($playerId) {
+    public function getParticipantLogsByPlayerNumericSteamidQuery($playerId) {
       return $this
         ->createQuery('l')
         ->leftJoin('l.Stats s')
         ->leftJoin('s.Player p')
         ->where('p.numeric_steamid = ?', $playerId)
         ->orderBy('l.created_at desc')
-        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
-        ->execute();
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }
     
     //retrieves logs that the user submitted in, not necessarily just played in
-    public function getSubmittedLogsByPlayerNumericSteamid($playerId) {
+    public function getSubmittedLogsByPlayerNumericSteamidQuery($playerId) {
       return $this
         ->createQuery('l')
         ->leftJoin('l.Submitter p')
         ->where('p.numeric_steamid = ?', $playerId)
         ->orderBy('l.created_at desc')
-        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
-        ->execute();
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }
     
     public function getNumberSubmittedLogsByPlayerNumericSteamid($playerId) {
