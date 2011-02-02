@@ -59,7 +59,21 @@ class logActions extends sfActions {
 
     $this->form = new LogForm();
 
-    return $this->processForm($request, $this->form);
+    $status = $this->processForm($request, $this->form);
+    if($request->isXmlHttpRequest()) {
+       $request->setRequestFormat('json');
+      if($status == "error") {
+        $this->msg = $this->getUser()->getFlash('error');
+      }
+      else {
+        $this->url = $status;
+      }
+    } else {
+      if($status == "error") return sfView::ERROR;
+      else {
+        $this->redirect($status);
+      }
+    }
   }
   
   public function executeSearch(sfWebRequest $request) {
@@ -94,10 +108,10 @@ class logActions extends sfActions {
           $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(self::PLAYER_ID_ATTR), $form->getValue('name'), $form->getValue('map_name'));
         } catch(TournamentModeNotFoundException $tmnfe) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
-          return sfView::ERROR;
+          return "error";
         } catch(CorruptLogLineException $clle) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.'.$clle);
-          return sfView::ERROR;
+          return "error";
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.
@@ -108,7 +122,7 @@ class logActions extends sfActions {
           $log->save();
           $this->logid = $log->getId();
           $this->getUser()->setFlash('error', 'An unexpected error ocurred. We have the log file that you sent, and will get the problem fixed as soon as possible.');
-          return sfView::ERROR;
+          return "error";
         }
         
         if($log) {
@@ -117,10 +131,10 @@ class logActions extends sfActions {
         
         $lastid = $log->getId();
       }
-      $this->redirect('log/show?id='.$lastid);
+      return 'log/show?id='.$lastid;
     } else {
       $this->getUser()->setFlash('error', 'The file you sent was not valid. Be sure that you choose a TF2 server log file to upload.');
-      $this->redirect('log/index');
+      return "error";
     }
   }
 }

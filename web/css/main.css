@@ -154,3 +154,11 @@ a:hover {
   font-size: 8px;
 }
 
+.logMetaData {
+  float: right;
+}
+
+.logInfo {
+  clear: both;
+}
+

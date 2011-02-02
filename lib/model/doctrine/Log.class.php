@@ -238,7 +238,7 @@ class Log extends BaseLog
         return $stat;
       }
     }
-    
-    return false;
+    $f = false;
+    return $f;
   }
 }
