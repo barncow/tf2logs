@@ -2,9 +2,11 @@
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
+<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
+<?php use_stylesheet('demo_table_jui.css'); ?>
+<?php use_javascript('jquery.dataTables.min.js'); ?>
 
 <?php if(mapExists($log['map_name'])): ?>
-<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
 <?php use_stylesheet('canvas.css'); ?>
 <?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
 <?php use_javascript('class.js'); ?>
@@ -46,8 +48,10 @@
 <?php endif ?>
 
 <div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>
-     
+
+<div class="statTableContainer">
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
+  <caption>Main Stats</caption>
   <thead>
     <tr>
       <th>Name</th>
@@ -72,40 +76,47 @@
   </thead>
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
-    <tr class="<?php echo $stat['team'] ?>">
-      <td>
-        <img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="avatar avatarImage" id="avatar<?php echo $stat['Player']['id'] ?>"/>
+    <tr>
+      <td class="ui-widget-content">
+        <img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="<?php echo $stat['team'] ?> avatar avatarImage ui-corner-all" id="avatar<?php echo $stat['Player']['id'] ?>"/>
         <?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?>
       </td>
-      <td><?php echo $stat['Player']['steamid'] ?></td>
-      <td>
+      <td class="ui-widget-content"><?php echo $stat['Player']['steamid'] ?></td>
+      <td class="ui-widget-content">
         <ul>
           <?php foreach($stat['RoleStats'] as $rs): ?>
             <li><img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$rs['Role']['key_name']?>.png" class="classIcon" title="<?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?>" alt="<?php echo $rs['Role']['name'] ?> - <?php echo outputSecondsToHumanFormat($rs['time_played']) ?>"/></li>
           <?php endforeach ?>
         </ul>
       </td>
-      <td class="<?php echo dataCellOutputClass($stat['kills']) ?>"><?php echo $stat['kills'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['assists']) ?>"><?php echo $stat['assists'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></td>
-      <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['headshots']) ?>"><?php echo $stat['headshots'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['flag_defends']) ?>"><?php echo $stat['flag_defends'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['flag_captures']) ?>"><?php echo $stat['flag_captures'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['dominations']) ?>"><?php echo $stat['dominations'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['times_dominated']) ?>"><?php echo $stat['times_dominated'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['revenges']) ?>"><?php echo $stat['revenges'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
-      <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['kills']) ?>"><?php echo $stat['kills'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['assists']) ?>"><?php echo $stat['assists'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['deaths']) ?>"><?php echo $stat['deaths'] ?></span></td>
+      <td class="ui-widget-content">
+        <span class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>">
+          <?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?>
+        </span>
+      </td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['longest_kill_streak']) ?>"><?php echo $stat['longest_kill_streak'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['headshots']) ?>"><?php echo $stat['headshots'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['capture_points_blocked']) ?>"><?php echo $stat['capture_points_blocked'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['capture_points_captured']) ?>"><?php echo $stat['capture_points_captured'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['flag_defends']) ?>"><?php echo $stat['flag_defends'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['flag_captures']) ?>"><?php echo $stat['flag_captures'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['dominations']) ?>"><?php echo $stat['dominations'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['times_dominated']) ?>"><?php echo $stat['times_dominated'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['revenges']) ?>"><?php echo $stat['revenges'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></span></td>
+      <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></span></td>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
+</div>
+<br class="hardSeparator"/>
 
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+<div class="statTableContainer">
+<table class="statTable" id="medicStats" border="0" cellspacing="0" cellpadding="3">
   <caption>Medic Comparison</caption>
   <thead>
     <tr>
@@ -124,35 +135,41 @@
       <?php foreach($stat['RoleStats'] as $rs): ?>
         <?php if($rs['Role']['key_name'] == "medic" && $rs['time_played'] > 1): ?>
           <tr>
-            <td>
-              <img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="avatar avatarImage" id="avatar<?php echo $stat['Player']['id'] ?>"/>
+            <td class="ui-widget-content">
+              <img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="<?php echo $stat['team'] ?> avatar avatarImage ui-corner-all" id="avatar<?php echo $stat['Player']['id'] ?>"/>
               <?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?>
             </td>
-            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?></td>
-            <td class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></td>
-            <td class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></td>
-            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></td>
-            <td class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></td>
-            <td class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></td>
-            <td class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['healing'], $stat['deaths']) ?></td>
+            <td class="ui-widget-content">
+              <span class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])) ?>">
+                <?php echo doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']) ?>
+              </span>
+            </td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['extinguishes']) ?>"><?php echo $stat['extinguishes'] ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['ubers']) ?>"><?php echo $stat['ubers'] ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['ubers'], $stat['deaths']) ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['dropped_ubers']) ?>"><?php echo $stat['dropped_ubers'] ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($stat['healing']) ?>"><?php echo $stat['healing'] ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])) ?>"><?php echo doPerDeathDivision($stat['healing'], $stat['deaths']) ?></span></td>
           </tr>
         <?php endif ?>
       <?php endforeach ?>
     <?php endforeach; ?>
   </tbody>
 </table>
+</div>
+<br class="hardSeparator"/>
 
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
+<div class="statTableContainer">
+<table class="statTable" id="weaponStats" border="0" cellspacing="0" cellpadding="3">
   <caption>Weapon Stats</caption>
   <thead>
     <tr>
-      <th><!--playername--></th>
+      <th rowspan="2"><!--playername--></th>
       <?php foreach($weapons as $w): ?>
-        <th colspan="2"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></th>
+        <th colspan="2" class="ui-state-default"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></th>
       <?php endforeach ?>
     </tr>
     <tr>
-      <th><!--playername--></th>
       <?php foreach($weapons as $w): ?>
         <th title="Kills">K</th>
         <th title="Deaths">D</th>
@@ -162,27 +179,30 @@
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="avatarImage"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td class="ui-widget-content"><img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="<?php echo $stat['team'] ?> avatarImage ui-corner-all"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <?php foreach($weapons as $w): ?>
         <?php $foundWS = false ?>
         <?php foreach($weaponStats as $ws): ?>
           <?php if($ws['stat_id'] == $stat['id'] && $ws['weapon_id'] == $w['id']): ?>
-            <td class="<?php echo dataCellOutputClass($ws['num_kills']) ?>"><?php echo $ws['num_kills'] ?></td>
-            <td class="<?php echo dataCellOutputClass($ws['num_deaths']) ?>"><?php echo $ws['num_deaths'] ?></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws['num_kills']) ?>"><?php echo $ws['num_kills'] ?></span></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws['num_deaths']) ?>"><?php echo $ws['num_deaths'] ?></span></td>
             <?php $foundWS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundWS): ?>
-          <td class="zeroValue">0</td>
-          <td class="zeroValue">0</td>
+          <td class="ui-widget-content"><span class="zeroValue">0</span></td>
+          <td class="ui-widget-content"><span class="zeroValue">0</span></td>
         <?php endif ?>
       <?php endforeach ?>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
+</div>
+<br class="hardSeparator"/>
 
+<div class="statTableContainer">
 <table class="statTable" id="playerStats" border="0" cellspacing="0" cellpadding="3">
   <caption>Player Stats</caption>
   <thead>
@@ -190,7 +210,7 @@
       <th><!--playername--></th>
       <?php foreach($log['Stats'] as $s): ?>
         <th>
-          <a href="<?php echo url_for('player/showNumericSteamId?id='.$s['Player']['numeric_steamid']) ?>"><img src="/avatars/<?php echo $s['Player']['id'] ?>.jpg" class="avatarImage" title="<?php echo $s['name'] ?>"/></a>
+          <img src="/avatars/<?php echo $s['Player']['id'] ?>.jpg" class="<?php echo $s['team'] ?> avatarImage ui-corner-all" title="<?php echo $s['name'] ?>"/>
         </th>
       <?php endforeach ?>
     </tr>
@@ -198,46 +218,78 @@
   <tbody>
   <?php foreach ($log['Stats'] as $stat): ?>
     <tr>
-      <td><img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="avatarImage"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
+      <td class="ui-widget-content"><img src="/avatars/<?php echo $stat['Player']['id'] ?>.jpg" class="<?php echo $stat['team'] ?> avatarImage ui-corner-all"/><?php echo link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']) ?></td>
       <?php foreach($log['Stats'] as $colstat): ?>
         <?php $foundPS = false ?>
         <?php foreach($playerStats as $ps): ?>
           <?php if($ps['stat_id'] == $stat['id'] && $ps['player_id'] == $colstat['Player']['id']): ?>
-            <td class="<?php echo dataCellOutputClass($ps['num_kills']) ?>"><?php echo $ps['num_kills'] ?></td>
+            <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ps['num_kills']) ?>"><?php echo $ps['num_kills'] ?></span></td>
             <?php $foundPS = true ?>
             <?php break ?>
           <?php endif ?>
         <?php endforeach ?>
         <?php if(!$foundPS): ?>
-          <td class="zeroValue">0</td>
+          <td class="ui-widget-content"><span class="zeroValue">0</span></td>
         <?php endif ?>
       <?php endforeach ?>
     </tr>
     <?php endforeach; ?>
   </tbody>
 </table>
+</div>
+<br class="hardSeparator"/>
 
 Created  <?php echo $log['created_at'] ?><br/>
 <?php if($log['created_at'] != $log['updated_at']): ?>
   Last Generated <?php echo $log['updated_at'] ?> 
 <?php endif ?>
 
-<?php if(mapExists($log['map_name'])): ?>
+
 <script type="application/x-javascript">
-var gameMapObj;
-var mapViewerObj;
-
-<?php echo outputPlayerCollection($log['Stats']); ?>
-
-<?php echo outputWeaponCollection($weapons); ?>
+<?php if(mapExists($log['map_name'])): ?>
+  var gameMapObj;
+  var mapViewerObj;
+  <?php echo outputPlayerCollection($log['Stats']); ?>
+  <?php echo outputWeaponCollection($weapons); ?>
+<?php endif ?>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Doc ready
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
-	mvc = $("#mapViewerControls");
-	mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
+  <?php if(mapExists($log['map_name'])): ?>
+	  mvc = $("#mapViewerControls");
+	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
+	<?php endif ?>
+	
+	$('#statPanel, #playerStats, #weaponStats').dataTable({
+		"bJQueryUI": true,
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": true,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"bSortClasses": false
+	});
+	
+	$('#medicStats').dataTable({
+		"bJQueryUI": true,
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": false,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"bSortClasses": false,
+		"aaSorting": [[1,'desc'], [2,'desc'], [3,'desc'], [4,'desc'], [5,'desc'], [6,'desc'], [7,'desc']]
+	});
+	
+	$('.statTable').children("caption").each(function(index,obj){
+	  obj = $(obj);
+	  html = obj.html();
+	  obj.html("");
+	  obj.closest(".dataTables_wrapper").children(".fg-toolbar:first").prepend('<div class="statTableCaption css_left">'+html+'</div>');
+	});
 });
 </script>
-<?php endif ?>
+
 <div id="canvasTooltip"></div>
