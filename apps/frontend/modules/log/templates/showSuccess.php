@@ -2,7 +2,7 @@
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
-<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
+<?php use_stylesheet('jquery-ui-1.8.9.custom.css'); ?>
 <?php use_stylesheet('demo_table_jui.css'); ?>
 <?php use_javascript('jquery.dataTables.min.js'); ?>
 
@@ -28,7 +28,7 @@
 </div>
 
 <?php if(mapExists($log['map_name'])): ?>
-<canvas id="mapViewer"></canvas>
+<canvas id="mapViewer" class="ui-state-default ui-corner-all"></canvas>
 <div id="mapViewerControls">
 	<button id="playPauseButton"></button>
 	<div id="playbackProgress"><span id="totalTime"></span></div>
@@ -44,7 +44,7 @@
 	  <input type="checkbox" id="isCumulitive"/>
 	</div>
 </div>
-<div id="chatBox"><ul></ul></div>
+<div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
 <?php endif ?>
 
 <div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>

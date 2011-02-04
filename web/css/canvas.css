@@ -35,7 +35,6 @@
 #chatBox {
 	overflow: auto;
 	height: 100px;
-	border: 1px solid white;
 	//width set dynamically
 }
 
@@ -51,9 +50,9 @@
 }
 
 #chatBox .red {
-	color: rgb(255,0,0);
+	color: #d06553;
 }
 
 #chatBox .blue {
-	color: rgb(0,0,255);
+	color: #79b3d2;
 }

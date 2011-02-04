@@ -283,6 +283,7 @@ var MapViewer = Class.extend({
 		
 		//init the Play and Pause Button. Set initial state to pause.
 		this.pause();
+		this.jqPlayPause.button({icons:{primary:'ui-icon-play'},text: false});
 		this.jqPlayPause.click(function(event){
 			if(mapViewerObj.isThisPlaying()) {
 				mapViewerObj.pause();
@@ -362,13 +363,13 @@ var MapViewer = Class.extend({
 	
 	pause: function() {
 		this.playBackState = 0; //pausing playback
-		this.jqPlayPause.html(">");
+		this.jqPlayPause.button( "option", "icons", {primary:'ui-icon-play'});
 		this.clearTimeout(); //could have a next iteration scheduled, need to clear it.
 	},
 	
 	play: function () {
 		this.playBackState = 1; //playing
-		this.jqPlayPause.html("||");
+		this.jqPlayPause.button( "option", "icons", {primary:'ui-icon-pause'});
 		this.iterateData(true);
 	},
 	

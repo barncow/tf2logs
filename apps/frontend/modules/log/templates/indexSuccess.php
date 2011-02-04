@@ -1,6 +1,6 @@
 <?php use_stylesheets_for_form($form) ?>
 <?php use_javascripts_for_form($form) ?>
-<?php use_stylesheet('./mint-choc/jquery-ui-1.8.9.custom.css'); ?>
+<?php use_stylesheet('jquery-ui-1.8.9.custom.css'); ?>
 
 <?php use_helper('Log') ?>
 
