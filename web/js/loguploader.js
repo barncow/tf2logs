@@ -4,6 +4,7 @@ $(function() {
 		url : uploadurl,
 		max_file_size : '2mb',
 		headers: { 'X-REQUESTED-WITH':'XMLHttpRequest' },
+		resize: false,
 
 		multipart: true,
 		multipart_params: {
