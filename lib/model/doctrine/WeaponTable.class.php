@@ -39,6 +39,22 @@ class WeaponTable extends Doctrine_Table {
     }
     
     /**
+    * Gets unique weapons that were used in the log, however this only gets the weapon data directly.
+    */
+    public function getMiniWeaponsForLogId($logid) {
+      return Doctrine_Query::create()
+        ->select('w.id, w.name, w.key_name, w.image_name')
+        ->from('Weapon w')
+        ->innerJoin('w.WeaponStat ws')
+        ->innerJoin('ws.Stat s')
+        ->innerJoin('s.Log l')
+        ->where('l.id = ?', $logid)
+        ->orderBy('w.name')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
+    
+    /**
     * Gets unique weapons that a player died or killed with
     */
     public function getWeaponsForPlayerId($playerId) {
