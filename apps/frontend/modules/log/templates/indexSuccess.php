@@ -5,12 +5,16 @@
 <?php use_helper('Log') ?>
 
 <?php if(!$sf_user->isAuthenticated()): ?>
-<div id="pageLogin">
-  In order to upload a log file, you must login through STEAM.<br/>It is quick and safe.<br/>You can browse the site without logging in.<br/>
-  <a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
+<div id="pageLogin" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Login to Upload</div>
+    <div class="content">
+     In order to upload a log file, you must login through STEAM.<br/>It is quick and safe.<br/>You can browse the site without logging in.<br/>
+     <a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
+<br class="hardSeparator"/>
 <?php endif ?>
-
 
 <?php if($sf_user->isAuthenticated()): ?>
   <?php use_javascript('jquery-1.4.4.min.js'); ?>
@@ -35,23 +39,43 @@
     </form>
   </div>
 <?php endif ?>
+<br/>
+<div id="infoBoxContainer">
+  <div id="recentlyAdded" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Recently Added</div>
+    <div class="content">
+      <table width="100%">
+      <?php foreach($logs as $l): ?>
+        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td><?php echo $l->getCreatedAt() ?></td></tr>
+      <?php endforeach ?>
+      </table>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
+  </div>
+  
+  <div id="actions" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Actions</div>
+    <div class="content">
+      <ul>
+        <li><?php echo link_to("Search Logs", '@log_search') ?></li>
+        <li><?php echo link_to("Search Players", '@player_search') ?></li>
+      </ul>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
+  </div>
 
-<div id="recentlyAdded" class="statBox">
-<span class="title">Recently Added</span>
-<ul>
-  <?php foreach($logs as $l): ?>
-    <li><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></li>
-  <?php endforeach ?>
-</ul>
-</div>
-
-<div id="topUploaders" class="statBox">
-<span class="title">Top Uploaders</span>
-<ol>
-  <?php foreach($topuploaders as $p): ?>
-    <li><?php echo link_to($p->name, 'player/showNumericSteamId?id='.$p->numeric_steamid) ?> - <?php echo $p->num_logs ?></li>
-  <?php endforeach ?>
-</ol>
+  <div id="topUploaders" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Top Uploaders</div>
+    <div class="content">
+      <table width="100%">
+        <?php foreach($topuploaders as $p): ?>
+          <tr><td><?php echo link_to($p->name, 'player/showNumericSteamId?id='.$p->numeric_steamid) ?></td><td><?php echo $p->num_logs ?></td></tr>
+        <?php endforeach ?>
+      </table>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
+  </div>
+  <br class="hardSeparator"/>
 </div>
 
 <script type="application/x-javascript">

@@ -25,6 +25,10 @@ player_by_numeric_steamid:
   param: { module: player, action: showNumericSteamId }
   requirements: {id: \d+}
   
+log_search:
+  url:   /log/search/
+  param: { module: log, action: search }
+  
 player_search:
   url:   /player/search/
   param: { module: player, action: search }

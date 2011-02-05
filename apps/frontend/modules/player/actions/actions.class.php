@@ -38,7 +38,11 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
   
   public function executeSearch(sfWebRequest $request) {
     $param = $request->getParameter('param');
-    if($param == null || $param == "") {
+    if($param === null) {
+      return;//no param set, just go to search form.
+    }
+    if(trim($param) == "") {
+      $this->getUser()->setFlash('error', 'You must enter search criteria.');
       $this->param = "";
       return; //no param set, just go to search form.
     } else if(is_numeric($param) && strpos($param, "7656119") == 0) {
@@ -76,7 +80,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
       }
         
       if(count($this->pager->getResults()) == 0) {
-        $this->getUser()->setFlash('error', 'No player could be found for the given search.');
+        $this->getUser()->setFlash('error', 'No results found.');
       }
     }
     
@@ -134,7 +138,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->getUser()->setAttribute(self::PLAYER_ID_ATTR, (int)$player->getId());
     
     //symfony credential system should handle what a user has access to. Just assume it's ok.
-    $this->getUser()->setFlash('notice', 'Successfully logged in.');
+    $this->getUser()->setFlash('notice', 'You were successfully logged in.');
     $this->getUser()->setAuthenticated(true);
     sfContext::getInstance()->getResponse()->setCookie('known_openid_identity',$openid_validation_result['identity']);
     

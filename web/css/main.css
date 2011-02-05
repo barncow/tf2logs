@@ -1,6 +1,6 @@
 @font-face {
   font-family: "TF2 Build";
-  src: url("/css/fonts/tf2build.ttf");
+  src: url(/css/fonts/tf2build.ttf);
 }
 
 body {
@@ -40,14 +40,17 @@ a:hover {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  float: left;
 }
 
 #score .Blue {
-  color: blue;
+  color: #79b3d2;
 }
 
 #score .Red {
-  color: #990000;
+  color: #d06553;
 }
 
 #score .winSeparator {
@@ -57,11 +60,11 @@ a:hover {
 }
 
 img.Blue {
-  border: 3px solid #001A64;
+  border: 2px solid #79b3d2;
 }
 
 img.Red {
-  border: 3px solid #64001A;
+  border: 2px solid #d06553;
 }
 
 .statTable, .statTable td {
@@ -70,6 +73,39 @@ img.Red {
   text-align: center;
   font-size: 10px;
   white-space:nowrap;
+}
+
+.infoBox {
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+div.infoBox .header {
+  padding: 0 3px 0 3px;
+}
+
+.infoBox table {
+	border-collapse: collapse;
+}
+
+.infoBox tr {
+	background: #201913 url(/css/images/ui-bg_inset-soft_10_201913_1x100.png) 50% bottom repeat-x; /*from .ui-widget-content*/
+	color: #e3ddc9; /*from .ui-widget-content*/
+}
+
+div.infoBox .content {
+	text-align: center;
+	border-left: 1px solid #695649; /*based on .ui-state-header*/
+	border-right: 1px solid #695649; /*based on .ui-state-header*/
+	padding: 3px;
+}
+
+.bottomSpacer {
+	height: 10px;
+}
+
+div.infoBox .subInfo {
+  font-size: 12px;
 }
 
 .statTable {
@@ -112,15 +148,27 @@ br.hardSeparator {
 }
 
 #header {
-  font-size: 40px;
-  font-weight: normal;
-  font-family: 'TF2 Build';
-  text-transform: uppercase;
-  float: left;
+	border: 1px solid #695649; /*from .ui-widget-header*/
+	background: #1c160d url(/css/images/ui-bg_gloss-wave_20_1c160d_500x100.png) 50% 50% repeat-x; /*from .ui-state-default*/
+	font-weight: bold; /*from .ui-widget-header*/
+	color: #79b3d2; /*from .ui-state-default*/
+	
+	padding: 5px;
+	margin-bottom: 1em;
 }
 
-#headerLogin {
-  float: right;
+#header a {
+  color: #79b3d2; /*from .ui-state-default*/
+}
+			
+#homeLink {
+	float: left;
+	font-size: 20pt;
+	font-family: "TF2 Build";
+}
+
+#userCP {
+	float: right;
 }
 
 .zeroValue {
@@ -135,9 +183,6 @@ br.hardSeparator {
   width: 300px;
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid white;
-  text-align: center;
-  padding: 5px;
 }
 
 .avatarImage {
@@ -173,3 +218,62 @@ br.hardSeparator {
   clear: both;
 }
 
+#recentlyAdded {
+  width: 350px;
+  float: left;
+}
+
+#topUploaders {
+  width: 200px;
+  float: left;
+}
+
+#actions {
+  width: 125px;
+  float: left;
+}
+
+#infoBoxContainer {
+  width: 705px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#infoBoxContainer .infoBox{
+  margin-right: 10px;
+}
+
+#infoBoxContainer ol {
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+}
+
+#infoBoxContainer ul {
+  display: inline;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.alertBox {
+  width: 300px;
+  margin: 0 auto 1em auto;
+  text-align: center;
+}
+
+#searchForm {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#searchResults {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#searchResults td {
+  text-align: left;
+}

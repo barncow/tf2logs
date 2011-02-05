@@ -56,3 +56,7 @@
 #chatBox .blue {
 	color: #79b3d2;
 }
+
+#mapViewerContainer {
+  margin-bottom: 1em;
+}

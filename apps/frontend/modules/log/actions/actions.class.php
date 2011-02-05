@@ -92,6 +92,8 @@ class logActions extends sfActions {
           $r = $this->pager->getResults();
           $this->getUser()->setFlash('notice', 'Since your search returned only one result, you were automatically sent to it.');
           $this->redirect('log/show?id='.$r[0]['id']);
+        } else if(count($this->pager->getResults()) == 0) {
+          $this->getUser()->setFlash('error', 'No results found.');
         }
       } else {
         $this->getUser()->setFlash('error', 'There was an error with your search.');

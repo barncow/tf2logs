@@ -9,23 +9,27 @@
     <link rel="shortcut icon" href="/favicon.ico" />
   </head>
   <body>
-  <div id="header"><a href="<?php echo url_for('@homepage', true) ?>">tf2logs.com</a></div>
-  <div id="headerLogin">
-    <?php if($sf_user->isAuthenticated()): ?>
-      <?php echo link_to('Logout', '@logout') ?>
-    <?php else: ?>
-      To upload a log, login through STEAM<br/><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
-    <?php endif ?>
+  <div id="header" class="ui-corner-all">
+    <div id="homeLink">
+      <a href="<?php echo url_for('@homepage', true) ?>">tf2logs.com</a>
+    </div>
+    <div id="userCP">
+      <?php if($sf_user->isAuthenticated()): ?>
+        <?php echo link_to('Logout', '@logout') ?>
+      <?php else: ?>
+        To upload a log, login through STEAM<a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
+      <?php endif ?>
+    </div>
+    <br class="hardSeparator"/>
   </div>
-  <div style="clear: both;"></div>
   
   <?php if ($sf_user->hasFlash('notice')): ?>
-  <div class="flash_notice"><?php echo $sf_user->getFlash('notice') ?></div>
-<?php endif ?>
+    <div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('notice') ?></div>
+  <?php endif ?>
 
-<?php if ($sf_user->hasFlash('error')): ?>
-  <div class="flash_error"><?php echo $sf_user->getFlash('error') ?></div>
-<?php endif ?>
+  <?php if ($sf_user->hasFlash('error')): ?>
+    <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('error') ?></div>
+  <?php endif ?>
     
     <?php echo $sf_content ?>
     

@@ -2,7 +2,6 @@
 <?php use_helper('Implode') ?>
 <?php use_stylesheet('jquery.tooltip.css'); ?>
 <?php use_javascript('jquery-1.4.4.min.js'); ?>
-<?php use_stylesheet('jquery-ui-1.8.9.custom.css'); ?>
 <?php use_stylesheet('demo_table_jui.css'); ?>
 <?php use_javascript('jquery.dataTables.min.js'); ?>
 
@@ -19,35 +18,47 @@
 <?php use_javascript('jquery.dimensions.js'); ?>
 <?php use_javascript('jquery.tooltip.min.js'); ?>
 <?php use_javascript('logshow.js'); ?>
-<div id="logName"><?php echo $log['name'] ?></div>
 
-<div id="score">
-  <span class="Red teamName">Red</span> <span class="red"><?php echo $log['redscore'] ?></span>
-   <span class="winSeparator"><?php echo getWinSeparator($log['redscore'], $log['bluescore']) ?></span> 
-   <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log['bluescore'] ?></span>
+<div id="score" class="infoBox">
+  <div class="ui-widget ui-widget-header ui-corner-top header"><?php echo $log['name'] ?></div>
+  <div class="content">
+    <span class="Red teamName">Red</span> <span class="red"><?php echo $log['redscore'] ?></span>
+    <span class="winSeparator"><?php echo getWinSeparator($log['redscore'], $log['bluescore']) ?></span> 
+    <span class="Blue teamName">Blue</span> <span class="blue"><?php echo $log['bluescore'] ?></span>
+    <br/>
+    <span class="subInfo">
+      Total Time: <?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?><br/>
+      Uploaded <?php echo $log['created_at'] ?>
+    <?php if($log['created_at'] != $log['updated_at']): ?>
+      <br/><span title="The Last Generated date represents when an admin last re-generated this log. This can happen when features are added.">Last Generated <?php echo $log['updated_at'] ?></span>
+    <?php endif ?>
+  </div>
+  <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
+<br class="hardSeparator"/>
 
 <?php if(mapExists($log['map_name'])): ?>
-<canvas id="mapViewer" class="ui-state-default ui-corner-all"></canvas>
-<div id="mapViewerControls">
-	<button id="playPauseButton"></button>
-	<div id="playbackProgress"><span id="totalTime"></span></div>
-	<div style="clear: both">
-	  <label for="playbackSpeed">Playback Speed</label>
-	  <select id="playbackSpeed">
-	    <option value="1">1x</option>
-	    <option value="5" selected>5x</option>
-	    <option value="20">20x</option>
-	  </select>
-	  
-	  <label for="isCumulitive">Cumulitive</label>
-	  <input type="checkbox" id="isCumulitive"/>
-	</div>
+<div id="mapViewerContainer">
+  <canvas id="mapViewer" class="ui-widget-content"></canvas>
+  <div id="mapViewerControls">
+	  <button id="playPauseButton"></button>
+	  <div id="playbackProgress"><span id="totalTime"></span></div>
+	  <div style="clear: both">
+	    <label for="playbackSpeed">Playback Speed</label>
+	    <select id="playbackSpeed">
+	      <option value="1">1x</option>
+	      <option value="5" selected>5x</option>
+	      <option value="20">20x</option>
+	    </select>
+	    
+	    <label for="isCumulitive">Cumulitive</label>
+	    <input type="checkbox" id="isCumulitive"/>
+	  </div>
+  </div>
+  <div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
 </div>
-<div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
 <?php endif ?>
 
-<div id="totalTime">Total Time: <span class="time"><?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?></span></div>
 <?php $miniStats = array() ?>
 <?php echo outputStatPanel($log['Stats'], $miniStats) ?>
 
@@ -57,57 +68,21 @@
 
 <?php echo outputPlayerStats($miniStats, $playerStats) ?>
 
-Created  <?php echo $log['created_at'] ?><br/>
-<?php if($log['created_at'] != $log['updated_at']): ?>
-  Last Generated <?php echo $log['updated_at'] ?> 
-<?php endif ?>
-
-
-<script type="application/x-javascript">
 <?php if(mapExists($log['map_name'])): ?>
+<script type="application/x-javascript">
   var gameMapObj;
   var mapViewerObj;
   <?php echo outputPlayerCollection($log['Stats']); ?>
   <?php echo outputWeaponCollection($weapons); ?>
-<?php endif ?>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Doc ready
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
-  <?php if(mapExists($log['map_name'])): ?>
 	  mvc = $("#mapViewerControls");
 	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
-	<?php endif ?>
-	
-	$('#statPanel, #playerStats, #weaponStats').dataTable({
-		"bJQueryUI": true,
-		"bPaginate": false,
-		"bLengthChange": false,
-		"bFilter": true,
-		"bInfo": false,
-		"bAutoWidth": false,
-		"bSortClasses": false
-	});
-	
-	$('#medicStats').dataTable({
-		"bJQueryUI": true,
-		"bPaginate": false,
-		"bLengthChange": false,
-		"bFilter": false,
-		"bInfo": false,
-		"bAutoWidth": false,
-		"bSortClasses": false,
-		"aaSorting": [[1,'desc'], [2,'desc'], [3,'desc'], [4,'desc'], [5,'desc'], [6,'desc'], [7,'desc']]
-	});
-	
-	$('.statTable').children("caption").each(function(index,obj){
-	  obj = $(obj);
-	  html = obj.html();
-	  obj.html("");
-	  obj.closest(".dataTables_wrapper").children(".fg-toolbar:first").prepend('<div class="statTableCaption css_left">'+html+'</div>');
-	});
 });
 </script>
+<?php endif ?>
 
 <div id="canvasTooltip"></div>
