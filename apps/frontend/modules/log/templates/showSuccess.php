@@ -1,8 +1,10 @@
 <?php
+$sf_response->setTitle($log['name'].' - TF2Logs.com');
 use_helper('Log');
 use_helper('Implode');
 use_stylesheet('demo_table_jui.css'); 
 use_javascript('jquery.dataTables.min.js'); 
+use_javascript('FixedColumns.min.js');
 
 if(mapExists($log['map_name'])) {
 use_stylesheet('canvas.css'); 
@@ -50,7 +52,7 @@ use_javascript('logshow.js');
 	      <option value="20">20x</option>
 	    </select>
 	    
-	    <label for="isCumulitive">Cumulitive</label>
+	    <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
 	    <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
 	  </div>
   </div>
@@ -83,5 +85,3 @@ $(function (){
 });
 </script>
 <?php endif ?>
-
-<div id="canvasTooltip" class="ui-widget-content ui-corner-all ui-toolbar"></div>

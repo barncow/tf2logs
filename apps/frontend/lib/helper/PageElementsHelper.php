@@ -41,4 +41,19 @@ function outputPaginationLinks($request, $pager, $pageParam = 'page', $pageBookm
   $s .= '</div>';
   return $s;
 }
+
+//returns a random logo file name that can be used like image_tag(getRandomLogoFilename());
+function getRandomLogoFilename() {
+  $files = array();
+  if ($handle = opendir(sfConfig::get('sf_web_images_dir_name', 'images').'/logos/')) {
+    while (false !== ($file = readdir($handle))) {
+      //only want png files.
+      if ($file != "." && $file != ".." && strpos($file, '.png') !== false) {
+          $files[] = $file;
+      }
+    }
+    closedir($handle);
+  }
+  return 'logos/'.$files[rand(0,count($files)-1)];
+}
 ?>

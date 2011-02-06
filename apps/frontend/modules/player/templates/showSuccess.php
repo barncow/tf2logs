@@ -1,12 +1,12 @@
 <?php 
+$sf_response->setTitle($player->name.' - TF2Logs.com');
 use_helper('Implode');
-use_stylesheet('jquery.tooltip.css'); 
 use_javascript('jquery-1.4.4.min.js'); 
-use_javascript('jquery.dimensions.js'); 
-use_javascript('jquery.tooltip.min.js'); 
 use_stylesheet('demo_table_jui.css'); 
 use_javascript('jquery.dataTables.min.js'); 
 use_javascript('playershow.js'); 
+use_javascript('jquery.qtip.min.20110205.js'); 
+use_stylesheet('jquery.qtip.min.20110205.css'); 
 use_helper('Log');
 use_helper('Search');
 use_helper('PageElements'); 
@@ -87,7 +87,7 @@ echo '</div><br class="hardSeparator"/>';
       <?php foreach($roles as $r): ?>
         <tr>
           <td class="ui-widget-content">
-            <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" title="<?php echo $r->name ?>" alt="<?php echo $r->name ?>"/>
+            <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" alt="<?php echo $r->name ?>"/>
             <?php echo $r->name ?>
           </td>
           <td class="ui-widget-content"><?php echo $r->num_times ?></td>
@@ -112,7 +112,7 @@ echo '</div><br class="hardSeparator"/>';
     <tbody>
       <?php foreach($weapons as $w): ?>
         <tr>
-          <td class="ui-widget-content"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
+          <td class="ui-widget-content" title="<?php echo outputWeaponName($w['name'], $w['key_name']) ?>"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
           <?php $foundWS = false ?>
           <?php foreach($weaponStats as $ws): ?>
             <?php if($ws->getWeaponId() == $w['id']): ?>

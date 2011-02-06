@@ -6,12 +6,13 @@
     <?php include_title() ?>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
+    <?php use_helper('PageElements') ?>
     <link rel="shortcut icon" href="/favicon.ico" />
   </head>
   <body>
   <div id="header" class="ui-corner-all">
     <div id="homeLink">
-      <a href="<?php echo url_for('@homepage', true) ?>">tf2logs.com</a>
+      <a href="<?php echo url_for('@homepage', true) ?>"><?php echo image_tag(getRandomLogoFilename()) ?></a>
     </div>
     <div id="userCP">
       <?php if($sf_user->isAuthenticated()): ?>

@@ -1,3 +1,4 @@
+<?php $sf_response->setTitle('User Control Panel - TF2Logs.com'); ?>
 <h1>Control Panel</h1>
 
 <h2>User Actions</h2>

@@ -8,6 +8,8 @@
 
 #playbackProgress {
 	text-align: right;
+	float: right;
+	margin-top: 5px;
 }
 
 #playbackProgress .ui-slider-handle {
@@ -20,15 +22,8 @@
 }
 
 #playPauseButton {
-	font-weight: bold;
-}
-
-#playPauseButton {
+  font-weight: bold;
 	float: left;
-}
-
-#playbackProgress {
-	float: right;
 	margin-top: 5px;
 }
 

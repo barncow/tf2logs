@@ -132,14 +132,8 @@ var MapDrawer = Class.extend({
 		//draw tooltip if needed
 		if(hoveredObj != null && hoveredObj.tooltip.tooltipEnabled()) {   
 		  mapViewerObj.jqMapViewerCanvas.qtip('option', 'content.text', hoveredObj.tooltip.text).qtip('show');
-			/*$("#canvasTooltip")
-			  .html(hoveredObj.tooltip.text)
-			  .show()
-			  .css('top', this.mouseLocation.y+this.jqMapViewerCanvas.offset().top+hoveredObj.tooltip.offset.y)
-			  .css('left',this.mouseLocation.x+this.jqMapViewerCanvas.offset().left+hoveredObj.tooltip.offset.x);*/
 		} else {
-		  mapViewerObj.jqMapViewerCanvas.qtip('hide');
-		  //$("#canvasTooltip").hide().html("");
+		  mapViewerObj.jqMapViewerCanvas.qtip('hide').qtip('option', 'content.text', ' ');
 		}
 		
 		//schedule next frame
@@ -540,25 +534,10 @@ var ToolTip = Class.extend({
 	init: function(text) {
 		this.text = "";
 		if(text != null && text != "") this.text = text;
-		this.offset = new Coordinate(15,15);
-		this.padding = 5;
-		this.fontSize = 12; //in pixels
-		this.smallFontSize = 10; //in pixels
-		this.fontFace = "Arial";
-		this.fontColor = "rgb(255,255,255)";
-		this.backgroundColor = "rgb(0,0,0)";
 	},
 	
 	tooltipEnabled: function() {
 		return this.text != null && this.text != "";
-	},
-	
-	fontStyle: function() {
-		return this.fontSize+"px "+this.fontFace;
-	},
-	
-	smallFontStyle: function() {
-		return this.smallFontSize+"px "+this.fontFace;
 	}
 });
 

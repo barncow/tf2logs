@@ -1,8 +1,12 @@
-<?php use_stylesheets_for_form($form) ?>
-<?php use_javascripts_for_form($form) ?>
-<?php use_stylesheet('jquery-ui-1.8.9.custom.css'); ?>
-
-<?php use_helper('Log') ?>
+<?php 
+use_stylesheets_for_form($form);
+use_javascripts_for_form($form);
+$sf_response->setTitle('Welcome - TF2Logs.com'); 
+use_stylesheet('jquery-ui-1.8.9.custom.css'); 
+use_helper('Log');
+use_javascript('jquery.qtip.min.20110205.js'); 
+use_stylesheet('jquery.qtip.min.20110205.css'); 
+?>
 
 <?php if(!$sf_user->isAuthenticated()): ?>
 <div id="pageLogin" class="infoBox">

@@ -1,10 +1,13 @@
 $(function() {
-  $('.statTable th, .killIcon').tooltip({ 
-    track: true, 
-    delay: 0, 
-    showURL: false, 
-    showBody: " - ", 
-    fade: 250 
+  $('th[title], img[title], span[title], td[title]').qtip({
+    position: {
+		  viewport: $(window),
+		  my: "bottom center",
+		  at: "top center"
+	  },
+    style: {
+      classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
+    }
   });
   
   jQuery.fn.dataTableExt.oSort['num-html-asc']  = function(a,b) {
@@ -33,6 +36,7 @@ $(function() {
 		"bAutoWidth": false,
 		"bSortClasses": false,
 		"aoColumnDefs": [
+		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
       { "sType": "num-html", "aTargets": [ 1, 2 ] }
     ]
 	});
