@@ -1,240 +1,213 @@
-<?php use_helper('Implode') ?>
-<?php use_stylesheet('jquery.tooltip.css'); ?>
-<?php use_javascript('jquery-1.4.4.min.js'); ?>
-<?php use_javascript('jquery.dimensions.js'); ?>
-<?php use_javascript('jquery.tooltip.min.js'); ?>
-<?php use_javascript('playershow.js'); ?>
-<?php use_helper('Log') ?>
-<?php use_helper('Search') ?>
+<?php 
+use_helper('Implode');
+use_stylesheet('jquery.tooltip.css'); 
+use_javascript('jquery-1.4.4.min.js'); 
+use_javascript('jquery.dimensions.js'); 
+use_javascript('jquery.tooltip.min.js'); 
+use_stylesheet('demo_table_jui.css'); 
+use_javascript('jquery.dataTables.min.js'); 
+use_javascript('playershow.js'); 
+use_helper('Log');
+use_helper('Search');
+use_helper('PageElements'); 
+?>
 <div id="playerName"><span class="description">Player Name: </span><?php echo $player->name ?></div>
 
 <?php if($player->num_matches == 0): ?>
-  <tr><td colspan="3">This player has not played in any logs.</td></tr>
+  This player has not played in any logs.
 <?php else: ?>
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Overall Stats</caption>
-  <thead>
-    <tr>
-      <th title="Kills">K</th>
-      <th title="Assists">A</th>
-      <th title="Deaths">D</th>
-      <th title="Kills/Death">KPD</th>
-      <th title="Longest Kill Streak">LKS</th>
-      <th title="Headshots">HS</th>
-      <th title="Capture Points Blocked">CPB</th>
-      <th title="Capture Points Captured">CPC</th>
-      <th title="Flag Defends">FD</th>
-      <th title="Flag Captures">FC</th>
-      <th title="Dominations">DOM</th>
-      <th title="Times Dominated">TDM</th>
-      <th title="Revenges">R</th>
-      <th title="Extinguishes">E</th>
-      <th title="Ubers">U</th>
-      <th title="Ubers/Death">UPD</th>
-      <th title="Dropped Ubers">DU</th>
-      <th title="Healing">H</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="<?php echo dataCellOutputClass($player->kills) ?>"><?php echo $player->kills ?></td>
-      <td class="<?php echo dataCellOutputClass($player->assists) ?>"><?php echo $player->assists ?></td>
-      <td class="<?php echo dataCellOutputClass($player->deaths) ?>"><?php echo $player->deaths ?></td>
-      <td class="<?php echo dataCellOutputClass($player->kills_per_death) ?>"><?php echo $player->kills_per_death ?></td>
-      <td class="<?php echo dataCellOutputClass($player->longest_kill_streak) ?>"><?php echo $player->longest_kill_streak ?></td>
-      <td class="<?php echo dataCellOutputClass($player->headshots) ?>"><?php echo $player->headshots ?></td>
-      <td class="<?php echo dataCellOutputClass($player->capture_points_blocked) ?>"><?php echo $player->capture_points_blocked ?></td>
-      <td class="<?php echo dataCellOutputClass($player->capture_points_captured) ?>"><?php echo $player->capture_points_captured ?></td>
-      <td class="<?php echo dataCellOutputClass($player->flag_defends) ?>"><?php echo $player->flag_defends ?></td>
-      <td class="<?php echo dataCellOutputClass($player->flag_captures) ?>"><?php echo $player->flag_captures ?></td>
-      <td class="<?php echo dataCellOutputClass($player->dominations) ?>"><?php echo $player->dominations ?></td>
-      <td class="<?php echo dataCellOutputClass($player->times_dominated) ?>"><?php echo $player->times_dominated ?></td>
-      <td class="<?php echo dataCellOutputClass($player->revenges) ?>"><?php echo $player->revenges ?></td>
-      <td class="<?php echo dataCellOutputClass($player->extinguishes) ?>"><?php echo $player->extinguishes ?></td>
-      <td class="<?php echo dataCellOutputClass($player->ubers) ?>"><?php echo $player->ubers ?></td>
-      <td class="<?php echo dataCellOutputClass($player->ubers_per_death) ?>"><?php echo $player->ubers_per_death ?></td>
-      <td class="<?php echo dataCellOutputClass($player->dropped_ubers) ?>"><?php echo $player->dropped_ubers ?></td>
-      <td class="<?php echo dataCellOutputClass($player->healing) ?>"><?php echo $player->healing ?></td>
-    </tr>
-  </tbody>
-</table>
-
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Classes</caption>
-  <thead>
-    <tr>
-      <th>Class Name</th>
-      <th>Number of Times Used</th>
-      <th>Total Time Played</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($roles as $r): ?>
+<?php 
+$s = <<<EOD
+<table class="statTable" id="playerStatPanel" border="0" cellspacing="0" cellpadding="3">
+    <thead>
       <tr>
-        <td><?php echo $r->name ?></td>
-        <td><?php echo $r->num_times ?></td>
-        <td><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
+        <th class="ui-state-default" title="Kills">K</th>
+        <th class="ui-state-default" title="Assists">A</th>
+        <th class="ui-state-default" title="Deaths">D</th>
+        <th class="ui-state-default" title="Kills/Death">KPD</th>
+        <th class="ui-state-default" title="Longest Kill Streak">LKS</th>
+        <th class="ui-state-default" title="Headshots">HS</th>
+        <th class="ui-state-default" title="Capture Points Blocked">CPB</th>
+        <th class="ui-state-default" title="Capture Points Captured">CPC</th>
+        <th class="ui-state-default" title="Intel Defends">ID</th>
+        <th class="ui-state-default" title="Intel Captures">IC</th>
+        <th class="ui-state-default" title="Dominations">DOM</th>
+        <th class="ui-state-default" title="Times Dominated">TDM</th>
+        <th class="ui-state-default" title="Revenges">R</th>
+        <th class="ui-state-default" title="Extinguishes">E</th>
+        <th class="ui-state-default" title="Ubers">U</th>
+        <th class="ui-state-default" title="Ubers/Death">UPD</th>
+        <th class="ui-state-default" title="Dropped Ubers">DU</th>
+        <th class="ui-state-default" title="Healing">H</th>
       </tr>
-    <?php endforeach ?>
-  </tbody>
-</table>
-
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Weapon Stats</caption>
-  <thead>
-    <tr>
-      <th>Weapon</th>
-      <th>Kills</th>
-      <th>Deaths</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($weapons as $w): ?>
+    </thead>
+    <tbody>
       <tr>
-        <td><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
-        <?php $foundWS = false ?>
-        <?php foreach($weaponStats as $ws): ?>
-          <?php if($ws->getWeaponId() == $w['id']): ?>
-            <td class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></td>
-            <td class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></td>
-            <?php $foundWS = true ?>
-            <?php break ?>
-          <?php endif ?>
-        <?php endforeach ?>
-        <?php if(!$foundWS): ?>
-          <td class="zeroValue">0</td>
-          <td class="zeroValue">0</td>
-        <?php endif ?>
+EOD;
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills_per_death).'">'.$player->kills_per_death.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_blocked).'">'.$player->capture_points_blocked.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_captured).'">'.$player->capture_points_captured.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->flag_defends).'">'.$player->flag_defends.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->flag_captures).'">'.$player->flag_captures.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->dominations).'">'.$player->dominations.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->times_dominated).'">'.$player->times_dominated.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->revenges).'">'.$player->revenges.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->extinguishes).'">'.$player->extinguishes.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->ubers).'">'.$player->ubers.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->ubers_per_death).'">'.$player->ubers_per_death.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->dropped_ubers).'">'.$player->dropped_ubers.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->healing).'">'.$player->healing.'</span></td>';
+  $s .= <<<EOD
       </tr>
-    <?php endforeach ?>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+EOD;
 
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Logs Played - <?php echo $player->num_matches ?></caption>
-  <thead>
-    <tr>
-      <th>Log Name</th>
-      <th>Map Name</th>
-      <th>Date Submitted</th>
-    </tr>
-  </thead>
-  <tbody>   
-    <?php if ($plPager->haveToPaginate()): ?>
-      <tr><td colspan="3">
-          <div class="pagination">
-            <a href="<?php echo replacePageParam($sf_request->getUri(),1,'plPage') ?>">First page</a>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getPreviousPage(),'plPage') ?>">Previous page</a>
-         
-            <?php foreach ($plPager->getLinks() as $page): ?>
-              <?php if ($page == $plPager->getPage()): ?>
-                <?php echo $page ?>
-              <?php else: ?>
-                <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'plPage') ?>"><?php echo $page ?></a>
-              <?php endif; ?>
-            <?php endforeach; ?>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getNextPage(),'plPage') ?>">Next page</a>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getLastPage(),'plPage') ?>">Last page</a>
-          </div>
-      </td></tr>
-    <?php endif; ?> 
-    <?php foreach($plPager->getResults() as $pl): ?>
+echo '<div class="statTableContainer">';
+echo outputInfoBox("playerStatPanel", 'Overall Stats', $s, true);
+echo '</div><br class="hardSeparator"/>';
+?>
+
+<div class="statTableContainer">
+  <table class="statTable" id="playerClassStats" border="0" cellspacing="0" cellpadding="3">
+    <caption>Classes</caption>
+    <thead>
       <tr>
-        <td><?php echo link_to($pl['name'], 'log/show?id='.$pl['id']) ?></td>
-        <td><?php echo $pl['map_name'] ?></td>
-        <td><?php echo $pl['created_at'] ?></td>
+        <th>Class Name</th>
+        <th>Number of Times Used</th>
+        <th>Total Time Played</th>
       </tr>
-    <?php endforeach ?>
-    <?php if ($plPager->haveToPaginate()): ?>
-      <tr><td colspan="3">
-          <div class="pagination">
-            <a href="<?php echo replacePageParam($sf_request->getUri(),1,'plPage') ?>">First page</a>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getPreviousPage(),'plPage') ?>">Previous page</a>
-         
-            <?php foreach ($plPager->getLinks() as $page): ?>
-              <?php if ($page == $plPager->getPage()): ?>
-                <?php echo $page ?>
-              <?php else: ?>
-                <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'plPage') ?>"><?php echo $page ?></a>
-              <?php endif; ?>
-            <?php endforeach; ?>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getNextPage(),'plPage') ?>">Next page</a>
-         
-            <a href="<?php echo replacePageParam($sf_request->getUri(),$plPager->getLastPage(),'plPage') ?>">Last page</a>
-          </div>
-      </td></tr>
-    <?php endif; ?> 
-  </tbody>
-</table>
-<?php endif ?>
-
-<table class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Logs Submitted - <?php echo $numSubmittedLogs ?></caption>
-  <thead>
-    <tr>
-      <th>Log Name</th>
-      <th>Map Name</th>
-      <th>Date Submitted</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php if($numSubmittedLogs == 0): ?>
-      <tr><td colspan="3">This player has not submitted any logs.</td></tr>
-    <?php else: ?>
-      <?php if ($slPager->haveToPaginate()): ?>
-        <tr><td colspan="3">
-            <div class="pagination">
-              <a href="<?php echo replacePageParam($sf_request->getUri(),1,'slPage') ?>">First page</a>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getPreviousPage(),'slPage') ?>">Previous page</a>
-           
-              <?php foreach ($slPager->getLinks() as $page): ?>
-                <?php if ($page == $slPager->getPage()): ?>
-                  <?php echo $page ?>
-                <?php else: ?>
-                  <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'slPage') ?>"><?php echo $page ?></a>
-                <?php endif; ?>
-              <?php endforeach; ?>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getNextPage(),'slPage') ?>">Next page</a>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getLastPage(),'slPage') ?>">Last page</a>
-            </div>
-        </td></tr>
-      <?php endif; ?>
-      <?php foreach($slPager->getResults() as $sl): ?>
+    </thead>
+    <tbody>
+      <?php foreach($roles as $r): ?>
         <tr>
-          <td><?php echo link_to($sl['name'], 'log/show?id='.$sl['id']) ?></td>
-          <td><?php echo $sl['map_name'] ?></td>
-          <td><?php echo $sl['created_at'] ?></td>
+          <td class="ui-widget-content">
+            <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" title="<?php echo $r->name ?>" alt="<?php echo $r->name ?>"/>
+            <?php echo $r->name ?>
+          </td>
+          <td class="ui-widget-content"><?php echo $r->num_times ?></td>
+          <td class="ui-widget-content"><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
         </tr>
       <?php endforeach ?>
-      <?php if ($slPager->haveToPaginate()): ?>
-        <tr><td colspan="3">
-            <div class="pagination">
-              <a href="<?php echo replacePageParam($sf_request->getUri(),1,'slPage') ?>">First page</a>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getPreviousPage(),'slPage') ?>">Previous page</a>
-           
-              <?php foreach ($slPager->getLinks() as $page): ?>
-                <?php if ($page == $slPager->getPage()): ?>
-                  <?php echo $page ?>
-                <?php else: ?>
-                  <a href="<?php echo replacePageParam($sf_request->getUri(),$page,'slPage') ?>"><?php echo $page ?></a>
-                <?php endif; ?>
-              <?php endforeach; ?>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getNextPage(),'slPage') ?>">Next page</a>
-           
-              <a href="<?php echo replacePageParam($sf_request->getUri(),$slPager->getLastPage(),'slPage') ?>">Last page</a>
-            </div>
-        </td></tr>
-      <?php endif; ?>
-    <?php endif ?>
+    </tbody>
+  </table>
+</div>
+<br class="hardSeparator"/>
+
+<div class="statTableContainer">
+  <table class="statTable" id="playerWeaponStats" width="100%" border="0" cellspacing="0" cellpadding="3">
+    <caption>Weapon Stats</caption>
+    <thead>
+      <tr>
+        <th>Weapon</th>
+        <th>Kills</th>
+        <th>Deaths</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($weapons as $w): ?>
+        <tr>
+          <td class="ui-widget-content"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
+          <?php $foundWS = false ?>
+          <?php foreach($weaponStats as $ws): ?>
+            <?php if($ws->getWeaponId() == $w['id']): ?>
+              <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></span></td>
+              <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></span></td>
+              <?php $foundWS = true ?>
+              <?php break ?>
+            <?php endif ?>
+          <?php endforeach ?>
+          <?php if(!$foundWS): ?>
+            <td class="ui-widget-content"><span class="zeroValue">0</span></td>
+            <td class="ui-widget-content"><span class="zeroValue">0</span></td>
+          <?php endif ?>
+        </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+</div>
+<br class="hardSeparator"/>
+
+<?php 
+$pagination = "";
+if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $plPager, 'plPage', 'playerLogPlayed').'</div>';
+$data = "";
+foreach($plPager->getResults() as $pl) {
+  $link = link_to($pl['name'], 'log/show?id='.$pl['id']);
+  $data .= <<<EOD
+      <tr>
+        <td class="ui-widget-content">$link</td>
+        <td class="ui-widget-content">{$pl['map_name']}</td>
+        <td class="ui-widget-content">{$pl['created_at']}</td>
+      </tr>
+EOD;
+}
+    
+$s = <<<EOD
+$pagination
+<table class="statTable" width="100%">
+  <thead>
+    <tr>
+      <th class="ui-state-default">Log Name</th>
+      <th class="ui-state-default">Map Name</th>
+      <th class="ui-state-default">Date Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    $data
   </tbody>
 </table>
+$pagination
+EOD;
+echo '<div class="statTableContainer">';
+echo '<a name="playerLogPlayed"/>';
+echo outputInfoBox("playerLogPlayed", 'Logs Played - '.$player->num_matches, $s, true);
+echo '</div><br class="hardSeparator"/>';
+?>
+
+<?php endif /* user has num_matches > 0 */?>
+
+<?php 
+if($numSubmittedLogs > 0) {
+  $pagination = "";
+  if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
+  $data = "";
+  foreach($slPager->getResults() as $sl) {
+    $link = link_to($sl['name'], 'log/show?id='.$sl['id']);
+    $data .= <<<EOD
+        <tr>
+          <td class="ui-widget-content">$link</td>
+          <td class="ui-widget-content">{$sl['map_name']}</td>
+          <td class="ui-widget-content">{$sl['created_at']}</td>
+        </tr>
+EOD;
+  }
+      
+  $s = <<<EOD
+  $pagination
+  <table class="statTable" width="100%">
+    <thead>
+      <tr>
+        <th class="ui-state-default">Log Name</th>
+        <th class="ui-state-default">Map Name</th>
+        <th class="ui-state-default">Date Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      $data
+      
+    </tbody>
+  </table>
+  $pagination
+EOD;
+  echo '<div class="statTableContainer">';
+  echo '<a name="playerLogSubmitted"/>';
+  echo outputInfoBox("playerLogSubmitted", 'Logs Submitted - '.$numSubmittedLogs, $s, true);
+  echo '</div><br class="hardSeparator"/>';
+  } //end if player submitted logs
+?>

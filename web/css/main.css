@@ -89,7 +89,7 @@ div.infoBox .header {
 }
 
 .infoBox tr {
-	background: #201913 url(/css/images/ui-bg_inset-soft_10_201913_1x100.png) 50% bottom repeat-x; /*from .ui-widget-content*/
+	background-color: #201913; /*from .ui-widget-content*/
 	color: #e3ddc9; /*from .ui-widget-content*/
 }
 
@@ -97,7 +97,6 @@ div.infoBox .content {
 	text-align: center;
 	border-left: 1px solid #695649; /*based on .ui-state-header*/
 	border-right: 1px solid #695649; /*based on .ui-state-header*/
-	padding: 3px;
 }
 
 .bottomSpacer {
@@ -192,22 +191,30 @@ br.hardSeparator {
   height: 16px;
 }
 
+.playerClassImg {
+  float: left;
+}
+
 #playerStats thead .avatarImage {
   float: left;
   margin: 0;
 }
 
-#canvasTooltip {
-  position: absolute;
-  background-color: black;
-  color: white;
-  padding: 5px;
-  border: 1px solid white;
-  display: none;
+#ui-tooltip-mapViewerTooltip {
+  white-space: nowrap;
+  max-width: 1000px;
 }
 
-#canvasTooltip .details {
+#ui-tooltip-mapViewerTooltip .details {
   font-size: 8px;
+}
+
+#ui-tooltip-mapViewerTooltip .cblue {
+  color: #79b3d2;
+}
+
+#ui-tooltip-mapViewerTooltip .cred {
+  color: #d06553;
 }
 
 .logMetaData {
@@ -268,6 +275,14 @@ br.hardSeparator {
   margin-right: auto;
 }
 
+#searchForm th {
+  text-align: right;
+}
+
+#searchForm td {
+  text-align: left;
+}
+
 #searchResults {
   width: 400px;
   margin-left: auto;
@@ -277,3 +292,46 @@ br.hardSeparator {
 #searchResults td {
   text-align: left;
 }
+
+.DataTables_sort_wrapper {
+  cursor: pointer;
+}
+
+/* to be used when background image is not desired. */
+.ui-widget-content-nobg { border: 1px solid #9c947c; background-color: #201913; color: #e3ddc9; }
+.ui-widget-content-nobg a { color: #e3ddc9; }
+
+.error_list {
+  margin: 3px; 
+  padding: 0; 
+  list-style-position: inside;
+}
+
+.center {
+  text-align: center;
+}
+
+/*! tf2 tooltip style */
+.ui-tooltip-tf2 .ui-tooltip-titlebar,
+.ui-tooltip-tf2 .ui-tooltip-content{
+	border-color: #9c947c;
+	color: #e3ddc9;
+}
+
+	.ui-tooltip-tf2 .ui-tooltip-content{
+		background-color: #201913;
+	}
+
+	.ui-tooltip-tf2 .ui-tooltip-titlebar{
+		background-color: #201913;
+	}
+
+	.ui-tooltip-tf2 .ui-tooltip-icon{
+		border-color: #9c947c;
+	}
+
+	.ui-tooltip-tf2 .ui-tooltip-titlebar .ui-state-hover{
+		border-color: #9c947c;
+	}
+
+

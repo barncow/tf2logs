@@ -18,10 +18,12 @@ class LogSearchForm extends BaseForm {
       'name'      => new sfWidgetFormInputText(),
       'map_name'  => new sfWidgetFormSelect(array('choices' => $maps)),
       'from_date' => new sfWidgetFormJQueryDate(array(
-                        'culture' => 'en'
+                        'culture' => 'en',
+                        'label' => 'Start Date'
                       )),
       'to_date'   => new sfWidgetFormJQueryDate(array(
-                        'culture' => 'en'
+                        'culture' => 'en',
+                        'label' => 'End Date'
                       ))
     ));
     
@@ -33,9 +35,8 @@ class LogSearchForm extends BaseForm {
     ));
     
     $this->validatorSchema->setPostValidator(
-      new sfValidatorSchemaCompare('from_date', sfValidatorSchemaCompare::LESS_THAN_EQUAL, 'to_date',
-        array('throw_global_error' => true),
-        array('invalid' => 'The From date ("%left_field%") must be before the To date ("%right_field%")')
+      new FromToDateValidator(array('throw_global_error' => true),
+        array('invalid' => 'The Start date ("%from_date%") must be before the End date ("%to_date%")')
       )
     );
     

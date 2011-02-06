@@ -27,6 +27,8 @@ $(function() {
 		}
 	});
 	$("#uploader_container").attr('title', ''); //clearing the ui's runtime title
+	var droptext = "Drag and drop log files here, or click the Add Files button.";
+	$(".plupload_droptext").html(droptext);
 	
 	var uploader = $('#uploader').plupload('getUploader');
 	
@@ -57,6 +59,7 @@ $(function() {
     });
     up.logMetaAttributes = {};
     $(".log_map_name").autocomplete(ACSource);
+    $(".plupload_droptext").html(droptext);
   });
 	    
   uploader.bind('BeforeUpload', function(up, file) {

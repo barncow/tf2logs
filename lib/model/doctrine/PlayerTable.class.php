@@ -50,7 +50,7 @@ class PlayerTable extends Doctrine_Table {
   
   public function getPlayerRolesByNumericSteamid($id) {
     $connection = Doctrine_Manager::connection();
-    $query = 'SELECT p.id, r.name, COUNT( rs.role_id ) as num_times, sum(time_played) as time_played '
+    $query = 'SELECT p.id, r.name, r.key_name, COUNT( rs.role_id ) as num_times, sum(time_played) as time_played '
       .'FROM  role_stat rs '
       .'INNER JOIN stat s ON rs.stat_id = s.id '
       .'INNER JOIN player p ON p.id = s.player_id '

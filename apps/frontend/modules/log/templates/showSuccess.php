@@ -1,23 +1,22 @@
-<?php use_helper('Log') ?>
-<?php use_helper('Implode') ?>
-<?php use_stylesheet('jquery.tooltip.css'); ?>
-<?php use_javascript('jquery-1.4.4.min.js'); ?>
-<?php use_stylesheet('demo_table_jui.css'); ?>
-<?php use_javascript('jquery.dataTables.min.js'); ?>
+<?php
+use_helper('Log');
+use_helper('Implode');
+use_stylesheet('demo_table_jui.css'); 
+use_javascript('jquery.dataTables.min.js'); 
 
-<?php if(mapExists($log['map_name'])): ?>
-<?php use_stylesheet('canvas.css'); ?>
-<?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
-<?php use_javascript('class.js'); ?>
-<?php use_javascript('mapviewer.js'); ?>
-<?php use_javascript('/maps/'.$log['map_name'].'/map.js'); ?>
-<?php use_dynamic_javascript(url_for('@events_by_id?id='.$log['id'])); ?>
-<?php endif ?>
+if(mapExists($log['map_name'])) {
+use_stylesheet('canvas.css'); 
+use_javascript('jquery-ui-1.8.9.custom.min.js'); 
+use_javascript('class.js'); 
+use_javascript('mapviewer.js'); 
+use_javascript('/maps/'.$log['map_name'].'/map.js'); 
+use_dynamic_javascript(url_for('@events_by_id?id='.$log['id'])); 
+}
 
-
-<?php use_javascript('jquery.dimensions.js'); ?>
-<?php use_javascript('jquery.tooltip.min.js'); ?>
-<?php use_javascript('logshow.js'); ?>
+use_javascript('jquery.qtip.min.20110205.js'); 
+use_stylesheet('jquery.qtip.min.20110205.css'); 
+use_javascript('logshow.js');
+?>
 
 <div id="score" class="infoBox">
   <div class="ui-widget ui-widget-header ui-corner-top header"><?php echo $log['name'] ?></div>
@@ -45,14 +44,14 @@
 	  <div id="playbackProgress"><span id="totalTime"></span></div>
 	  <div style="clear: both">
 	    <label for="playbackSpeed">Playback Speed</label>
-	    <select id="playbackSpeed">
+	    <select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">
 	      <option value="1">1x</option>
 	      <option value="5" selected>5x</option>
 	      <option value="20">20x</option>
 	    </select>
 	    
 	    <label for="isCumulitive">Cumulitive</label>
-	    <input type="checkbox" id="isCumulitive"/>
+	    <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
 	  </div>
   </div>
   <div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
@@ -85,4 +84,4 @@ $(function (){
 </script>
 <?php endif ?>
 
-<div id="canvasTooltip"></div>
+<div id="canvasTooltip" class="ui-widget-content ui-corner-all ui-toolbar"></div>

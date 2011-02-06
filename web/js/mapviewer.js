@@ -130,15 +130,16 @@ var MapDrawer = Class.extend({
 		this.drawScores(this.mapViewerCanvas, this.mapViewerContext, mapViewerObj.redScore, mapViewerObj.blueScore);
 		
 		//draw tooltip if needed
-		if(hoveredObj != null && hoveredObj.tooltip.tooltipEnabled()) {
-			//this.drawTooltip(hoveredObj.tooltip);
-			$("#canvasTooltip")
+		if(hoveredObj != null && hoveredObj.tooltip.tooltipEnabled()) {   
+		  mapViewerObj.jqMapViewerCanvas.qtip('option', 'content.text', hoveredObj.tooltip.text).qtip('show');
+			/*$("#canvasTooltip")
 			  .html(hoveredObj.tooltip.text)
 			  .show()
 			  .css('top', this.mouseLocation.y+this.jqMapViewerCanvas.offset().top+hoveredObj.tooltip.offset.y)
-			  .css('left',this.mouseLocation.x+this.jqMapViewerCanvas.offset().left+hoveredObj.tooltip.offset.x);
+			  .css('left',this.mouseLocation.x+this.jqMapViewerCanvas.offset().left+hoveredObj.tooltip.offset.x);*/
 		} else {
-		  $("#canvasTooltip").hide().html("");
+		  mapViewerObj.jqMapViewerCanvas.qtip('hide');
+		  //$("#canvasTooltip").hide().html("");
 		}
 		
 		//schedule next frame
@@ -155,14 +156,15 @@ var MapDrawer = Class.extend({
 	  boxX = boxleftmargin;
 	  leftPadding = 2;
 	  topPadding = 2;
-	  strokecolor = "#fff";
+	  strokecolor = "#9C947C";
+	  bgcolor = "#201913";
 	  fontStyle = "bold 10px Arial";
 	  
 	  //red box
-	  context.fillStyle = "rgb(200,0,0)";
+	  context.fillStyle = bgcolor;
 	  context.strokeStyle = strokecolor;
 	  this.roundRect(context, boxX, boxY, boxwidth, boxheight, 5, true, true);
-	  context.fillStyle = strokecolor;
+	  context.fillStyle = "#d06553";
 	  context.textBaseline = "top";
 	  context.font = fontStyle;
 		context.fillText(redScore,boxX+leftPadding,boxY);
@@ -170,9 +172,10 @@ var MapDrawer = Class.extend({
 	  
 	  //blue box
 	  boxX += boxwidth+boxspacing;
-	  context.fillStyle = "rgb(0,0,200)";
+	  context.fillStyle = bgcolor;
+	  context.strokeStyle = strokecolor;
 	  this.roundRect(context, boxX, boxY, boxwidth, boxheight, 5, true, true);
-	  context.fillStyle = strokecolor;
+	  context.fillStyle = "#79b3d2";
 	  context.textBaseline = "top";
 	  context.font = fontStyle;
 		context.fillText(blueScore,boxX+leftPadding,boxY);
@@ -253,6 +256,26 @@ var MapViewer = Class.extend({
 		this.jqIsCumulitive = jqIsCumulitive;
 		this.isCumulitive = this.jqIsCumulitive.is(':checked');
 		
+		this.tooltipId = 'mapViewerTooltip';
+		this.jqMapViewerCanvas.qtip({
+		  id: this.tooltipId,
+		  content: ' ', //required in order to show tooltip
+		  position: {
+			  my: 'left center',
+			  target: 'mouse',
+			  viewport: $(window),
+			  adjust: {
+				  x: 5,  y: 0
+			  }
+		  },
+		  hide: {
+			  fixed: true // Helps to prevent the tooltip from hiding ocassionally when tracking!
+		  },
+      style: {
+        classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
+      }
+    });
+		
 		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
 		//set canvas size.
@@ -323,8 +346,14 @@ var MapViewer = Class.extend({
 		});
 		
 		//cumulitive checkbox
+		this.jqIsCumulitive.button({icons: {primary: 'ui-icon-cancel'}});
 		this.jqIsCumulitive.click(function(event){
 			mapViewerObj.isCumulitive = mapViewerObj.jqIsCumulitive.is(':checked');
+			if(mapViewerObj.isCumulitive) {
+			  mapViewerObj.jqIsCumulitive.button({icons:{primary:'ui-icon-check'}});
+			} else {
+			  mapViewerObj.jqIsCumulitive.button({icons:{primary:'ui-icon-cancel'}});
+			}
 			if(!mapViewerObj.isThisPlaying()) {
 			  //if paused, refresh data on canvas. Otherwise, a tick will do a refresh for us.
 			  mapViewerObj.iterateData(false);
@@ -615,7 +644,7 @@ var CapturePointDrawable = Drawable.extend({
 	},
 	
 	draw: function(canvas, canvasContext) {  				
-		strokestring = "#FFF";
+		strokestring = "#fff";
 		if(this.isHovered) {
 			//orange color.
 			strokestring = this.highlightColor;
@@ -703,14 +732,14 @@ var PlayerDrawable = ImageDrawable.extend({
 	setVictimTooltip: function(textFromArrow){
 		a = textFromArrow.split("&nbsp;");
 		//bold third line
-		a[2] = "<b>"+a[2]+"</b>";
+		a[2] = "<strong>"+a[2]+"</strong>";
 		this.tooltip.text = a.join("&nbsp;");
 	},
 	
 	setAttackerTooltip: function(textFromArrow){
 		a = textFromArrow.split("&nbsp;");
 		//bold first line
-		a[0] = "<b>"+a[0]+"</b>";
+		a[0] = "<strong>"+a[0]+"</strong>";
 		this.tooltip.text = a.join("&nbsp;");
 	},
 	
@@ -725,9 +754,9 @@ var PlayerDrawable = ImageDrawable.extend({
 			colorstring = this.highlightColor;
 		} else {
 			if(this.team == "blue") {
-				colorstring = "rgb(0,0,255)";
+				colorstring = "#79b3d2";
 			} else if(this.team == "red") {
-				colorstring = "rgb(255,0,0)";
+				colorstring = "#d06553";
 			}
 		}
 		
@@ -792,7 +821,7 @@ var KillArrowDrawable = Drawable.extend({
 		this.onTopIfHovered = false;
 		this.finLength = 5;
 		this.calculateDimensions();
-		this.tooltip.text = this.attacker.name+"&nbsp;"+weapon.toString()+"&nbsp;"+this.victim.name;
+		this.tooltip.text = '<span class="c'+this.attacker.team+'">'+this.attacker.name+'</span>&nbsp;'+weapon.toString()+'&nbsp;<span class="c'+this.victim.team+'">'+this.victim.name+'</span>';
 	},
 	
 	//helper method to calculate width, height, x, y
