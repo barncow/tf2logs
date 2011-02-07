@@ -3,10 +3,11 @@
 
 prod:
   logger:
-    class:   sfNoLogger
+    class: sfFileLogger
     param:
       level:   err
       loggers: ~
+      file:    %SF_LOG_DIR%/%SF_APP%_%SF_ENVIRONMENT%.log
 
 test:
   storage:
@@ -40,3 +41,13 @@ all:
     param:
       cache_key_use_vary_headers: true
       cache_key_use_host_name:    true
+      
+  storage:
+    class: sfPDOSessionStorage
+    param:
+      session_name: tf2logs
+      db_table:     session
+      database:     doctrine
+      db_id_col:    id
+      db_data_col:  sdata
+      db_time_col:  stime

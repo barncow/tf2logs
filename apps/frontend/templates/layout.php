@@ -34,7 +34,9 @@
     
     <?php echo $sf_content ?>
     
-    <div class="footer"><a href="http://steampowered.com">Powered by Steam</a></div>
+    <div id="footer">
+      <div id="copyright"><a href="http://steampowered.com">Powered by Steam</a><br/>&copy; 2011 TF2Logs.com. Valve, the Valve logo, Steam, the Steam logo, Team Fortress, and the Team Fortress logo are trademarks and/or registered trademarks of Valve Corporation.</div>
+    </div>
   </body>
   
 </html>

@@ -15,6 +15,11 @@ events_by_id:
   url:   /log/:id/events
   param: { module: log, action: events }
   requirements: {id: \d+, sf_format: json}
+
+logfile:
+  url:   /log/:id/logfile
+  param: { module: log, action: logfile }
+  requirements: {id: \d+}
   
 log_create:
   url:   /log/add

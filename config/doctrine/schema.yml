@@ -390,3 +390,10 @@ EventPlayer:
     Event:
       onDelete: CASCADE
       foreignAlias: EventPlayers
+
+Session:
+  columns:
+    sdata:
+      type: string
+    stime:
+      type: timestamp

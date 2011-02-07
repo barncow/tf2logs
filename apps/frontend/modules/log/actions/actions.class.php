@@ -8,9 +8,6 @@
  * @author     Brian Barnekow
  */
 class logActions extends sfActions {
-  //todo move to app config
-  const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
-  const PLAYER_ID_ATTR = "playerId";
   protected static $SEED_MAPS = array(
     "cp_badlands" => "cp_badlands"
     ,"cp_coldfront" => "cp_coldfront"
@@ -43,14 +40,21 @@ class logActions extends sfActions {
   
   public function executeShow(sfWebRequest $request) {
     $this->log = Doctrine::getTable('Log')->getLogByIdAsArray($request->getParameter('id'));
+    $this->forward404Unless($this->log);
     $this->weapons = Doctrine::getTable('Weapon')->getMiniWeaponsForLogId($request->getParameter('id'));
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($request->getParameter('id'));  
     $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($request->getParameter('id'));
-    $this->forward404Unless($this->log);
   }
   
   public function executeEvents(sfWebRequest $request) {
     $this->events = Doctrine::getTable('Event')->getEventsByIdAsArray($request->getParameter('id'));
+  }
+  
+  public function executeLogfile(sfWebRequest $request) {
+    $this->logfile = Doctrine::getTable('LogFile')->findOneByLogId($request->getParameter('id'));
+    $this->forward404Unless($this->logfile);
+    $this->getResponse()->setContentType('text/plain');
+    return $this->renderText($this->logfile->getLogData());
   }
   
   public function executeAdd(sfWebRequest $request) {
@@ -115,7 +119,7 @@ class logActions extends sfActions {
         $log = null;
         
         try {
-          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(self::PLAYER_ID_ATTR), $form->getValue('name'), $form->getValue('map_name'));
+          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $form->getValue('name'), $form->getValue('map_name'));
         } catch(TournamentModeNotFoundException $tmnfe) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return "error";

@@ -26,8 +26,7 @@ $(function() {
     return ((x < y) ?  1 : ((x > y) ? -1 : 0));
   };
   
-  var datatables = '#playerClassStats, #playerWeaponStats';
-  $(datatables).dataTable({
+  $('#playerClassStats').dataTable({
 		"bJQueryUI": true,
 		"bPaginate": false,
 		"bLengthChange": false,
@@ -41,8 +40,22 @@ $(function() {
     ]
 	});
 	
+	$('#playerWeaponStats').dataTable({
+		"bJQueryUI": true,
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": false,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"bSortClasses": false,
+		"aoColumnDefs": [
+		  { "bSortable": false, "aTargets": [ 0 ] },
+      { "sType": "num-html", "aTargets": [ 1, 2 ] }
+    ]
+	});
+	
 
-  $(datatables).children("caption").each(function(index,obj){
+  $('#playerClassStats, #playerWeaponStats').children("caption").each(function(index,obj){
 	  obj = $(obj);
 	  html = obj.html();
 	  obj.html("");

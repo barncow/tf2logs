@@ -293,6 +293,15 @@ br.hardSeparator {
   text-align: left;
 }
 
+#copyright, #copyright a {
+  font-size: 10px;
+  text-align: center;
+}
+
+#footer {
+  margin-top: 2em;
+}
+
 .DataTables_sort_wrapper {
   cursor: pointer;
 }

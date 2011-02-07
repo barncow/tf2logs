@@ -36,6 +36,7 @@ class LogTable extends Doctrine_Table {
       $l = $this
         ->createQuery('l')
         ->where('l.id = ?', $id)
+        ->leftJoin('l.Submitter sr')
         ->leftJoin('l.Stats s')
         ->leftJoin('s.Player p')
         ->leftJoin('s.Weapons w')

@@ -76,7 +76,7 @@ $(function() {
   
   uploader.bind('FileUploaded', function(up, file, response) {
     var obj = jQuery.parseJSON(response.response);
-    $('#'+file.id+' .plupload_file_name .logInfo').html('<a href="'+obj.url+'" target="_new">View the Log</a>');
+    $('#'+file.id+' .plupload_file_name .logInfo').html('<a href="'+obj.url+'" target="_blank">View the Log</a>');
   });
   
   uploader.bind('UploadProgress', function(up, file) {

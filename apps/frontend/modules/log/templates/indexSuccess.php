@@ -4,6 +4,7 @@ use_javascripts_for_form($form);
 $sf_response->setTitle('Welcome - TF2Logs.com'); 
 use_stylesheet('jquery-ui-1.8.9.custom.css'); 
 use_helper('Log');
+use_helper('PageElements');
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
 ?>
@@ -50,7 +51,7 @@ use_stylesheet('jquery.qtip.min.20110205.css');
     <div class="content">
       <table width="100%">
       <?php foreach($logs as $l): ?>
-        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td><?php echo $l->getCreatedAt() ?></td></tr>
+        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td style="white-space: nowrap;"><?php echo getHumanReadableDate($l->getDateTimeObject('created_at')) ?></td></tr>
       <?php endforeach ?>
       </table>
     </div>

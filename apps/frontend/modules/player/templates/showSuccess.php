@@ -10,13 +10,20 @@ use_stylesheet('jquery.qtip.min.20110205.css');
 use_helper('Log');
 use_helper('Search');
 use_helper('PageElements'); 
-?>
-<div id="playerName"><span class="description">Player Name: </span><?php echo $player->name ?></div>
 
-<?php if($player->num_matches == 0): ?>
-  This player has not played in any logs.
-<?php else: ?>
-<?php 
+$s = <<<EOD
+<div class="subInfo">
+  Steam ID: {$player->steamid}<br/>
+  <a href="http://steamcommunity.com/profiles/{$player->numeric_steamid}" target="_blank">Steam Community</a>
+</div>
+EOD;
+echo '<div class="statTableContainer">';
+echo outputInfoBox("playName", $player->name, $s, true);
+echo '</div><br class="hardSeparator"/>';
+
+if($player->num_matches == 0) {
+  echo 'This player has not played in any logs.';
+} else {
 $s = <<<EOD
 <table class="statTable" id="playerStatPanel" border="0" cellspacing="0" cellpadding="3">
     <thead>
@@ -24,7 +31,7 @@ $s = <<<EOD
         <th class="ui-state-default" title="Kills">K</th>
         <th class="ui-state-default" title="Assists">A</th>
         <th class="ui-state-default" title="Deaths">D</th>
-        <th class="ui-state-default" title="Kills/Death">KPD</th>
+        <th class="ui-state-default" title="Kills+Assists/Death">KAPD</th>
         <th class="ui-state-default" title="Longest Kill Streak">LKS</th>
         <th class="ui-state-default" title="Headshots">HS</th>
         <th class="ui-state-default" title="Capture Points Blocked">CPB</th>
@@ -47,7 +54,7 @@ EOD;
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills_per_death).'">'.$player->kills_per_death.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->killsassists_per_death).'">'.$player->killsassists_per_death.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_blocked).'">'.$player->capture_points_blocked.'</span></td>';
@@ -139,11 +146,12 @@ if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content sta
 $data = "";
 foreach($plPager->getResults() as $pl) {
   $link = link_to($pl['name'], 'log/show?id='.$pl['id']);
+  $date = getHumanReadableDate($pl['created_at']);
   $data .= <<<EOD
       <tr>
         <td class="ui-widget-content">$link</td>
         <td class="ui-widget-content">{$pl['map_name']}</td>
-        <td class="ui-widget-content">{$pl['created_at']}</td>
+        <td class="ui-widget-content">{$date}</td>
       </tr>
 EOD;
 }
@@ -168,22 +176,21 @@ echo '<div class="statTableContainer">';
 echo '<a name="playerLogPlayed"/>';
 echo outputInfoBox("playerLogPlayed", 'Logs Played - '.$player->num_matches, $s, true);
 echo '</div><br class="hardSeparator"/>';
-?>
 
-<?php endif /* user has num_matches > 0 */?>
+} /* user has num_matches > 0 */
 
-<?php 
 if($numSubmittedLogs > 0) {
   $pagination = "";
   if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
   $data = "";
   foreach($slPager->getResults() as $sl) {
     $link = link_to($sl['name'], 'log/show?id='.$sl['id']);
+    $date = getHumanReadableDate($sl['created_at']);
     $data .= <<<EOD
         <tr>
           <td class="ui-widget-content">$link</td>
           <td class="ui-widget-content">{$sl['map_name']}</td>
-          <td class="ui-widget-content">{$sl['created_at']}</td>
+          <td class="ui-widget-content">{$date}</td>
         </tr>
 EOD;
   }

@@ -25,7 +25,9 @@ $(function() {
 		"bSortClasses": false,
 		"aoColumnDefs": [
 		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
-      { "sType": "num-html", "aTargets": [ "_all" ] }
+      { "bSearchable": true, "aTargets": [ 0 ] },
+      { "sType": "num-html", "aTargets": [ "_all" ] },
+      { "bSearchable": false, "aTargets": [ "_all" ] }
     ]
 	});
 	
@@ -39,7 +41,9 @@ $(function() {
 		"bSortClasses": false,
 		"aoColumnDefs": [
 		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
-      { "sType": "num-html", "aTargets": [ "_all" ] }
+		  { "bSearchable": true, "aTargets": [ 0 ] },
+      { "sType": "num-html", "aTargets": [ "_all" ] },
+      { "bSearchable": false, "aTargets": [ "_all" ] }
     ],
     "sScrollX": "700px",
 		"bScrollCollapse": true
@@ -57,7 +61,9 @@ $(function() {
 		"aaSorting": [[1,'desc'], [2,'desc'], [3,'desc'], [4,'desc'], [5,'desc'], [6,'desc'], [7,'desc']],
 		"aoColumnDefs": [
 		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
-      { "sType": "num-html", "aTargets": [ "_all" ] }
+      { "bSearchable": true, "aTargets": [ 0 ] },
+      { "sType": "num-html", "aTargets": [ "_all" ] },
+      { "bSearchable": false, "aTargets": [ "_all" ] }
     ]
 	});
 	
@@ -75,7 +81,7 @@ $(function() {
 	$('.dataTables_filter').children(':text').addClass("ui-widget-content ui-corner-all").attr('title', 'Enter a player name to narrow the results.');
 	
 	//this must be last since the above code generates HTML.
-	$('th[title], img[title], span[title], input[title], label[title]').qtip({
+	$('th[title], img[title], span[title], input[title], label[title], td[title]').qtip({
     position: {
 		  viewport: $(window),
 		  my: "bottom center",

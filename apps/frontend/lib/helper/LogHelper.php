@@ -212,7 +212,6 @@ $s = <<<EOD
   <thead>
     <tr>
       <th>Name</th>
-      <th>Steam ID</th>
       <th title="Classes">C</th>
       <th title="Kills">K</th>
       <th title="Assists">A</th>
@@ -242,11 +241,10 @@ EOD;
     $miniStat['id'] = $stat['id'];
     $miniStatsRet[] = $miniStat;
     
-    $s .= '<tr><td class="ui-widget-content">';
+    $s .= '<tr><td class="ui-widget-content" title="Steam ID: '.$stat['Player']['steamid'].'">';
         $s .= '<img src="/avatars/'.$miniStat['playerId'].'.jpg" class="'.$stat['team'].' avatar avatarImage ui-corner-all" id="avatar'.$miniStat['playerId'].'"/>';
         $s .= link_to($miniStat['name'], 'player/showNumericSteamId?id='.$miniStat['playerNumericSteamid']);
       $s .= '</td>';
-      $s .= '<td class="ui-widget-content">'.$stat['Player']['steamid'].'</td>';
       $s .= '<td class="ui-widget-content">';
         $s .= '<ul>';
           foreach($stat['RoleStats'] as $rs) {

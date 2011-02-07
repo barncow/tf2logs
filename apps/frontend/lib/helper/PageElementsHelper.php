@@ -56,4 +56,12 @@ function getRandomLogoFilename() {
   }
   return 'logos/'.$files[rand(0,count($files)-1)];
 }
+
+function getHumanReadableDate($date) {
+  if(is_callable(array($date, 'format'))) {
+    return $date->format("M j, Y");
+  } else if (is_string($date)) {
+    return date("M j, Y", strtotime($date));
+  }
+}
 ?>

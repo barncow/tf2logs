@@ -25,6 +25,7 @@ class LogParser {
   protected $isCtf;
   protected $playerChangeTeams;
   protected $addToScrubbedLog;
+  protected $ignoreUnrecognizedLogLines;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -39,6 +40,7 @@ class LogParser {
     $this->buildRoleCache();
     $this->isCtf = false;
     $this->addToScrubbedLog = true;
+    $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
     
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
@@ -488,7 +490,9 @@ class LogParser {
 	  }
 	  
 	  //still here. Did not return like expected, therefore this is an unrecognized line.
-	  throw new UnrecognizedLogLineException($logLine);
+	  if(!$this->ignoreUnrecognizedLogLines) {
+	    throw new UnrecognizedLogLineException($logLine);
+	  }
 	}
 }
 

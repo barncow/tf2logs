@@ -1,7 +1,7 @@
 <?php
 $sf_response->setTitle($log['name'].' - TF2Logs.com');
 use_helper('Log');
-use_helper('Implode');
+use_helper('PageElements');
 use_stylesheet('demo_table_jui.css'); 
 use_javascript('jquery.dataTables.min.js'); 
 use_javascript('FixedColumns.min.js');
@@ -29,10 +29,12 @@ use_javascript('logshow.js');
     <br/>
     <span class="subInfo">
       Total Time: <?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?><br/>
-      Uploaded <?php echo $log['created_at'] ?>
+      Uploaded <?php echo getHumanReadableDate($log['created_at']) ?><br/>
+      By <?php echo link_to($log['Submitter']['name'], 'player/showNumericSteamId?id='.$log['Submitter']['numeric_steamid']) ?>
     <?php if($log['created_at'] != $log['updated_at']): ?>
-      <br/><span title="The Last Generated date represents when an admin last re-generated this log. This can happen when features are added.">Last Generated <?php echo $log['updated_at'] ?></span>
+      <br/><span title="The Last Generated date represents when an admin last re-generated this log. This can happen when features are added.">Last Generated <?php echo getHumanReadableDate($log['updated_at']) ?></span>
     <?php endif ?>
+      <br/><?php echo link_to('Download Log File', '@logfile?id='.$log['id'], array('target' => '_blank')) ?>
   </div>
   <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
