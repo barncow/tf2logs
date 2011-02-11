@@ -14,7 +14,8 @@ use_helper('PageElements');
 $s = <<<EOD
 <div class="subInfo">
   Steam ID: {$player->steamid}<br/>
-  <a href="http://steamcommunity.com/profiles/{$player->numeric_steamid}" target="_blank">Steam Community</a>
+  <a href="http://steamcommunity.com/profiles/{$player->numeric_steamid}" target="_blank">Steam Community</a><br/>
+  Views: {$player->views}
 </div>
 EOD;
 echo '<div class="statTableContainer">';

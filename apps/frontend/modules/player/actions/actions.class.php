@@ -14,6 +14,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->setTemplate('show');
     $this->player = Doctrine::getTable('Player')->getPlayerStatsByNumericSteamid($request->getParameter('id'));
     $this->forward404Unless($this->player);
+    Doctrine::getTable('Player')->incrementViews($request->getParameter('id'));
     $this->roles = Doctrine::getTable('Player')->getPlayerRolesByNumericSteamid($request->getParameter('id'));
     $this->weapons = Doctrine::getTable('Weapon')->getWeaponsForPlayerId($request->getParameter('id'));
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getPlayerWeaponStatsByNumericSteamid($request->getParameter('id'));

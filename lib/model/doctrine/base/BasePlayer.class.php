@@ -10,6 +10,7 @@
  * @property string $steamid
  * @property string $credential
  * @property string $name
+ * @property integer $views
  * @property Doctrine_Collection $Log
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $PlayerStats
@@ -21,6 +22,7 @@
  * @method string              getSteamid()         Returns the current record's "steamid" value
  * @method string              getCredential()      Returns the current record's "credential" value
  * @method string              getName()            Returns the current record's "name" value
+ * @method integer             getViews()           Returns the current record's "views" value
  * @method Doctrine_Collection getLog()             Returns the current record's "Log" collection
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
  * @method Doctrine_Collection getPlayerStats()     Returns the current record's "PlayerStats" collection
@@ -31,6 +33,7 @@
  * @method Player              setSteamid()         Sets the current record's "steamid" value
  * @method Player              setCredential()      Sets the current record's "credential" value
  * @method Player              setName()            Sets the current record's "name" value
+ * @method Player              setViews()           Sets the current record's "views" value
  * @method Player              setLog()             Sets the current record's "Log" collection
  * @method Player              setStats()           Sets the current record's "Stats" collection
  * @method Player              setPlayerStats()     Sets the current record's "PlayerStats" collection
@@ -73,6 +76,12 @@ abstract class BasePlayer extends sfDoctrineRecord
              'type' => 'string',
              'notnull' => false,
              'length' => 100,
+             ));
+        $this->hasColumn('views', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => false,
+             'default' => 0,
+             'length' => 4,
              ));
     }
 

@@ -146,15 +146,15 @@ abstract class BaseEvent extends sfDoctrineRecord
              'notnull' => false,
              'length' => 30,
              ));
-        $this->hasColumn('blue_score', 'integer', 4, array(
+        $this->hasColumn('blue_score', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => false,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('red_score', 'integer', 4, array(
+        $this->hasColumn('red_score', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => false,
-             'length' => 4,
+             'length' => 2,
              ));
         $this->hasColumn('weapon_id', 'integer', null, array(
              'type' => 'integer',

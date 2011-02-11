@@ -29,10 +29,11 @@ use_javascript('logshow.js');
     <br/>
     <span class="subInfo">
       Total Time: <?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?><br/>
-      Uploaded <?php echo getHumanReadableDate($log['created_at']) ?><br/>
-      By <?php echo link_to($log['Submitter']['name'], 'player/showNumericSteamId?id='.$log['Submitter']['numeric_steamid']) ?>
+      Uploaded: <?php echo getHumanReadableDate($log['created_at']) ?><br/>
+      By: <?php echo link_to($log['Submitter']['name'], 'player/showNumericSteamId?id='.$log['Submitter']['numeric_steamid']) ?><br/>
+      Views: <?php echo $log['views'] ?>
     <?php if($log['created_at'] != $log['updated_at']): ?>
-      <br/><span title="The Last Generated date represents when an admin last re-generated this log. This can happen when features are added.">Last Generated <?php echo getHumanReadableDate($log['updated_at']) ?></span>
+      <br/><span title="The Last Generated date represents when an admin last re-generated this log. This can happen when features are added.">Last Generated: <?php echo getHumanReadableDate($log['updated_at']) ?></span>
     <?php endif ?>
       <br/><?php echo link_to('Download Log File', '@logfile?id='.$log['id'], array('target' => '_blank')) ?>
   </div>

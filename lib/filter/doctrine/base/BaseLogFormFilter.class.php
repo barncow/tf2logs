@@ -21,6 +21,7 @@ abstract class BaseLogFormFilter extends BaseFormFilterDoctrine
       'submitter_player_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Submitter'), 'add_empty' => true)),
       'error_log_name'      => new sfWidgetFormFilterInput(),
       'error_exception'     => new sfWidgetFormFilterInput(),
+      'views'               => new sfWidgetFormFilterInput(),
       'created_at'          => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
       'updated_at'          => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
     ));
@@ -34,6 +35,7 @@ abstract class BaseLogFormFilter extends BaseFormFilterDoctrine
       'submitter_player_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Submitter'), 'column' => 'id')),
       'error_log_name'      => new sfValidatorPass(array('required' => false)),
       'error_exception'     => new sfValidatorPass(array('required' => false)),
+      'views'               => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'created_at'          => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
       'updated_at'          => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
     ));
@@ -64,6 +66,7 @@ abstract class BaseLogFormFilter extends BaseFormFilterDoctrine
       'submitter_player_id' => 'ForeignKey',
       'error_log_name'      => 'Text',
       'error_exception'     => 'Text',
+      'views'               => 'Number',
       'created_at'          => 'Date',
       'updated_at'          => 'Date',
     );

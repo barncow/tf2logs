@@ -130,107 +130,107 @@ abstract class BaseStat extends sfDoctrineRecord
              'notnull' => true,
              'length' => 4,
              ));
-        $this->hasColumn('kills', 'integer', 4, array(
+        $this->hasColumn('kills', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('assists', 'integer', 4, array(
+        $this->hasColumn('assists', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('deaths', 'integer', 4, array(
+        $this->hasColumn('deaths', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('longest_kill_streak', 'integer', 4, array(
+        $this->hasColumn('longest_kill_streak', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('headshots', 'integer', 4, array(
+        $this->hasColumn('headshots', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('backstabs', 'integer', 4, array(
+        $this->hasColumn('backstabs', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('capture_points_blocked', 'integer', 4, array(
+        $this->hasColumn('capture_points_blocked', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('capture_points_captured', 'integer', 4, array(
+        $this->hasColumn('capture_points_captured', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('flag_defends', 'integer', 4, array(
+        $this->hasColumn('flag_defends', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('flag_captures', 'integer', 4, array(
+        $this->hasColumn('flag_captures', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('dominations', 'integer', 4, array(
+        $this->hasColumn('dominations', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('times_dominated', 'integer', 4, array(
+        $this->hasColumn('times_dominated', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('revenges', 'integer', 4, array(
+        $this->hasColumn('revenges', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('extinguishes', 'integer', 4, array(
+        $this->hasColumn('extinguishes', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('ubers', 'integer', 4, array(
+        $this->hasColumn('ubers', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('dropped_ubers', 'integer', 4, array(
+        $this->hasColumn('dropped_ubers', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('healing', 'integer', 4, array(
+        $this->hasColumn('healing', 'integer', 3, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 3,
              ));
 
 

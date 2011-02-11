@@ -45,17 +45,17 @@ abstract class BasePlayerStat extends sfDoctrineRecord
              'primary' => true,
              'autoincrement' => false,
              ));
-        $this->hasColumn('kills', 'integer', 4, array(
+        $this->hasColumn('kills', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
-        $this->hasColumn('deaths', 'integer', 4, array(
+        $this->hasColumn('deaths', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
-             'length' => 4,
+             'length' => 2,
              ));
     }
 

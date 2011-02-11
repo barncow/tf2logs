@@ -76,20 +76,26 @@ class PlayerTable extends Doctrine_Table {
   }
   
   public function getTopUploaders($num_to_retrieve = 10) {
-      $connection = Doctrine_Manager::connection();
-      $query = 'select p.numeric_steamid as numeric_steamid, p.name as name, count(l.submitter_player_id) as num_logs '
-        .'from log l '
-        .'left join player p on l.submitter_player_id = p.id '
-        .'group by p.numeric_steamid, p.name '
-        .'having num_logs > 0 '
-        .'limit 0, '.$num_to_retrieve;
-      $statement = $connection->execute($query);
-      $ret = array();
-      while($row = $statement->fetch(PDO::FETCH_OBJ)) {
-        $ret[] = $row;
-      }
-      return $ret;
+    $connection = Doctrine_Manager::connection();
+    $query = 'select p.numeric_steamid as numeric_steamid, p.name as name, count(l.submitter_player_id) as num_logs '
+      .'from log l '
+      .'left join player p on l.submitter_player_id = p.id '
+      .'group by p.numeric_steamid, p.name '
+      .'having num_logs > 0 '
+      .'limit 0, '.$num_to_retrieve;
+    $statement = $connection->execute($query);
+    $ret = array();
+    while($row = $statement->fetch(PDO::FETCH_OBJ)) {
+      $ret[] = $row;
     }
+    return $ret;
+  }
     
-    
+  public function incrementViews($id, $increment = 1) {
+    return Doctrine_Query::create()
+      ->update('Player')
+      ->set('views', 'views + ?', $increment)
+      ->where('numeric_steamid = ?', $id)
+      ->execute();
+  }
 }

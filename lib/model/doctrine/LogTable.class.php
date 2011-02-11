@@ -174,4 +174,12 @@ class LogTable extends Doctrine_Table {
         
       return $q;
     }
+    
+    public function incrementViews($id, $increment = 1) {
+      return Doctrine_Query::create()
+        ->update('Log')
+        ->set('views', 'views + ?', $increment)
+        ->where('id = ?', $id)
+        ->execute();
+    }
 }
