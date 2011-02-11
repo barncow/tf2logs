@@ -134,7 +134,12 @@ class LogParser {
 	    $this->log = $logObj;
 	  }
 	  $file = $this->getRawLogFile($filename);
-	  return $this->parseLog($file);
+	  
+	  try {
+	    return $this->parseLog($file);
+	  } catch(TournamentModeNotFoundException $e) {
+	    return $this->parseLog($file, true);
+	  }
 	}
 	
 	/**
@@ -147,9 +152,15 @@ class LogParser {
 	  return $this->parseLog($file);
 	}
 	
-	protected function parseLog($arrayLogLines) {
+	protected function parseLog($arrayLogLines, $ignoreTourneyModeNotFound = false) {
 	  $game_state = null;
 	  $fileLength = count($arrayLogLines);
+	  
+	  if($ignoreTourneyModeNotFound) {
+	    //since ignoring trying to find the actual start of the match, we will just set tournamentmode = true immediately.
+	    $this->isTournamentMode = true;
+	  }
+	  
 	  foreach($arrayLogLines as $key => $logLine) {
 	    try {
 	      $game_state = $this->parseLine($logLine);
@@ -237,6 +248,16 @@ class LogParser {
 	  //always set elapsed time. When the log finishes, the last timestamp set will be our elapsed time.
 	  $elapsedTime = $this->getElapsedTime($dt);
 	  $this->log->setElapsedTime($elapsedTime);
+	  
+	  if($this->log->get_timeStart() == null && $this->isTournamentMode) {
+      //we do not yet have a timestart, and we are in tournament mode. This should only happen 
+      //when we put ourselves manually in tournament mode to ignore the
+      //tournament mode not found exception.
+      $this->log->set_timeStart($dt);
+      
+      //adding a round start event for the first round.
+      $this->log->addRoundStartEvent($elapsedTime, 0, 0);
+    }
 	  
 	  //check for world trigger, specifically the first round_start of the log. This indicates
 	  //that the tournament mode has started, and pregame has ended.

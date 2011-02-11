@@ -14,21 +14,6 @@ class unit_LogParserTest extends BaseLogParserTestCase {
     $this->assertNotEmpty($this->logParser->getRawLogFile($this->LFIXDIR."blah.log"));
   }
   
-  /**
-  * @expectedException TournamentModeNotFoundException
-  */
-  //may want to deal with this as corrupt log file exception
-  public function testCorruptFileThrowsCorruptLogLineException() {
-    $this->logParser->parseLogFile($this->LFIXDIR."blah.log", 1);
-  }
-  
-  /**
-  * @expectedException TournamentModeNotFoundException
-  */
-  public function testTournamentModeNotFoundException() {
-    $this->logParser->parseLogFile($this->LFIXDIR."mini_without_tourney.log", 1);
-  }
-  
   //the last line of the log file is usually truncated, and corrupt. Ignore exceptions for that line.
   public function testIgnoreUnrecognizedExceptionOnLastLine() {
     $this->logParser->parseLogFile($this->LFIXDIR."mini_truncated.log", 1);
