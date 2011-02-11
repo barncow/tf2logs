@@ -9,8 +9,6 @@
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class authModuleActions extends BasesfPHPOpenIDAuthActions {
-  //todo move to app config
-  const STEAM_OPENID_URL = "http://steamcommunity.com/openid";
   
   public function executeOpenidError() {
     $this->error = $this->getRequest()->getErrors();
@@ -27,13 +25,13 @@ class authModuleActions extends BasesfPHPOpenIDAuthActions {
   //this will send the user directly to the url, instead of bringing up a page first.
   public function executeAutoLogin() {
     $this->getUser()->setAttribute('openid_real_back_url', $this->getRequest()->getReferer());
-    $this->openID = $this->getRedirectHtml(self::STEAM_OPENID_URL);
+    $this->openID = $this->getRedirectHtml(sfConfig::get('app_steam_openid_url'));
     $this->redirect($this->openID['url']);
   }
   
   //this will bring up a page to login.
   public function executeLogin() {
-    $this->openID = $this->getRedirectHtml(self::STEAM_OPENID_URL);
+    $this->openID = $this->getRedirectHtml(sfConfig::get('app_steam_openid_url'));
   }
   
   public function executeLogout() {

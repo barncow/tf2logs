@@ -3,6 +3,11 @@
   src: url(/css/fonts/tf2build.ttf);
 }
 
+.error {
+  color: #d06553;
+  font-weight: bold;
+}
+
 body {
   background-color: #201913;
   color: #E3DDC9;

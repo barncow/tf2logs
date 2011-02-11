@@ -23,7 +23,7 @@ class logActions extends sfActions {
     $log = Doctrine::getTable('Log')->getErrorLogById($request->getParameter('id'));
     $this->forward404Unless($log);
     $logParser = new LogParser();
-    $log = $logParser->parseLogFile(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName(), $this->getUser()->getAttribute(self::PLAYER_ID_ATTR), null, null, $log);
+    $log = $logParser->parseLogFile(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName(), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), null, null, $log);
     unlink(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
     $log->setErrorLogName(null);
     $log->setErrorException(null);

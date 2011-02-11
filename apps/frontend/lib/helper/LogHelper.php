@@ -289,12 +289,12 @@ $s = <<<EOD
     <tr>
       <th>Name</th>
       <th title="Kills+Assists/Death">KAPD</th>
-      <th title="Extinguishes">E</th>
       <th title="Ubers">U</th>
       <th title="Ubers/Death">UPD</th>
       <th title="Dropped Ubers">DU</th>
       <th title="Healing">H</th>
       <th title="Healing/Death">HPD</th>
+      <th title="Extinguishes">E</th>
     </tr>
   </thead>
   <tbody>
@@ -312,12 +312,12 @@ EOD;
                 $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']).'';
               $s .= '</span>';
             $s .= '</td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['extinguishes']).'">'.$stat['extinguishes'].'</span></td>';
             $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['ubers']).'">'.$stat['ubers'].'</span></td>';
             $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])).'">'.doPerDeathDivision($stat['ubers'], $stat['deaths']).'</span></td>';
             $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['dropped_ubers']).'">'.$stat['dropped_ubers'].'</span></td>';
             $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['healing']).'">'.$stat['healing'].'</span></td>';
             $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])).'">'.doPerDeathDivision($stat['healing'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['extinguishes']).'">'.$stat['extinguishes'].'</span></td>';
           $s .= '</tr>';
         }
       }

@@ -69,6 +69,7 @@ class logActions extends sfActions {
        $request->setRequestFormat('json');
       if($status == "error") {
         $this->msg = $this->getUser()->getFlash('error');
+        $this->getUser()->setFlash('error', null);
       }
       else {
         $this->url = $status;
@@ -132,7 +133,12 @@ class logActions extends sfActions {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.
           $log = new Log();
-          $log->setName($form->getValue('name'));
+          $name = $form->getValue('name');
+          if(trim($name) === "") {
+            $name = $upload_filename;
+          }
+          $log->setName($name);
+          $log->setSubmitterPlayerId($this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
           $log->setErrorLogName($upload_filename);
           $log->setErrorException($e);
           $log->save();

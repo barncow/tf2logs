@@ -272,6 +272,7 @@ class LogParser {
 	      || $worldTriggerAction == "Mini_Round_Start"
 	      || $worldTriggerAction == "Mini_Round_Length"
 	      || $worldTriggerAction == "Mini_Round_Win"
+	      || $worldTriggerAction == "Round_Stalemate"
 	      ) {
 	      return self::GAME_CONTINUE; //no need to process
 	    }
