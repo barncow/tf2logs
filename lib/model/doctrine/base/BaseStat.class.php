@@ -15,6 +15,7 @@
  * @property integer $deaths
  * @property integer $longest_kill_streak
  * @property integer $headshots
+ * @property integer $backstabs
  * @property integer $capture_points_blocked
  * @property integer $capture_points_captured
  * @property integer $flag_defends
@@ -45,6 +46,7 @@
  * @method integer             getDeaths()                  Returns the current record's "deaths" value
  * @method integer             getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
  * @method integer             getHeadshots()               Returns the current record's "headshots" value
+ * @method integer             getBackstabs()               Returns the current record's "backstabs" value
  * @method integer             getCapturePointsBlocked()    Returns the current record's "capture_points_blocked" value
  * @method integer             getCapturePointsCaptured()   Returns the current record's "capture_points_captured" value
  * @method integer             getFlagDefends()             Returns the current record's "flag_defends" value
@@ -74,6 +76,7 @@
  * @method Stat                setDeaths()                  Sets the current record's "deaths" value
  * @method Stat                setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
  * @method Stat                setHeadshots()               Sets the current record's "headshots" value
+ * @method Stat                setBackstabs()               Sets the current record's "backstabs" value
  * @method Stat                setCapturePointsBlocked()    Sets the current record's "capture_points_blocked" value
  * @method Stat                setCapturePointsCaptured()   Sets the current record's "capture_points_captured" value
  * @method Stat                setFlagDefends()             Sets the current record's "flag_defends" value
@@ -152,6 +155,12 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 4,
              ));
         $this->hasColumn('headshots', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 4,
+             ));
+        $this->hasColumn('backstabs', 'integer', 4, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

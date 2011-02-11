@@ -9,7 +9,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
     //$countOfLines-1 represents the lack of chat line with SM command.
-    $this->assertEquals($countOfLines-1, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines == count orig lines subtract line with SM command");
+    $this->assertEquals($countOfLines-1, count(explode("\n", $log->getLogFile()->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
     $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
     
     $this->assertEquals(0, $log->getRedscore(), "red score");
@@ -36,7 +36,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals(3, count($pce['EventPlayers']), "point capture has 3 players");
     $this->assertEquals("C", $pce['EventPlayers'][0]['event_player_type'], "point capture player type is C");
     
-    $this->assertEquals(1, $events[7]['blue_score'], "sixth event has blue score 1");
+    $this->assertEquals(1, $events[8]['blue_score'], "sixth event has blue score 1");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
@@ -190,6 +190,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:973270") {
         //verify numbers for "`yay!"
         $this->assertEquals(1, $stat->getCapturePointsBlocked(), "yay's point blocks");
+        $this->assertEquals(1, $stat->getBackstabs(), "yay's backstabs");
+        
+        foreach($stat->getWeaponStats() as $ws) {
+          if($ws->getWeapon()->getKeyName() == "knife_bs") {
+            $this->assertEquals(1, $ws->getKills());
+            break;
+          }
+        }
       }
     }
   }

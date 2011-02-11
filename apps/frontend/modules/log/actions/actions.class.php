@@ -63,6 +63,7 @@ class logActions extends sfActions {
     $this->form = new LogForm();
 
     $status = $this->processForm($request, $this->form);
+    
     if($request->isXmlHttpRequest()) {
        $request->setRequestFormat('json');
       if($status == "error") {

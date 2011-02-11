@@ -34,6 +34,7 @@ $s = <<<EOD
         <th class="ui-state-default" title="Kills+Assists/Death">KAPD</th>
         <th class="ui-state-default" title="Longest Kill Streak">LKS</th>
         <th class="ui-state-default" title="Headshots">HS</th>
+        <th class="ui-state-default" title="Backstabs">BS</th>
         <th class="ui-state-default" title="Capture Points Blocked">CPB</th>
         <th class="ui-state-default" title="Capture Points Captured">CPC</th>
         <th class="ui-state-default" title="Intel Defends">ID</th>
@@ -57,6 +58,7 @@ EOD;
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->killsassists_per_death).'">'.$player->killsassists_per_death.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->backstabs).'">'.$player->backstabs.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_blocked).'">'.$player->capture_points_blocked.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_captured).'">'.$player->capture_points_captured.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->flag_defends).'">'.$player->flag_defends.'</span></td>';

@@ -219,6 +219,7 @@ $s = <<<EOD
       <th title="Kills+Assists/Death">KAPD</th>
       <th title="Longest Kill Streak">LKS</th>
       <th title="Headshots">HS</th>
+      <th title="Backstabs">BS</th>
       <th title="Capture Points Blocked">CPB</th>
       <th title="Capture Points Captured">CPC</th>
       <th title="Intel Defends">ID</th>
@@ -227,7 +228,6 @@ $s = <<<EOD
       <th title="Times Dominated">TDM</th>
       <th title="Revenges">R</th>
       <th title="Extinguishes">E</th>
-      <th title="Healing">H</th>
     </tr>
   </thead>
   <tbody>
@@ -262,6 +262,7 @@ EOD;
       $s .= '</td>';
       $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['longest_kill_streak']).'">'. $stat['longest_kill_streak'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['headshots']).'">'. $stat['headshots'].'</span></td>';
+      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['backstabs']).'">'. $stat['backstabs'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['capture_points_blocked']).'">'. $stat['capture_points_blocked'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['capture_points_captured']).'">'. $stat['capture_points_captured'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['flag_defends']).'">'. $stat['flag_defends'].'</span></td>';
@@ -270,7 +271,6 @@ EOD;
       $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['times_dominated']).'">'. $stat['times_dominated'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['revenges']).'">'. $stat['revenges'].'</span></td>';
       $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['extinguishes']).'">'. $stat['extinguishes'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['healing']).'">'. $stat['healing'].'</span></td>';
       $s .= '</tr>';
     }
   $s .= '</tbody>';

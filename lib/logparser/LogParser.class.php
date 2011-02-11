@@ -150,7 +150,6 @@ class LogParser {
 	protected function parseLog($arrayLogLines) {
 	  $game_state = null;
 	  $fileLength = count($arrayLogLines);
-	  
 	  foreach($arrayLogLines as $key => $logLine) {
 	    try {
 	      $game_state = $this->parseLine($logLine);
@@ -357,6 +356,10 @@ class LogParser {
 	        //also, add headshot score
 	        $w .= "_hs";
 	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "headshots");
+	      } else if($ck == "backstab") {
+	        //edit weapon to be backstab variant
+	        $w .= "_bs";
+	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "backstabs");
 	      }
 	      $weapon = $this->getWeaponFromCache($w);
 	      

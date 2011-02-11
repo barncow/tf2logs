@@ -42,12 +42,12 @@ all:
       cache_key_use_vary_headers: true
       cache_key_use_host_name:    true
       
-  storage:
-    class: sfPDOSessionStorage
-    param:
-      session_name: tf2logs
-      db_table:     session
-      database:     doctrine
-      db_id_col:    id
-      db_data_col:  sdata
-      db_time_col:  stime
+  #storage:
+  #  class: sfPDOSessionStorage
+  #  param:
+  #    session_name: tf2logs
+  #    db_table:     session
+  #    database:     doctrine
+  #    db_id_col:    id
+  #    db_data_col:  sdata
+  #    db_time_col:  stime
