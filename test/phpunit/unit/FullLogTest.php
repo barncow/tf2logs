@@ -17,7 +17,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   public function testFull_withGarbageAtEnd() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     
-    $this->assertEquals(895, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
+    $this->assertEquals(894, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
