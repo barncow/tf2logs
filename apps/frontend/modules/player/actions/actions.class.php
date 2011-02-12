@@ -88,14 +88,24 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->param = $param;
   }
   
+  public function executeControlPanel(sfWebRequest $request) {
+    $playerid = $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var'));
+    $this->player = Doctrine::getTable('Player')->findOneById($playerid);
+    
+    $this->slPager = new sfDoctrinePager(
+      'Log',
+      sfConfig::get('app_max_results_per_page')
+    );
+    $this->slPager->setQuery(Doctrine::getTable('Log')->getSubmittedLogsByPlayerIdQuery($playerid));
+    $this->slPager->setPage($request->getParameter('slPage', 1));
+    $this->slPager->init();
+    $this->numSubmittedLogs = count($this->slPager);
+  }
+  
   //////////////////////AUTH ACTIONS///////////////////////////////  
   public function executeOpenidError() {
     $this->error = $this->getRequest()->getErrors();
     $this->getResponse()->setCookie('known_openid_identity', '');
-  }
-  
-  public function executeControlPanel() {
-  
   }
   
   //this will send the user directly to the url, instead of bringing up a page first.

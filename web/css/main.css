@@ -3,7 +3,7 @@
   src: url(/css/fonts/tf2build.ttf);
 }
 
-.error {
+.error, .error_list li {
   color: #d06553;
   font-weight: bold;
 }
@@ -175,6 +175,17 @@ br.hardSeparator {
 	float: right;
 }
 
+#userCP ul, #userCP li {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+}
+
+#userCP strong a {
+  font-weight: bolder;
+  color: #ffff38;
+}
+
 .zeroValue {
   opacity: .2;
 }
@@ -317,8 +328,19 @@ br.hardSeparator {
   text-align: right;
 }
 
-.txtleft {
-  text-align: left;
+
+
+#playerNameCP {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100px;
+}
+
+#submittedCP {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .DataTables_sort_wrapper {
@@ -337,6 +359,14 @@ br.hardSeparator {
 
 .center {
   text-align: center;
+}
+
+.txtleft {
+  text-align: left;
+}
+
+.txtright {
+  text-align: right;
 }
 
 /*! tf2 tooltip style */

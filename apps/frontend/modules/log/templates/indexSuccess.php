@@ -22,7 +22,6 @@ use_stylesheet('jquery.qtip.min.20110205.css');
 <?php endif ?>
 
 <?php if($sf_user->isAuthenticated()): ?>
-  <?php use_javascript('jquery-1.4.4.min.js'); ?>
   <?php use_stylesheet('jquery.ui.plupload.css'); ?>
   <?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
   <?php use_javascript('plupload.min.js'); ?>

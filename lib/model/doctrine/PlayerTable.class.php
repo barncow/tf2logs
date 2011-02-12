@@ -82,6 +82,7 @@ class PlayerTable extends Doctrine_Table {
       .'left join player p on l.submitter_player_id = p.id '
       .'group by p.numeric_steamid, p.name '
       .'having num_logs > 0 '
+      .'order by num_logs desc '
       .'limit 0, '.$num_to_retrieve;
     $statement = $connection->execute($query);
     $ret = array();

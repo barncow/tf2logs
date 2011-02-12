@@ -107,6 +107,51 @@ class logActions extends sfActions {
       }
     }
   }
+  
+  public function executeEdit(sfWebRequest $request) {
+    $this->log = Doctrine::getTable('Log')->getLogById($request->getParameter('id'));
+    $this->forward404Unless($this->log);
+    $playerid = $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var'));
+    if($this->log->getSubmitterPlayerId() != $playerid && !$this->getUser()->hasCredential('owner')) {
+      $this->getUser()->setFlash('error', 'You are not authorized to edit that log file.');
+      $this->redirect('@homepage', 401); //401 is http unauthorized.
+    } else {
+      $this->form = new LogUpdateForm($this->log);
+      $this->mapNames = array();
+      Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);
+    }
+  }
+  
+  public function executeUpdate(sfWebRequest $request) {
+    $this->log = Doctrine::getTable('Log')->getLogById($request->getParameter("id"));
+    $this->forward404Unless($this->log && $request->isMethod(sfRequest::POST));
+    $playerid = $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var'));
+    if($this->log->getSubmitterPlayerId() != $playerid && !$this->getUser()->hasCredential('owner')) {
+      $this->getUser()->setFlash('error', 'You are not authorized to edit that log file.');
+      $this->redirect('@homepage', 401); //401 is http unauthorized.
+    } else {
+      $this->form = new LogUpdateForm($this->log);
+      if($this->processUpdateForm($request)) {
+        $this->redirect('@log_edit?id='.$this->log->getId());
+      } else {
+        $this->mapNames = array();
+        Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);
+        $this->setTemplate('edit');
+      }
+    }
+  }
+  
+  protected function processUpdateForm(sfWebRequest $request) {
+    $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
+    if ($this->form->isValid()) {
+      $this->form->save();
+      $this->getUser()->setFlash('notice', "Your updates were successfully saved.");
+      return true;
+    } else {
+      $this->getUser()->setFlash('error', 'Your update had errors. Make sure you specify a name.');
+      return false;
+    }
+  }
 
   protected function processForm(sfWebRequest $request, sfForm $form) {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));

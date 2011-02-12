@@ -19,7 +19,7 @@ $s = <<<EOD
 </div>
 EOD;
 echo '<div class="statTableContainer">';
-echo outputInfoBox("playName", $player->name, $s, true);
+echo outputInfoBox("playerName", $player->name, $s, true);
 echo '</div><br class="hardSeparator"/>';
 
 if($player->num_matches == 0) {
@@ -184,7 +184,7 @@ echo '</div><br class="hardSeparator"/>';
 
 if($numSubmittedLogs > 0) {
   $pagination = "";
-  if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
+  if ($slPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
   $data = "";
   foreach($slPager->getResults() as $sl) {
     $link = link_to($sl['name'], 'log/show?id='.$sl['id']);

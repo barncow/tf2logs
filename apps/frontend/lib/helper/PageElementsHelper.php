@@ -11,7 +11,7 @@ function outputInfoBox($id, $title, $content, $styleLikeStatTables = false) {
   }
  return <<<EOD
 <div id="$id" class="infoBox">
-  <div class="ui-widget ui-toolbar ui-widget-header ui-corner-top$header">$titleHTML</div>
+  <div class="ui-widget ui-widget-header ui-corner-top$header">$titleHTML</div>
   <div class="content">
     $content
   </div>

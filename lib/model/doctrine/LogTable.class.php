@@ -19,13 +19,7 @@ class LogTable extends Doctrine_Table {
       $l = $this
         ->createQuery('l')
         ->where('l.id = ?', $id)
-        ->leftJoin('l.Stats s')
-        ->leftJoin('s.Player p')
-        ->leftJoin('s.Weapons w')
-        ->leftJoin('s.RoleStats rs')
-        ->leftJoin('rs.Role r')
         ->andWhere('l.error_log_name is null')
-        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
         ->execute();
      
       if(count($l) == 0) return null;
@@ -103,6 +97,15 @@ class LogTable extends Doctrine_Table {
         ->createQuery('l')
         ->leftJoin('l.Submitter p')
         ->where('p.numeric_steamid = ?', $playerId)
+        ->orderBy('l.created_at desc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
+    }
+    
+    public function getSubmittedLogsByPlayerIdQuery($playerId) {
+      return $this
+        ->createQuery('l')
+        ->leftJoin('l.Submitter p')
+        ->where('p.id = ?', $playerId)
         ->orderBy('l.created_at desc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }

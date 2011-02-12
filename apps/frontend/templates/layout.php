@@ -15,21 +15,29 @@
       <a href="<?php echo url_for('@homepage', true) ?>"><?php echo image_tag(getRandomLogoFilename()) ?></a>
     </div>
     <div id="userCP">
+      <ul>
+        <li><?php echo link_to('Log Search', '@log_search') ?></li>
+        <li><?php echo link_to('Player Search', '@player_search') ?></li>
       <?php if($sf_user->isAuthenticated()): ?>
-        <?php echo link_to('Logout', '@logout') ?>
+        <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
+        <li><?php echo link_to('Control Panel', '@controlpanel') ?></li>
+        <li><?php echo link_to('Logout', '@logout') ?></li>
       <?php else: ?>
-        To upload a log, login through STEAM<a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
+        <li>To upload a log, login through STEAM<a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a></li>
       <?php endif ?>
+      </ul>
     </div>
     <br class="hardSeparator"/>
   </div>
   
   <?php if ($sf_user->hasFlash('notice')): ?>
     <div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('notice') ?></div>
+    <?php $sf_user->setFlash('notice', null) /*erasing flash */?>
   <?php endif ?>
 
   <?php if ($sf_user->hasFlash('error')): ?>
     <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('error') ?></div>
+    <?php $sf_user->setFlash('error', null) /*erasing flash */?>
   <?php endif ?>
     
     <?php echo $sf_content ?>

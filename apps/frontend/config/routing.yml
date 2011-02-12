@@ -11,6 +11,16 @@ log_by_id:
   param: { module: log, action: show }
   requirements: {id: \d+}
   
+log_edit:
+  url:   /log/:id/edit
+  param: { module: log, action: edit }
+  requirements: {id: \d+}
+  
+log_update:
+  url:   /log/:id/update
+  param: { module: log, action: update }
+  requirements: {id: \d+}
+  
 events_by_id:
   url:   /log/:id/events
   param: { module: log, action: events }
