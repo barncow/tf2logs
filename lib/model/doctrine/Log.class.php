@@ -135,6 +135,17 @@ class Log extends BaseLog
     $this->Events[] = $e;
   }
   
+  public function markLastKillEventWithAssist($assistSteamid, $assistCoord) {
+    $eCount = count($this->Events);
+    if($this->Events && $eCount > 0) {
+      $e = &$this->Events[$eCount-1];
+      if($e->getEventType() == "kill") {
+        $assistStat = $this->getStatFromSteamid($assistSteamid);
+        $e->assist($assistStat->getPlayerId(), $assistCoord);
+      }
+    }
+  }
+  
   public function addPointCaptureEvent($elapsedSeconds, $players, $team, $capturePoint) {
     $e = new Event();
     $pids = array();

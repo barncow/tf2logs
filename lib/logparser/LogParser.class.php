@@ -446,6 +446,7 @@ class LogParser {
 	          //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
 	          $p = $players[0];
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
+	          $this->log->markLastKillEventWithAssist($p->getSteamid(), $this->parsingUtils->getKillCoords("assister", $logLineDetails));
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "domination") {
 	          $attacker = $players[0];
