@@ -30,7 +30,7 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'steamid'         => new sfValidatorString(array('max_length' => 30)),
       'credential'      => new sfValidatorString(array('max_length' => 10, 'required' => false)),
       'name'            => new sfValidatorString(array('max_length' => 100, 'required' => false)),
-      'last_login'      => new sfValidatorDateTime(),
+      'last_login'      => new sfValidatorDateTime(array('required' => false)),
       'views'           => new sfValidatorInteger(array('required' => false)),
     ));
 

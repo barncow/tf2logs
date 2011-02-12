@@ -284,7 +284,8 @@ Player:
       notnull: false
     last_login:
       type: timestamp
-      notnull: true
+      notnull: false
+      default: null
     views:
       type: integer(4)
       notnull: false

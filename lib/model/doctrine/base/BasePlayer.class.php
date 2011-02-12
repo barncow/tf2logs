@@ -82,7 +82,7 @@ abstract class BasePlayer extends sfDoctrineRecord
              ));
         $this->hasColumn('last_login', 'timestamp', null, array(
              'type' => 'timestamp',
-             'notnull' => true,
+             'notnull' => false,
              ));
         $this->hasColumn('views', 'integer', 4, array(
              'type' => 'integer',

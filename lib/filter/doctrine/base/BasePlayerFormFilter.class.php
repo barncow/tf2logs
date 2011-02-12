@@ -17,7 +17,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'steamid'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'credential'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'name'            => new sfWidgetFormFilterInput(),
-      'last_login'      => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
+      'last_login'      => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate())),
       'views'           => new sfWidgetFormFilterInput(),
     ));
 
