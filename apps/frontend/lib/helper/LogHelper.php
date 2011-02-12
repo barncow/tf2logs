@@ -208,7 +208,7 @@ function outputStatPanel($stats, &$miniStatsRet) {
 $s = <<<EOD
 <div class="statTableContainer">
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Main Stats</caption>
+  <caption>Log Stats</caption>
   <thead>
     <tr>
       <th>Name</th>

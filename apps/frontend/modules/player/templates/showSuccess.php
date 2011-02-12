@@ -19,16 +19,17 @@ $s = <<<EOD
 </div>
 EOD;
 echo '<div class="statTableContainer">';
-echo outputInfoBox("playerName", $player->name, $s, true);
+echo outputInfoBox("playerName", $player->name, $s);
 echo '</div><br class="hardSeparator"/>';
 
 if($player->num_matches == 0) {
-  echo 'This player has not played in any logs.';
+  echo '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This player has not played in any logs.</div>';
 } else {
 $s = <<<EOD
 <table class="statTable" id="playerStatPanel" border="0" cellspacing="0" cellpadding="3">
     <thead>
       <tr>
+        <th class="ui-state-default" title="Logs Played">LP</th>
         <th class="ui-state-default" title="Kills">K</th>
         <th class="ui-state-default" title="Assists">A</th>
         <th class="ui-state-default" title="Deaths">D</th>
@@ -53,6 +54,7 @@ $s = <<<EOD
     <tbody>
       <tr>
 EOD;
+        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->num_matches).'">'.$player->num_matches.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
         $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
@@ -121,8 +123,14 @@ echo '</div><br class="hardSeparator"/>';
     </thead>
     <tbody>
       <?php foreach($weapons as $w): ?>
+        <?php
+        $title = "";
+        $weaponHTML = outputWeapon($w['name'], $w['key_name'], $w['image_name']);
+        //only want a tooltip if there is an img.
+        if(strpos($weaponHTML, "<img") === 0) $title = ' title="'.outputWeaponName($w['name'], $w['key_name']).'"';
+        ?>
         <tr>
-          <td class="ui-widget-content" title="<?php echo outputWeaponName($w['name'], $w['key_name']) ?>"><?php echo outputWeapon($w['name'], $w['key_name'], $w['image_name']) ?></td>
+          <td class="ui-widget-content"<?php echo $title ?>><?php echo $weaponHTML ?></td>
           <?php $foundWS = false ?>
           <?php foreach($weaponStats as $ws): ?>
             <?php if($ws->getWeaponId() == $w['id']): ?>

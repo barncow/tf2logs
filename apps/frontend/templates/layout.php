@@ -23,7 +23,7 @@
         <li><?php echo link_to('Control Panel', '@controlpanel') ?></li>
         <li><?php echo link_to('Logout', '@logout') ?></li>
       <?php else: ?>
-        <li>To upload a log, login through STEAM<a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a></li>
+        <li><span class="subInfo"><strong>To upload a log, login through STEAM</strong></span><a class="fRight" href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a></li>
       <?php endif ?>
       </ul>
     </div>

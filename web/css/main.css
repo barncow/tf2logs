@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "TF2 Build";
-  src: url(/css/fonts/tf2build.ttf);
-}
-
 .error, .error_list li {
   color: #d06553;
   font-weight: bold;
@@ -108,7 +103,7 @@ div.infoBox .content {
 	height: 10px;
 }
 
-div.infoBox .subInfo {
+div.infoBox .subInfo, #userCP .subInfo {
   font-size: 12px;
 }
 
@@ -125,10 +120,9 @@ div.infoBox .subInfo {
 .statTable caption, .statTableCaption {
   text-align: left;
   font-weight: normal;
-  font-family: 'TF2 Build';
-  text-transform: uppercase;
   font-size: 25px;
   white-space:nowrap;
+  font-weight: bolder;
 }
 
 .statTableContainer {
@@ -168,10 +162,9 @@ br.hardSeparator {
 #homeLink {
 	float: left;
 	font-size: 20pt;
-	font-family: "TF2 Build";
 }
 
-#userCP {
+#userCP, .fRight {
 	float: right;
 }
 
@@ -181,7 +174,7 @@ br.hardSeparator {
   margin: 0;
 }
 
-#userCP strong a {
+#userCP strong a, #userCP strong {
   font-weight: bolder;
   color: #ffff38;
 }
