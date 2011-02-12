@@ -35,7 +35,7 @@ Log:
       notnull: false
     views:
       type: integer(4)
-      notnull: false
+      notnull: true
       default: 0
   relations:
     LogFile:
@@ -282,6 +282,9 @@ Player:
     name:
       type: string(100)
       notnull: false
+    last_login:
+      type: timestamp
+      notnull: true
     views:
       type: integer(4)
       notnull: false

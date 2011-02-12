@@ -17,6 +17,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'steamid'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'credential'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'name'            => new sfWidgetFormFilterInput(),
+      'last_login'      => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
       'views'           => new sfWidgetFormFilterInput(),
     ));
 
@@ -25,6 +26,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'steamid'         => new sfValidatorPass(array('required' => false)),
       'credential'      => new sfValidatorPass(array('required' => false)),
       'name'            => new sfValidatorPass(array('required' => false)),
+      'last_login'      => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
       'views'           => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
@@ -50,6 +52,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'steamid'         => 'Text',
       'credential'      => 'Text',
       'name'            => 'Text',
+      'last_login'      => 'Date',
       'views'           => 'Number',
     );
   }

@@ -128,6 +128,7 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     if($name && trim($name) != "") {
       $player->setName($name);
     }
+    $player->setLastLogin(date('Y-m-d H:i:s'));
     $player->save();
     
     $this->getUser()->addCredential($player->getCredential());

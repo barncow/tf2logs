@@ -107,7 +107,7 @@ abstract class BaseLog extends sfDoctrineRecord
              ));
         $this->hasColumn('views', 'integer', 4, array(
              'type' => 'integer',
-             'notnull' => false,
+             'notnull' => true,
              'default' => 0,
              'length' => 4,
              ));

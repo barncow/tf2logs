@@ -10,6 +10,7 @@
  * @property string $steamid
  * @property string $credential
  * @property string $name
+ * @property timestamp $last_login
  * @property integer $views
  * @property Doctrine_Collection $Log
  * @property Doctrine_Collection $Stats
@@ -22,6 +23,7 @@
  * @method string              getSteamid()         Returns the current record's "steamid" value
  * @method string              getCredential()      Returns the current record's "credential" value
  * @method string              getName()            Returns the current record's "name" value
+ * @method timestamp           getLastLogin()       Returns the current record's "last_login" value
  * @method integer             getViews()           Returns the current record's "views" value
  * @method Doctrine_Collection getLog()             Returns the current record's "Log" collection
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
@@ -33,6 +35,7 @@
  * @method Player              setSteamid()         Sets the current record's "steamid" value
  * @method Player              setCredential()      Sets the current record's "credential" value
  * @method Player              setName()            Sets the current record's "name" value
+ * @method Player              setLastLogin()       Sets the current record's "last_login" value
  * @method Player              setViews()           Sets the current record's "views" value
  * @method Player              setLog()             Sets the current record's "Log" collection
  * @method Player              setStats()           Sets the current record's "Stats" collection
@@ -76,6 +79,10 @@ abstract class BasePlayer extends sfDoctrineRecord
              'type' => 'string',
              'notnull' => false,
              'length' => 100,
+             ));
+        $this->hasColumn('last_login', 'timestamp', null, array(
+             'type' => 'timestamp',
+             'notnull' => true,
              ));
         $this->hasColumn('views', 'integer', 4, array(
              'type' => 'integer',

@@ -21,7 +21,7 @@ abstract class BaseLogFormFilter extends BaseFormFilterDoctrine
       'submitter_player_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Submitter'), 'add_empty' => true)),
       'error_log_name'      => new sfWidgetFormFilterInput(),
       'error_exception'     => new sfWidgetFormFilterInput(),
-      'views'               => new sfWidgetFormFilterInput(),
+      'views'               => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'created_at'          => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
       'updated_at'          => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
     ));
