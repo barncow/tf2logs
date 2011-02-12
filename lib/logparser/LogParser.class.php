@@ -26,6 +26,8 @@ class LogParser {
   protected $playerChangeTeams;
   protected $addToScrubbedLog;
   protected $ignoreUnrecognizedLogLines;
+  protected $previousLogLine;
+  protected $gameOver;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -41,6 +43,7 @@ class LogParser {
     $this->isCtf = false;
     $this->addToScrubbedLog = true;
     $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
+    $this->gameOver = false;
     
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
@@ -135,6 +138,7 @@ class LogParser {
 	  }
 	  $file = $this->getRawLogFile($filename);
 	  
+	  $this->previousLogLine = null; //clearing in case this is getting called again.
 	  try {
 	    return $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
@@ -149,6 +153,7 @@ class LogParser {
 	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($log->getId())->getLogData());
 	  $log->clearLog();
 	  $this->log = $log;
+	  $this->previousLogLine = null; //clearing in case this is getting called again.
 	  return $this->parseLog($file);
 	}
 	
@@ -178,8 +183,11 @@ class LogParser {
 	      }
 	    }
 	    
-	    if($game_state == self::GAME_APPEARS_OVER || $game_state == self::GAME_OVER) {
-	      break; //do not keep going
+	    if($game_state == self::GAME_APPEARS_OVER) {
+	      break; //do not keep going as the log did not exit cleanly
+	    } else if ($game_state == self::GAME_OVER) {
+	      //mark as game over, but keep processing in case there is another round_start.
+	      $this->gameOver = true;
 	    }
 	  }
 	  if(!$this->isTournamentMode) {
@@ -226,6 +234,23 @@ class LogParser {
 	  } else {
 	    $this->addToScrubbedLog = true;
 	  }
+	  
+	  $this->previousLogLine = $logLine;
+	}
+	
+	/**
+	  Valve awards a round cut short by timelimit (by definition, no winner of the round) to
+	  a team, even though no one really won. The only way to detect if a round_win is 
+	  actually legit is to check if the line before a round_win is a "pointcaptured" line.
+	  This should only be used on a round_win line.
+	*/
+	protected function isRoundWinACapture() {
+	  $logLineDetails = $this->parsingUtils->getLineDetails($this->previousLogLine);
+	  
+	  //round win is only a capture if the previous line was a Team triggered pointcaptured line.
+	  return ($this->parsingUtils->isLogLineOfType($this->previousLogLine, 'Team', $logLineDetails)
+	  && $this->parsingUtils->getTeamAction($logLineDetails) === "triggered"
+	  && $this->parsingUtils->getTeamTriggerAction($logLineDetails) === "pointcaptured");
 	}
 	
 	/**
@@ -264,6 +289,7 @@ class LogParser {
 	  if($this->parsingUtils->isLogLineOfType($logLine, "World triggered", $logLineDetails)) {
 	    $worldTriggerAction = $this->parsingUtils->getWorldTriggerAction($logLineDetails);
 	    if($worldTriggerAction == "Round_Start") {
+	      $this->gameOver = false;
 	      $this->isTournamentMode = true;
 	      if($this->log->get_timeStart() == null) {
 	        //there will likely be multiple round_start's, only need the first one for the tmsp
@@ -280,7 +306,7 @@ class LogParser {
 	      return self::GAME_OVER;
 	    } else if($worldTriggerAction == "Round_Win") {
 	      //increment score for the team that won the round, if the map is not ctf (ctf has own scoring)
-	      if(!$this->isCtf) {
+	      if(!$this->isCtf && $this->isRoundWinACapture()) {
 	        $team = $this->parsingUtils->getRoundWinTeam($logLineDetails);
 	        $this->log->incrementScoreForTeam($team);
 	      }
@@ -321,36 +347,9 @@ class LogParser {
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
 	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
 	    
-	    if($playerLineAction == "entered the game"
-	    || $playerLineAction == "connected, address"
-	    || $playerLineAction == "STEAM USERID validated"
-	    ) {
-	      return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
-	    } else if($playerLineAction == "say" || $playerLineAction == "say_team") {
-	      $txt = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
-	      
-	      if(strpos($txt, "!") === 0 || strpos($txt, "/") === 0) {
-	        //lines beginning with ! or / generally are Sourcemod commands, which could hold sensitive info.
-	        //do not include in scrubbed log, nor in events.
-	        $this->addToScrubbedLog = false;
-	        return self::GAME_CONTINUE;
-	      }
-	      
-	      if($players[0]->getSteamid() != "Console") {
-	        $p = $players[0];
-	        $this->log->addChatEvent($elapsedTime, $playerLineAction, $p, $txt);
-	      }
-	      
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "disconnected") {
-	      $p = $players[0];
-	      $this->log->finishStatForSteamid($p->getSteamid(), $dt, $this->log->get_timeStart());
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "changed role to") {
-	      $p = $players[0];
-	      $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache($this->parsingUtils->getPlayerLineActionDetail($logLineDetails)), $dt, $this->log->get_timeStart());
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "joined team") {
+	    //want to process any joined team line whether or not we are in game over.
+	    //otherwise, skip the rest if in gameover.
+	    if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
 	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
@@ -362,157 +361,190 @@ class LogParser {
 	        $this->playerChangeTeams = array();
 	      }
 	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "changed name to") {
-	      $p = $players[0];
-	      $p->setName($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
-	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "killed") {
-	      $attacker = $players[0];
-	      $victim = $players[1];
-	      $w = $this->parsingUtils->getWeapon($logLineDetails);
-	      $ck = $this->parsingUtils->getCustomKill($logLineDetails);
-	      
-	      if(($w == "sniperrifle" || $w == "tf_projectile_arrow" || $w == "ambassador") && $ck == "headshot") {
-	        //if a headshot occurred, edit the weapon to be the normal weapon's headshot variant.
-	        //also, add headshot score
-	        $w .= "_hs";
-	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "headshots");
-	      } else if($ck == "backstab") {
-	        //edit weapon to be backstab variant
-	        $w .= "_bs";
-	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "backstabs");
-	      }
-	      $weapon = $this->getWeaponFromCache($w);
-	      
-	      $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
-	      $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
-	      if($weapon->getRole() != null && $weapon->getRole()->getId() != null) {
-	        $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
-	      }
-	      $this->log->addPlayerStatToSteamid($attacker->getSteamid(), $victim->getSteamid(), "kills");
-	      
-	      $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
-	      $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
-	      $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
-	      
-	      $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
-	        ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
-	      
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "committed suicide with") {
-	      $p = $players[0];
-	      $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
-	      $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
-	      $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
-	      $this->log->addPlayerStatToSteamid($p->getSteamid(), $p->getSteamid(), "deaths");
-	      if($weapon->getRole() != null) $this->log->addRoleToSteamid($p->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
-	      return self::GAME_CONTINUE;
-	    } else if($playerLineAction == "triggered") {	      
-	      $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
-	      
-	      if($playerLineActionDetail == "kill assist") {
-	        //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
-	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
+	    } else if($this->gameOver) {
+	      return self::GAME_OVER; //prevent unrecogloglineexception
+	    } else {
+	      if($playerLineAction == "entered the game"
+	      || $playerLineAction == "connected, address"
+	      || $playerLineAction == "STEAM USERID validated"
+	      ) {
+	        return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
+	      } else if($playerLineAction == "say" || $playerLineAction == "say_team") {
+	        $txt = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
+	        
+	        if(strpos($txt, "!") === 0 || strpos($txt, "/") === 0) {
+	          //lines beginning with ! or / generally are Sourcemod commands, which could hold sensitive info.
+	          //do not include in scrubbed log, nor in events.
+	          $this->addToScrubbedLog = false;
+	          return self::GAME_CONTINUE;
+	        }
+	        
+	        if($players[0]->getSteamid() != "Console") {
+	          $p = $players[0];
+	          $this->log->addChatEvent($elapsedTime, $playerLineAction, $p, $txt);
+	        }
+	        
 	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "domination") {
+	      } else if($playerLineAction == "disconnected") {
+	        $p = $players[0];
+	        $this->log->finishStatForSteamid($p->getSteamid(), $dt, $this->log->get_timeStart());
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineAction == "changed role to") {
+	        $p = $players[0];
+	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache($this->parsingUtils->getPlayerLineActionDetail($logLineDetails)), $dt, $this->log->get_timeStart());
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineAction == "changed name to") {
+	        $p = $players[0];
+	        $p->setName($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	        $this->log->addUpdateUniqueStatFromPlayerInfo($p);
+	        return self::GAME_CONTINUE;
+	      } else if($playerLineAction == "killed") {
 	        $attacker = $players[0];
 	        $victim = $players[1];
-	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "dominations"); 
-	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "times_dominated"); 
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "builtobject") {
-	        $p = $players[0];
-	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "killedobject") {
-          //just ignore
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "revenge") {
-	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "revenges"); 
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "player_extinguished") {
-	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "extinguishes"); 
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "chargedeployed") {
-	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
-	        $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "medic_death") {
-	        $victim = $players[1];
-	        if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
-	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
+	        $w = $this->parsingUtils->getWeapon($logLineDetails);
+	        $ck = $this->parsingUtils->getCustomKill($logLineDetails);
+	        
+	        if(($w == "sniperrifle" || $w == "tf_projectile_arrow" || $w == "ambassador") && $ck == "headshot") {
+	          //if a headshot occurred, edit the weapon to be the normal weapon's headshot variant.
+	          //also, add headshot score
+	          $w .= "_hs";
+	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "headshots");
+	        } else if($ck == "backstab") {
+	          //edit weapon to be backstab variant
+	          $w .= "_bs";
+	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "backstabs");
 	        }
-	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
-	        $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
+	        $weapon = $this->getWeaponFromCache($w);
+	        
+	        $this->log->incrementStatFromSteamid($attacker->getSteamid(), "kills");
+	        $this->log->incrementWeaponForPlayer($attacker->getSteamid(), $weapon, 'kills');
+	        if($weapon->getRole() != null && $weapon->getRole()->getId() != null) {
+	          $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
+	        }
+	        $this->log->addPlayerStatToSteamid($attacker->getSteamid(), $victim->getSteamid(), "kills");
+	        
+	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
+	        $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
+	        $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
+	        
+	        $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
+	          ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
+	        
 	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "healed") {
+	      } else if($playerLineAction == "committed suicide with") {
 	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
+	        $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
+	        $this->log->incrementStatFromSteamid($p->getSteamid(), "deaths"); 
+	        $this->log->incrementWeaponForPlayer($p->getSteamid(), $weapon, 'deaths');
+	        $this->log->addPlayerStatToSteamid($p->getSteamid(), $p->getSteamid(), "deaths");
+	        if($weapon->getRole() != null) $this->log->addRoleToSteamid($p->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "captureblocked") {
-	        $p = $players[0];
-	        $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_blocked");
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "weaponstats") {
-	        //superlogs specific trigger
-	        return self::GAME_CONTINUE;
-	      } else if($playerLineActionDetail == "flagevent") {
-	        $p = $players[0];
-	        $event = $this->parsingUtils->getFlagEvent($logLineDetails);
-	        $this->isCtf = true;
-	        if($event == "defended") {
-	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_defends");
+	      } else if($playerLineAction == "triggered") {	      
+	        $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
+	        
+	        if($playerLineActionDetail == "kill assist") {
+	          //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
 	          return self::GAME_CONTINUE;
-	        } else if($event == "captured") {
-	          $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_captures");
-	          $this->log->incrementScoreForTeam($p->getTeam());
-	          $this->log->addScoreChangeEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
+	        } else if($playerLineActionDetail == "domination") {
+	          $attacker = $players[0];
+	          $victim = $players[1];
+	          $this->log->incrementStatFromSteamid($attacker->getSteamid(), "dominations"); 
+	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "times_dominated"); 
 	          return self::GAME_CONTINUE;
-	        } else if($event == "picked up"
-	          || $event == "dropped") {
-	          //ignore
+	        } else if($playerLineActionDetail == "builtobject") {
+	          $p = $players[0];
+	          $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
 	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "killedobject") {
+            //just ignore
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "revenge") {
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "revenges"); 
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "player_extinguished") {
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "extinguishes"); 
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "chargedeployed") {
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "ubers"); 
+	          $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "medic_death") {
+	          $victim = $players[1];
+	          if($this->parsingUtils->didMedicDieWithUber($logLineDetails)) {  
+	            $this->log->incrementStatFromSteamid($victim->getSteamid(), "dropped_ubers");
+	          }
+	          $this->log->incrementStatFromSteamid($victim->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
+	          $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "healed") {
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "captureblocked") {
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_blocked");
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "weaponstats") {
+	          //superlogs specific trigger
+	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "flagevent") {
+	          $p = $players[0];
+	          $event = $this->parsingUtils->getFlagEvent($logLineDetails);
+	          $this->isCtf = true;
+	          if($event == "defended") {
+	            $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_defends");
+	            return self::GAME_CONTINUE;
+	          } else if($event == "captured") {
+	            $this->log->incrementStatFromSteamid($p->getSteamid(), "flag_captures");
+	            $this->log->incrementScoreForTeam($p->getTeam());
+	            $this->log->addScoreChangeEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
+	            return self::GAME_CONTINUE;
+	          } else if($event == "picked up"
+	            || $event == "dropped") {
+	            //ignore
+	            return self::GAME_CONTINUE;
+	          }
 	        }
 	      }
 	    }
-	  } else if($this->parsingUtils->isLogLineOfType($logLine, 'Team', $logLineDetails)) {
-	    $team = $this->parsingUtils->getTeamFromTeamLine($logLineDetails);
-	    $teamAction = $this->parsingUtils->getTeamAction($logLineDetails);
-	    if($teamAction == "triggered") {
-	      $teamTriggerAction = $this->parsingUtils->getTeamTriggerAction($logLineDetails);
-	      if($teamTriggerAction == "pointcaptured") {
-	        $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
-	        $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
-	        
-	        foreach($players as $p) {
-	          $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_captured");
-	        }
-	        
-	        $cpname = $this->parsingUtils->getCapturePointName($logLineDetails);
-	        
-	        $this->log->addPointCaptureEvent($elapsedTime, $players, $team, $cpname);
-	        return self::GAME_CONTINUE;
-	      } else if($teamTriggerAction == "Intermission_Win_Limit") {
-	        return self::GAME_CONTINUE;//skip processing.
-	      }
-	    } else if($teamAction == "current score" || $teamAction == "final score") {
-	      if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
-	        //the only time there would be zero players for a team is if something screwed up.
-	        return self::GAME_APPEARS_OVER;
-	      }
-	      
-	      if($team == "Blue") {
-	        //this line will be the last of the team score lines, and will likely always be the last line in a game.
-	        $this->log->addRoundStartEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
-	      }
-	      return self::GAME_CONTINUE;
-	    }
-	  }
+    } else if($this->parsingUtils->isLogLineOfType($logLine, 'Team', $logLineDetails)) {
+      $team = $this->parsingUtils->getTeamFromTeamLine($logLineDetails);
+      $teamAction = $this->parsingUtils->getTeamAction($logLineDetails);
+      if($teamAction == "triggered") {
+        $teamTriggerAction = $this->parsingUtils->getTeamTriggerAction($logLineDetails);
+        if($teamTriggerAction == "pointcaptured") {
+          $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
+          $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
+          
+          foreach($players as $p) {
+            $this->log->incrementStatFromSteamid($p->getSteamid(), "capture_points_captured");
+          }
+          
+          $cpname = $this->parsingUtils->getCapturePointName($logLineDetails);
+          
+          $this->log->addPointCaptureEvent($elapsedTime, $players, $team, $cpname);
+          return self::GAME_CONTINUE;
+        } else if($teamTriggerAction == "Intermission_Win_Limit") {
+          return self::GAME_CONTINUE;//skip processing.
+        }
+      } else if($teamAction == "current score" || $teamAction == "final score") {
+        if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
+          //the only time there would be zero players for a team is if something screwed up.
+          return self::GAME_APPEARS_OVER;
+        }
+        
+        if($team == "Blue") {
+          //this line will be the last of the team score lines, and will likely always be the last line in a game.
+          $this->log->addRoundStartEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
+        }
+        return self::GAME_CONTINUE;
+      }
+    }
 	  
 	  //still here. Did not return like expected, therefore this is an unrecognized line.
 	  if(!$this->ignoreUnrecognizedLogLines) {
