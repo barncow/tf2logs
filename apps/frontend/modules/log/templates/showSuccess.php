@@ -41,27 +41,35 @@ use_javascript('logshow.js');
 </div>
 <br class="hardSeparator"/>
 
-<?php if(mapExists($log['map_name'])): ?>
 <div id="mapViewerContainer">
-  <canvas id="mapViewer" class="ui-widget-content"></canvas>
-  <div id="mapViewerControls">
-	  <button id="playPauseButton"></button>
-	  <div id="playbackProgress"><span id="totalTime"></span></div>
-	  <div style="clear: both">
-	    <label for="playbackSpeed">Playback Speed</label>
-	    <select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">
-	      <option value="1">1x</option>
-	      <option value="5" selected>5x</option>
-	      <option value="20">20x</option>
-	    </select>
-	    
-	    <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
-	    <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
-	  </div>
-  </div>
-  <div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
-</div>
+<?php if($log['map_name']): ?>
+  <?php if(mapExists($log['map_name'])): ?>
+  
+    <canvas id="mapViewer" class="ui-widget-content"></canvas>
+    <div id="mapViewerControls">
+	    <button id="playPauseButton"></button>
+	    <div id="playbackProgress"><span id="totalTime"></span></div>
+	    <div style="clear: both">
+	      <label for="playbackSpeed">Playback Speed</label>
+	      <select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">
+	        <option value="1">1x</option>
+	        <option value="5" selected>5x</option>
+	        <option value="20">20x</option>
+	      </select>
+	      
+	      <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
+	      <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
+	    </div>
+    </div>
+    <div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
+ 
+  <?php else: ?>
+    <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>The map <?php echo $log['map_name'] ?> is not yet supported.</div>
+  <?php endif ?>
+<?php else: ?>
+  <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $log['Submitter']['name'] ?> did not specify a map for this log file.</div>
 <?php endif ?>
+ </div>
 
 <?php $miniStats = array() ?>
 <?php echo outputStatPanel($log['Stats'], $miniStats) ?>
