@@ -105,7 +105,9 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         
         foreach($stat->getRoleStats() as $r) {
           if($r->getRole()->getKeyName() == "medic") {
-            $this->assertEquals(1666, $r->getTimePlayed(), "barncow's time as medic");
+            $this->assertEquals(744, $r->getTimePlayed(), "barncow's time as medic");
+          } else if($r->getRole()->getKeyName() == "heavyweapons") {
+            $this->assertEquals(922, $r->getTimePlayed(), "barncow's time as heavyweapons");
           } else {
             $this->fail("Barncow has extra role: ".$r->getRole()->getKeyName());
           }
