@@ -47,7 +47,7 @@ function mapExists($map) {
 
 function getCoords($coord) {
   $a = explode(" ", $coord);
-  return $a[0].",".$a[1];
+  return "x:".$a[0].",y:".$a[1];
 }
 
 function outputPlayerCollection($statsArray) {
@@ -75,7 +75,7 @@ function outputEventsCollection($eventsArray) {
       $isFirst = false;
     }
     if($event['event_type'] == "kill") {
-      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['weapon_id'].",".$event['attacker_player_id'].",new Coordinate(".getCoords($event['attacker_coord'])."),".$event['victim_player_id'].",new Coordinate(".getCoords($event['victim_coord'])."))\n";
+      $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").k(".$event['weapon_id'].",".$event['attacker_player_id'].",{".getCoords($event['attacker_coord'])."},".$event['victim_player_id'].",{".getCoords($event['victim_coord'])."})\n";
     } elseif($event['event_type'] == "say") {
       $s .= $comma."new LogEvent(".$event['elapsed_seconds'].").s(".$event['chat_player_id'].",\"".addslashes($event['text'])."\")\n";
     } elseif($event['event_type'] == "say_team") {
