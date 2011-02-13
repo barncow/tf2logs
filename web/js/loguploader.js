@@ -29,6 +29,8 @@ $(function() {
 	$("#uploader_container").attr('title', ''); //clearing the ui's runtime title
 	var droptext = "Drag and drop log files here, or click the Add Files button.";
 	$(".plupload_droptext").html(droptext);
+	$(".plupload_header_title").html("Upload Log Files");
+	$(".plupload_header_text").html("Click the Add Files button to add a log file to the queue. Enter in an optional name and map name for the log file. In order to view the events of the log with the Log Viewer, a map must be specified. When you are ready, click Upload Files. If you make a mistake, you can always edit your log files through the control panel.");
 	
 	var uploader = $('#uploader').plupload('getUploader');
 	
@@ -68,7 +70,7 @@ $(function() {
   });
 	    
   uploader.bind('BeforeUpload', function(up, file) {
-    $('#'+file.id+' .plupload_file_name .logInfo .status').html("Uploading...");
+    $('#'+file.id+' .plupload_file_name .logInfo .status').html("<strong>Uploading...</strong>");
     $('#'+file.id+' .plupload_file_name :text').attr('disabled', true);
     up.settings.multipart_params['log[name]'] = $('#logName' + file.id).val();
     up.settings.multipart_params['log[map_name]'] = $('#logMapName' + file.id).val();
@@ -93,7 +95,7 @@ $(function() {
 			case plupload.UPLOADING:
 			  if(file.percent == 100) {
 			    //file has been uploaded, just waiting for response.
-				  $('#'+file.id+' .plupload_file_name .logInfo .status').html("Processing...");
+				  $('#'+file.id+' .plupload_file_name .logInfo .status').html("<strong>Processing...</strong>");
 				}
 				break;
 		}

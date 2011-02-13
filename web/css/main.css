@@ -120,7 +120,7 @@ div.infoBox .subInfo, #userCP .subInfo {
 .statTable caption, .statTableCaption {
   text-align: left;
   font-weight: normal;
-  font-size: 25px;
+  font-size: 20px;
   white-space:nowrap;
   font-weight: bolder;
 }
@@ -129,6 +129,14 @@ div.infoBox .subInfo, #userCP .subInfo {
   float: left;
   position: relative;
   margin-bottom: 2em;
+}
+
+#mapViewerContainer {
+  padding: 3px;
+}
+
+#logViewerInfoBox {
+  float: left;
 }
 
 br.hardSeparator {
@@ -174,7 +182,7 @@ br.hardSeparator {
   margin: 0;
 }
 
-#userCP strong a, #userCP strong {
+#userCP strong a, #userCP strong, .status strong {
   font-weight: bolder;
   color: #ffff38;
 }
@@ -273,7 +281,7 @@ br.hardSeparator {
 }
 
 .alertBox {
-  width: 300px;
+  width: 400px;
   margin: 0 auto 1em auto;
   text-align: center;
 }
@@ -341,8 +349,19 @@ br.hardSeparator {
 }
 
 /* to be used when background image is not desired. */
-.ui-widget-content-nobg { border: 1px solid #9c947c; background-color: #201913; color: #e3ddc9; }
-.ui-widget-content-nobg a { color: #e3ddc9; }
+.ui-widget-content-nobg { 
+  border: 1px solid #9c947c;
+}
+.ui-widget-content-nobg a { 
+  color: #e3ddc9; 
+}
+.ui-widget-content-nobg, .ui-table-content {
+  background-color: #201913; 
+  color: #e3ddc9;
+}
+.ui-table-content {
+  border: 1px solid #695444;
+}
 
 .error_list {
   margin: 3px; 
@@ -360,6 +379,12 @@ br.hardSeparator {
 
 .txtright {
   text-align: right;
+}
+
+#uploader {
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /*! tf2 tooltip style */

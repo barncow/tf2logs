@@ -462,7 +462,7 @@ class LogParser {
 	          $attacker = $players[0];
 	          $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
 	          
-	          if($weapon->getRole() != null && $weapon->getRole()->getId() != null) {
+	          if($weapon && $weapon->getRole() != null && $weapon->getRole()->getId() != null) {
 	            $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
 	          }
 	          return self::GAME_CONTINUE;

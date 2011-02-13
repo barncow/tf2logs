@@ -54,26 +54,26 @@ $s = <<<EOD
     <tbody>
       <tr>
 EOD;
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->num_matches).'">'.$player->num_matches.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->killsassists_per_death).'">'.$player->killsassists_per_death.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->backstabs).'">'.$player->backstabs.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_blocked).'">'.$player->capture_points_blocked.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->capture_points_captured).'">'.$player->capture_points_captured.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->flag_defends).'">'.$player->flag_defends.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->flag_captures).'">'.$player->flag_captures.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->dominations).'">'.$player->dominations.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->times_dominated).'">'.$player->times_dominated.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->revenges).'">'.$player->revenges.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->extinguishes).'">'.$player->extinguishes.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->ubers).'">'.$player->ubers.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->ubers_per_death).'">'.$player->ubers_per_death.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->dropped_ubers).'">'.$player->dropped_ubers.'</span></td>';
-        $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($player->healing).'">'.$player->healing.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->num_matches).'">'.$player->num_matches.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->killsassists_per_death).'">'.$player->killsassists_per_death.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->backstabs).'">'.$player->backstabs.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->capture_points_blocked).'">'.$player->capture_points_blocked.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->capture_points_captured).'">'.$player->capture_points_captured.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->flag_defends).'">'.$player->flag_defends.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->flag_captures).'">'.$player->flag_captures.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->dominations).'">'.$player->dominations.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->times_dominated).'">'.$player->times_dominated.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->revenges).'">'.$player->revenges.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->extinguishes).'">'.$player->extinguishes.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->ubers).'">'.$player->ubers.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->ubers_per_death).'">'.$player->ubers_per_death.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->dropped_ubers).'">'.$player->dropped_ubers.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->healing).'">'.$player->healing.'</span></td>';
   $s .= <<<EOD
       </tr>
     </tbody>
@@ -98,12 +98,12 @@ echo '</div><br class="hardSeparator"/>';
     <tbody>
       <?php foreach($roles as $r): ?>
         <tr>
-          <td class="ui-widget-content">
+          <td class="ui-table-content">
             <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" alt="<?php echo $r->name ?>"/>
             <?php echo $r->name ?>
           </td>
-          <td class="ui-widget-content"><?php echo $r->num_times ?></td>
-          <td class="ui-widget-content"><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
+          <td class="ui-table-content"><?php echo $r->num_times ?></td>
+          <td class="ui-table-content"><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
         </tr>
       <?php endforeach ?>
     </tbody>
@@ -130,19 +130,19 @@ echo '</div><br class="hardSeparator"/>';
         if(strpos($weaponHTML, "<img") === 0) $title = ' title="'.outputWeaponName($w['name'], $w['key_name']).'"';
         ?>
         <tr>
-          <td class="ui-widget-content"<?php echo $title ?>><?php echo $weaponHTML ?></td>
+          <td class="ui-table-content"<?php echo $title ?>><?php echo $weaponHTML ?></td>
           <?php $foundWS = false ?>
           <?php foreach($weaponStats as $ws): ?>
             <?php if($ws->getWeaponId() == $w['id']): ?>
-              <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></span></td>
-              <td class="ui-widget-content"><span class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></span></td>
+              <td class="ui-table-content"><span class="<?php echo dataCellOutputClass($ws->num_kills) ?>"><?php echo $ws->num_kills ?></span></td>
+              <td class="ui-table-content"><span class="<?php echo dataCellOutputClass($ws->num_deaths) ?>"><?php echo $ws->num_deaths ?></span></td>
               <?php $foundWS = true ?>
               <?php break ?>
             <?php endif ?>
           <?php endforeach ?>
           <?php if(!$foundWS): ?>
-            <td class="ui-widget-content"><span class="zeroValue">0</span></td>
-            <td class="ui-widget-content"><span class="zeroValue">0</span></td>
+            <td class="ui-table-content"><span class="zeroValue">0</span></td>
+            <td class="ui-table-content"><span class="zeroValue">0</span></td>
           <?php endif ?>
         </tr>
       <?php endforeach ?>
@@ -153,16 +153,16 @@ echo '</div><br class="hardSeparator"/>';
 
 <?php 
 $pagination = "";
-if ($plPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $plPager, 'plPage', 'playerLogPlayed').'</div>';
+if ($plPager->haveToPaginate()) $pagination = '<div class="ui-table-content statTable">'.outputPaginationLinks($sf_request, $plPager, 'plPage', 'playerLogPlayed').'</div>';
 $data = "";
 foreach($plPager->getResults() as $pl) {
   $link = link_to($pl['name'], 'log/show?id='.$pl['id']);
   $date = getHumanReadableDate($pl['created_at']);
   $data .= <<<EOD
       <tr>
-        <td class="ui-widget-content">$link</td>
-        <td class="ui-widget-content">{$pl['map_name']}</td>
-        <td class="ui-widget-content">{$date}</td>
+        <td class="ui-table-content">$link</td>
+        <td class="ui-table-content">{$pl['map_name']}</td>
+        <td class="ui-table-content">{$date}</td>
       </tr>
 EOD;
 }
@@ -192,16 +192,16 @@ echo '</div><br class="hardSeparator"/>';
 
 if($numSubmittedLogs > 0) {
   $pagination = "";
-  if ($slPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
+  if ($slPager->haveToPaginate()) $pagination = '<div class="ui-table-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
   $data = "";
   foreach($slPager->getResults() as $sl) {
     $link = link_to($sl['name'], 'log/show?id='.$sl['id']);
     $date = getHumanReadableDate($sl['created_at']);
     $data .= <<<EOD
         <tr>
-          <td class="ui-widget-content">$link</td>
-          <td class="ui-widget-content">{$sl['map_name']}</td>
-          <td class="ui-widget-content">{$date}</td>
+          <td class="ui-table-content">$link</td>
+          <td class="ui-table-content">{$sl['map_name']}</td>
+          <td class="ui-table-content">{$date}</td>
         </tr>
 EOD;
   }

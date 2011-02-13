@@ -177,7 +177,7 @@ EOD;
     
     for($x = 0; $x < count($miniStats); ++$x) {
       $stat = $miniStats[$x];
-      $s .= '<tr><td class="ui-widget-content">';
+      $s .= '<tr><td class="ui-table-content">';
         $s .= '<img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
       for($y = 0; $y < count($weapons); ++$y) {
         $w = $weapons[$y];
@@ -187,13 +187,13 @@ EOD;
           if($ws['stat_id'] == $stat['id'] && $ws['weapon_id'] == $w['id']) {
             $kills = $ws['num_kills'];
             $deaths = $ws['num_deaths'];
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($kills).'">'.$kills.'</span></td><td class="ui-widget-content"><span class="'.dataCellOutputClass($deaths).'">'.$deaths.'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($kills).'">'.$kills.'</span></td><td class="ui-table-content"><span class="'.dataCellOutputClass($deaths).'">'.$deaths.'</span></td>';
             $foundWS = true;
             break;
           }
         }
         if(!$foundWS) {
-          $s .= '<td class="ui-widget-content"><span class="zeroValue">0</span></td><td class="ui-widget-content"><span class="zeroValue">0</span></td>';
+          $s .= '<td class="ui-table-content"><span class="zeroValue">0</span></td><td class="ui-table-content"><span class="zeroValue">0</span></td>';
         }
       }
     $s .= '</tr>';
@@ -241,36 +241,36 @@ EOD;
     $miniStat['id'] = $stat['id'];
     $miniStatsRet[] = $miniStat;
     
-    $s .= '<tr><td class="ui-widget-content" title="Steam ID: '.$stat['Player']['steamid'].'">';
+    $s .= '<tr><td class="ui-table-content" title="Steam ID: '.$stat['Player']['steamid'].'">';
         $s .= '<img src="/avatars/'.$miniStat['playerId'].'.jpg" class="'.$stat['team'].' avatar avatarImage ui-corner-all" id="avatar'.$miniStat['playerId'].'"/>';
         $s .= link_to($miniStat['name'], 'player/showNumericSteamId?id='.$miniStat['playerNumericSteamid']);
       $s .= '</td>';
-      $s .= '<td class="ui-widget-content">';
+      $s .= '<td class="ui-table-content">';
         $s .= '<ul>';
           foreach($stat['RoleStats'] as $rs) {
             $s .= '<li><img src="'.sfConfig::get('app_class_icon_base_url').'/'.$rs['Role']['key_name'].'.png" class="classIcon" title="'.$rs['Role']['name'].' - '.outputSecondsToHumanFormat($rs['time_played']).'" alt="'.$rs['Role']['name'].' - '.outputSecondsToHumanFormat($rs['time_played']).'"/></li>';
           }
         $s .= '</ul>';
       $s .= '</td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['kills']).'">'. $stat['kills'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['assists']).'">'. $stat['assists'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['deaths']).'">'. $stat['deaths'].'</span></td>';
-      $s .= '<td class="ui-widget-content">';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['kills']).'">'. $stat['kills'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['assists']).'">'. $stat['assists'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['deaths']).'">'. $stat['deaths'].'</span></td>';
+      $s .= '<td class="ui-table-content">';
         $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
           $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']);
         $s .= '</span>';
       $s .= '</td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['longest_kill_streak']).'">'. $stat['longest_kill_streak'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['headshots']).'">'. $stat['headshots'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['backstabs']).'">'. $stat['backstabs'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['capture_points_blocked']).'">'. $stat['capture_points_blocked'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['capture_points_captured']).'">'. $stat['capture_points_captured'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['flag_defends']).'">'. $stat['flag_defends'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['flag_captures']).'">'. $stat['flag_captures'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['dominations']).'">'. $stat['dominations'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['times_dominated']).'">'. $stat['times_dominated'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['revenges']).'">'. $stat['revenges'].'</span></td>';
-      $s .= '<td class="ui-widget-content"><span class="'. dataCellOutputClass($stat['extinguishes']).'">'. $stat['extinguishes'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['longest_kill_streak']).'">'. $stat['longest_kill_streak'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['headshots']).'">'. $stat['headshots'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['backstabs']).'">'. $stat['backstabs'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['capture_points_blocked']).'">'. $stat['capture_points_blocked'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['capture_points_captured']).'">'. $stat['capture_points_captured'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['flag_defends']).'">'. $stat['flag_defends'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['flag_captures']).'">'. $stat['flag_captures'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['dominations']).'">'. $stat['dominations'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['times_dominated']).'">'. $stat['times_dominated'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['revenges']).'">'. $stat['revenges'].'</span></td>';
+      $s .= '<td class="ui-table-content"><span class="'. dataCellOutputClass($stat['extinguishes']).'">'. $stat['extinguishes'].'</span></td>';
       $s .= '</tr>';
     }
   $s .= '</tbody>';
@@ -303,21 +303,21 @@ EOD;
       foreach($stat['RoleStats'] as $rs) {
         if($rs['Role']['key_name'] == "medic" && $rs['time_played'] > 1) {
           $s .= '<tr>';
-            $s .= '<td class="ui-widget-content">';
+            $s .= '<td class="ui-table-content">';
               $s .= '<img src="/avatars/'.$stat['Player']['id'].'.jpg" class="'.$stat['team'].' avatar avatarImage ui-corner-all" id="avatar'.$stat['Player']['id'].'"/>';
               $s .= link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']).'';
             $s .= '</td>';
-            $s .= '<td class="ui-widget-content">';
+            $s .= '<td class="ui-table-content">';
               $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
                 $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']).'';
               $s .= '</span>';
             $s .= '</td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['ubers']).'">'.$stat['ubers'].'</span></td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])).'">'.doPerDeathDivision($stat['ubers'], $stat['deaths']).'</span></td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['dropped_ubers']).'">'.$stat['dropped_ubers'].'</span></td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['healing']).'">'.$stat['healing'].'</span></td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])).'">'.doPerDeathDivision($stat['healing'], $stat['deaths']).'</span></td>';
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($stat['extinguishes']).'">'.$stat['extinguishes'].'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['ubers']).'">'.$stat['ubers'].'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])).'">'.doPerDeathDivision($stat['ubers'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['dropped_ubers']).'">'.$stat['dropped_ubers'].'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['healing']).'">'.$stat['healing'].'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])).'">'.doPerDeathDivision($stat['healing'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['extinguishes']).'">'.$stat['extinguishes'].'</span></td>';
           $s .= '</tr>';
         }
       }
@@ -347,20 +347,20 @@ EOD;
     $s .= '</tr></thead><tbody>';
   for($x = 0; $x < count($miniStats); ++$x) {
     $stat = $miniStats[$x];
-    $s .= '<tr><td class="ui-widget-content"><img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
+    $s .= '<tr><td class="ui-table-content"><img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
       for($y = 0; $y < count($miniStats); ++$y) {
         $colstat = $miniStats[$y];
         $foundPS = false;
         for($z = 0; $z < count($playerStats); ++$z) {
           $ps = $playerStats[$z];
           if($ps['stat_id'] == $stat['id'] && $ps['player_id'] == $colstat['playerId']) {
-            $s .= '<td class="ui-widget-content"><span class="'.dataCellOutputClass($ps['num_kills']).'">'.$ps['num_kills'].'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($ps['num_kills']).'">'.$ps['num_kills'].'</span></td>';
             $foundPS = true;
             break;
           }
         }
         if(!$foundPS) {
-          $s .= '<td class="ui-widget-content"><span class="zeroValue">0</span></td>';
+          $s .= '<td class="ui-table-content"><span class="zeroValue">0</span></td>';
         }
       }
     $s .= '</tr>';

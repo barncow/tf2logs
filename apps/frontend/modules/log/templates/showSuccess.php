@@ -41,11 +41,13 @@ use_javascript('logshow.js');
 </div>
 <br class="hardSeparator"/>
 
-<div id="mapViewerContainer">
-<?php if($log['map_name']): ?>
-  <?php if(mapExists($log['map_name'])): ?>
-  
-    <canvas id="mapViewer" class="ui-widget-content"></canvas>
+<?php
+
+$s = '<div id="mapViewerContainer">';
+if($log['map_name']) {
+  if(mapExists($log['map_name'])) {
+  $s .= <<<EOD
+    <canvas id="mapViewer"></canvas>
     <div id="mapViewerControls">
 	    <button id="playPauseButton"></button>
 	    <div id="playbackProgress"><span id="totalTime"></span></div>
@@ -61,26 +63,28 @@ use_javascript('logshow.js');
 	      <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
 	    </div>
     </div>
-    <div id="chatBox" class="ui-widget-content ui-corner-all"><ul></ul></div>
- 
-  <?php else: ?>
-    <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>The map <?php echo $log['map_name'] ?> is not yet supported.</div>
-  <?php endif ?>
-<?php else: ?>
-  <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $log['Submitter']['name'] ?> did not specify a map for this log file.</div>
-<?php endif ?>
- </div>
+    <div id="chatBox" class="ui-widget-content-nobg ui-corner-all"><ul></ul></div>
+EOD;
+  } else {
+    $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>The map '.$log['map_name'].' is not currently supported.</div>';
+  }
+} else {
+  $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>'.$log['Submitter']['name'].' did not specify a map for this log file.</div>';
+}
+ $s .= '</div>';
+echo outputInfoBox("logViewerInfoBox", "Log Viewer", $s);
+echo '<br class="hardSeparator"/>';
 
-<?php $miniStats = array() ?>
-<?php echo outputStatPanel($log['Stats'], $miniStats) ?>
+$miniStats = array();
+echo outputStatPanel($log['Stats'], $miniStats);
 
-<?php echo outputMedicStats($log['Stats']) ?>
+echo outputMedicStats($log['Stats']);
 
-<?php echo outputWeaponStats($weapons, $miniStats, $weaponStats) ?>
+echo outputWeaponStats($weapons, $miniStats, $weaponStats);
 
-<?php echo outputPlayerStats($miniStats, $playerStats) ?>
+echo outputPlayerStats($miniStats, $playerStats);
 
-<?php if(mapExists($log['map_name'])): ?>
+if(mapExists($log['map_name'])) { ?>
 <script type="application/x-javascript">
   var gameMapObj;
   var mapViewerObj;
@@ -95,4 +99,4 @@ $(function (){
 	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
 });
 </script>
-<?php endif ?>
+<?php } ?>
