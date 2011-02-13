@@ -364,10 +364,7 @@ var MapViewer = Class.extend({
 	},
 	
 	scrollChatBox: function() {
-		last = this.jqChatBox.children("ul").children(":last");
-		if(last.length == 1) {
-			this.jqChatBox.scrollTop(last.position().top);
-		}
+	  this.jqChatBox.scrollTop(this.jqChatBox.children("ul").height());
 	},
 	
 	updateSliderLabel: function(secs) {
