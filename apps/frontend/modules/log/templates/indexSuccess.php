@@ -29,6 +29,7 @@ use_stylesheet('jquery.qtip.min.20110205.css');
   <?php use_javascript('plupload.html4.min.js'); ?>
   <?php use_javascript('jquery.ui.plupload.min.js'); ?>
   <?php use_javascript('loguploader.js'); ?>
+  <?php use_javascript('jquery.infieldlabel.min.js'); ?>
   <div id="uploader">
     <?php 
     $url = url_for('log/add');
@@ -83,17 +84,6 @@ echo '</div><br class="hardSeparator"/>';
         <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td style="white-space: nowrap;"><?php echo getHumanReadableDate($l->getDateTimeObject('created_at')) ?></td></tr>
       <?php endforeach ?>
       </table>
-    </div>
-    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
-  </div>
-  
-  <div id="actions" class="infoBox">
-    <div class="ui-widget ui-widget-header ui-corner-top header">Actions</div>
-    <div class="content">
-      <ul>
-        <li><?php echo link_to("Search Logs", '@log_search') ?></li>
-        <li><?php echo link_to("Search Players", '@player_search') ?></li>
-      </ul>
     </div>
     <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
   </div>

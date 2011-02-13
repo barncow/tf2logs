@@ -15,8 +15,8 @@ class LogSearchForm extends BaseForm {
     Doctrine::getTable('Log')->getMapsAsList($maps);
     
     $this->setWidgets(array(
-      'name'      => new sfWidgetFormInputText(),
-      'map_name'  => new sfWidgetFormSelect(array('choices' => $maps)),
+      'name'      => new sfWidgetFormInputText(array('label' => 'Log Name')),
+      'map_name'  => new sfWidgetFormSelect(array('choices' => $maps, 'label' => 'Map Name')),
       'from_date' => new sfWidgetFormJQueryDate(array(
                         'culture' => 'en',
                         'label' => 'Start Date'

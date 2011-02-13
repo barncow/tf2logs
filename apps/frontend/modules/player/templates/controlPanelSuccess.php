@@ -1,5 +1,5 @@
 <?php 
-$sf_response->setTitle('User Control Panel - TF2Logs.com'); 
+$sf_response->setTitle('My TF2Logs - TF2Logs.com'); 
 use_helper("PageElements");
 use_helper('Search');
 
@@ -14,17 +14,17 @@ echo outputInfoBox("playerNameCP", $player->name, $s);
 echo '</div><br class="hardSeparator"/>';
 
 $pagination = "";
-if ($slPager->haveToPaginate()) $pagination = '<div class="ui-widget-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
+if ($slPager->haveToPaginate()) $pagination = '<div class="ui-table-content statTable">'.outputPaginationLinks($sf_request, $slPager, 'slPage', 'playerLogSubmitted').'</div>';
 $data = "";
 foreach($slPager->getResults() as $sl) {
   $link = link_to('Edit', '@log_edit?id='.$sl['id']);
   $date = getHumanReadableDate($sl['created_at']);
   $data .= <<<EOD
       <tr>
-        <td class="ui-widget-content">$link</td>
-        <td class="ui-widget-content">{$sl['name']}</td>
-        <td class="ui-widget-content">{$sl['map_name']}</td>
-        <td class="ui-widget-content">{$date}</td>
+        <td class="ui-table-content">$link</td>
+        <td class="ui-table-content">{$sl['name']}</td>
+        <td class="ui-table-content">{$sl['map_name']}</td>
+        <td class="ui-table-content txtnowrap">{$date}</td>
       </tr>
 EOD;
 }

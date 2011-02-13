@@ -63,7 +63,7 @@ class logActions extends sfActions {
 
     $this->form = new LogForm();
 
-    $status = $this->processForm($request, $this->form);
+    $status = $this->processForm($request);
     
     if($request->isXmlHttpRequest()) {
        $request->setRequestFormat('json');
@@ -153,12 +153,12 @@ class logActions extends sfActions {
     }
   }
 
-  protected function processForm(sfWebRequest $request, sfForm $form) {
-    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+  protected function processForm(sfWebRequest $request) {
+    $this->form->bind($request->getParameter($this->form->getName()), $request->getFiles($this->form->getName()));
     
     if ($this->form->isValid()) {
       $lastid = null;
-      foreach ($request->getFiles($form->getName()) as $uploadedFile) {
+      foreach ($request->getFiles($this->form->getName()) as $uploadedFile) {
         $uploadDir = sfConfig::get('app_uploadedlogs');
         $upload_filename = $uploadedFile["name"];
         move_uploaded_file($uploadedFile["tmp_name"], $uploadDir . "/" . $upload_filename);
@@ -167,10 +167,7 @@ class logActions extends sfActions {
         $log = null;
         
         try {
-          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $form->getValue('name'), $form->getValue('map_name'));
-        } catch(TournamentModeNotFoundException $tmnfe) {
-          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
-          return "error";
+          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
         } catch(CorruptLogLineException $clle) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.'.$clle);
           return "error";
@@ -178,7 +175,7 @@ class logActions extends sfActions {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.
           $log = new Log();
-          $name = $form->getValue('name');
+          $name = $this->form->getValue('name');
           if(trim($name) === "") {
             $name = $upload_filename;
           }

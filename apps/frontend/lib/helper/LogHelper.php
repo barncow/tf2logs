@@ -167,17 +167,17 @@ EOD;
       $weaponHTML = outputWeapon($w['name'], $w['key_name'], $w['image_name']);
       //only want a tooltip if there is an img.
       if(strpos($weaponHTML, "<img") === 0) $title = ' title="'.outputWeaponName($w['name'], $w['key_name']).'"';
-      $s .= '<th colspan="2" class="ui-state-default"'.$title.'>'.$weaponHTML."</th>";
+      $s .= '<th colspan="2" class="ui-state-default txtnowrap"'.$title.'>'.$weaponHTML."</th>";
     }
     $s .= "</tr><tr>";
     for($x = 0; $x < count($weapons); ++$x) {
-      $s .= '<th title="Kills">K</th><th title="Deaths">D</th>';
+      $s .= '<th title="Kills" class="ui-state-default txtnowrap">K</th><th title="Deaths" class="ui-state-default txtnowrap">D</th>';
     }
     $s .= '</tr></thead><tbody>';
     
     for($x = 0; $x < count($miniStats); ++$x) {
       $stat = $miniStats[$x];
-      $s .= '<tr><td class="ui-table-content">';
+      $s .= '<tr><td class="ui-table-content txtnowrap">';
         $s .= '<img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
       for($y = 0; $y < count($weapons); ++$y) {
         $w = $weapons[$y];
@@ -212,22 +212,22 @@ $s = <<<EOD
   <thead>
     <tr>
       <th>Name</th>
-      <th title="Classes">C</th>
-      <th title="Kills">K</th>
-      <th title="Assists">A</th>
-      <th title="Deaths">D</th>
-      <th title="Kills+Assists/Death">KAPD</th>
-      <th title="Longest Kill Streak">LKS</th>
-      <th title="Headshots">HS</th>
-      <th title="Backstabs">BS</th>
-      <th title="Capture Points Blocked">CPB</th>
-      <th title="Capture Points Captured">CPC</th>
-      <th title="Intel Defends">ID</th>
-      <th title="Intel Captures">IC</th>
-      <th title="Dominations">DOM</th>
-      <th title="Times Dominated">TDM</th>
-      <th title="Revenges">R</th>
-      <th title="Extinguishes">E</th>
+      <th title="Classes"class="ui-table-content txtnowrap">C</th>
+      <th title="Kills"class="ui-table-content txtnowrap">K</th>
+      <th title="Assists"class="ui-table-content txtnowrap">A</th>
+      <th title="Deaths"class="ui-table-content txtnowrap">D</th>
+      <th title="Kills+Assists/Death"class="ui-table-content txtnowrap">KAPD</th>
+      <th title="Longest Kill Streak"class="ui-table-content txtnowrap">LKS</th>
+      <th title="Headshots"class="ui-table-content txtnowrap">HS</th>
+      <th title="Backstabs"class="ui-table-content txtnowrap">BS</th>
+      <th title="Capture Points Blocked"class="ui-table-content txtnowrap">CPB</th>
+      <th title="Capture Points Captured"class="ui-table-content txtnowrap">CPC</th>
+      <th title="Intel Defends"class="ui-table-content txtnowrap">ID</th>
+      <th title="Intel Captures"class="ui-table-content txtnowrap">IC</th>
+      <th title="Dominations"class="ui-table-content txtnowrap">DOM</th>
+      <th title="Times Dominated"class="ui-table-content txtnowrap">TDM</th>
+      <th title="Revenges"class="ui-table-content txtnowrap">R</th>
+      <th title="Extinguishes"class="ui-table-content txtnowrap">E</th>
     </tr>
   </thead>
   <tbody>
@@ -241,7 +241,7 @@ EOD;
     $miniStat['id'] = $stat['id'];
     $miniStatsRet[] = $miniStat;
     
-    $s .= '<tr><td class="ui-table-content" title="Steam ID: '.$stat['Player']['steamid'].'">';
+    $s .= '<tr><td class="ui-table-content txtnowrap" title="Steam ID: '.$stat['Player']['steamid'].'">';
         $s .= '<img src="/avatars/'.$miniStat['playerId'].'.jpg" class="'.$stat['team'].' avatar avatarImage ui-corner-all" id="avatar'.$miniStat['playerId'].'"/>';
         $s .= link_to($miniStat['name'], 'player/showNumericSteamId?id='.$miniStat['playerNumericSteamid']);
       $s .= '</td>';
@@ -303,7 +303,7 @@ EOD;
       foreach($stat['RoleStats'] as $rs) {
         if($rs['Role']['key_name'] == "medic" && $rs['time_played'] > 1) {
           $s .= '<tr>';
-            $s .= '<td class="ui-table-content">';
+            $s .= '<td class="ui-table-content txtnowrap">';
               $s .= '<img src="/avatars/'.$stat['Player']['id'].'.jpg" class="'.$stat['team'].' avatar avatarImage ui-corner-all" id="avatar'.$stat['Player']['id'].'"/>';
               $s .= link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']).'';
             $s .= '</td>';
@@ -342,12 +342,12 @@ $s = <<<EOD
 EOD;
       for($x = 0; $x < count($miniStats); ++$x) {
         $st = $miniStats[$x];
-        $s .= '<th title="'.$st['name'].'"><img src="/avatars/'.$st['playerId'].'.jpg" class="'.$st['team'].' avatarImage ui-corner-all"/></th>';
+        $s .= '<th title="'.$st['name'].'" class="ui-state-default txtnowrap"><img src="/avatars/'.$st['playerId'].'.jpg" class="'.$st['team'].' avatarImage ui-corner-all"/></th>';
       }
     $s .= '</tr></thead><tbody>';
   for($x = 0; $x < count($miniStats); ++$x) {
     $stat = $miniStats[$x];
-    $s .= '<tr><td class="ui-table-content"><img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
+    $s .= '<tr><td class="ui-table-content txtnowrap"><img src="/avatars/'.$stat['playerId'].'.jpg" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
       for($y = 0; $y < count($miniStats); ++$y) {
         $colstat = $miniStats[$y];
         $foundPS = false;

@@ -11,9 +11,9 @@ class LogForm extends sfForm
 {
   public function configure() {
     $this->setWidgets(array(
-      'name'      => new sfWidgetFormInputText(),
-      'map_name'  => new sfWidgetFormInputText(),
-      'logfile'   => new sfWidgetFormInputFile()
+      'name'      => new sfWidgetFormInputText(array('label' => 'Log Name')),
+      'map_name'  => new sfWidgetFormInputText(array('label' => 'Map Name')),
+      'logfile'   => new sfWidgetFormInputFile(array('label' => 'Log File'))
     ));
     
     $this->setValidators(array(

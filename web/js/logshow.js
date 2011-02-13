@@ -45,7 +45,7 @@ $(function() {
       { "sType": "num-html", "aTargets": [ "_all" ] },
       { "bSearchable": false, "aTargets": [ "_all" ] }
     ],
-    "sScrollX": "700px",
+    "sScrollX": "800px",
 		"bScrollCollapse": true
 	});
 	new FixedColumns(wsdt);

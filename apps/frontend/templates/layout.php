@@ -20,12 +20,14 @@
         <li><?php echo link_to('Player Search', '@player_search') ?></li>
       <?php if($sf_user->isAuthenticated()): ?>
         <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
-        <li><?php echo link_to('Control Panel', '@controlpanel') ?></li>
+        <li><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></li>
         <li><?php echo link_to('Logout', '@logout') ?></li>
       <?php else: ?>
-        <li><span class="subInfo"><strong>To upload a log, login through STEAM</strong></span><a class="fRight" href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
+        <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
       <?php endif ?>
       </ul>
+      <br class="hardSeparator"/>
+      <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
     </div>
     <br class="hardSeparator"/>
   </div>

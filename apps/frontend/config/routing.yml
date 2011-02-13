@@ -49,7 +49,7 @@ player_search:
   param: { module: player, action: search }
   
 controlpanel:
-  url:   /player/controlPanel
+  url:   /my
   param: { module: player, action: controlPanel }
   
 autoLogin:

@@ -22,7 +22,7 @@ Log:
       notnull: true
       default: 0
     map_name:
-      type: string(50)
+      type: string(25)
       notnull: false
     submitter_player_id:
       type: integer

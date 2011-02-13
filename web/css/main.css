@@ -72,6 +72,9 @@ img.Red {
   border-collapse: collapse;
   text-align: center;
   font-size: 10px;
+}
+
+.txtnowrap {
   white-space:nowrap;
 }
 
@@ -258,7 +261,7 @@ br.hardSeparator {
 }
 
 #infoBoxContainer {
-  width: 705px;
+  width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -343,6 +346,9 @@ br.hardSeparator {
   margin-left: auto;
   margin-right: auto;
 }
+
+.plupload_file_name .logFormFieldContainer { position:relative; display: inline; }
+.plupload_file_name label  { position:absolute; top:0px; left:5px;}
 
 .DataTables_sort_wrapper {
   cursor: pointer;

@@ -30,7 +30,7 @@ $(function() {
 	var droptext = "Drag and drop log files here, or click the Add Files button.";
 	$(".plupload_droptext").html(droptext);
 	$(".plupload_header_title").html("Upload Log Files");
-	$(".plupload_header_text").html("Click the Add Files button to add a log file to the queue. Enter in an optional name and map name for the log file. In order to view the events of the log with the Log Viewer, a map must be specified. When you are ready, click Upload Files. If you make a mistake, you can always edit your log files through the control panel.");
+	$(".plupload_header_text").html('Click the Add Files button to add a log file to the queue. You can enter in an optional name and map name for the log file. In order to view the events of the log with the Log Viewer, a map must be specified. When you are ready, click Start Upload. If you make a mistake, you can always edit your log files at <a href="'+$("#mycplink").attr("href")+'" style="text-decoration: underline;">My Tf2Logs</a>.');
 	
 	var uploader = $('#uploader').plupload('getUploader');
 	
@@ -53,14 +53,15 @@ $(function() {
       
 	    $('#'+file.id+' .plupload_file_name').append(
 	      '<div class="logMetaData ui-priority-secondary">' +
-		    '<label for="logName' + file.id + '">Log Name:</label> <input type="text" id="logName' + file.id + '" class="ui-widget-content ui-corner-all"'+logNameVal+' title="Optional. By default, the name of the log is the log file name. You can specify a different name here."/>' +
-		    '<label for="logMapName' + file.id + '">Map Name:</label> <input type="text" id="logMapName' + file.id + '" title="Optional. In order to take advantage of Log Playback, you must specify the map name of the log." class="log_map_name ui-widget-content ui-corner-all"'+logMapNameVal+'/>' +
+		    '<div class="logFormFieldContainer"><label for="logName' + file.id + '">Log Name</label> <input type="text" maxlength="100" id="logName' + file.id + '" class="ui-widget-content ui-corner-all"'+logNameVal+' title="Optional. By default, the name of the log is the log file name. You can specify a different name here."/></div>' +
+		    '<div class="logFormFieldContainer"><label for="logMapName' + file.id + '">Map Name</label> <input type="text" maxlength="25" id="logMapName' + file.id + '" title="Optional. In order to take advantage of Log Playback, you must specify the map name of the log." class="log_map_name ui-widget-content ui-corner-all"'+logMapNameVal+'/></div>' +
 	    '</div>');
 	    
 	    $('#'+file.id+' .plupload_file_name').append('<div class="logInfo ui-priority-secondary">' + logInfo + '</div>');
     });
     up.logMetaAttributes = {};
     $(".log_map_name").autocomplete(ACSource);
+    $(".plupload_file_name label").inFieldLabels();
     $(".plupload_droptext").html(droptext);
     $('input[title]').qtip({
       style: {
