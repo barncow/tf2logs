@@ -7,6 +7,7 @@ class unit_PlayerInfoTest extends BaseLogParserTestCase {
     $this->assertEquals(new PlayerInfo("Console", "Console", "Console"), PlayerInfo::getPlayerFromString('"Console<0><Console><Console>"'), "verify that console string returns player");
     $this->assertEquals(new PlayerInfo("Target", "STEAM_0:0:6845279", null), PlayerInfo::getPlayerFromString('"Target<46><STEAM_0:0:6845279><>"'), "verify that actual player string without team returns player");
     $this->assertEquals(new PlayerInfo("Target", "STEAM_0:0:6845279", null), PlayerInfo::getPlayerFromString('"Target<46><STEAM_0:0:6845279><Unassigned>"'), "verify that actual player string with unassigned team returns player");
+    $this->assertEquals(false, PlayerInfo::getPlayerFromString('"Numnutz<17><BOT><Red>"'), "verify that bot returns false");
   }
   
   /**
@@ -66,6 +67,15 @@ class unit_PlayerInfoTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(array(new PlayerInfo("Target", "STEAM_0:0:6845279", "Blue"), new PlayerInfo("FSTNG! Barncow", "STEAM_0:1:16481274", "Red")),
      PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that player kill string returns 2 playerInfos");
+     
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_bot_medic.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(array(), PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that bot does not return playerinfo.");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured_bot.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(array(new PlayerInfo('Target', 'STEAM_0:0:6845279', 'Blue')
+      , new PlayerInfo('Ctrl+f Muffin!','STEAM_0:1:9852193','Blue')), PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails), "verify that bot is not in playerinfo array.");
   }
   
   public function testEquals() {

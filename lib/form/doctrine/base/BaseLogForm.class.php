@@ -35,7 +35,7 @@ abstract class BaseLogForm extends BaseFormDoctrine
       'redscore'            => new sfValidatorInteger(array('required' => false)),
       'bluescore'           => new sfValidatorInteger(array('required' => false)),
       'elapsed_time'        => new sfValidatorInteger(array('required' => false)),
-      'map_name'            => new sfValidatorString(array('max_length' => 50, 'required' => false)),
+      'map_name'            => new sfValidatorString(array('max_length' => 25, 'required' => false)),
       'submitter_player_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Submitter'), 'required' => false)),
       'error_log_name'      => new sfValidatorString(array('max_length' => 50, 'required' => false)),
       'error_exception'     => new sfValidatorString(array('max_length' => 500, 'required' => false)),

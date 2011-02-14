@@ -17,6 +17,7 @@ class logActions extends sfActions {
     ,"cp_gorge" => "cp_gorge"
     ,"cp_granary" => "cp_granary"
     ,"cp_gravelpit" => "cp_gravelpit"
+    ,"cp_gullywash_imp3" => "cp_gullywash_imp3"
     ,"cp_steel" => "cp_steel"
     ,"cp_yukon_final" => "cp_yukon_final"
     ,"cp_well" => "cp_well"
@@ -169,7 +170,7 @@ class logActions extends sfActions {
         try {
           $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
         } catch(CorruptLogLineException $clle) {
-          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.'.$clle);
+          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return "error";
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);

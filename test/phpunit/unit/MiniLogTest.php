@@ -10,7 +10,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
     //$countOfLines-1 represents the lack of chat line with SM command.
     $this->assertEquals($countOfLines-1, count(explode("\n", $log->getLogFile()->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
-    $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
+    $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console, specs, and bots");
     
     $this->assertEquals(0, $log->getRedscore(), "red score");
     $this->assertEquals(1, $log->getBluescore(), "blue score");
@@ -18,6 +18,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
     
     $this->assertEquals(1, $log->getSubmitterPlayerId(), "submitter has correct ID.");
+    
+    $this->assertEquals("ctf_2fort", $log->getMapName(), "map is ctf_2fort");
     
     $events = $log->getEvents()->toArray();
     $this->assertTrue($events[1]['attacker_player_id'] > 0, "first kill event has attacker 2");

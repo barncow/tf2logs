@@ -60,6 +60,7 @@ $(function() {
 	    $('#'+file.id+' .plupload_file_name').append('<div class="logInfo ui-priority-secondary">' + logInfo + '</div>');
     });
     up.logMetaAttributes = {};
+    ACSource.delay = 0;
     $(".log_map_name").autocomplete(ACSource);
     $(".plupload_file_name label").inFieldLabels();
     $(".plupload_droptext").html(droptext);

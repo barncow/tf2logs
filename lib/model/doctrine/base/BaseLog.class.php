@@ -86,10 +86,10 @@ abstract class BaseLog extends sfDoctrineRecord
              'notnull' => true,
              'default' => 0,
              ));
-        $this->hasColumn('map_name', 'string', 50, array(
+        $this->hasColumn('map_name', 'string', 25, array(
              'type' => 'string',
              'notnull' => false,
-             'length' => 50,
+             'length' => 25,
              ));
         $this->hasColumn('submitter_player_id', 'integer', null, array(
              'type' => 'integer',

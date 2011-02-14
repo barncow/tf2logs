@@ -123,6 +123,19 @@ class ParsingUtils {
   }
   
   /**
+  * Gets the map for a loading map line.
+  */
+  public function getMapFromLoadingMapLine($logLineDetails) {
+    $matches;
+    preg_match("/^Loading map \"(.+?)\"/", $logLineDetails, $matches);
+    if(count($matches) > 1) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
+  
+  /**
   * Gets the action for a team line.
   */
   public function getTeamAction($logLineDetails) {

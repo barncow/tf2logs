@@ -16,6 +16,7 @@ L 09/29/2010 - 19:08:55: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Ba
 L 09/29/2010 - 19:08:55: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:56: World triggered "Round_Start"
 L 09/29/2010 - 19:08:56: World triggered "Round_Setup_Begin"
+L 09/29/2010 - 19:08:56: Loading map "ctf_2fort"
 L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:58: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "tf_projectile_rocket" (attacker_position "-3718 1821 -540")
@@ -45,6 +46,9 @@ L 09/29/2010 - 19:32:08: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" disconnect
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" (heal "510")
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" say "!sm_cvar sv_password secret"
 L 09/29/2010 - 19:32:09: "Console<0><Console><Console>" say "console say line"
+L 09/29/2010 - 19:32:09: "<17><BOT><>" entered the game
+L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Unassigned>" joined team "Red"
+L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Red>" changed role to "medic"
 L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"
 L 09/29/2010 - 19:36:42: World triggered "Round_Win" (winner "Red")
 L 09/29/2010 - 19:36:42: World triggered "Round_Length" (seconds "632.25")

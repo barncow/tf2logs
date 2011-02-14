@@ -332,6 +332,7 @@ class LogParser {
 	  //go through line types. When complete with the line, return.
 	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "server_message: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Your server will be restarted on map change.", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)) {
@@ -340,12 +341,22 @@ class LogParser {
 	    //this could contain sensitive information. Do not add it to the log.
 	    $this->addToScrubbedLog = false;
 	    return self::GAME_CONTINUE;
+	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)) {
+	    //populate the map field if not specified.
+	    $map = $this->parsingUtils->getMapFromLoadingMapLine($logLineDetails);
+	    if(!$this->log->getMapName()) $this->log->setMapName($map);
+	    return self::GAME_CONTINUE;
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
 	    //Need to determine what action is being done here.
 	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
 	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
 	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
+	    
+	    if(strpos($logLine, "><BOT><")) {
+	      //ignoring all bots.
+	      return self::GAME_CONTINUE;
+	    }
 	    
 	    //want to process any joined team line whether or not we are in game over.
 	    //otherwise, skip the rest if in gameover.
@@ -555,6 +566,8 @@ class LogParser {
 	  //still here. Did not return like expected, therefore this is an unrecognized line.
 	  if(!$this->ignoreUnrecognizedLogLines) {
 	    throw new UnrecognizedLogLineException($logLine);
+	  } else {
+	    return self::GAME_CONTINUE;
 	  }
 	}
 }

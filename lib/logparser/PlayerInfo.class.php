@@ -33,7 +33,8 @@ class PlayerInfo {
     $a = self::getPlayerStringsFromLogLineDetails($logLineDetails);
     $ret = array();
     foreach($a as $p) {
-      $ret[] = self::getPlayerFromString($p);
+      $pi = self::getPlayerFromString($p);
+      if($pi !== false) $ret[] = $pi;
     }
     return $ret;
   }
@@ -58,6 +59,7 @@ class PlayerInfo {
     $matches;
     preg_match("/\"(.+)<\d+><([A-Za-z0-9:_]+)><(\w*)>\"/", $playerString, $matches);
     if(count($matches) > 0) {
+      if($matches[2] == "BOT") return false;
       return new PlayerInfo($matches[1], $matches[2], $matches[3]);
     } else {
       throw new InvalidPlayerStringException($playerString);

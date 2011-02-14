@@ -1,5 +1,4 @@
 <?php $sf_response->setTitle('Log Upload Error - TF2Logs.com'); ?>
-<h1>Error Processing Log File</h1>
 
 <?php echo $form->renderGlobalErrors() ?>
 
