@@ -26,8 +26,10 @@
         <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
       <?php endif ?>
       </ul>
-      <br class="hardSeparator"/>
-      <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
+      <?php if(!$sf_user->isAuthenticated()): ?>
+        <br class="hardSeparator"/>
+        <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
+      <?php endif ?>
     </div>
     <br class="hardSeparator"/>
   </div>

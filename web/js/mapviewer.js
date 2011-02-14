@@ -28,6 +28,10 @@ var GameMap = Class.extend({
 		this.flipXY = false;
 		this.negX = false;
 		this.negY = false;
+		
+		//bl = bottom left, br = bottom right, tl = top left, tr = top right
+		//precedence for scoreboard placement: bl > br > tl > tr
+		this.scoreBoardCorner = "bl"; 
 	},
 	
 	copyCapturePoints: function() {
@@ -143,11 +147,24 @@ var MapDrawer = Class.extend({
 	drawScores: function(canvas, context, redScore, blueScore) {
 	  boxwidth = 20;
 	  boxheight = 15;
-	  boxbotmargin = 10;
+	  boxtbmargin = 10;
 	  boxspacing = 10;
-	  boxleftmargin = 10;
-	  boxY = canvas.height - boxbotmargin - boxheight;
-	  boxX = boxleftmargin;
+	  boxrlmargin = 10;
+	  var pos = mapViewerObj.gameMap.scoreBoardCorner;
+	  var boxY, boxX;
+	  if(pos === 'bl') {
+	    boxY = canvas.height - boxtbmargin - boxheight;
+	    boxX = boxrlmargin;
+	  } else if (pos === 'br') {
+	    boxY = canvas.height - boxtbmargin - boxheight;
+	    boxX = canvas.width - boxrlmargin - boxspacing - boxwidth*2;
+	  } else if(pos === 'tl') {
+	    boxY = boxtbmargin;
+	    boxX = boxrlmargin;
+	  } else if (pos === 'tr') {
+	    boxY = boxtbmargin;
+	    boxX = canvas.width - boxrlmargin - boxspacing - boxwidth*2;
+	  }
 	  leftPadding = 2;
 	  topPadding = 2;
 	  strokecolor = "#9C947C";
