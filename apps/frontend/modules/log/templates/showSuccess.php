@@ -51,16 +51,16 @@ if($log['map_name']) {
     <div id="mapViewerControls">
 	    <button id="playPauseButton"></button>
 	    <div id="playbackProgress"><span id="totalTime"></span></div>
-	    <div style="clear: both">
+	    <div id="controlsContainer">
 	      <label for="playbackSpeed">Playback Speed</label>
 	      <select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">
 	        <option value="1">1x</option>
 	        <option value="5" selected>5x</option>
 	        <option value="20">20x</option>
 	      </select>
-	      
-	      <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
-	      <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
+
+        <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
+        <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
 	    </div>
     </div>
     <div id="chatBox" class="ui-widget-content-nobg ui-corner-all"><ul></ul></div>

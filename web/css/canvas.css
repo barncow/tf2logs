@@ -58,4 +58,8 @@
   text-align: left;
 }
 
-
+#controlsContainer, #controlsContainer select {
+  clear: both;
+  font-size: 10px;
+  margin: 2px;
+}
