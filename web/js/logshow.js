@@ -46,7 +46,10 @@ $(function() {
       { "bSearchable": false, "aTargets": [ "_all" ] }
     ],
     "sScrollX": "800px",
-		"bScrollCollapse": true
+		"bScrollCollapse": true,
+		"fnDrawCallback": function() {
+      $('#weaponStats_wrapper th').qtip(qtipopts);//on each draw, the DOM is destroyed, need to reattach.
+    }
 	});
 	new FixedColumns(wsdt);
 	
@@ -81,7 +84,7 @@ $(function() {
 	$('.dataTables_filter').children(':text').addClass("ui-widget-content ui-corner-all").attr('title', 'Enter a player name to narrow the results.');
 	
 	//this must be last since the above code generates HTML.
-	$('th[title], img[title], span[title], input[title], label[title], td[title]').qtip({
+	var qtipopts = {
     position: {
 		  viewport: $(window),
 		  my: "bottom center",
@@ -90,5 +93,6 @@ $(function() {
     style: {
       classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
     }
-  });
+  }
+	$('th[title], img[title], span[title], input[title], label[title], td[title]').qtip(qtipopts);
 });
