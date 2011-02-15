@@ -132,6 +132,7 @@ div.infoBox .subInfo, #userCP .subInfo {
   float: left;
   position: relative;
   margin-bottom: 2em;
+  margin-right: 1em;
 }
 
 #mapViewerContainer {

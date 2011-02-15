@@ -82,6 +82,7 @@ echo outputMedicStats($log['Stats']);
 
 echo outputWeaponStats($weapons, $miniStats, $weaponStats);
 
+echo '<span class="statDescription">Rows indicate kills; columns indicate deaths</span><br class="hardSeparator"/>';
 echo outputPlayerStats($miniStats, $playerStats);
 
 if(mapExists($log['map_name'])) { ?>

@@ -85,32 +85,7 @@ echo outputInfoBox("playerStatPanel", 'Overall Stats', $s, true);
 echo '</div><br class="hardSeparator"/>';
 ?>
 
-<div class="statTableContainer">
-  <table class="statTable" id="playerClassStats" border="0" cellspacing="0" cellpadding="3">
-    <caption>Classes</caption>
-    <thead>
-      <tr>
-        <th>Class Name</th>
-        <th>Number of Times Used</th>
-        <th>Total Time Played</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($roles as $r): ?>
-        <tr>
-          <td class="ui-table-content">
-            <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" alt="<?php echo $r->name ?>"/>
-            <?php echo $r->name ?>
-          </td>
-          <td class="ui-table-content"><?php echo $r->num_times ?></td>
-          <td class="ui-table-content"><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
-        </tr>
-      <?php endforeach ?>
-    </tbody>
-  </table>
-</div>
-<br class="hardSeparator"/>
-
+<div style="width: 600px;">
 <div class="statTableContainer">
   <table class="statTable" id="playerWeaponStats" width="100%" border="0" cellspacing="0" cellpadding="3">
     <caption>Weapon Stats</caption>
@@ -149,7 +124,31 @@ echo '</div><br class="hardSeparator"/>';
     </tbody>
   </table>
 </div>
-<br class="hardSeparator"/>
+
+<div class="statTableContainer">
+  <table class="statTable" id="playerClassStats" border="0" cellspacing="0" cellpadding="3">
+    <caption>Classes</caption>
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>Number of Times Used</th>
+        <th>Total Time Played</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($roles as $r): ?>
+        <tr>
+          <td class="ui-table-content">
+            <img src="<?php echo sfConfig::get('app_class_icon_base_url').'/'.$r->key_name.'.png'?>" class="classIcon playerClassImg" alt="<?php echo $r->name ?>"/>
+            <?php echo $r->name ?>
+          </td>
+          <td class="ui-table-content"><?php echo $r->num_times ?></td>
+          <td class="ui-table-content"><?php echo outputSecondsToHumanFormat($r->time_played) ?></td>
+        </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+</div>
 
 <?php 
 $pagination = "";
@@ -186,7 +185,7 @@ EOD;
 echo '<div class="statTableContainer">';
 echo '<a name="playerLogPlayed"/>';
 echo outputInfoBox("playerLogPlayed", 'Logs Played - '.$player->num_matches, $s, true);
-echo '</div><br class="hardSeparator"/>';
+echo '</div></div><br class="hardSeparator"/>';
 
 } /* user has num_matches > 0 */
 
