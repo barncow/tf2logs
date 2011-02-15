@@ -10,42 +10,45 @@
     <link rel="shortcut icon" href="/favicon.ico" />
   </head>
   <body>
-  <div id="header" class="ui-corner-all">
-    <div id="homeLink">
-      <a href="<?php echo url_for('@homepage', true) ?>"><?php echo image_tag(getRandomLogoFilename()) ?></a>
-    </div>
-    <div id="userCP">
-      <ul>
-        <li><?php echo link_to('Log Search', '@log_search') ?></li>
-        <li><?php echo link_to('Player Search', '@player_search') ?></li>
-      <?php if($sf_user->isAuthenticated()): ?>
-        <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
-        <li><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></li>
-        <li><?php echo link_to('Logout', '@logout') ?></li>
-      <?php else: ?>
-        <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
-      <?php endif ?>
-      </ul>
-      <?php if(!$sf_user->isAuthenticated()): ?>
+    <div class="wrapper">
+      <div id="header" class="ui-corner-all">
+        <div id="homeLink">
+          <a href="<?php echo url_for('@homepage', true) ?>"><?php echo image_tag(getRandomLogoFilename()) ?></a>
+        </div>
+        <div id="userCP">
+          <ul>
+            <li><?php echo link_to('Log Search', '@log_search') ?></li>
+            <li><?php echo link_to('Player Search', '@player_search') ?></li>
+          <?php if($sf_user->isAuthenticated()): ?>
+            <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
+            <li><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></li>
+            <li><?php echo link_to('Logout', '@logout') ?></li>
+          <?php else: ?>
+            <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
+          <?php endif ?>
+          </ul>
+          <?php if(!$sf_user->isAuthenticated()): ?>
+            <br class="hardSeparator"/>
+            <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
+          <?php endif ?>
+        </div>
         <br class="hardSeparator"/>
-        <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
+      </div>
+      
+      <?php if ($sf_user->hasFlash('notice')): ?>
+        <div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('notice') ?></div>
+        <?php $sf_user->setFlash('notice', null) /*erasing flash */?>
       <?php endif ?>
-    </div>
-    <br class="hardSeparator"/>
-  </div>
-  
-  <?php if ($sf_user->hasFlash('notice')): ?>
-    <div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('notice') ?></div>
-    <?php $sf_user->setFlash('notice', null) /*erasing flash */?>
-  <?php endif ?>
 
-  <?php if ($sf_user->hasFlash('error')): ?>
-    <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('error') ?></div>
-    <?php $sf_user->setFlash('error', null) /*erasing flash */?>
-  <?php endif ?>
-    
-    <?php echo $sf_content ?>
-    
+      <?php if ($sf_user->hasFlash('error')): ?>
+        <div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('error') ?></div>
+        <?php $sf_user->setFlash('error', null) /*erasing flash */?>
+      <?php endif ?>
+      
+      <?php echo $sf_content ?>
+      
+      <div id="pushFooter"></div>
+    </div>
     <div id="footer">
       <div id="copyright"><a href="http://steampowered.com">Powered by Steam</a><br/>&copy; 2011 TF2Logs.com. Valve, the Valve logo, Steam, the Steam logo, Team Fortress, and the Team Fortress logo are trademarks and/or registered trademarks of Valve Corporation.</div>
     </div>

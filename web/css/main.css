@@ -319,7 +319,6 @@ br.hardSeparator {
 }
 
 #footer {
-  margin-top: 2em;
 }
 
 #uploadForm table {
@@ -416,4 +415,21 @@ br.hardSeparator {
 		border-color: #9c947c;
 	}
 
-
+/*helper to push footer to bottom of page*/
+* {
+  margin: 0;
+}
+html, body {
+  height: 100%;
+}
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -2em;
+}
+#footer, #pushFooter {
+  /*change to height here must also take place in margin -Xem in .wrapper */
+  height: 2em;
+  clear: both;
+}
