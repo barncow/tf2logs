@@ -16,6 +16,9 @@ show:
 events:
   is_secure: false
   
+logfile:
+  is_secure: false
+  
 search:
   is_secure: false
   
