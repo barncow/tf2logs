@@ -273,3 +273,83 @@ Weapon:
     name: Wrench
     Role: engineer
     image_name: wrench.png
+  pistol:
+    key_name: pistol
+    name: Engineer's Pistol
+    Role: engineer
+    image_name: pistol.png
+  obj_minisentry:
+    key_name: obj_minisentry
+    name: Combat Mini-Sentry
+    Role: engineer
+    image_name: obj_minisentry.png
+  fryingpan:
+    key_name: fryingpan
+    name: Frying Pan
+    #can be used by soldier and demo
+    image_name: fryingpan.png
+  knife_bs:
+    key_name: knife_bs
+    name: Knife (Backstab)
+    Role: spy
+    image_name: knife_bs.png
+  steel_fists:
+    key_name: steel_fists
+    name: Fists of Steel
+    Role: heavyweapons
+    image_name: steel_fists.png
+  amputator:
+    key_name: amputator
+    name: Amputator
+    Role: medic
+    image_name: amputator.png
+  brass_beast:
+    key_name: brass_beast
+    name: Brass Beast
+    Role: heavyweapons
+    image_name: brass_beast.png
+  tf_pumpkin_bomb:
+    key_name: tf_pumpkin_bomb
+    name: Pumpkin Bomb
+    #no role, env hazard
+    image_name: tf_pumpkin_bomb.png
+  short_stop:
+    key_name: short_stop
+    name: Short Stop
+    Role: scout
+    image_name: shortstop.png
+  eternal_reward_bs:
+    key_name: eternal_reward_bs
+    name: Eternal Reward (Backstab)
+    Role: spy
+    image_name: knife_bs.png
+  eternal_reward:
+    key_name: eternal_reward
+    name: Eternal Reward
+    Role: spy
+    image_name: eternal_reward.png
+  robot_arm_combo_kill:
+    key_name: robot_arm_combo_kill
+    name: Gunslinger Triple Punch
+    Role: engineer
+    image_name: robot_arm_combo_kill.png
+  deflect_promode:
+    key_name: deflect_promode
+    name: Pipe Deflect
+    Role: pyro
+    image_name: deflect_promode.png
+  tribalkukri:
+    key_name: tribalkukri
+    name: Tribalman's Shiv
+    Role: sniper
+    image_name: tribalkukri.png
+  taunt_soldier:
+    key_name: taunt_soldier
+    name: Kamikaze
+    Role: soldier
+    image_name: taunt_soldier.png
+  powerjack:
+    key_name: powerjack
+    name: Powerjack
+    Role: pyro
+    image_name: powerjack.png

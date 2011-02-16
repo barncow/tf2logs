@@ -470,13 +470,7 @@ class LogParser {
 	          $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "killedobject") {
-	          $attacker = $players[0];
-	          $weapon = $this->getWeaponFromCache($this->parsingUtils->getWeapon($logLineDetails));
-	          
-	          if($weapon && $weapon->getRole() != null && $weapon->getRole()->getId() != null) {
-	            $this->log->addRoleToSteamid($attacker->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
-	          }
-	          return self::GAME_CONTINUE;
+	          return self::GAME_CONTINUE; //ignoring all together, weapons not reliable.
 	        } else if($playerLineActionDetail == "revenge") {
 	          $p = $players[0];
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "revenges"); 

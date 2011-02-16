@@ -133,12 +133,21 @@ class logActions extends sfActions {
     } else {
       $this->form = new LogUpdateForm($this->log);
       if($this->processUpdateForm($request)) {
+        $this->removeCacheForLogId($this->log->getId());
         $this->redirect('@log_edit?id='.$this->log->getId());
       } else {
         $this->mapNames = array();
         Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);
         $this->setTemplate('edit');
       }
+    }
+  }
+  
+  protected function removeCacheForLogId($logid) {
+    $cacheManager = $this->getContext()->getViewCacheManager();
+    if($cacheManager) {
+    	$cacheManager->remove('log/show?id='.$logid);
+    	$cacheManager->remove('log/events?id='.$logid);
     }
   }
   

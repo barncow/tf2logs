@@ -13,6 +13,11 @@ dev:
     param:
       dsn:  mysql:dbname=tf2logs_dev;host=localhost
       
+staging:
+  doctrine:
+    param:
+      dsn:  mysql:dbname=tf2logs;host=localhost
+      
 prod:
   doctrine:
     param:

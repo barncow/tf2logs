@@ -28,6 +28,7 @@ class logActions extends sfActions {
     $log->setErrorLogName(null);
     $log->setErrorException(null);
     $log->save();
+    $this->removeCacheForLogId($log->getId());
     $this->getUser()->setFlash('notice', 'Log Successfully processed.');
     $this->redirect('log/unfinished');
   }
@@ -41,6 +42,7 @@ class logActions extends sfActions {
     
     $logParser = new LogParser();
     $log = $logParser->parseLogFromDB($log);
+    $this->removeCacheForLogId($log->getId());
     
     $this->getUser()->setFlash('notice', 'Log Successfully regenerated.');
     $this->redirect('authModule/controlPanel');
@@ -65,6 +67,15 @@ class logActions extends sfActions {
     $log = file_get_contents(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
     $this->getResponse()->setHttpHeader("content-type", 'text-plain');
     return $this->renderText($log);
+  }
+  
+  protected function removeCacheForLogId($logid) {
+    $frontend_cache_dir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'frontend'. DIRECTORY_SEPARATOR.sfConfig::get('sf_environment').DIRECTORY_SEPARATOR.'template';
+    $cache = new sfFileCache(array('cache_dir' => $frontend_cache_dir)); // Use the same settings as the ones defined in the frontend factories.yml
+    if($cache) {
+      $cache->removePattern('log/show?id='.$logid);
+      $cache->removePattern('log/events?id='.$logid);
+    }
   }
   
   protected function listUploadedLogs() {
