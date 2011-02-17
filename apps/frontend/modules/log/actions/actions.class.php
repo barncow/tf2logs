@@ -181,6 +181,9 @@ class logActions extends sfActions {
         } catch(CorruptLogLineException $clle) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return "error";
+        } catch(NoDataInLogFileException $ndilfe) {
+          $this->getUser()->setFlash('error', 'The log file that you submitted does not appear to have any content, and was not processed.');
+          return "error";
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
           //create a log record so the user can find his way back when the issue is fixed.

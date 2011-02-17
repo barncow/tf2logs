@@ -242,9 +242,13 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $this->assertEquals("headshot", $this->parsingUtils->getCustomKill($logLineDetails), "can grab headshot from customkill kill event");
   }  
   
-  public function testGetMapFromLoadingMapLine() {
+  public function testGetMapFromMapLine() {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_loadingmap.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
-    $this->assertEquals("ctf_2fort", $this->parsingUtils->getMapFromLoadingMapLine($logLineDetails), "able to grab map");
+    $this->assertEquals("ctf_2fort", $this->parsingUtils->getMapFromMapLine($logLineDetails), "able to grab map from loading");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_started_map.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("ctf_turbine", $this->parsingUtils->getMapFromMapLine($logLineDetails), "able to grab map from started");
   }
 }

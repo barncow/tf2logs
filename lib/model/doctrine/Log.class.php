@@ -188,7 +188,7 @@ class Log extends BaseLog
   /**
   * Used to perform any last cleanup work.
   */
-  public function finishLog($nowDt, $logStartDt) {
+  public function finishLog($nowDt, $logStartDt) {    
     //call finishStat for all stats.
     foreach($this->Stats as &$stat) {
       $stat->finishStat($nowDt, $logStartDt);

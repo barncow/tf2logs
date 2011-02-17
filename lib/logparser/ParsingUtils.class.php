@@ -125,13 +125,19 @@ class ParsingUtils {
   /**
   * Gets the map for a loading map line.
   */
-  public function getMapFromLoadingMapLine($logLineDetails) {
+  public function getMapFromMapLine($logLineDetails) {
     $matches;
     preg_match("/^Loading map \"(.+?)\"/", $logLineDetails, $matches);
     if(count($matches) > 1) {
       return $matches[1];
     } else {
-      return false;
+      //no matches, so let's try another map line
+      preg_match("/^Started map \"(.+?)\"/", $logLineDetails, $matches);
+      if(count($matches) > 1) {
+        return $matches[1];
+      } else {
+        return false;
+      }
     }
   }
   

@@ -4,6 +4,7 @@ require_once('exceptions/LogFileNotFoundException.class.php');
 require_once('exceptions/CorruptLogLineException.class.php');
 require_once('exceptions/InvalidPlayerStringException.class.php');
 require_once('exceptions/TournamentModeNotFoundException.class.php');
+require_once('exceptions/NoDataInLogFileException.class.php');
 require_once('ParsingUtils.class.php');
 require_once('PlayerInfo.class.php');
 
@@ -28,6 +29,7 @@ class LogParser {
   protected $ignoreUnrecognizedLogLines;
   protected $previousLogLine;
   protected $gameOver;
+  protected $isServerCvars;
   
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
@@ -44,6 +46,7 @@ class LogParser {
     $this->addToScrubbedLog = true;
     $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
     $this->gameOver = false;
+    $this->isServerCvars = false;
     
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
@@ -142,6 +145,7 @@ class LogParser {
 	  try {
 	    return $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
+	    //if no tournament mode was found, re-run entire log file as one round.
 	    return $this->parseLog($file, true);
 	  }
 	}
@@ -193,6 +197,12 @@ class LogParser {
 	  if(!$this->isTournamentMode) {
 	    throw new TournamentModeNotFoundException();
 	  }
+	  
+	  //check to see if any data was even entered.
+    if(count($this->log->Stats) == 0) {
+      throw new NoDataInLogFileException();
+    }
+    
     $this->finishLog();
 	  $this->log->save();
 	  return $this->log;
@@ -283,6 +293,17 @@ class LogParser {
       //adding a round start event for the first round.
       $this->log->addRoundStartEvent($elapsedTime, 0, 0);
     }
+    
+    if ($this->parsingUtils->isLogLineOfType($logLine, "server cvars start", $logLineDetails)) {
+	    $this->isServerCvars = true;
+	  } else if($this->parsingUtils->isLogLineOfType($logLine, "server cvars end", $logLineDetails)) {
+	    $this->isServerCvars = false;
+	    return self::GAME_CONTINUE;
+	  }
+	  if($this->isServerCvars) {
+	    //tf2 will sometimes dump out a whole block of cvars. Want to ignore these.
+	    return self::GAME_CONTINUE;
+	  }
 	  
 	  //check for world trigger, specifically the first round_start of the log. This indicates
 	  //that the tournament mode has started, and pregame has ended.
@@ -335,15 +356,17 @@ class LogParser {
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_message: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Your server will be restarted on map change.", $logLineDetails)
-	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)) {
+	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)
+	  ) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
 	    //this could contain sensitive information. Do not add it to the log.
 	    $this->addToScrubbedLog = false;
 	    return self::GAME_CONTINUE;
-	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)) {
+	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "Started map ", $logLineDetails)) {
 	    //populate the map field if not specified.
-	    $map = $this->parsingUtils->getMapFromLoadingMapLine($logLineDetails);
+	    $map = $this->parsingUtils->getMapFromMapLine($logLineDetails);
 	    if(!$this->log->getMapName()) $this->log->setMapName($map);
 	    return self::GAME_CONTINUE;
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
