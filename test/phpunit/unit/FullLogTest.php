@@ -14,7 +14,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     unset($this->logParser);
   }
   
-  /*blic function testFull_withGarbageAtEnd() {
+  public function testFull_withGarbageAtEnd() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     
     $this->assertEquals(894, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
@@ -44,17 +44,26 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $this->assertEquals(0, $log->getRedscore(), "red score of plupward");
   }
   
+  public function testFull_kothviaduct() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_kothviaduct.log", 1);
+    $this->assertEquals(4, $log->getBluescore(), "blue score of kothviaduct");
+    $this->assertEquals(0, $log->getRedscore(), "red score of kothviaduct");
+  }
+  
   /**
     The purpose of this test is to check that the logparser handles multiple halves correctly.
     The log should contain a game_over, then a round_start. The log should ignore everything between the two, except player teams.
     This log file also includes a bogus round_win from a reached time limit game_over.
     The log has been edited to give a player some kills that should let us know that kills were not counted between halves.
     The log has also been edited so that the players will also switch sides.
+    
+    KOTH and PL maps both depend on round_wins not proceeding right after a capture. This feature has been removed,
+    and we will just suck up the extra round_win
   */
-  /*public function testFull_badlands_2halves() {
+  public function testFull_badlands_2halves() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
     
-    $this->assertEquals(5, $log->getRedscore(), "red score");
+    $this->assertEquals(6, $log->getRedscore(), "red score");
     
     $this->assertEquals(0, $log->getBluescore(), "red score");
     
@@ -67,7 +76,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
         break;
       }
     }
-  }*/
+  }
   
   /**
   * @expectedException NoDataInLogFileException

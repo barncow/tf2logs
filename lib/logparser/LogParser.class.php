@@ -249,21 +249,6 @@ class LogParser {
 	}
 	
 	/**
-	  Valve awards a round cut short by timelimit (by definition, no winner of the round) to
-	  a team, even though no one really won. The only way to detect if a round_win is 
-	  actually legit is to check if the line before a round_win is a "pointcaptured" line.
-	  This should only be used on a round_win line.
-	*/
-	protected function isRoundWinACapture() {
-	  $logLineDetails = $this->parsingUtils->getLineDetails($this->previousLogLine);
-	  
-	  //round win is only a capture if the previous line was a Team triggered pointcaptured line.
-	  return ($this->parsingUtils->isLogLineOfType($this->previousLogLine, 'Team', $logLineDetails)
-	  && $this->parsingUtils->getTeamAction($logLineDetails) === "triggered"
-	  && $this->parsingUtils->getTeamTriggerAction($logLineDetails) === "pointcaptured");
-	}
-	
-	/**
 	* This will do the processing of the line. This will not be called outside this
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
@@ -327,7 +312,7 @@ class LogParser {
 	      return self::GAME_OVER;
 	    } else if($worldTriggerAction == "Round_Win") {
 	      //increment score for the team that won the round, if the map is not ctf (ctf has own scoring)
-	      if(!$this->isCtf && $this->isRoundWinACapture()) {
+	      if(!$this->isCtf) {
 	        $team = $this->parsingUtils->getRoundWinTeam($logLineDetails);
 	        $this->log->incrementScoreForTeam($team);
 	      }
