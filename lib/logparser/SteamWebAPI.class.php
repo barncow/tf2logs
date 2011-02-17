@@ -13,8 +13,9 @@ class SteamWebAPI {
     $a = $this->getPlayerSummaries($numericalSteamids);
     $ret = array();
     if(!$a || count($a) <= 0) return $ret;
+    $baseurlcount = strlen(sfConfig::get('app_avatar_base_url'));
     foreach($a['response']['players']['player'] as $p) {
-      $ret[] = array($p['steamid'] => $p['avatar']);
+      $ret[] = array($p['steamid'] => substr($p['avatar'], $baseurlcount));
     }
     return $ret;
   }

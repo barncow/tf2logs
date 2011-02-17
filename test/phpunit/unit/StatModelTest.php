@@ -4,8 +4,8 @@ require_once dirname(__FILE__).'/../bootstrap/unit.php';
 class unit_StatModelTest extends sfPHPUnitBaseTestCase {
   public function testEqualToPlayerInfo() {
     $stat = new Stat();
-    $stat->setPlayerInfoAttributes(new PlayerInfo("myname", "steamid", "team"));
-    $this->assertTrue($stat->equalsPlayerInfo(new PlayerInfo("myname", "steamid", "team")));
+    $stat->setPlayerInfoAttributes(new PlayerInfo("myname", "STEAM_0:0:8581157", "team"));
+    $this->assertTrue($stat->equalsPlayerInfo(new PlayerInfo("myname", "STEAM_0:0:8581157", "team")));
   }
   
   public function testIncrementStat() {
@@ -14,22 +14,6 @@ class unit_StatModelTest extends sfPHPUnitBaseTestCase {
     $this->assertEquals(1, $stat->getKills(), "first inc");
     $stat->incrementStat("kills");
     $this->assertEquals(2, $stat->getKills(), "second inc");
-  }
-  
-  /**
-  * @expectedException InvalidArgumentException
-  */
-  public function testIncrementStatInvalid() {
-    $stat = new Stat();
-    $stat->incrementStat("id");
-  }
-  
-  /**
-  * @expectedException InvalidArgumentException
-  */
-  public function testIncrementStatNotFound() {
-    $stat = new Stat();
-    $stat->incrementStat("lhf;alsdjiusfj");
   }
   
   public function testGetKillsPerDeath() {
@@ -62,16 +46,5 @@ class unit_StatModelTest extends sfPHPUnitBaseTestCase {
     $stat->setUbers(3);
     $stat->setDeaths(2);
     $this->assertEquals(1.5, $stat->getUbersPerDeath(), "3/2");
-  }
-  
-  public function testInsertWeapon() {
-    $log = new Log();
-    $stat = new Stat();
-    $stat->getPlayer()->setSteamid("STEAM_0:0:247");
-    $weapon = new Weapon();
-    $weapon->setKeyName('fluffybear');
-    $stat->Weapons[] = $weapon;
-    $log->Stats[] = $stat;
-    $log->save();
   }
 }

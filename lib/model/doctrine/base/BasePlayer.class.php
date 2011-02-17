@@ -12,6 +12,7 @@
  * @property string $name
  * @property timestamp $last_login
  * @property integer $views
+ * @property string $avatar_url
  * @property Doctrine_Collection $Log
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $PlayerStats
@@ -25,6 +26,7 @@
  * @method string              getName()            Returns the current record's "name" value
  * @method timestamp           getLastLogin()       Returns the current record's "last_login" value
  * @method integer             getViews()           Returns the current record's "views" value
+ * @method string              getAvatarUrl()       Returns the current record's "avatar_url" value
  * @method Doctrine_Collection getLog()             Returns the current record's "Log" collection
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
  * @method Doctrine_Collection getPlayerStats()     Returns the current record's "PlayerStats" collection
@@ -37,6 +39,7 @@
  * @method Player              setName()            Sets the current record's "name" value
  * @method Player              setLastLogin()       Sets the current record's "last_login" value
  * @method Player              setViews()           Sets the current record's "views" value
+ * @method Player              setAvatarUrl()       Sets the current record's "avatar_url" value
  * @method Player              setLog()             Sets the current record's "Log" collection
  * @method Player              setStats()           Sets the current record's "Stats" collection
  * @method Player              setPlayerStats()     Sets the current record's "PlayerStats" collection
@@ -89,6 +92,11 @@ abstract class BasePlayer extends sfDoctrineRecord
              'notnull' => false,
              'default' => 0,
              'length' => 4,
+             ));
+        $this->hasColumn('avatar_url', 'string', 75, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 75,
              ));
     }
 

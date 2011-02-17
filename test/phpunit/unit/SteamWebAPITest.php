@@ -7,7 +7,7 @@ class unit_SteamWebAPITest extends sfPHPUnitBaseTestCase {
   public function testGetAvatarUrls() {
     $swapi = new SteamWebAPI();
     $a = $swapi->getAvatarUrlsFromSteamids(array("76561197993228277", "76561197973956286"));
-    $aresult = array("76561197973956286" => "http://media.steampowered.com/steamcommunity/public/images/avatars/99/99680cfa3c8e98bba925a92556d8f15fc084df27.jpg");
+    $aresult = array("76561197973956286" => "/99/99680cfa3c8e98bba925a92556d8f15fc084df27.jpg");
     $this->assertTrue(in_array($aresult, $a), "check that a result was found");
   }
   

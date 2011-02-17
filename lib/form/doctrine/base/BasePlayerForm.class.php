@@ -22,6 +22,7 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'name'            => new sfWidgetFormInputText(),
       'last_login'      => new sfWidgetFormDateTime(),
       'views'           => new sfWidgetFormInputText(),
+      'avatar_url'      => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -32,6 +33,7 @@ abstract class BasePlayerForm extends BaseFormDoctrine
       'name'            => new sfValidatorString(array('max_length' => 100, 'required' => false)),
       'last_login'      => new sfValidatorDateTime(array('required' => false)),
       'views'           => new sfValidatorInteger(array('required' => false)),
+      'avatar_url'      => new sfValidatorString(array('max_length' => 75, 'required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(

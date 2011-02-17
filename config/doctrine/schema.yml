@@ -290,6 +290,9 @@ Player:
       type: integer(4)
       notnull: false
       default: 0
+    avatar_url:
+      type: string(75)
+      notnull: false
       
 PlayerStat:
   columns:

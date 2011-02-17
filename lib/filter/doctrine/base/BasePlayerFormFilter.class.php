@@ -19,6 +19,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'name'            => new sfWidgetFormFilterInput(),
       'last_login'      => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate())),
       'views'           => new sfWidgetFormFilterInput(),
+      'avatar_url'      => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -28,6 +29,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'name'            => new sfValidatorPass(array('required' => false)),
       'last_login'      => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
       'views'           => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'avatar_url'      => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('player_filters[%s]');
@@ -54,6 +56,7 @@ abstract class BasePlayerFormFilter extends BaseFormFilterDoctrine
       'name'            => 'Text',
       'last_login'      => 'Date',
       'views'           => 'Number',
+      'avatar_url'      => 'Text',
     );
   }
 }

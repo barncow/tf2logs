@@ -53,11 +53,17 @@ class LogParser {
   }
   
   public function buildWeaponCache() {
-    $this->weapons = Doctrine::getTable('Weapon')->getAllWeapons();
+    $weps = Doctrine::getTable('Weapon')->getAllWeapons();
+    foreach($weps as $wep) {
+      $this->weapons[$wep->getKeyName()] = $wep;
+    }
   }
   
   public function buildRoleCache() {
-    $this->roles = Doctrine::getTable('Role')->findAll();
+    $rs = Doctrine::getTable('Role')->findAll();
+    foreach($rs as $r) {
+      $this->roles[$r->getKeyName()] = $r;
+    }
   }
   
   /**
@@ -66,10 +72,8 @@ class LogParser {
   */
   public function getWeaponFromCache($keyName) {
     if($keyName === false) return false;
-    foreach($this->weapons as $w) {
-      if($w->getKeyName() == $keyName) {
-        return $w;
-      }
+    if(isset($this->weapons[$keyName])) {
+      return $this->weapons[$keyName];
     }
     
     //still here, need to create new weapon
@@ -87,14 +91,7 @@ class LogParser {
   */
   public function getRoleFromCache($keyName) {
     if($keyName === false) return false;
-    foreach($this->roles as $r) {
-      if($r->getKeyName() == $keyName) {
-        return $r;
-      }
-    }
-    
-    //still here, did not find.
-    throw new InvalidArgumentException("Invalid role given to getRoleFromCache method: ".$keyName);
+    return $this->roles[$keyName];
   }
   
   public function getLog() {
@@ -130,6 +127,7 @@ class LogParser {
 	* This will parse the entire log file.
 	*/
 	public function parseLogFile($filename, $logSubmitterId, $logName = null, $logMapName = null, Log $logObj = null) {
+	  $tlp = sfTimerManager::getTimer('totalLogParse');
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
 	  }
@@ -142,12 +140,15 @@ class LogParser {
 	  $file = $this->getRawLogFile($filename);
 	  
 	  $this->previousLogLine = null; //clearing in case this is getting called again.
+	  $ret;
 	  try {
-	    return $this->parseLog($file);
+	    $ret =  $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
 	    //if no tournament mode was found, re-run entire log file as one round.
 	    return $this->parseLog($file, true);
 	  }
+	  $tlp->addTime();
+	  return $ret;
 	}
 	
 	/**
@@ -204,7 +205,9 @@ class LogParser {
     }
     
     $this->finishLog();
+    $st = sfTimerManager::getTimer('saveLog');
 	  $this->log->save();
+	  $st->addTime();
 	  return $this->log;
 	}
 	
@@ -356,22 +359,22 @@ class LogParser {
 	    return self::GAME_CONTINUE;
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
-	    //Need to determine what action is being done here.
-	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
-	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
-	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
 	    
 	    if(strpos($logLine, "><BOT><")) {
 	      //ignoring all bots.
 	      return self::GAME_CONTINUE;
 	    }
 	    
+	    //Need to determine what action is being done here.
+	    $playerLineAction = $this->parsingUtils->getPlayerLineAction($logLineDetails);
+	    $players = PlayerInfo::getAllPlayersFromLogLineDetails($logLineDetails);
+	    $this->log->addUpdateUniqueStatsFromPlayerInfos($players);
+	    
 	    //want to process any joined team line whether or not we are in game over.
 	    //otherwise, skip the rest if in gameover.
 	    if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
-	      $this->log->addUpdateUniqueStatFromPlayerInfo($p);
 	      $this->playerChangeTeams[$p->getSteamid()] = 1;
 	      if(count($this->playerChangeTeams) >= count($this->log->getStats())) {
 	        //teams have switched, switch scores
