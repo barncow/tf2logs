@@ -14,7 +14,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     unset($this->logParser);
   }
   
-  /*public function testFull_withGarbageAtEnd() {
+  public function testFull_withGarbageAtEnd() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     
     $this->assertEquals(894, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
@@ -22,7 +22,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
     }
-  }*/
+  }
   
   public function testFull_1123dwidgranary() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
@@ -36,7 +36,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     }
   }
   
-  /*public function testFull_ctfdoublecross() {
+  public function testFull_ctfdoublecross() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
     $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
     $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
@@ -54,7 +54,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_kothviaduct.log", 1);
     $this->assertEquals(4, $log->getBluescore(), "blue score of kothviaduct");
     $this->assertEquals(0, $log->getRedscore(), "red score of kothviaduct");
-  }*/
+  }
   
   /**
     The purpose of this test is to check that the logparser handles multiple halves correctly.
@@ -66,7 +66,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     KOTH and PL maps both depend on round_wins not proceeding right after a capture. This feature has been removed,
     and we will just suck up the extra round_win
   */
-  /*public function testFull_badlands_2halves() {
+  public function testFull_badlands_2halves() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
     
     $this->assertEquals(6, $log->getRedscore(), "red score");
@@ -82,12 +82,12 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
         break;
       }
     }
-  }*/
+  }
   
   /**
   * @expectedException NoDataInLogFileException
   */
-  //public function testFull_empty() {
-  //  $log = $this->logParser->parseLogFile($this->LFIXDIR."full_empty.log", 1);
-  //}
+  public function testFull_empty() {
+    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_empty.log", 1);
+  }
 }
