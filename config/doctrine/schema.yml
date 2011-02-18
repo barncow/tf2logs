@@ -412,7 +412,13 @@ EventPlayer:
 
 Session:
   columns:
+    id:
+      type: string(32)
+      primary: true
+      notnull: true
     sdata:
-      type: string
+      type: string(4096)
+      notnull: true
     stime:
-      type: timestamp
+      type: integer(4)
+      notnull: true
