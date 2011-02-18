@@ -56,6 +56,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat->getFlagCaptures(), "target's flag captures");
         $this->assertEquals(1, $stat->getFlagDefends(), "target's flag defends");
         $this->assertEquals(2, $stat->getLongestKillStreak(), "target's longest kill streak");
+        $this->assertEquals('/99/99680cfa3c8e98bba925a92556d8f15fc084df27.jpg', $stat->getPlayer()->getAvatarUrl(), "target has correct avatar url");
         
         foreach($stat->getWeaponStats() as $ws) {
           if($ws->getWeapon()->getKeyName() == "scattergun") {
