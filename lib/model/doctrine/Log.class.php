@@ -32,27 +32,22 @@ class Log extends BaseLog
   * Adds a stat record for the given player, if unique.
   */
   public function addUpdateUniqueStatFromPlayerInfo(PlayerInfo $playerInfo) {
-    $addStat = true;
-    foreach($this->Stats as &$stat) {
-      if($stat->equalsPlayerInfo($playerInfo)) {
-        //no need to add, but will update here.
-        
-        //if the player is now on team null (discon, spec, etc) keep old team designation.
-        if($playerInfo->getTeam() == null) {
-          $playerInfo->setTeam($stat->getTeam());
-        }
-        
-        $stat->setPlayerInfoAttributes($playerInfo);
-        $addStat = false;
-        break;
+    if(isset($this->Stats[$playerInfo->getSteamid()])) {
+      $stat = $this->Stats[$playerInfo->getSteamid()];
+      //no need to add, but will update here.
+      
+      //if the player is now on team null (discon, spec, etc) keep old team designation.
+      if($playerInfo->getTeam() == null) {
+        $playerInfo->setTeam($stat->getTeam());
       }
-    }
-    
-    //no need to track the console's stats, and do not add a player unless an ingame action occurs
-    if($addStat && $playerInfo->getSteamid() != "Console" && $playerInfo->getTeam() != null) {
+      
+      $stat->setPlayerInfoAttributes($playerInfo);
+    } else if($playerInfo->getSteamid() != "Console" && $playerInfo->getTeam() != null) {
+      //no need to track the console's stats, and do not add a player unless an ingame action occurs
+      //otherwise, add the player.
       $stat = new Stat();
       $stat->setPlayerInfoAttributes($playerInfo);
-      $this->Stats[] = $stat;
+      $this->Stats[$playerInfo->getSteamid()] = $stat;
     }
   }
   
@@ -244,12 +239,8 @@ class Log extends BaseLog
   * outside of this class is unwise.
   */
   protected function &getStatFromSteamid($steamid) {
-    foreach($this->Stats as &$stat) {
-      if($stat->getPlayer()->getSteamid() == $steamid) {
-        return $stat;
-      }
-    }
-    $f = false;
+    if(!isset($this->Stats[$steamid])) return false;
+    $f = &$this->Stats[$steamid];
     return $f;
   }
 }

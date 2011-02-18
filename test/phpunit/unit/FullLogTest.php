@@ -22,15 +22,21 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
     }
-  }
+  }*/
   
   public function testFull_1123dwidgranary() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
     $this->assertEquals(1, $log->getBluescore(), "blue score of 1123dwidgranary");
     $this->assertEquals(5, $log->getRedscore(), "red score of 1123dwidgranary");
+    
+    foreach($log->getStats() as $stat) {
+      if($stat->getName() == "=OBL= Rubber Ducky") {
+        $this->fail("Spectator found in granary log.");
+      }
+    }
   }
   
-  public function testFull_ctfdoublecross() {
+  /*public function testFull_ctfdoublecross() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
     $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
     $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
@@ -76,12 +82,12 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
         break;
       }
     }
-  }
+  }*/
   
   /**
   * @expectedException NoDataInLogFileException
   */
-  /*public function testFull_empty() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_empty.log", 1);
-  }*/
+  //public function testFull_empty() {
+  //  $log = $this->logParser->parseLogFile($this->LFIXDIR."full_empty.log", 1);
+  //}
 }
