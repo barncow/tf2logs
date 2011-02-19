@@ -347,6 +347,15 @@ br.hardSeparator {
   margin-right: auto;
 }
 
+.ui-autocomplete {
+	max-height: 100px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+}
+
 .plupload_file_name .logFormFieldContainer { position:relative; display: inline; }
 .plupload_file_name label  { position:absolute; top:0px; left:5px;}
 

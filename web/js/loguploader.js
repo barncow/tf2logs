@@ -54,13 +54,12 @@ $(function() {
 	    $('#'+file.id+' .plupload_file_name').append(
 	      '<div class="logMetaData ui-priority-secondary">' +
 		    '<div class="logFormFieldContainer"><label for="logName' + file.id + '">Log Name</label> <input type="text" maxlength="100" id="logName' + file.id + '" class="ui-widget-content ui-corner-all"'+logNameVal+' title="Optional. By default, the name of the log is the log file name. You can specify a different name here."/></div>' +
-		    '<div class="logFormFieldContainer"><label for="logMapName' + file.id + '">Map Name</label> <input type="text" maxlength="25" id="logMapName' + file.id + '" title="Optional. In order to take advantage of Log Playback, you must specify the map name of the log." class="log_map_name ui-widget-content ui-corner-all"'+logMapNameVal+'/></div>' +
+		    '<div class="logFormFieldContainer"><label for="logMapName' + file.id + '">Map Name</label> <input type="text" maxlength="25" id="logMapName' + file.id + '" title="Optional. In order to take advantage of Log Playback, you must specify the map name of the log. A list of sample maps is provided, but you can enter another map if yours is not listed." class="log_map_name ui-widget-content ui-corner-all"'+logMapNameVal+'/></div>' +
 	    '</div>');
 	    
 	    $('#'+file.id+' .plupload_file_name').append('<div class="logInfo ui-priority-secondary">' + logInfo + '</div>');
     });
     up.logMetaAttributes = {};
-    ACSource.delay = 0;
     $(".log_map_name").autocomplete(ACSource);
     $(".plupload_file_name label").inFieldLabels();
     $(".plupload_droptext").html(droptext);

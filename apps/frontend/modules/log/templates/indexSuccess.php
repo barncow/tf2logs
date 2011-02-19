@@ -7,6 +7,7 @@ use_helper('Log');
 use_helper('PageElements');
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
+use_javascript('autocompletehelper.js');
 ?>
 
 <?php if(!$sf_user->isAuthenticated()): ?>
@@ -105,7 +106,5 @@ echo '</div><br class="hardSeparator"/>';
 <script type="application/x-javascript">
 var uploadurl = "<?php echo url_for('log/add') ?>";
 var csrftoken = "<?php echo $form->getCSRFToken() ?>";
-var ACSource = {
-  source: <?php echo outputAsJSArray($mapNames); ?>
-};
+ACSource.source = <?php echo outputAsJSArray($mapNames); ?>;
 </script>
