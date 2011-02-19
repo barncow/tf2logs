@@ -186,13 +186,13 @@ EOD;
           if($ws['stat_id'] == $stat['id'] && $ws['weapon_id'] == $w['id']) {
             $kills = $ws['num_kills'];
             $deaths = $ws['num_deaths'];
-            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($kills).'">'.$kills.'</span></td><td class="ui-table-content"><span class="'.dataCellOutputClass($deaths).'">'.$deaths.'</span></td>';
+            $s .= '<td class="ui-table-kills"><span class="'.dataCellOutputClass($kills).'">'.$kills.'</span></td><td class="ui-table-deaths"><span class="'.dataCellOutputClass($deaths).'">'.$deaths.'</span></td>';
             $foundWS = true;
             break;
           }
         }
         if(!$foundWS) {
-          $s .= '<td class="ui-table-content"><span class="zeroValue">0</span></td><td class="ui-table-content"><span class="zeroValue">0</span></td>';
+          $s .= '<td class="ui-table-kills"><span class="zeroValue">0</span></td><td class="ui-table-deaths"><span class="zeroValue">0</span></td>';
         }
       }
     $s .= '</tr>';

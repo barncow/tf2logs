@@ -370,12 +370,20 @@ br.hardSeparator {
 .ui-widget-content-nobg a { 
   color: #e3ddc9; 
 }
-.ui-widget-content-nobg, .ui-table-content {
+.ui-widget-content-nobg, .ui-table-content, .ui-table-kills, .ui-table-deaths {
   background-color: #201913; 
   color: #e3ddc9;
 }
 .ui-table-content {
   border: 1px solid #695444;
+}
+.ui-table-kills {
+  border-left: 1px solid #695444;
+  border-bottom: 1px solid #695444;
+  border-right: 1px dotted #433428;
+}
+.ui-table-deaths {
+  border-bottom: 1px solid #695444;
 }
 
 .error_list {
