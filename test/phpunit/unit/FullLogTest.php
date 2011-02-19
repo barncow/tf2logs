@@ -17,7 +17,8 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   public function testFull_withGarbageAtEnd() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     
-    $this->assertEquals(894, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
+    //893 instead of 894 because rcon line is removed.
+    $this->assertEquals(893, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
     
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
@@ -25,9 +26,10 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   }
   
   public function testFull_1123dwidgranary() {
+    //note - this log seems to start in the middle of a round. the first capture by red currently does not count until the "round_start"
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
     $this->assertEquals(1, $log->getBluescore(), "blue score of 1123dwidgranary");
-    $this->assertEquals(5, $log->getRedscore(), "red score of 1123dwidgranary");
+    $this->assertEquals(4, $log->getRedscore(), "red score of 1123dwidgranary");
     
     foreach($log->getStats() as $stat) {
       if($stat->getName() == "=OBL= Rubber Ducky") {
@@ -69,9 +71,9 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   public function testFull_badlands_2halves() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
     
-    $this->assertEquals(6, $log->getRedscore(), "red score");
+    $this->assertEquals(5, $log->getRedscore(), "red score");
     
-    $this->assertEquals(0, $log->getBluescore(), "red score");
+    $this->assertEquals(0, $log->getBluescore(), "blue score");
     
     foreach($log->getStats() as $stat) {
       if($stat->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {

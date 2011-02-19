@@ -7,45 +7,45 @@ homepage:
   param: { module: log, action: index }
   
 log_by_id:
-  url:   /log/:id
+  url:   /logs/:id
   param: { module: log, action: show }
   requirements: {id: \d+}
   
 log_edit:
-  url:   /log/:id/edit
+  url:   /logs/:id/edit
   param: { module: log, action: edit }
   requirements: {id: \d+}
   
 log_update:
-  url:   /log/:id/update
+  url:   /logs/:id/update
   param: { module: log, action: update }
   requirements: {id: \d+}
   
 events_by_id:
-  url:   /log/:id/events
+  url:   /logs/:id/events
   param: { module: log, action: events }
   requirements: {id: \d+, sf_format: json}
 
 logfile:
-  url:   /log/:id/logfile
+  url:   /logs/:id/logfile
   param: { module: log, action: logfile }
   requirements: {id: \d+}
   
 log_create:
-  url:   /log/add
+  url:   /logs/add
   param: { module: log, action: add }
   
 player_by_numeric_steamid:
-  url:   /player/:id
+  url:   /players/:id
   param: { module: player, action: showNumericSteamId }
   requirements: {id: \d+}
   
 log_search:
-  url:   /log/search/
+  url:   /logs/search
   param: { module: log, action: search }
   
 player_search:
-  url:   /player/search/
+  url:   /players/search
   param: { module: player, action: search }
   
 controlpanel:
@@ -53,19 +53,19 @@ controlpanel:
   param: { module: player, action: controlPanel }
   
 autoLogin:
-  url:   /player/autoLogin
+  url:   /players/autoLogin
   param: { module: player, action: autoLogin }
   
 logout:
-  url:   /player/logout
+  url:   /players/logout
   param: { module: player, action: logout }
   
 openid_finishauth:
-  url: /player/finish
+  url: /players/finish
   param: { module: player, action: finish }
   
 openid_error:
-  url: /player/openidError
+  url: /players/openidError
   param: { module: player, action: openidError }
 
 # generic rules

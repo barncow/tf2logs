@@ -74,7 +74,6 @@ EOD;
         </tbody>
       </table>
       $pagination
-  </div>
 EOD;
   echo outputInfoBox("searchResults", "Search Results", $s);
 }

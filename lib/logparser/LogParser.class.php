@@ -31,6 +31,11 @@ class LogParser {
   protected $gameOver;
   protected $isServerCvars;
   
+  //these values are used to detect whether a round_win is valid or not.
+  protected $currentRoundWinTeam;
+  protected $prevBlueTeamScore;
+  protected $prevRedTeamScore;
+  
   //GAME STATE CONSTANTS
   const GAME_APPEARS_OVER = 0;
   const GAME_OVER = 1;
@@ -47,6 +52,8 @@ class LogParser {
     $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
     $this->gameOver = false;
     $this->isServerCvars = false;
+    $this->prevBlueTeamScore = 0;
+    $this->prevRedTeamScore = 0;
     
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
@@ -316,8 +323,9 @@ class LogParser {
 	    } else if($worldTriggerAction == "Round_Win") {
 	      //increment score for the team that won the round, if the map is not ctf (ctf has own scoring)
 	      if(!$this->isCtf) {
-	        $team = $this->parsingUtils->getRoundWinTeam($logLineDetails);
-	        $this->log->incrementScoreForTeam($team);
+	        $this->currentRoundWinTeam = $this->parsingUtils->getRoundWinTeam($logLineDetails);
+	        
+	        //$this->log->incrementScoreForTeam($team);
 	      }
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Round_Setup_Begin"
@@ -332,7 +340,11 @@ class LogParser {
 	      ) {
 	      return self::GAME_CONTINUE; //no need to process
 	    }
-	  }	  
+	  } else if($this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
+	    //this could contain sensitive information. Do not add it to the log.
+	    $this->addToScrubbedLog = false;
+	    return self::GAME_CONTINUE;
+	  }
 	  
 	  if(!$this->isTournamentMode) {
 	    return self::GAME_CONTINUE; //do not want to track information when not in tournament mode.
@@ -347,10 +359,6 @@ class LogParser {
 	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)
 	  ) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
-	  } else if($this->parsingUtils->isLogLineOfType($logLine, "rcon from", $logLineDetails)) {
-	    //this could contain sensitive information. Do not add it to the log.
-	    $this->addToScrubbedLog = false;
-	    return self::GAME_CONTINUE;
 	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Started map ", $logLineDetails)) {
 	    //populate the map field if not specified.
@@ -379,6 +387,10 @@ class LogParser {
 	      if(count($this->playerChangeTeams) >= count($this->log->getStats())) {
 	        //teams have switched, switch scores
 	        $this->log->switchScores();
+	        $tempblue = $this->prevBlueTeamScore;
+	        $this->prevBlueTeamScore = $this->prevRedTeamScore;
+	        $this->prevRedTeamScore = $tempblue;
+	        
 	        $this->log->addScoreChangeEvent($elapsedTime, $this->log->getBluescore(), $this->log->getRedscore());
 	        $this->playerChangeTeams = array();
 	      }
@@ -558,6 +570,37 @@ class LogParser {
         if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
           //the only time there would be zero players for a team is if something screwed up.
           return self::GAME_APPEARS_OVER;
+        }
+        
+        $score = (int)$this->parsingUtils->getTeamScore($logLineDetails);
+        
+        /*
+        since the team score lines can reset scores to zero, either because of two half logs or
+        normal map operation, can't use them for scores. CTF maps just count flagcaptures, so
+        no special attention needed. Need to use round_win, however these can be awarded if no
+        person capped last point (ie. round cut short due to timelimit). Need to filter these out.
+        The only way a round_win is legit, is if *any* team's score changes, even if it gets reset to zero.
+        (since a/d maps switch teams, and scores switch before teams, any score could change; just award win
+        to team in currentRoundWinTeam in either case.)
+        */
+        if(!$this->isCtf) {
+          if($team == "Blue") {
+            if($score != $this->prevBlueTeamScore) {
+              if($this->currentRoundWinTeam) {
+                $this->log->incrementScoreForTeam($this->currentRoundWinTeam);
+                $this->currentRoundWinTeam = null;
+              }
+            }
+            $this->prevBlueTeamScore = $score;
+          } else if($team == "Red") {
+            if($score != $this->prevRedTeamScore) {
+              if($this->currentRoundWinTeam) {
+                $this->log->incrementScoreForTeam($this->currentRoundWinTeam);
+                $this->currentRoundWinTeam = null;
+              }
+            }
+            $this->prevRedTeamScore = $score;
+          }
         }
         
         if($team == "Blue") {

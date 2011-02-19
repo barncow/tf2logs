@@ -8,8 +8,9 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
     $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
-    //$countOfLines-1 represents the lack of chat line with SM command.
-    $this->assertEquals($countOfLines-1, count(explode("\n", $log->getLogFile()->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
+    //$countOfLines-1 represents the lack of chat line with SM command, and the two rcon lines.
+    $this->assertEquals($countOfLines-3, count(explode("\n", $log->getLogFile()->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
+    $this->assertFalse(strpos($log->getLogFile()->getLogData(), "rcon"), "verify that no rcon line is in the log.");
     $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console, specs, and bots");
     
     $this->assertEquals(0, $log->getRedscore(), "red score");
