@@ -383,6 +383,7 @@ class LogParser {
 	    if($playerLineAction == "joined team") {
 	      $p = $players[0];
 	      $p->setTeam($this->parsingUtils->getPlayerLineActionDetail($logLineDetails));
+	      $this->log->addUpdateUniqueStatsFromPlayerInfos(array($p));
 	      $this->playerChangeTeams[$p->getSteamid()] = 1;
 	      if(count($this->playerChangeTeams) >= count($this->log->getStats())) {
 	        //teams have switched, switch scores

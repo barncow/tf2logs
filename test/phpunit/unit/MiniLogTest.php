@@ -48,7 +48,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       if($stat->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
         //verify numbers for "Target"
         $this->assertEquals("Target", $stat->getPlayer()->getName(), "name on player object should be Target");
-        $this->assertEquals("Blue", $stat->getTeam(), "Target should be on team Blue");
+        $this->assertEquals("Red", $stat->getTeam(), "Target should be on team Red");
         $this->assertEquals(2, $stat->getKills(), "target's kills");
         $this->assertEquals(1, $stat->getDominations(), "target's dominations");
         $this->assertEquals(1, $stat->getDeaths(), "target's deaths");
@@ -114,9 +114,6 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             $this->fail("Barncow has extra role: ".$r->getRole()->getKeyName());
           }
         }
-        
-        $fullpath = sfConfig::get('sf_web_dir')."/avatars/1.jpg";
-        $this->assertTrue(file_exists($fullpath), "check that avatar was downloaded");
       } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat->getAssists(), "cres' assists");

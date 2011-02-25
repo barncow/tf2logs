@@ -48,6 +48,7 @@ L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggere
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" say "!sm_cvar sv_password secret"
 L 09/29/2010 - 19:32:09: "Console<0><Console><Console>" say "console say line"
 L 09/29/2010 - 19:32:09: "<17><BOT><>" entered the game
+L 09/29/2010 - 19:32:09: "Target<46><STEAM_0:0:6845279><Blue>" joined team "Red"
 L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Unassigned>" joined team "Red"
 L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Red>" changed role to "medic"
 L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"
