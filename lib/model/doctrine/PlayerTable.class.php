@@ -80,6 +80,7 @@ class PlayerTable extends Doctrine_Table {
     $query = 'select p.numeric_steamid as numeric_steamid, p.name as name, count(l.submitter_player_id) as num_logs '
       .'from log l '
       .'left join player p on l.submitter_player_id = p.id '
+      .'where l.error_log_name is null '
       .'group by p.numeric_steamid, p.name '
       .'having num_logs > 0 '
       .'order by num_logs desc '

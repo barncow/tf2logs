@@ -87,6 +87,7 @@ class LogTable extends Doctrine_Table {
         ->leftJoin('l.Stats s')
         ->leftJoin('s.Player p')
         ->where('p.numeric_steamid = ?', $playerId)
+        ->andWhere('l.error_log_name is null')
         ->orderBy('l.created_at desc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }
@@ -97,6 +98,7 @@ class LogTable extends Doctrine_Table {
         ->createQuery('l')
         ->leftJoin('l.Submitter p')
         ->where('p.numeric_steamid = ?', $playerId)
+        ->andWhere('l.error_log_name is null')
         ->orderBy('l.created_at desc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }
@@ -106,6 +108,7 @@ class LogTable extends Doctrine_Table {
         ->createQuery('l')
         ->leftJoin('l.Submitter p')
         ->where('p.id = ?', $playerId)
+        ->andWhere('l.error_log_name is null')
         ->orderBy('l.created_at desc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
     }
@@ -116,6 +119,7 @@ class LogTable extends Doctrine_Table {
       ->from('Log l')
       ->leftJoin('l.Submitter p')
       ->where('p.numeric_steamid = ?', $playerId)
+      ->andWhere('l.error_log_name is null')
       ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
       ->execute();
       if(count($p) != 1) return 0;
@@ -156,6 +160,7 @@ class LogTable extends Doctrine_Table {
       $q = $this
         ->createQuery('l')
         ->orderBy('l.created_at desc, l.name asc')
+        ->where('l.error_log_name is null')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
       if($logName && strlen($logName) > 0) {
         $q->andWhere('l.name LIKE ?', '%'.$logName.'%');
