@@ -251,4 +251,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals("ctf_turbine", $this->parsingUtils->getMapFromMapLine($logLineDetails), "able to grab map from started");
   }
+  
+  public function testGetObjectFromBuiltObject() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_attach_sapper.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("OBJ_ATTACHMENT_SAPPER", $this->parsingUtils->getObjectFromBuiltObject($logLineDetails), "can grab object from built_object event");
+  }
 }

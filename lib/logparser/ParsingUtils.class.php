@@ -360,5 +360,18 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves object from built_object
+  */
+  public function getObjectFromBuiltObject($logLineDetails) {
+    $matches;
+    preg_match("/\(object \"(.+?)\"\)/", $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

@@ -491,7 +491,12 @@ class LogParser {
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "builtobject") {
 	          $p = $players[0];
-	          $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
+	          //spies attaching sappers are actually builtobject sappers. Filter these out.
+	          if($this->parsingUtils->getObjectFromBuiltObject($logLineDetails) != "OBJ_ATTACHMENT_SAPPER") {
+	            $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("engineer"), $dt, $this->log->get_timeStart());
+	          } else {
+	            $this->log->addRoleToSteamid($p->getSteamid(), $this->getRoleFromCache("spy"), $dt, $this->log->get_timeStart());
+	          }
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "killedobject") {
 	          return self::GAME_CONTINUE; //ignoring all together, weapons not reliable.

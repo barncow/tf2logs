@@ -206,6 +206,12 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
             break;
           }
         }
+        
+        foreach($stat->getRoleStats() as $r) {
+          if($r->getRole()->getKeyName() == "engineer") {
+            $this->fail("yay has engineer role when only spy");
+          }
+        }
       }
     }
   }
