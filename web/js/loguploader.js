@@ -78,6 +78,7 @@ $(function() {
   });
   
   uploader.bind('FileUploaded', function(up, file, response) {
+    //$('#'+file.id+' .openAC').button( "option", "icons", {primary:'ui-icon-triangle-1-s'});
     var obj = jQuery.parseJSON(response.response);
     var status = $('#'+file.id+' .plupload_file_name .logInfo');
     if(obj.url) {
@@ -94,6 +95,7 @@ $(function() {
 				break;
 
 			case plupload.UPLOADING:
+			  //$('#'+file.id+' .openAC').button( "option", "icons", {primary:'ui-icon-triangle-1-s'});
 			  if(file.percent == 100) {
 			    //file has been uploaded, just waiting for response.
 				  $('#'+file.id+' .plupload_file_name .logInfo .status').html("<strong>Processing...</strong>");

@@ -1,7 +1,7 @@
 var ACSource = {
   delay: 0,
   minLength: 0,
-  close: function(event, ui) {
+  /*close: function(event, ui) {
     $(this).next('.openAC').removeClass('open');
   },
   open: function(event, ui) {
@@ -26,6 +26,6 @@ var ACSource = {
 					  self.addClass('open').prev('.ui-autocomplete-input').autocomplete("search", "");
 					}
 				});
-  },
+  },*/
   source: []
 };
