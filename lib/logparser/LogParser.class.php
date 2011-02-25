@@ -89,7 +89,7 @@ class LogParser {
     //setting the weapon name to keyname for easier sorting onscreen.
     $wep->setName($keyName);
     $wep->save();
-    $this->weapons[] = $wep;
+    $this->weapons[$keyName] = $wep;
     return $wep;
   }
   

@@ -4,6 +4,10 @@ require_once 'BaseLogParserTestCase.php';
 
 class unit_MiniLogTest extends BaseLogParserTestCase {    
   public function testMiniLog() {
+    /**
+    NOTE - This log is also testing proper saving of weapons (the garbage weapon key at the end of the log)
+    When running this test, make sure that the database is clean to get a true indication of success.
+    */
     $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
