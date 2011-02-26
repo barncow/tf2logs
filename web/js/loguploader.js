@@ -33,6 +33,8 @@ $(function() {
 	$(".plupload_header_text").html('Click the Add Files button to add a log file to the queue. You can enter in an optional name and map name for the log file. In order to view the events of the log with the Log Viewer, a map must be specified. When you are ready, click Start Upload. If you make a mistake, you can always edit your log files at <a href="'+$("#mycplink").attr("href")+'" style="text-decoration: underline;">My Tf2Logs</a>.');
 	
 	var uploader = $('#uploader').plupload('getUploader');
+	//since we updated the text of the uploader, in order for the upload button to work, we need to refresh its position.
+	uploader.refresh();
 	
 	//this callback must be added after the upload queue is initialized, since it has to be fired after the ui
 	//has added its html.
