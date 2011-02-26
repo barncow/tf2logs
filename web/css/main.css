@@ -75,7 +75,15 @@ img.Red {
 }
 
 .txtnowrap {
-  white-space:nowrap;
+  /*white-space:nowrap;*/
+}
+
+.weaponStatWeapon {
+  min-width: 53px;
+}
+
+.weaponStatPlayer {
+  min-width: 150px;
 }
 
 .infoBox {

@@ -159,7 +159,7 @@ $avbase = sfConfig::get('app_avatar_base_url');
   <caption>Weapon Stats</caption>
   <thead>
     <tr>
-      <th rowspan="2"><!--playername--></th>
+      <th rowspan="2" class="weaponStatPlayer"><!--playername--></th>
 EOD;
     for($x = 0; $x < count($weapons); ++$x) {
       $w = $weapons[$x];
@@ -167,16 +167,16 @@ EOD;
       $weaponHTML = outputWeapon($w['name'], $w['key_name'], $w['image_name']);
       //only want a tooltip if there is an img.
       if(strpos($weaponHTML, "<img") === 0) $title = ' title="'.outputWeaponName($w['name'], $w['key_name']).'"';
-      $s .= '<th colspan="2" class="ui-state-default txtnowrap"'.$title.'>'.$weaponHTML."</th>";
+      $s .= '<th colspan="2" class="ui-state-default weaponStatWeapon"'.$title.'>'.$weaponHTML."</th>";
     }
     $s .= "</tr><tr>";
     for($x = 0; $x < count($weapons); ++$x) {
-      $s .= '<th title="Kills" class="ui-state-default txtnowrap">K</th><th title="Deaths" class="ui-state-default txtnowrap">D</th>';
+      $s .= '<th title="Kills" class="ui-state-default">K</th><th title="Deaths" class="ui-state-default">D</th>';
     }
     $s .= '</tr></thead><tbody>';
     for($x = 0; $x < count($miniStats); ++$x) {
       $stat = $miniStats[$x];
-      $s .= '<tr><td class="ui-table-content txtnowrap">';
+      $s .= '<tr><td class="ui-table-content weaponStatPlayer">';
         $s .= '<img src="'.$avbase.$stat['playerAvatarUrl'].'" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
       for($y = 0; $y < count($weapons); ++$y) {
         $w = $weapons[$y];
