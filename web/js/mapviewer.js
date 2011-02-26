@@ -95,16 +95,12 @@ var MapDrawer = Class.extend({
 	init: function(mapViewerCanvas) {
 		this.jqMapViewerCanvas = mapViewerCanvas;
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
-		this.mapViewerContext = null;
 		this.fps = 30;
 		this.interval = 1000/this.fps;
 		this.drawTimeout = null;
 		this.drawableStack = new DrawableStack();
 		this.mouseLocation = new Coordinate(-1,-1);
-		
-		if(this.mapViewerCanvas.getContext) {	
-			this.mapViewerContext = this.mapViewerCanvas.getContext('2d');
-		}
+		this.mapViewerContext = this.mapViewerCanvas.getContext('2d');
 	},
 	
 	//initiates draw interval
@@ -238,18 +234,21 @@ var MapDrawer = Class.extend({
 // MapViewer class - class that handles everything for the mapviewer.
 /////////////////////////////////////////////////////////////////////////////////////
 var MapViewer = Class.extend({
-	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, mapViewerCanvas, jqPlaybackControls, jqPlayPause, jqPlaybackProgress, jqChatBox, jqPlaybackSpeed, jqIsCumulitive) {
-		this.jqMapViewerCanvas = mapViewerCanvas;
-		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
-		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
-		this.canvasOffset = this.jqMapViewerCanvas.offset();this.eventType = "team_say";
+	init: function(gameMap, playerCollection, logEventCollection, weaponCollection, jqMapViewerContainer) {
+	  this.jqMapViewerContainer = jqMapViewerContainer;
+	  
+	  this.jqMapViewerContainer.append('<canvas id="tempCanvas" style="width: 1px; height: 1px;"></canvas>');
+	  //test that there is canvas support
+	  if(document.getElementById("tempCanvas").getContext) {
+	    this.jqMapViewerContainer.html('<div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>Loading, please wait.</div>');
+	  } else {
+	    $("#tempCanvas").remove();
+	    return; //no canvas support, so there is no need to go on.
+	  }
+	  
 		this.gameMap = gameMap; //GameMap child object
 		this.dataTimeout = null;
 		this.mapImgDrawable = null;
-		this.jqPlayPause = jqPlayPause;
-		this.jqPlaybackControls = jqPlaybackControls;
-		this.jqPlaybackProgress = jqPlaybackProgress;
-		this.jqChatBox = jqChatBox;
 		this.playbackState = 0; //0 is paused, 1 is playing.
 		this.playbackPosition = 0; //time in seconds
 		this.playbackStateBeforeSlide = null; //state of playback when sliding. will return to it when done.
@@ -261,12 +260,67 @@ var MapViewer = Class.extend({
 		this.isMapImgLoaded = false;
 		this.blueScore = 0;
 		this.redScore = 0;
-		this.weaponCollection = weaponCollection;
-		this.jqPlaybackSpeed = jqPlaybackSpeed;
+		this.weaponCollection = weaponCollection;		
+		
+		//load map overhead image
+		this.mapImg = new Image();
+		this.mapImg.onload = function() {mapViewerObj.mapImgLoadingComplete();};
+		this.mapImg.src = this.gameMap.mapImageLocation;
+		this.checkAvatarsAreLoaded();
+	},
+	
+	drawInterface: function() {
+	  this.jqMapViewerContainer.html('<canvas id="mapViewer"></canvas>' +
+    '<div id="mapViewerControls">' +
+	    '<button id="playPauseButton"></button>' +
+	    '<div id="playbackProgress"><span id="totalTime"></span></div>' +
+	    '<div id="controlsContainer">' +
+	      '<label for="playbackSpeed">Playback Speed</label>' +
+	      '<select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">' +
+	        '<option value="1">1x</option>' +
+	        '<option value="5" selected>5x</option>' +
+	        '<option value="20">20x</option>' +
+	      '</select>' +
+
+        '<label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>' +
+        '<input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>' +
+	    '</div>' +
+    '</div>' +
+    '<div id="chatBox" class="ui-widget-content-nobg ui-corner-all"><ul></ul></div>');
+    this.jqMapViewerCanvas = $("#mapViewer");
+		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
+		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
+		this.canvasOffset = this.jqMapViewerCanvas.offset();
+		this.jqPlayPause = $("#playPauseButton");
+		this.jqPlaybackControls = $("#mapViewerControls");
+		this.jqPlaybackProgress = $("#playbackProgress");
+		this.jqChatBox = $("#chatBox");
+		this.jqPlaybackSpeed = $("#playbackSpeed");
 		this.playbackSpeed = parseInt(this.jqPlaybackSpeed.val());
-		this.jqIsCumulitive = jqIsCumulitive;
+		this.jqIsCumulitive = $("#isCumulitive");
 		this.isCumulitive = this.jqIsCumulitive.is(':checked');
 		
+		//set canvas size.
+		this.mapViewerCanvas.width = this.gameMap.imgWidth;
+		this.mapViewerCanvas.height = this.gameMap.imgHeight;
+		this.jqPlaybackControls.width(this.gameMap.imgWidth);
+		this.jqPlaybackProgress.width(this.gameMap.imgWidth-this.jqPlayPause.width()-40);
+		this.jqChatBox.width(this.gameMap.imgWidth);
+		
+		//set canvas mousemove handler. This will determine where the mouse is hovering.
+		this.jqMapViewerCanvas.mousemove(function(event){
+		  var p = $(this).position();
+			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(event.pageX-p.left, event.pageY-p.top);
+		});
+		
+		//set canvas mouseout handler. If a highlighted box was right on the corner,
+		//and the mouse moved outside the canvas, the box would remain highlighted.
+		//the mouse position in the canvas is reset, so no boxes should be selected.
+		this.jqMapViewerCanvas.mouseout(function(){
+			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(-1,-1);
+		});
+		
+		//setup canvas tooltips
 		this.tooltipId = 'mapViewerTooltip';
 		this.jqMapViewerCanvas.qtip({
 		  id: this.tooltipId,
@@ -286,35 +340,6 @@ var MapViewer = Class.extend({
         classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
       }
     });
-		
-		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
-		
-		//set canvas size.
-		this.mapViewerCanvas.width = this.gameMap.imgWidth;
-		this.mapViewerCanvas.height = this.gameMap.imgHeight;
-		this.jqPlaybackControls.width(this.gameMap.imgWidth);
-		this.jqPlaybackProgress.width(this.gameMap.imgWidth-this.jqPlayPause.width()-40);
-		this.jqChatBox.width(this.gameMap.imgWidth);
-		
-		//load map overhead image
-		this.mapImg = new Image();
-		this.mapImg.onload = function() {mapViewerObj.mapImgLoadingComplete();};
-		this.mapImg.src = this.gameMap.mapImageLocation;
-		
-		this.checkAvatarsAreLoaded();
-		
-		//set canvas mousemove handler. This will determine where the mouse is hovering.
-		this.jqMapViewerCanvas.mousemove(function(event){
-		  var p = $(this).position();
-			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(event.pageX-p.left, event.pageY-p.top);
-		});
-		
-		//set canvas mouseout handler. If a highlighted box was right on the corner,
-		//and the mouse moved outside the canvas, the box would remain highlighted.
-		//the mouse position in the canvas is reset, so no boxes should be selected.
-		this.jqMapViewerCanvas.mouseout(function(){
-			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(-1,-1);
-		});
 		
 		//init the Play and Pause Button. Set initial state to pause.
 		this.pause();
@@ -351,6 +376,8 @@ var MapViewer = Class.extend({
 				mapViewerObj.playbackStateBeforeSlide = null;
 			}
 		});
+		
+		$('#totalTime').html(this.getSecondsAsString(this.playbackMax));
 		
 		//playback speed dropdown
 		this.jqPlaybackSpeed.change(function(event){
@@ -438,6 +465,9 @@ var MapViewer = Class.extend({
 			var id = new ImageDrawable(this.mapImg, new Coordinate(0,0));
 			id.onTopIfHovered = false;
 			this.mapImgDrawable = id;
+			
+			//draw interface
+			this.drawInterface();
 			
 			//starting the data iteration
 			this.iterateData(false);

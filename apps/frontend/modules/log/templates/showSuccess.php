@@ -46,25 +46,7 @@ use_javascript('logshow.js');
 $s = '<div id="mapViewerContainer">';
 if($log['map_name']) {
   if(mapExists($log['map_name'])) {
-  $s .= <<<EOD
-    <canvas id="mapViewer"></canvas>
-    <div id="mapViewerControls">
-	    <button id="playPauseButton"></button>
-	    <div id="playbackProgress"><span id="totalTime"></span></div>
-	    <div id="controlsContainer">
-	      <label for="playbackSpeed">Playback Speed</label>
-	      <select id="playbackSpeed" class="ui-widget-content-nobg ui-corner-all">
-	        <option value="1">1x</option>
-	        <option value="5" selected>5x</option>
-	        <option value="20">20x</option>
-	      </select>
-
-        <label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>
-        <input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>
-	    </div>
-    </div>
-    <div id="chatBox" class="ui-widget-content-nobg ui-corner-all"><ul></ul></div>
-EOD;
+    $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This log file has data that can be viewed on the map. However, you will need a modern browser, such as Google Chrome or Mozilla Firefox to view it.</div>';
   } else {
     $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>The map '.$log['map_name'].' is not currently supported.</div>';
   }
@@ -97,7 +79,7 @@ if(mapExists($log['map_name'])) { ?>
 /////////////////////////////////////////////////////////////////////////////////////
 $(function (){  
 	  mvc = $("#mapViewerControls");
-	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewer"), mvc, $("#playPauseButton"), $("#playbackProgress"), $("#chatBox"), $("#playbackSpeed"), $("#isCumulitive"));
+	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewerContainer"));
 });
 </script>
 <?php } ?>
