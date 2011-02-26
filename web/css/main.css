@@ -167,6 +167,10 @@ br.hardSeparator {
 	margin-bottom: 1em;
 }
 
+img {
+  border: 0;
+}
+
 #header a {
   color: #79b3d2; /*from .ui-state-default*/
 }

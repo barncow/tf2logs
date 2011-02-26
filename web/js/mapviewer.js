@@ -125,7 +125,7 @@ var MapDrawer = Class.extend({
 		//don't need to clearRect the whole canvas, since we will just overlay with our bg img.
 		
 		//determine what is hovered
-		hoveredObj = this.drawableStack.markIsHovered(this.mouseLocation);
+		var hoveredObj = this.drawableStack.markIsHovered(this.mouseLocation);
 		
 		//draw everything in the stack
 		this.drawableStack.drawAll(this.mapViewerCanvas, this.mapViewerContext);
@@ -145,11 +145,11 @@ var MapDrawer = Class.extend({
 	},
 	
 	drawScores: function(canvas, context, redScore, blueScore) {
-	  boxwidth = 20;
-	  boxheight = 15;
-	  boxtbmargin = 10;
-	  boxspacing = 10;
-	  boxrlmargin = 10;
+	  var boxwidth = 20;
+	  var boxheight = 15;
+	  var boxtbmargin = 10;
+	  var boxspacing = 10;
+	  var boxrlmargin = 10;
 	  var pos = mapViewerObj.gameMap.scoreBoardCorner;
 	  var boxY, boxX;
 	  if(pos === 'bl') {
@@ -165,11 +165,11 @@ var MapDrawer = Class.extend({
 	    boxY = boxtbmargin;
 	    boxX = canvas.width - boxrlmargin - boxspacing - boxwidth*2;
 	  }
-	  leftPadding = 2;
-	  topPadding = 2;
-	  strokecolor = "#9C947C";
-	  bgcolor = "#201913";
-	  fontStyle = "bold 10px Arial";
+	  var leftPadding = 2;
+	  var topPadding = 2;
+	  var strokecolor = "#9C947C";
+	  var bgcolor = "#201913";
+	  var fontStyle = "bold 10px Arial";
 	  
 	  //red box
 	  context.fillStyle = bgcolor;
@@ -209,10 +209,10 @@ var MapDrawer = Class.extend({
 	 */
 	roundRect: function(ctx, x, y, width, height, radius, fill, stroke) {
 	  if (typeof stroke == "undefined" ) {
-		stroke = true;
+		  stroke = true;
 	  }
 	  if (typeof radius === "undefined") {
-		radius = 5;
+		  radius = 5;
 	  }
 	  ctx.beginPath();
 	  ctx.moveTo(x + radius, y);
@@ -305,7 +305,8 @@ var MapViewer = Class.extend({
 		
 		//set canvas mousemove handler. This will determine where the mouse is hovering.
 		this.jqMapViewerCanvas.mousemove(function(event){
-			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(event.offsetX, event.offsetY);
+		  var p = $(this).position();
+			mapViewerObj.mapDrawer.mouseLocation = new Coordinate(event.pageX-p.left, event.pageY-p.top);
 		});
 		
 		//set canvas mouseout handler. If a highlighted box was right on the corner,
@@ -389,11 +390,11 @@ var MapViewer = Class.extend({
 	},
 	
 	getSecondsAsString: function(seconds) {
-		mins = Math.floor(seconds/60);
-		secs = seconds%60;
-		szero = "";
+		var mins = Math.floor(seconds/60);
+		var secs = seconds%60;
+		var szero = "";
 		if(secs < 10) szero = "0";
-		mzero = "";
+		var mzero = "";
 		if(mins < 10) mzero = "0";
 		return mzero+mins+":"+szero+secs;
 	},
@@ -434,7 +435,7 @@ var MapViewer = Class.extend({
 	initAfterLoad: function() {
 		if(this.areAvatarsLoaded && this.isMapImgLoaded) {
 			//create the map image as a drawable for use in iterateData.
-			id = new ImageDrawable(this.mapImg, new Coordinate(0,0));
+			var id = new ImageDrawable(this.mapImg, new Coordinate(0,0));
 			id.onTopIfHovered = false;
 			this.mapImgDrawable = id;
 			
@@ -455,19 +456,19 @@ var MapViewer = Class.extend({
 		
 		this.updateSliderLabel(this.playbackPosition);
 				
-		drawableStack = new DrawableStack();
+		var drawableStack = new DrawableStack();
 		
 		//add map image as background
 		drawableStack.add(this.mapImgDrawable);
 
 		//get a clean copy of our capture points to customize and display
-		cps = this.gameMap.copyCapturePoints();
+		var cps = this.gameMap.copyCapturePoints();
 		
 		//clean the chat log
 		this.resetChatBox();
 		
 		//get all events pertinent for this frame
-		startSeconds = 0;
+		var startSeconds = 0;
 		if(!this.isCumulitive) {
 		  startSeconds = this.playbackPosition-this.numberOfSecondsKeepEventOnScreen*this.playbackSpeed;
 		}
@@ -496,12 +497,12 @@ var MapViewer = Class.extend({
 	avatarLoadingComplete: function() {
 		//todo move to playerCollection
 		//go through PlayerDrawable objects and assign avatar images to each drawable.
-		a = $(".avatar");
-		for(i in this.playerCollection.players) {
+		var a = $(".avatar");
+		for(var i in this.playerCollection.players) {
 			pd = this.playerCollection.players[i];
 			a.each(function(imgIndex, img) {
 				//avatar id's start with string "avatar", then id number.
-				id = parseInt(img.id.substring(6));
+				var id = parseInt(img.id.substring(6));
 				if(id == pd.playerId) {
 					pd.img = img;
 					return false;
@@ -518,12 +519,12 @@ var MapViewer = Class.extend({
 	},
 	
 	checkAvatarsAreLoaded: function() {
-		a = $(".avatar");
+		var a = $(".avatar");
 		if(a == null || a.length == 0) {
 			//no avatars on page, just keep going.
 			this.avatarLoadingComplete();
 		} else {
-			loaded = true;
+			var loaded = true;
 			a.each(function(imgIndex, img) {
 				if(!img.complete) {
 					loaded = false;
@@ -582,8 +583,8 @@ var Drawable = Class.extend({
 	
 	//returns this.coordinate, centered using this.width and height.
 	getCenteredCoordinate: function() {
-		x = this.coordinate.x-(this.width/2);
-		y = this.coordinate.y-(this.height/2);
+		var x = this.coordinate.x-(this.width/2);
+		var y = this.coordinate.y-(this.height/2);
 		return new Coordinate(x,y);
 	},
 	
@@ -595,7 +596,7 @@ var Drawable = Class.extend({
 	area of this object. If true, do a more precise calculation.
 	*/
 	checkCollision: function(coord) {
-		tc = this.coordinate;
+		var tc = this.coordinate;
 		
 		if(this.isCentered) {
 			tc = this.getCenteredCoordinate();
@@ -637,13 +638,13 @@ var CapturePointDrawable = Drawable.extend({
 	},
 	
 	draw: function(canvas, canvasContext) {  				
-		strokestring = "#fff";
+		var strokestring = "#fff";
 		if(this.isHovered) {
 			//orange color.
 			strokestring = this.highlightColor;
 		}
 		
-		colorstring = "100,100,100"; //neutral gray
+		var colorstring = "100,100,100"; //neutral gray
 		if(this.owningTeam == "red") {
 			colorstring = "200,0,0";
 		} else if(this.owningTeam == "blue") {
@@ -651,7 +652,7 @@ var CapturePointDrawable = Drawable.extend({
 		}
 		
 		if(this.justCapped) {
-			grd=canvasContext.createRadialGradient(this.coordinate.x,this.coordinate.y,2,this.coordinate.x,this.coordinate.y,this.justCappedRadius);
+			var grd=canvasContext.createRadialGradient(this.coordinate.x,this.coordinate.y,2,this.coordinate.x,this.coordinate.y,this.justCappedRadius);
 			grd.addColorStop(0,"rgba("+colorstring+",1)");
 			grd.addColorStop(.6,"rgba("+colorstring+",.25)"); 
 			grd.addColorStop(1,"rgba("+colorstring+",0)"); 
@@ -697,7 +698,7 @@ var ImageDrawable = Drawable.extend({
 	
 	draw: function(canvas, canvasContext) {
 		if(this.img == null) return;
-		c = this.coordinate;
+		var c = this.coordinate;
 		if(this.isCentered) {
 			c = this.getCenteredCoordinate();
 		}
@@ -711,7 +712,7 @@ var ImageDrawable = Drawable.extend({
 /////////////////////////////////////////////////////////////////////////////////////
 var PlayerDrawable = ImageDrawable.extend({
 	init: function(playerId, name, team) {
-		size = 16;
+		var size = 16;
 		this._super(null, new Coordinate(-size*2,-size*2));
 		this.height = size;
 		this.width = size;
@@ -723,14 +724,14 @@ var PlayerDrawable = ImageDrawable.extend({
 	},
 	
 	setVictimTooltip: function(textFromArrow){
-		a = textFromArrow.split("&nbsp;");
+		var a = textFromArrow.split("&nbsp;");
 		//bold third line
 		a[2] = "<strong>"+a[2]+"</strong>";
 		this.tooltip.text = a.join("&nbsp;");
 	},
 	
 	setAttackerTooltip: function(textFromArrow){
-		a = textFromArrow.split("&nbsp;");
+		var a = textFromArrow.split("&nbsp;");
 		//bold first line
 		a[0] = "<strong>"+a[0]+"</strong>";
 		this.tooltip.text = a.join("&nbsp;");
@@ -742,7 +743,7 @@ var PlayerDrawable = ImageDrawable.extend({
 	},
 	
 	draw: function(canvas, canvasContext) {
-		colorstring = "#fff";
+		var colorstring = "#fff";
 		if(this.isHovered) {
 			colorstring = this.highlightColor;
 		} else {
@@ -755,7 +756,7 @@ var PlayerDrawable = ImageDrawable.extend({
 		
 		//draw stroke
 		canvasContext.fillStyle = colorstring;
-		c = this.getCenteredCoordinate();
+		var c = this.getCenteredCoordinate();
 		canvasContext.fillRect (c.x-this.highlightWidth, c.y-this.highlightWidth, this.width+this.highlightWidth*2, this.height+this.highlightWidth*2);
 		
 		//draw the image
@@ -764,7 +765,7 @@ var PlayerDrawable = ImageDrawable.extend({
 	
 	//overriding the checkCollision handler to handle the stroke around the image.
 	checkCollision: function(coord) {
-		tc = this.coordinate;
+		var tc = this.coordinate;
 		
 		if(this.isCentered) {
 			tc = this.getCenteredCoordinate();
@@ -778,8 +779,8 @@ var PlayerDrawable = ImageDrawable.extend({
 	
 	//gets the tip coordinate for this obj from the given coordinate
 	getEdgeCoordinate: function(fromCoord) {
-		x = this.coordinate.x;
-		y = this.coordinate.y;
+		var x = this.coordinate.x;
+		var y = this.coordinate.y;
 		
 		if(fromCoord.y > this.coordinate.y+this.height) {
 			//attacker below vic
@@ -819,8 +820,8 @@ var KillArrowDrawable = Drawable.extend({
 	
 	//helper method to calculate width, height, x, y
 	calculateDimensions: function() {
-		ae = this.attacker.getEdgeCoordinate(this.victim.coordinate);
-		ve = this.victim.getEdgeCoordinate(this.attacker.coordinate);
+		var ae = this.attacker.getEdgeCoordinate(this.victim.coordinate);
+		var ve = this.victim.getEdgeCoordinate(this.attacker.coordinate);
 		
 		if(ae.x < ve.x) {
 			this.coordinate.x = ae.x;
@@ -834,7 +835,7 @@ var KillArrowDrawable = Drawable.extend({
 			this.coordinate.y = ve.y;
 		}
 		
-		mindimension = this.finLength*2;
+		var mindimension = this.finLength*2;
 		
 		//need to ensure that the width, height are of a minimum size to better reflect
 		//the actual geometry of the arrow. Will also adjust the x,y as necessary.
@@ -852,7 +853,7 @@ var KillArrowDrawable = Drawable.extend({
 	},
 	
 	draw: function(canvas, canvasContext) {
-		strokeStyle = "#fff";
+		var strokeStyle = "#fff";
 		if(this.isHovered) {
 			strokeStyle = this.highlightColor;
 		}
@@ -870,7 +871,7 @@ var KillArrowDrawable = Drawable.extend({
 
 		canvasContext.translate(endCoord.x,endCoord.y);//translate to victim
 		
-		addend = 0;
+		var addend = 0;
 		if(endCoord.x < startCoord.x) addend = Math.PI;
 		canvasContext.rotate(Math.atan((endCoord.y-startCoord.y)/(endCoord.x-startCoord.x))+addend);
 		
@@ -926,23 +927,23 @@ var DrawableStack = Class.extend({
 	
 	//adds the drawables given, either in a simple array form or another DrawableStack.
 	addAll: function(drawables) {
-		array = [];
+		var array = [];
 		if(drawables instanceof Array) {
 			array = drawables;
 		} else if(drawables instanceof DrawableStack) {
 			array = drawables.stack;
 		}
 		
-		for(i in array) {
+		for(var i in array) {
 			this.add(array[i]);
 		}
 	},
 	
 	//calls .draw on all objects in this stack.
 	drawAll: function(canvas, canvasContext) {
-		dahoveredObj = null;
-		for(i in this.stack) {
-			d = this.stack[i];
+		var dahoveredObj = null;
+		for(var i in this.stack) {
+			var d = this.stack[i];
 			if(d.isHovered && d.onTopIfHovered) {
 				//d is being moused over and wants to be on top
 				dahoveredObj = d;
@@ -961,10 +962,10 @@ var DrawableStack = Class.extend({
 	//it will also disable any other isHovered
 	//Returns the object that is being hovered if found, otherwise null.
 	markIsHovered: function(coord) {
-		mahoveredObj = null;
+		var mahoveredObj = null;
 		//pref given to items higher in stack, so start from last.
-		for(i = this.stack.length-1; i >= 0; --i) {
-			d = this.stack[i];
+		for(var i = this.stack.length-1; i >= 0; --i) {
+			var d = this.stack[i];
 			if(mahoveredObj == null && d.checkCollision(coord)) {
 				//we only want one Drawable highlighted, and we have just found it.
 				d.isHovered = true;
@@ -1043,23 +1044,23 @@ var LogEvent = Class.extend({
 	},
 	
 	getAsDrawables: function(playerCollection, weaponCollection, gameMap, capturePoints, isDrawableCurrent) {
-		a = [];
+		var a = [];
 		if(this.eventType == "kill") {
 			 
-			att = playerCollection.getPlayerById(this.attackerPlayerId);
+			var att = playerCollection.getPlayerById(this.attackerPlayerId);
 			att.coordinate = gameMap.generateImageCoordinate(this.attackerCoord);
 			
-			vic = playerCollection.getPlayerById(this.victimPlayerId);
+			var vic = playerCollection.getPlayerById(this.victimPlayerId);
 			vic.coordinate = gameMap.generateImageCoordinate(this.victimCoord);
 			
-			ka = new KillArrowDrawable(att,vic,weaponCollection.getWeaponById(this.weaponId));
+			var ka = new KillArrowDrawable(att,vic,weaponCollection.getWeaponById(this.weaponId));
 			vic.setVictimTooltip(ka.tooltip.text);
 			att.setAttackerTooltip(ka.tooltip.text);
 			a.push(ka);
 			a.push(vic);
 			
 			if(this.assistPlayerId != null) {
-				asst = playerCollection.getPlayerById(this.assistPlayerId);
+				var asst = playerCollection.getPlayerById(this.assistPlayerId);
 				asst.coordinate = gameMap.generateImageCoordinate(this.assistCoord);
 				asst.tooltip.text = ka.tooltip.text;
 				a.push(asst);
@@ -1068,7 +1069,7 @@ var LogEvent = Class.extend({
 			a.push(att);
 		} else if(this.eventType == "pointCaptured") {
 			//find the capture point we want
-			for(i in capturePoints) {
+			for(var i in capturePoints) {
 				point = capturePoints[i];
 				if(point.pointName == this.cp) {
 					if(isDrawableCurrent) {
@@ -1077,14 +1078,14 @@ var LogEvent = Class.extend({
 					point.owningTeam = this.team;
 					point.resetTooltip();
 					point.tooltip.text += "<span class=\"details\"><br/>Captured By:";
-					for(p in this.players) {
+					for(var p in this.players) {
 						point.tooltip.text += "<br/>"+playerCollection.getPlayerById(this.players[p]).name;
 					}
 					point.tooltip.text += "</span>";
 				}
 			}
 		} else if(this.eventType == "say" || this.eventType == "team_say") {
-			p = playerCollection.getPlayerById(this.playerId);
+			var p = playerCollection.getPlayerById(this.playerId);
 			teamtxt = "";
 			if(this.eventType == "team_say") teamtxt = "(team)";
 			mapViewerObj.appendToChatBox("<span class=\"chatTime\">"+mapViewerObj.getSecondsAsString(this.elapsedSeconds)+"</span> <span class=\"chatUser "+p.team+"\">"+p.name+teamtxt+":</span> "+this.text);
@@ -1134,7 +1135,7 @@ var LogEventCollection = Class.extend({
 	//adds the logevents given, either in a simple array form 
 	addAll: function(e) {
 		if(e instanceof Array) {
-			for(i in e) {
+			for(var i in e) {
 				this.add(e[i]);
 			}
 		}			
@@ -1142,18 +1143,18 @@ var LogEventCollection = Class.extend({
 	
 	getDrawablesForDuration: function(startSeconds, endSeconds, playerCollection, weaponCollection, gameMap, capturePoints) {
 		drawevents = [];
-		for(c in this.logEvents) {
-			l = this.logEvents[c];
+		for(var c in this.logEvents) {
+			var l = this.logEvents[c];
 			if(l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds) {
-				d = l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
-				for(i in d) {
+				var d = l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
+				for(var i in d) {
 					drawevents.push(d[i]);
 				}
 			}
 		}
-		lastRoundStartElapsedSeconds = 0;
-		for(r in this.roundEvents) {
-			l = this.roundEvents[r];
+		var lastRoundStartElapsedSeconds = 0;
+		for(var r in this.roundEvents) {
+			var l = this.roundEvents[r];
 			if(l.elapsedSeconds <= endSeconds) {
 				l.getAsDrawables(playerCollection, weaponCollection, gameMap, capturePoints, l.elapsedSeconds >= startSeconds && l.elapsedSeconds <= endSeconds);
 				lastRoundStartElapsedSeconds = l.elapsedSeconds;
@@ -1182,19 +1183,19 @@ var LogEventCollection = Class.extend({
 	
 	getDuration: function() {
 	  //need to find the max elapsedSeconds for each array, if any.
-		logEventsLast = 0;
+		var logEventsLast = 0;
 		if(this.logEvents && this.logEvents.length-1 >= 0) {
 		  logEventsLast = (this.logEvents[this.logEvents.length-1]).elapsedSeconds;
 		}
-		capEventsLast = 0;
+		var capEventsLast = 0;
 		if(this.capEvents && this.capEvents.length-1 >= 0) {
 		  capEventsLast = (this.capEvents[this.capEvents.length-1]).elapsedSeconds;
 		}
-		chatEventsLast = 0;
+		var chatEventsLast = 0;
 		if(this.chatEvents && this.chatEvents.length-1 >= 0) {
 		  chatEventsLast = (this.chatEvents[this.chatEvents.length-1]).elapsedSeconds;
 		}
-		roundEventsLast = 0;
+		var roundEventsLast = 0;
 		if(this.roundEvents && this.roundEvents.length-1 >= 0) {
 		  roundEventsLast = (this.roundEvents[this.roundEvents.length-1]).elapsedSeconds;
 		}
@@ -1227,7 +1228,7 @@ var PlayerCollection = Class.extend({
 	
 	addAll: function(p) {
 		if(p instanceof Array) {
-			for(i in p) {
+			for(var i in p) {
 				this.add(p[i]);
 			}
 		} else if(p instanceof PlayerCollection) {
@@ -1236,12 +1237,12 @@ var PlayerCollection = Class.extend({
 	},
 	
 	getPlayerById: function(id) {
-		for(i in this.players) {
+		for(var i in this.players) {
 			player = this.players[i];
 			if(parseInt(player.playerId) == parseInt(id)) {
 			  //return new deep copy of the player, otherwise only one copy of the player is used.
-			  newplayer = {};
-			  tt = {};
+			  var newplayer = {};
+			  var tt = {};
 			  $.extend(true, newplayer, player);
 			  $.extend(true, tt, player.tooltip);
 			  newplayer.tooltip = tt;
@@ -1268,8 +1269,8 @@ var Weapon = Class.extend({
 	},
 	
 	toString: function() {
-    s = "";
-    t = "";
+    var s = "";
+    var t = "";
     if(this.name_) {
       t = this.name_;
     } else {
@@ -1309,7 +1310,7 @@ var WeaponCollection = Class.extend({
 	
 	addAll: function(w) {
 		if(w instanceof Array) {
-			for(i in w) {
+			for(var i in w) {
 				this.add(w[i]);
 			}
 		} else if(w instanceof WeaponCollection) {
@@ -1318,7 +1319,7 @@ var WeaponCollection = Class.extend({
 	},
 	
 	getWeaponById: function(id) {
-		for(i in this.weapons) {
+		for(var i in this.weapons) {
 			weapon = this.weapons[i];
 			if(parseInt(weapon.id) == parseInt(id)) {
 				return weapon;
