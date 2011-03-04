@@ -3,3 +3,4 @@ cache/
 uploadedlogs/
 web/avatars/*
 config/app.yml
+config/databases.yml
