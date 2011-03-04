@@ -14,3 +14,15 @@ $(function (){
     e.preventDefault();
   }); 
 });
+
+function replaceDatePickerButtons() {
+  $(".ui-datepicker-trigger").html("") //clear default button text
+    .button({
+      icons: {
+        primary: "ui-icon-calendar",
+        text: false,
+        label: ''
+      }
+    }) //create button
+    .removeClass("ui-button-text-icon-primary").addClass("ui-button-icon-only"); //adjust styling
+}

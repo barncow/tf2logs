@@ -15,7 +15,24 @@ $(function() {
     return ((x < y) ?  1 : ((x > y) ? -1 : 0));
   };
   
-  $('#statPanel, #playerStats').dataTable({
+  $('#statPanel').dataTable({
+		"bJQueryUI": true,
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": true,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"bSortClasses": false,
+		"aoColumnDefs": [
+		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
+      { "bSearchable": true, "aTargets": [ 0 ] },
+      { "sType": "string", "aTargets": [ 1 ] },
+      { "sType": "num-html", "aTargets": [ "_all" ] },
+      { "bSearchable": false, "aTargets": [ "_all" ] }
+    ]
+	});
+  
+  $('#playerStats').dataTable({
 		"bJQueryUI": true,
 		"bPaginate": false,
 		"bLengthChange": false,
@@ -31,7 +48,7 @@ $(function() {
     ]
 	});
 	
-	var wsdt = $('#weaponStats').dataTable({
+	/*var wsdt = $('#weaponStats').dataTable({
 		"bJQueryUI": true,
 		"bPaginate": false,
 		"bLengthChange": false,
@@ -51,7 +68,7 @@ $(function() {
       $('#weaponStats_wrapper th').qtip(qtipopts);//on each draw, the DOM is destroyed, need to reattach.
     }
 	});
-	new FixedColumns(wsdt);
+	new FixedColumns(wsdt);*/
 	
 	$('#medicStats').dataTable({
 		"bJQueryUI": true,

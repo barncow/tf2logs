@@ -422,6 +422,24 @@ img {
   margin-right: auto;
 }
 
+.viewLogLink{
+  font-weight: bold;
+  border-bottom: 1px solid #FFFF38;
+}
+
+.viewLogLink:hover {
+  border-bottom: 0;
+}
+
+#weaponStatsContainer {
+  width: 800px;
+  overflow: auto;
+}
+
+#weaponStats tbody {
+  border-right: 1px solid #695444;
+}
+
 /*! tf2 tooltip style */
 .ui-tooltip-tf2 .ui-tooltip-titlebar,
 .ui-tooltip-tf2 .ui-tooltip-content{

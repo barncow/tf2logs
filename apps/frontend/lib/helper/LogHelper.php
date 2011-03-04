@@ -154,12 +154,12 @@ function outputWeaponName($name, $key_name) {
 function outputWeaponStats($weapons, $miniStats, $weaponStats) {
 $avbase = sfConfig::get('app_avatar_base_url');
   $s = <<<EOD
-<div class="statTableContainer">
+<div class="statTableContainer" id="weaponStatsContainer">
 <table class="statTable" id="weaponStats" border="0" cellspacing="0" cellpadding="3">
   <caption>Weapon Stats</caption>
   <thead>
     <tr>
-      <th rowspan="2" class="weaponStatPlayer"><!--playername--></th>
+      <th rowspan="2" class="ui-state-default weaponStatPlayer"><!--playername--></th>
 EOD;
     for($x = 0; $x < count($weapons); ++$x) {
       $w = $weapons[$x];

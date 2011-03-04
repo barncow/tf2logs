@@ -51,6 +51,9 @@ Search for a log via the criteria below. All fields are optional. Entering no cr
     </tr>
   </table>
 </form>
+<script type="application/javascript">
+$(function(){replaceDatePickerButtons();});
+</script>
 EOD;
 echo outputInfoBox("searchForm", "Log Search", $s);
 ?>

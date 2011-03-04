@@ -66,6 +66,10 @@ $(function() {
     $(".plupload_file_name label").inFieldLabels();
     $(".plupload_droptext").html(droptext);
     $('input[title]').qtip({
+      position: {
+        my: "bottom center",
+		    at: "top center"
+      },
       style: {
         classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
       }
@@ -84,7 +88,7 @@ $(function() {
     var obj = jQuery.parseJSON(response.response);
     var status = $('#'+file.id+' .plupload_file_name .logInfo');
     if(obj.url) {
-      status.html('<a href="'+obj.url+'">View the Log</a>');
+      status.html('<a href="'+obj.url+'" class="viewLogLink">View the Log</a>');
     } else {
       status.html('<span class="error">'+obj.msg+'</span>');
     }
