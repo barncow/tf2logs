@@ -353,3 +353,23 @@ Weapon:
     name: Powerjack
     Role: pyro
     image_name: powerjack.png
+  bleed_kill:
+    key_name: bleed_kill
+    name: Bleed Kill
+    #multiple classes
+    image_name: bleed_kill.png
+  gloves_running_urgently:
+    key_name: gloves_running_urgently
+    name: Gloves of Running Urgently
+    Role: heavyweapons
+    image_name: gloves_running_urgently.png
+  samrevolver:
+    key_name: samrevolver
+    name: Big Kill
+    Role: spy
+    image_name: samrevolver.png
+  wrench_jag:
+    key_name: wrench_jag
+    name: Jag
+    Role: engineer
+    image_name: wrench_jag.png
