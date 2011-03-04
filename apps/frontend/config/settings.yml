@@ -6,6 +6,11 @@ prod:
     no_script_name:         true
     logging_enabled:        true
     
+qa:
+  .settings:
+    no_script_name:         true
+    logging_enabled:        true
+    
 staging:
   .settings:
     web_debug:  true
@@ -19,6 +24,7 @@ dev:
     cache:                  false
     no_script_name:         false
     etag:                   false
+    check_lock:             true
 
 test:
   .settings:
@@ -29,6 +35,9 @@ test:
     etag:                   false
 
 all:
+  .actions:
+    login_module: player  
+    login_action: login   
   .settings:
     # Form security secret (CSRF protection)
     csrf_secret:            991999809d226415feaa71cea49966c9116fda10

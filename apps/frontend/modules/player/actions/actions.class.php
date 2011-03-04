@@ -108,6 +108,11 @@ class playerActions extends BasesfPHPOpenIDAuthActions {
     $this->getResponse()->setCookie('known_openid_identity', '');
   }
   
+  public function executeLogin() {
+    $this->getUser()->setFlash('error', 'You must log in to do that action.');
+    $this->redirect('@homepage');
+  }
+  
   //this will send the user directly to the url, instead of bringing up a page first.
   public function executeAutoLogin() {
     //todo check if already logged in
