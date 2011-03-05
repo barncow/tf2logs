@@ -87,7 +87,7 @@ $(function() {
     ]
 	});
 	
-	$('.statTable > caption').each(function(index,obj){
+	$('.dataTables_wrapper .statTable > caption').each(function(index,obj){
 	  obj = $(obj);
 	  html = obj.html();
 	  obj.html("");

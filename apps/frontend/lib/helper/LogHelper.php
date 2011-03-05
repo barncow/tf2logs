@@ -156,7 +156,7 @@ $avbase = sfConfig::get('app_avatar_base_url');
   $s = <<<EOD
 <div class="statTableContainer" id="weaponStatsContainer">
 <table class="statTable" id="weaponStats" border="0" cellspacing="0" cellpadding="3">
-  <caption>Weapon Stats</caption>
+  <caption class="ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr">Weapon Stats</caption>
   <thead>
     <tr>
       <th rowspan="2" class="ui-state-default weaponStatPlayer"><!--playername--></th>
