@@ -7,7 +7,7 @@ use_javascript('autocompletehelper.js');
 
 $url = url_for('@log_update?id='.$log->getId());
 $loglink = link_to('View this Log', '@log_by_id?id='.$log->getId());
-$cp = link_to('Back to Control Panel', '@controlpanel');
+$cp = link_to('Back to My TF2Logs', '@controlpanel');
 $s = <<<EOD
 Update this log's information below. The name is required, but map name is optional. However, if you want to allow your log file to display events on screen through the Log Viewer, you should specify a map.<br/>
 $loglink $cp
