@@ -71,7 +71,7 @@ if(isset($pager) && count($pager->getResults()) > 0) {
         <tbody>
 EOD;
         foreach($pager->getResults() as $r) {
-          $s .= '<tr><td>'.link_to($r['name'], '@log_by_id?id='.$r['id']).'</td><td>'.$r["created_at"].'</td></tr>';
+          $s .= '<tr><td>'.link_to($r['name'], '@log_by_id?id='.$r['id']).'</td><td class="center">'.getHumanReadableDate($r["created_at"]).'</td></tr>';
         }
   $s .= <<<EOD
         </tbody>

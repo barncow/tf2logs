@@ -325,6 +325,9 @@ img {
 #searchResults td {
   text-align: left;
 }
+#searchResults .center {
+  text-align: center;
+}
 
 #copyright, #copyright a {
   font-size: 10px;
