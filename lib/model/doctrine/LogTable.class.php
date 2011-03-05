@@ -179,6 +179,8 @@ class LogTable extends Doctrine_Table {
         $toDate = date("Y-m-d", strtotime($toDate." +1 day"));
         $q->andWhere('l.created_at < ?', $toDate);
       }
+      
+      $q->orderBy("l.name, l.created_at asc");
         
       return $q;
     }

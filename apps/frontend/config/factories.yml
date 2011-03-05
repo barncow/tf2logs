@@ -9,6 +9,14 @@ prod:
       loggers: ~
       file:    %SF_LOG_DIR%/%SF_APP%_%SF_ENVIRONMENT%.log
       
+qa:
+  logger:
+    class: sfFileLogger
+    param:
+      level:   err
+      loggers: ~
+      file:    %SF_LOG_DIR%/%SF_APP%_%SF_ENVIRONMENT%.log
+      
 staging:
   logger:
     class: sfFileLogger
