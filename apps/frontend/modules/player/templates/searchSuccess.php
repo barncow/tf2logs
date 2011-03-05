@@ -2,7 +2,7 @@
 $sf_response->setTitle('Search for Player - TF2Logs.com');
 use_helper('Search');
 use_javascript('jquery-ui-1.8.9.custom.min.js'); 
-use_javascript('search.js'); 
+use_javascript('search.min.js'); 
 use_helper('PageElements'); 
 
 $url = url_for('player/search');

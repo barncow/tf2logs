@@ -29,7 +29,7 @@ use_javascript('autocompletehelper.js');
   <?php use_javascript('plupload.html5.min.js'); ?>
   <?php use_javascript('plupload.html4.min.js'); ?>
   <?php use_javascript('jquery.ui.plupload.min.js'); ?>
-  <?php use_javascript('loguploader.js'); ?>
+  <?php use_javascript('loguploader.min.js'); ?>
   <?php use_javascript('jquery.infieldlabel.min.js'); ?>
   <div id="uploader">
     <?php 

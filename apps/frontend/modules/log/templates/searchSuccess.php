@@ -1,6 +1,6 @@
 <?php $sf_response->setTitle('Search for Log - TF2Logs.com'); ?>
 <?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
-<?php use_javascript('search.js'); ?>
+<?php use_javascript('search.min.js'); ?>
 <?php use_helper('Search') ?>
 <?php use_helper('PageElements') ?>
 

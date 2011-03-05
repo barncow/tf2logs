@@ -4,7 +4,7 @@ use_helper('Implode');
 use_javascript('jquery-1.4.4.min.js'); 
 use_stylesheet('demo_table_jui.css'); 
 use_javascript('jquery.dataTables.min.js'); 
-use_javascript('playershow.js'); 
+use_javascript('playershow.min.js'); 
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
 use_helper('Log');
