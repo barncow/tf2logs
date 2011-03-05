@@ -23,6 +23,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     foreach($log->getStats() as $stat) {
       $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
     }
+    $log->free(true);
   }
   
   public function testFull_1123dwidgranary() {
@@ -36,12 +37,14 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
         $this->fail("Spectator found in granary log.");
       }
     }
+    $log->free(true);
   }
   
   public function testFull_ctfdoublecross() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
     $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
     $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
+    $log->free(true);
   }
   
   public function testFull_plupward() {
@@ -50,12 +53,14 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_plupward.log", 1);
     $this->assertEquals(4, $log->getBluescore(), "blue score of plupward");
     $this->assertEquals(0, $log->getRedscore(), "red score of plupward");
+    $log->free(true);
   }
   
   public function testFull_kothviaduct() {
     $log = $this->logParser->parseLogFile($this->LFIXDIR."full_kothviaduct.log", 1);
     $this->assertEquals(4, $log->getBluescore(), "blue score of kothviaduct");
     $this->assertEquals(0, $log->getRedscore(), "red score of kothviaduct");
+    $log->free(true);
   }
   
   /**
@@ -84,6 +89,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
         break;
       }
     }
+    $log->free(true);
   }
   
   /**

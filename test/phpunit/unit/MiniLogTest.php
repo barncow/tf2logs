@@ -214,5 +214,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         }
       }
     }
+    
+    $log->free(true);
   }
 }
