@@ -16,4 +16,13 @@ class RoleStatTable extends Doctrine_Table
     {
         return Doctrine_Core::getTable('RoleStat');
     }
+    
+    public function findArrayByStatId($statid) {
+      return $this
+        ->createQuery('rs')
+        ->leftJoin('rs.Role r')
+        ->where('rs.stat_id = ?', $statid)
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }

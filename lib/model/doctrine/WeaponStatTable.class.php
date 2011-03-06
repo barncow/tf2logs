@@ -47,4 +47,13 @@ class WeaponStatTable extends Doctrine_Table {
         ->orderBy('w.name')
         ->execute();
     }
+    
+    public function findArrayByStatId($statid) {
+      return $this
+        ->createQuery('ws')
+        ->leftJoin('ws.Weapon w')
+        ->where('ws.stat_id = ?', $statid)
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }

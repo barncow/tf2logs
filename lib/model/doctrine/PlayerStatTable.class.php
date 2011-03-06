@@ -32,4 +32,13 @@ class PlayerStatTable extends Doctrine_Table
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
+    
+    public function findArrayByStatId($statid) {
+      return $this
+        ->createQuery('ps')
+        ->leftJoin('ps.Player p')
+        ->where('ps.stat_id = ?', $statid)
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }

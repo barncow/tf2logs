@@ -9,11 +9,29 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     When running this test, make sure that the database is clean to get a true indication of success.
     */
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
-    $log = Doctrine::getTable('Log')->getLogAndChildrenByIdAsArray($logid);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $events = Doctrine::getTable('Event')->getEventsByIdAsArray($logid);
+    $logfile = Doctrine::getTable('LogFile')->findOneByLogId($logid);
     
+    //this assertion will no longer be valid since we are now getting the log after the save. Keeping this around in case this changes.
+    //$this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
     
-    $events = $log['Events'];
-    //var_dump($events);
+    $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
+    //$countOfLines-1 represents the lack of chat line with SM command, and the two rcon lines.
+    $this->assertEquals($countOfLines-3, count(explode("\n", $logfile->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
+    $this->assertFalse(strpos($logfile->getLogData(), "rcon"), "verify that no rcon line is in the log.");
+    $this->assertEquals(8, count($log['Stats']), "number of players, should exclude console, specs, and bots");
+    
+    $this->assertEquals(0, $log['redscore'], "red score");
+    $this->assertEquals(1, $log['bluescore'], "blue score");
+    
+    $this->assertEquals(1666, $log['elapsed_time'], "elapsed time");
+    
+    $this->assertEquals(1, $log['submitter_player_id'], "submitter has correct ID.");
+    
+    $this->assertEquals("ctf_2fort", $log['map_name'], "map is ctf_2fort");
+    
+    //Events
     $this->assertTrue($events[1]['attacker_player_id'] > 0, "first kill event has attacker 2");
     $this->assertEquals(1, $events[1]['weapon_id'], "first kill event has scattergun");
     $this->assertNotNull($events[1]['assist_player_id'], "first kill event has assist_player_id ");
@@ -34,193 +52,201 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $this->assertEquals(1, $events[8]['blue_score'], "sixth event has blue score 1");
     
-    /*$this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
-    
-    $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
-    //$countOfLines-1 represents the lack of chat line with SM command, and the two rcon lines.
-    $this->assertEquals($countOfLines-3, count(explode("\n", $log->getLogFile()->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
-    $this->assertFalse(strpos($log->getLogFile()->getLogData(), "rcon"), "verify that no rcon line is in the log.");
-    $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console, specs, and bots");
-    
-    $this->assertEquals(0, $log->getRedscore(), "red score");
-    $this->assertEquals(1, $log->getBluescore(), "blue score");
-    
-    $this->assertEquals(1666, $log->getElapsedTime(), "elapsed time");
-    
-    $this->assertEquals(1, $log->getSubmitterPlayerId(), "submitter has correct ID.");
-    
-    $this->assertEquals("ctf_2fort", $log->getMapName(), "map is ctf_2fort");
-    
-    
-    
-    foreach($log->getStats() as $stat) {
-      $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
-      if($stat->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
+    //Stats
+    foreach($log['Stats'] as $stat) {
+      $this->assertNotNull($stat['team'], $stat['Player']['steamid']." team is not null");
+      if($stat['Player']['steamid'] == "STEAM_0:0:6845279") {
         //verify numbers for "Target"
-        $this->assertEquals("Target", $stat->getPlayer()->getName(), "name on player object should be Target");
-        $this->assertEquals("Red", $stat->getTeam(), "Target should be on team Red");
-        $this->assertEquals(2, $stat->getKills(), "target's kills");
-        $this->assertEquals(1, $stat->getDominations(), "target's dominations");
-        $this->assertEquals(1, $stat->getDeaths(), "target's deaths");
-        $this->assertEquals(1, $stat->getCapturePointsCaptured(), "target's point captures");
-        $this->assertEquals(2, $stat->getKillsPerDeath(), "target's kd");
-        $this->assertEquals(1, $stat->getFlagCaptures(), "target's flag captures");
-        $this->assertEquals(1, $stat->getFlagDefends(), "target's flag defends");
-        $this->assertEquals(2, $stat->getLongestKillStreak(), "target's longest kill streak");
-        $this->assertEquals('/99/99680cfa3c8e98bba925a92556d8f15fc084df27.jpg', $stat->getPlayer()->getAvatarUrl(), "target has correct avatar url");
+        $this->assertEquals("Target", $stat['Player']['name'], "name on player object should be Target");
+        $this->assertEquals("Red", $stat['team'], "Target should be on team Red");
+        $this->assertEquals(2, $stat['kills'], "target's kills");
+        $this->assertEquals(1, $stat['dominations'], "target's dominations");
+        $this->assertEquals(1, $stat['deaths'], "target's deaths");
+        $this->assertEquals(1, $stat['capture_points_captured'], "target's point captures");
+        //$this->assertEquals(2, $stat->getKillsPerDeath(), "target's kd");
+        $this->assertEquals(1, $stat['flag_captures'], "target's flag captures");
+        $this->assertEquals(1, $stat['flag_defends'], "target's flag defends");
+        $this->assertEquals(2, $stat['longest_kill_streak'], "target's longest kill streak");
+        $this->assertEquals('/99/99680cfa3c8e98bba925a92556d8f15fc084df27.jpg', $stat['Player']['avatar_url'], "target has correct avatar url");
         
-        foreach($stat->getWeaponStats() as $ws) {
-          if($ws->getWeapon()->getKeyName() == "scattergun") {
-            $this->assertEquals(2, $ws->getKills(), "target has 2 kills with scatter");
-          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
-            $this->assertEquals(1, $ws->getDeaths(), "target has 1 death to sniperrifle");
+        $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($wstats) > 0);
+        foreach($wstats as $ws) {
+          if($ws['Weapon']['key_name'] == "scattergun") {
+            $this->assertEquals(2, $ws['kills'], "target has 2 kills with scatter");
+          } else if($ws['Weapon']['key_name'] == "sniperrifle") {
+            $this->assertEquals(1, $ws['deaths'], "target has 1 death to sniperrifle");
           }
         }
         
-        foreach($stat->getPlayerStats() as $ps) {
-          if($ps->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
-            $this->assertEquals(1, $ps->getKills(), "target has one kill on barncow");
-          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
-            $this->assertEquals(1, $ps->getKills(), "target has one kill on muffin");
-            $this->assertEquals(1, $ps->getDeaths(), "target has one death by muffin");
+        $pstats = Doctrine::getTable('PlayerStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($pstats) > 0);
+        foreach($pstats as $ps) {
+          if($ps['Player']['steamid'] == "STEAM_0:1:16481274") {
+            $this->assertEquals(1, $ps['kills'], "target has one kill on barncow");
+          } else if($ps['Player']['steamid'] == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps['kills'], "target has one kill on muffin");
+            $this->assertEquals(1, $ps['deaths'], "target has one death by muffin");
           }  
         }
         
-        foreach($stat->getRoleStats() as $r) {
-          if($r->getRole()->getKeyName() == "scout") {
-            $this->assertEquals(1666, $r->getTimePlayed(), "target's time as scout");
+        $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($rstats) > 0);
+        foreach($rstats as $r) {
+          if($r['Role']['key_name'] == "scout") {
+            $this->assertEquals(1666, $r['time_played'], "target's time as scout");
           } else {
-            $this->fail("Target has extra role: ".$r->getRole()->getKeyName());
+            $this->fail("Target has extra role: ".$r['Role']['key_name']);
           }
         }
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
+      } else if($stat['Player']['steamid'] == "STEAM_0:1:16481274") {
         //verify numbers for "Barncow"
-        $this->assertEquals(2, $stat->getDeaths(), "barncow's deaths");
-        $this->assertEquals(1, $stat->getUbers(), "barncow's ubers");
-        $this->assertEquals(1, $stat->getDroppedUbers(), "Barncow dropped uber");
-        $this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
-        $this->assertEquals(2310, $stat->getHealing(), "Barncow's healing amount");
+        $this->assertEquals(2, $stat['deaths'], "barncow's deaths");
+        $this->assertEquals(1, $stat['ubers'], "barncow's ubers");
+        $this->assertEquals(1, $stat['dropped_ubers'], "Barncow dropped uber");
+        //$this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
+        $this->assertEquals(2310, $stat['healing'], "Barncow's healing amount");
         
-        foreach($stat->getWeaponStats() as $ws) {
-          if($ws->getWeapon()->getKeyName() == "scattergun") {
-            $this->assertEquals(1, $ws->getDeaths());
-          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
-            $this->assertEquals(1, $ws->getDeaths());
+        $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($wstats) > 0);
+        foreach($wstats as $ws) {
+          if($ws['Weapon']['key_name'] == "scattergun") {
+            $this->assertEquals(1, $ws['deaths']);
+          } else if($ws['Weapon']['key_name'] == "sniperrifle") {
+            $this->assertEquals(1, $ws['deaths']);
           }
         }
         
-        foreach($stat->getPlayerStats() as $ps) {
-          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
-            $this->assertEquals(1, $ps->getDeaths(), "barncow has one death by target");
-          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
-            $this->assertEquals(1, $ps->getDeaths(), "barncow has one death by muffin");
+        $pstats = Doctrine::getTable('PlayerStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($pstats) > 0);
+        foreach($pstats as $ps) {
+          if($ps['Player']['steamid'] == "STEAM_0:0:6845279") {
+            $this->assertEquals(1, $ps['deaths'], "barncow has one death by target");
+          } else if($ps['Player']['steamid'] == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps['deaths'], "barncow has one death by muffin");
           }
         }
         
-        foreach($stat->getRoleStats() as $r) {
-          if($r->getRole()->getKeyName() == "medic") {
-            $this->assertEquals(1666, $r->getTimePlayed(), "barncow's time as medic");
+        $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($rstats) > 0);
+        foreach($rstats as $r) {
+          if($r['Role']['key_name'] == "medic") {
+            $this->assertEquals(1666, $r['time_played'], "barncow's time as medic");
           } else {
-            $this->fail("Barncow has extra role: ".$r->getRole()->getKeyName());
+            $this->fail("Barncow has extra role: ".$r['Role']['key_name']);
           }
         }
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:8581157") {
+      } else if($stat['Player']['steamid'] == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
-        $this->assertEquals(1, $stat->getAssists(), "cres' assists");
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
+        $this->assertEquals(1, $stat['assists'], "cres' assists");
+      } else if($stat['Player']['steamid'] == "STEAM_0:1:9852193") {
         //verify numbers for "Ctrl+f Muffin!"
-        $this->assertEquals(2, $stat->getDeaths(), "Ctrl+f Muffin!'s deaths");
-        $this->assertEquals(1, $stat->getTimesDominated(), "Ctrl+f Muffin!'s times dominated");
-        $this->assertEquals(1, $stat->getRevenges(), "Ctrl+f Muffin!'s revenges");
-        $this->assertEquals(2, $stat->getKills(), "Ctrl+f Muffin!'s kills");
-        $this->assertEquals(0, $stat->getDroppedUbers(), "Ctrl+f Muffin! did not drop uber");
-        $this->assertEquals(1, $stat->getCapturePointsCaptured(), "Ctrl+f Muffin!'s point captures");
-        $this->assertEquals(1, $stat->getHeadshots(), "Ctrl+f Muffin!'s headshots");
+        $this->assertEquals(2, $stat['deaths'], "Ctrl+f Muffin!'s deaths");
+        $this->assertEquals(1, $stat['times_dominated'], "Ctrl+f Muffin!'s times dominated");
+        $this->assertEquals(1, $stat['revenges'], "Ctrl+f Muffin!'s revenges");
+        $this->assertEquals(2, $stat['kills'], "Ctrl+f Muffin!'s kills");
+        $this->assertEquals(0, $stat['dropped_ubers'], "Ctrl+f Muffin! did not drop uber");
+        $this->assertEquals(1, $stat['capture_points_captured'], "Ctrl+f Muffin!'s point captures");
+        $this->assertEquals(1, $stat['headshots'], "Ctrl+f Muffin!'s headshots");
         
-        foreach($stat->getWeaponStats() as $ws) {
-          if($ws->getWeapon()->getKeyName() == "tf_projectile_rocket") {
+        $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($wstats) > 0);
+        foreach($wstats as $ws) {
+          if($ws['Weapon']['key_name'] == "tf_projectile_rocket") {
 
-            $this->assertEquals(1, $ws->getDeaths());
-          } else if($ws->getWeapon()->getKeyName() == "sniperrifle") {
-            $this->assertEquals(1, $ws->getKills());
-          } else if($ws->getWeapon()->getKeyName() == "sniperrifle_hs") {
-            $this->assertEquals(1, $ws->getKills());
-          } else if($ws->getWeapon()->getKeyName() == "scattergun") {
-            $this->assertEquals(1, $ws->getDeaths());
+            $this->assertEquals(1, $ws['deaths']);
+          } else if($ws['Weapon']['key_name'] == "sniperrifle") {
+            $this->assertEquals(1, $ws['kills']);
+          } else if($ws['Weapon']['key_name'] == "sniperrifle_hs") {
+            $this->assertEquals(1, $ws['kills']);
+          } else if($ws['Weapon']['key_name'] == "scattergun") {
+            $this->assertEquals(1, $ws['deaths']);
           }
         }
         
-        foreach($stat->getRoleStats() as $r) {
-          if($r->getRole()->getKeyName() == "soldier") {
-            $this->assertEquals(211, $r->getTimePlayed(), "muffin's time as soldier");
-          } else if($r->getRole()->getKeyName() == "engineer") {
-            $this->assertEquals(136, $r->getTimePlayed(), "muffin's time as engineer");
-          } else if($r->getRole()->getKeyName() == "sniper") {
-            $this->assertEquals(1045, $r->getTimePlayed(), "muffin's time as sniper (cut short due to discon)");
+        $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($rstats) > 0);
+        foreach($rstats as $r) {
+          if($r['Role']['key_name'] == "soldier") {
+            $this->assertEquals(211, $r['time_played'], "muffin's time as soldier");
+          } else if($r['Role']['key_name'] == "engineer") {
+            $this->assertEquals(136, $r['time_played'], "muffin's time as engineer");
+          } else if($r['Role']['key_name'] == "sniper") {
+            $this->assertEquals(1045, $r['time_played'], "muffin's time as sniper (cut short due to discon)");
           } else {
-            $this->fail("Muffin has extra role: ".$r->getRole()->getKeyName());
+            $this->fail("Muffin has extra role: ".$r['Role']['key_name']);
           }
         }
         
-        foreach($stat->getPlayerStats() as $ps) {
-          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:6845279") {
-            $this->assertEquals(1, $ps->getDeaths(), "muffin has one death by target");
-            $this->assertEquals(1, $ps->getKills(), "muffin killed target once");
-          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:9852193") {
-            $this->assertEquals(1, $ps->getDeaths(), "muffin has one death by muffin");
-          } else if($ps->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
-            $this->assertEquals(1, $ps->getKills(), "muffin killed barncow once");
+        $pstats = Doctrine::getTable('PlayerStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($pstats) > 0);
+        foreach($pstats as $ps) {
+          if($ps['Player']['steamid'] == "STEAM_0:0:6845279") {
+            $this->assertEquals(1, $ps['deaths'], "muffin has one death by target");
+            $this->assertEquals(1, $ps['kills'], "muffin killed target once");
+          } else if($ps['Player']['steamid'] == "STEAM_0:1:9852193") {
+            $this->assertEquals(1, $ps['deaths'], "muffin has one death by muffin");
+          } else if($ps['Player']['steamid'] == "STEAM_0:1:16481274") {
+            $this->assertEquals(1, $ps['kills'], "muffin killed barncow once");
           }
         }
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:11710749") {
+      } else if($stat['Player']['steamid'] == "STEAM_0:0:11710749") {
         //verify numbers for "perl"
-        $this->assertEquals(1, $stat->getExtinguishes(), "perl's extinguishes");
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
+        $this->assertEquals(1, $stat['extinguishes'], "perl's extinguishes");
+      } else if($stat['Player']['steamid'] == "STEAM_0:0:556497") {
         //verify numbers for "[H2K]BubbleAlan ʚϊɞ"
-        $this->assertEquals(0, $stat->getDroppedUbers(), "Alan did not drop uber");
+        $this->assertEquals(0, $stat['dropped_ubers'], "Alan did not drop uber");
         
-        foreach($stat->getWeaponStats() as $ws) {
-          if($ws->getWeapon()->getKeyName() == "world") {
-            $this->assertEquals(1, $ws->getDeaths());
+        $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($wstats) > 0);
+        foreach($wstats as $ws) {
+          if($ws['Weapon']['key_name'] == "world") {
+            $this->assertEquals(1, $ws['deaths']);
           }
         }
         
-        foreach($stat->getPlayerStats() as $ps) {
-          if($ps->getPlayer()->getSteamid() == "STEAM_0:0:556497") {
-            $this->assertEquals(1, $ps->getDeaths(), "alan has one death by alan");
+        $pstats = Doctrine::getTable('PlayerStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($pstats) > 0);
+        foreach($pstats as $ps) {
+          if($ps['Player']['steamid'] == "STEAM_0:0:556497") {
+            $this->assertEquals(1, $ps['deaths'], "alan has one death by alan");
           }
         }
         
-        foreach($stat->getRoleStats() as $r) {
-          if($r->getRole()->getKeyName() == "medic") {
-            $this->assertEquals(1666, $r->getTimePlayed(), "alan's time as medic");
+        $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($rstats) > 0);
+        foreach($rstats as $r) {
+          if($r['Role']['key_name'] == "medic") {
+            $this->assertEquals(1666, $r['time_played'], "alan's time as medic");
           } else {
-            $this->fail("Alan has extra role: ".$r->getRole()->getKeyName());
+            $this->fail("Alan has extra role: ".$r['Role']['key_name']);
           }
         }
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:12272740") {
+      } else if($stat['Player']['steamid'] == "STEAM_0:0:12272740") {
         //verify numbers for "[!?] cheap"
-        $this->assertEquals(1, $stat->getCapturePointsCaptured(), "cheap's point captures");
-      } else if($stat->getPlayer()->getSteamid() == "STEAM_0:0:973270") {
+        $this->assertEquals(1, $stat['capture_points_captured'], "cheap's point captures");
+      } else if($stat['Player']['steamid'] == "STEAM_0:0:973270") {
         //verify numbers for "`yay!"
-        $this->assertEquals(1, $stat->getCapturePointsBlocked(), "yay's point blocks");
-        $this->assertEquals(1, $stat->getBackstabs(), "yay's backstabs");
+        $this->assertEquals(1, $stat['capture_points_blocked'], "yay's point blocks");
+        $this->assertEquals(1, $stat['backstabs'], "yay's backstabs");
         
-        foreach($stat->getWeaponStats() as $ws) {
-          if($ws->getWeapon()->getKeyName() == "knife_bs") {
-            $this->assertEquals(1, $ws->getKills());
+        $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($wstats) > 0);
+        foreach($wstats as $ws) {
+          if($ws['Weapon']['key_name'] == "knife_bs") {
+            $this->assertEquals(1, $ws['kills']);
             break;
           }
         }
         
-        foreach($stat->getRoleStats() as $r) {
-          if($r->getRole()->getKeyName() == "engineer") {
+        $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($rstats) > 0);
+        foreach($rstats as $r) {
+          if($r['Role']['key_name'] == "engineer") {
             $this->fail("yay has engineer role when only spy");
           }
         }
       }
     }
-    */
-    //$log->free(true);
   }
 }

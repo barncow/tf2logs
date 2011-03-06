@@ -45,30 +45,6 @@ class LogTable extends Doctrine_Table {
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
     }
     
-    /**
-      ONLY USE THIS ON MINILOG - WILL CAUSE HANGS ON LONGER LOG FILES
-    */
-    public function getLogAndChildrenByIdAsArray($id) {
-      $l = $this
-        ->createQuery('l')
-        ->where('l.id = ?', $id)
-        ->leftJoin('l.Submitter sr')
-        ->leftJoin('l.Stats s')
-        ->leftJoin('l.Events e')
-        ->leftJoin('e.EventPlayers ep')
-        ->leftJoin('s.Player p')
-        ->leftJoin('s.Weapons w')
-        ->leftJoin('s.RoleStats rs')
-        ->leftJoin('rs.Role r')
-        ->andWhere('l.error_log_name is null')
-        ->orderBy('s.team asc, s.name asc, rs.time_played desc, e.id asc')
-        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
-        ->execute();
-     
-      if(count($l) == 0) return null;
-      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
-    }
-    
     public function getErrorLogById($id) {
       $l = $this
         ->createQuery('l')
