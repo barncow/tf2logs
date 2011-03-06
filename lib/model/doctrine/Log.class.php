@@ -13,6 +13,11 @@ class Log extends BaseLog
 {
   protected $_timeStart;
   protected $_scrubbedLog = "";
+  protected $_events;
+  
+  public function getEvents() {
+    return $this->_events;
+  }
   
   public function set_timeStart($timeStart) {
     $this->_timeStart = $timeStart;
@@ -123,38 +128,33 @@ class Log extends BaseLog
   }
   
   public function addKillEvent($elapsedSeconds, $weaponId, $attackerSteamid, $attackerCoord, $victimSteamid, $victimCoord) {
-    $e = new Event();
     $attackerStat = $this->getStatFromSteamid($attackerSteamid);
     $victimStat = $this->getStatFromSteamid($victimSteamid);
-    $e->kill($elapsedSeconds, $weaponId, $attackerStat->getPlayer(), $attackerCoord, $victimStat->getPlayer(), $victimCoord);
-    $this->Events[] = $e;
+    $this->_events[] = Event::kill($elapsedSeconds, $weaponId, $attackerStat->getPlayerId(), $attackerCoord, $victimStat->getPlayerId(), $victimCoord);
   }
   
   public function markLastKillEventWithAssist($assistSteamid, $assistCoord) {
-    $eCount = count($this->Events);
-    if($this->Events && $eCount > 0) {
-      $e = &$this->Events[$eCount-1];
-      if($e->getEventType() == "kill") {
+    $eCount = count($this->_events);
+    if($this->_events && $eCount > 0) {
+      $e = &$this->_events[$eCount-1];
+      if($e['event_type'] == "kill") {
         $assistStat = $this->getStatFromSteamid($assistSteamid);
-        $e->assist($assistStat->getPlayerId(), $assistCoord);
+        Event::assist($e, $assistStat->getPlayerId(), $assistCoord);
       }
     }
   }
   
   public function addPointCaptureEvent($elapsedSeconds, $players, $team, $capturePoint) {
-    $e = new Event();
     $pids = array();
     foreach($players as $p) {
       $stat = $this->getStatFromSteamid($p->getSteamid());
-      $pids[] = $stat->getPlayer()->getId();
+      $pids[] = $stat->getPlayerId();
     }
     
-    $e->pointCapture($elapsedSeconds, $pids, $team, $capturePoint);
-    $this->Events[] = $e;
+    $this->_events[] = Event::pointCapture($elapsedSeconds, $pids, $team, $capturePoint);
   }
   
   public function addChatEvent($elapsedSeconds, $chatType, $chatPlayer, $text) {
-    $e = new Event();
     $chatStat = $this->getStatFromSteamid($chatPlayer->getSteamid());
     if($chatStat == null) {
       $this->addUpdateUniqueStatFromPlayerInfo($chatPlayer);
@@ -163,21 +163,16 @@ class Log extends BaseLog
     
     //if we still don't have a chatStat, its because it could not be added, due to it being Console or not on team.
     if($chatStat != null) {
-      $e->chat($elapsedSeconds, $chatType, $chatStat->getPlayer(), $text);
-      $this->Events[] = $e;
+      $this->_events[] = Event::chat($elapsedSeconds, $chatType, $chatStat->getPlayerId(), $text);
     }
   }
   
   public function addRoundStartEvent($elapsedSeconds, $blueScore, $redScore) {
-    $e = new Event();
-    $e->roundStart($elapsedSeconds, $blueScore, $redScore);
-    $this->Events[] = $e;
+    $this->_events[] = Event::roundStart($elapsedSeconds, $blueScore, $redScore);
   }
   
   public function addScoreChangeEvent($elapsedSeconds, $blueScore, $redScore) {
-    $e = new Event();
-    $e->scoreChange($elapsedSeconds, $blueScore, $redScore);
-    $this->Events[] = $e;
+    $this->_events[] = Event::scoreChange($elapsedSeconds, $blueScore, $redScore);
   }
   
   /**

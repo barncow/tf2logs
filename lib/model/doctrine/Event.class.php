@@ -9,53 +9,68 @@
  * @subpackage model
  * @author     Brian Barnekow
  */
-class Event extends BaseEvent {
-  public function kill($elapsedSeconds, $weaponId, $attackerPlayerId, $attackerCoord, $victimPlayerId, $victimCoord) {
-    $this->event_type = "kill";
-    $this->elapsed_seconds = $elapsedSeconds;
-    $this->Attacker = $attackerPlayerId;
-    $this->attacker_coord = $attackerCoord;
-    $this->Victim = $victimPlayerId;
-    $this->victim_coord = $victimCoord;
-    $this->weapon_id = $weaponId;
+class Event extends BaseEvent {  
+  public static function kill($elapsedSeconds, $weaponId, $attackerPlayerId, $attackerCoord, $victimPlayerId, $victimCoord) {
+    return array(
+      'event_type' => "kill",
+      'elapsed_seconds' => $elapsedSeconds,
+      'attacker_player_id' => $attackerPlayerId,
+      'attacker_coord' => $attackerCoord,
+      'victim_player_id' => $victimPlayerId,
+      'victim_coord' => $victimCoord,
+      'weapon_id' => $weaponId
+    );
   }
   
-  public function assist($assistPlayerId, $assistCoord) {
-    $this->assist_player_id = $assistPlayerId;
-    $this->assist_coord = $assistCoord;
+  public static function assist(&$e, $assistPlayerId, $assistCoord) {
+    $e['assist_player_id'] = $assistPlayerId;
+    $e['assist_coord'] = $assistCoord;
   }
   
-  public function chat($elapsedSeconds, $chatType, $playerId, $text) {
-    $this->elapsed_seconds = $elapsedSeconds;
-    $this->event_type = $chatType;
-    $this->chat_player_id = $playerId;
-    $this->text = $text;
+  public static function chat($elapsedSeconds, $chatType, $playerId, $text) {
+    return array(
+      'elapsed_seconds' => $elapsedSeconds,
+      'event_type' => $chatType,
+      'chat_player_id' => $playerId,
+      'text' => $text
+    );
   }
   
-  public function pointCapture($elapsedSeconds, $playerIds, $team, $capturePoint) {
-    $this->elapsed_seconds = $elapsedSeconds;
-    $this->event_type = 'pointCap';
-    $this->team = strtolower($team);
-    $this->capture_point = $capturePoint;
-    foreach($playerIds as $id) {
-      $ep = new EventPlayer();
-      $ep->setEventPlayerType('C');
-      $ep->setPlayerId($id);
-      $this->EventPlayers[] = $ep;
+  public static function pointCapture($elapsedSeconds, $playerIds, $team, $capturePoint) {
+    $e = array(
+      'elapsed_seconds' => $elapsedSeconds,
+      'event_type' => 'pointCap',
+      'team' => strtolower($team),
+      'capture_point' => $capturePoint
+    );
+    if($playerIds && count($playerIds) > 0) {
+      $e['EventPlayer'] = array();
+      foreach($playerIds as $id) {
+        $ep = array(
+          'event_player_type' => 'C',
+          'player_id' => $id
+        );
+        $e['EventPlayer'][] = $ep;
+      }
     }
+    return $e;
   }
   
-  public function roundStart($elapsedSeconds, $blueScore, $redScore) {
-    $this->elapsed_seconds = $elapsedSeconds;
-    $this->event_type = 'rndStart';
-    $this->blue_score = $blueScore;
-    $this->red_score = $redScore;
+  public static function roundStart($elapsedSeconds, $blueScore, $redScore) {
+    return array(
+      'elapsed_seconds' => $elapsedSeconds,
+      'event_type' => 'rndStart',
+      'blue_score' => $blueScore,
+      'red_score' => $redScore
+    );
   }
   
-  public function scoreChange($elapsedSeconds, $blueScore, $redScore) {
-    $this->elapsed_seconds = $elapsedSeconds;
-    $this->event_type = 'scrChng';
-    $this->blue_score = $blueScore;
-    $this->red_score = $redScore;
+  public static function scoreChange($elapsedSeconds, $blueScore, $redScore) {
+    return array(
+      'elapsed_seconds' => $elapsedSeconds,
+      'event_type' => 'scrChng',
+      'blue_score' => $blueScore,
+      'red_score' => $redScore
+    );
   }
 }

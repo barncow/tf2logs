@@ -7,6 +7,7 @@ require_once('exceptions/TournamentModeNotFoundException.class.php');
 require_once('exceptions/NoDataInLogFileException.class.php');
 require_once('ParsingUtils.class.php');
 require_once('PlayerInfo.class.php');
+require_once('LogSave.class.php');
 
 /**
  * Handles processing a log and saving the results to a database.
@@ -213,9 +214,11 @@ class LogParser {
     
     $this->finishLog();
     $st = sfTimerManager::getTimer('saveLog');
-	  $this->log->save();
+	  //$this->log->save();
+	  $ls = new LogSave();
+	  $id = $ls->save($this->log);
 	  $st->addTime();
-	  return $this->log;
+	  return $id;
 	}
 	
 	/**
@@ -461,7 +464,6 @@ class LogParser {
 	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	        $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
 	        $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
-	        
 	        $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
 	          ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
 	        
