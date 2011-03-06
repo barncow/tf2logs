@@ -13,6 +13,7 @@ class Stat extends BaseStat {
   protected $currentLongestKillStreak = 0;
   protected $_WeaponStats;
   protected $_PlayerStats;
+  protected $_RoleStats;
   
   public function getWeaponStatsArray() {
     return $this->_WeaponStats;
@@ -22,10 +23,15 @@ class Stat extends BaseStat {
     return $this->_PlayerStats;
   }
   
+  public function getRoleStatsArray() {
+    return $this->_RoleStats;
+  }
+  
   //constructor used with doctrine
   public function construct() {
     $this->_WeaponStats = array();
     $this->_PlayerStats = array();
+    $this->_RoleStats = array();
   }
   
   /**
@@ -176,19 +182,15 @@ class Stat extends BaseStat {
     if($this->currentRole == null || $this->currentRole->getId() == null) return;
     $addrs = true;
     $elapsedTime = $nowDt->getTimestamp()-$this->currentRoleSinceDt->getTimestamp();
-    foreach($this->RoleStats as &$rs) {
-      if($rs->getRoleId() == $this->currentRole->getId()) {
-        $rs->_set('time_played', $rs->_get('time_played')+$elapsedTime);
+    foreach($this->_RoleStats as &$rs) {
+      if($rs['role_id'] == $this->currentRole->getId()) {
+        $rs['time_played'] = $rs['time_played']+$elapsedTime;
         $addrs = false;
         break;
       }
     }
     if($addrs) {
-      $rsadd = new RoleStat();
-      $rsadd->setRoleId($this->currentRole->getId());
-      $rsadd->setStat($this);
-      $rsadd->_set('time_played', $elapsedTime);
-      $this->RoleStats[] = $rsadd;
+      $this->_RoleStats[] = RoleStat::createRoleStat($this->currentRole->getId(), $elapsedTime);
     }
   }
   
