@@ -1,3 +1,14 @@
+var qtipopts = {
+  position: {
+	  viewport: $(window),
+	  my: "bottom center",
+	  at: "top center"
+  },
+  style: {
+    classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
+  }
+}
+
 $(function() {    
   jQuery.fn.dataTableExt.oSort['num-html-asc']  = function(a,b) {
 	  var x = a.replace( /<.*?>/g, "" );
@@ -101,15 +112,5 @@ $(function() {
 	$('.dataTables_filter').children(':text').addClass("ui-widget-content ui-corner-all").attr('title', 'Enter a player name to narrow the results.');
 	
 	//this must be last since the above code generates HTML.
-	var qtipopts = {
-    position: {
-		  viewport: $(window),
-		  my: "bottom center",
-		  at: "top center"
-	  },
-    style: {
-      classes: "ui-tooltip-rounded ui-tooltip-shadow ui-tooltip-tf2"
-    }
-  }
 	$('th[title], img[title], span[title], input[title], label[title], td[title]').qtip(qtipopts);
 });

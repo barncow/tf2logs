@@ -287,6 +287,7 @@ var MapViewer = Class.extend({
 	    '</div>' +
     '</div>' +
     '<div id="chatBox" class="ui-widget-content-nobg ui-corner-all"><ul></ul></div>');
+    $('input[title], label[title]').qtip(qtipopts);
     this.jqMapViewerCanvas = $("#mapViewer");
 		this.mapViewerCanvas = this.jqMapViewerCanvas[0];
 		this.mapDrawer = new MapDrawer(this.jqMapViewerCanvas);
