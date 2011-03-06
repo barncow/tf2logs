@@ -6,7 +6,7 @@ class unit_LogParserTest extends BaseLogParserTestCase {
   /**
   * @expectedException LogFileNotFoundException
   */
-  public function testGetNotExistingLogFile() {	
+ public function testGetNotExistingLogFile() {	
     $this->logParser->getRawLogFile($this->LFIXDIR."asodijfsfj.log");
   }
   
@@ -25,10 +25,11 @@ class unit_LogParserTest extends BaseLogParserTestCase {
   }
   
   public function testParseFromDB() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $this->logParser = new LogParser();
-    $log = $this->logParser->parseLogFromDB($log);
+    $logid = $this->logParser->parseLogFromDB($logid);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     
-    $this->assertEquals(8, count($log->getStats()), "number of players, should exclude console and specs");
+    $this->assertEquals(8, count($log['Stats']), "number of players, should exclude console and specs");
   }
 }

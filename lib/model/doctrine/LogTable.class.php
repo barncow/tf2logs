@@ -26,6 +26,16 @@ class LogTable extends Doctrine_Table {
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
     }
     
+    public function getLogForRegenerationById($id) {
+      $l = $this
+        ->createQuery('l')
+        ->where('l.id = ?', $id)
+        ->execute();
+     
+      if(count($l) == 0) return null;
+      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
+    }
+    
     public function getLogByIdAsArray($id) {
       $l = $this
         ->createQuery('l')

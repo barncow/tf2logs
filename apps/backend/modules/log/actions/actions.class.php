@@ -23,12 +23,13 @@ class logActions extends sfActions {
     $log = Doctrine::getTable('Log')->getErrorLogById($request->getParameter('id'));
     $this->forward404Unless($log);
     $logParser = new LogParser();
-    $log = $logParser->parseLogFile(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName(), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), null, null, $log);
+    $logid = $logParser->parseLogFile(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName(), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), null, null, $log);
+    $log = Doctrine::getTable('Log')->getLogById($logid);
     unlink(sfConfig::get('app_errorlogs') . "/" . $log->getErrorLogName());
     $log->setErrorLogName(null);
     $log->setErrorException(null);
     $log->save();
-    $this->removeCacheForLogId($log->getId());
+    $this->removeCacheForLogId($logid);
     $this->getUser()->setFlash('notice', 'Log Successfully processed.');
     $this->redirect('log/unfinished');
   }
@@ -41,11 +42,11 @@ class logActions extends sfActions {
     $this->forward404Unless($log);
     
     $logParser = new LogParser();
-    $log = $logParser->parseLogFromDB($log);
-    $this->removeCacheForLogId($log->getId());
+    $logid = $logParser->parseLogFromDB($request->getParameter('id'));
+    $this->removeCacheForLogId($logid);
     
     $this->getUser()->setFlash('notice', 'Log Successfully regenerated.');
-    $this->redirect('authModule/controlPanel');
+    $this->redirect('@controlpanel');
   }
   
   public function executeDelete(sfWebRequest $request) {

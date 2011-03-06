@@ -174,10 +174,10 @@ class logActions extends sfActions {
         move_uploaded_file($uploadedFile["tmp_name"], $uploadDir . "/" . $upload_filename);
         
         $logParser = new LogParser();
-        $log = null;
+        $logid = null;
         
         try {
-          $log = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
+          $logid = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
         } catch(CorruptLogLineException $clle) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
           return "error";
@@ -202,11 +202,11 @@ class logActions extends sfActions {
           return "error";
         }
         
-        if($log) {
+        if($logid) {
           unlink($uploadDir . "/" . $upload_filename);
         }
         
-        $lastid = $log->getId();
+        $lastid = $logid;
       }
       return 'log/show?id='.$lastid;
     } else {

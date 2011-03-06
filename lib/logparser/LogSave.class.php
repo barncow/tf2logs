@@ -23,7 +23,7 @@ class LogSave {
     $this->log->save();
     $logid = $this->log->getId();
     
-    $this->saveEvents($this->log->getEvents(), $logid);
+    $this->saveEvents($this->log->getEventsArray(), $logid);
     $this->saveStatChildren($logid);
     
     return $logid;

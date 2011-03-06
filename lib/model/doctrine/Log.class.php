@@ -15,7 +15,7 @@ class Log extends BaseLog
   protected $_scrubbedLog = "";
   protected $_events;
   
-  public function getEvents() {
+  public function getEventsArray() {
     return $this->_events;
   }
   

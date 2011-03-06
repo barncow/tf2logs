@@ -162,10 +162,10 @@ class LogParser {
 	/**
 	* This will parse the entire log file saved from the database.
 	*/
-	public function parseLogFromDB($log) {  
-	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($log->getId())->getLogData());
-	  $log->clearLog();
-	  $this->log = $log;
+	public function parseLogFromDB($logid) {  
+	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($logid)->getLogData());
+	  $this->log = Doctrine::getTable('Log')->getLogForRegenerationById($logid);
+	  $this->log->clearLog();
 	  $this->previousLogLine = null; //clearing in case this is getting called again.
 	  return $this->parseLog($file);
 	}
