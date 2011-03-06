@@ -11,6 +11,16 @@
  */
 class Stat extends BaseStat {  
   protected $currentLongestKillStreak = 0;
+  protected $_WeaponStats;
+  
+  public function getWeaponStatsArray() {
+    return $this->_WeaponStats;
+  }
+  
+  //constructor used with doctrine
+  public function construct() {
+    $this->_WeaponStats = array();
+  }
   
   /**
   * Sets the attributes found in the PlayerInfo object into this object.
@@ -107,19 +117,15 @@ class Stat extends BaseStat {
   */
   public function incrementWeaponForPlayer($weapon, $propertyToIncrement, $increment = 1) {
     $addws = true;
-    foreach($this->WeaponStats as &$ws) {
-      if($ws->getWeaponId() == $weapon->getId()) {
-        $ws->_set($propertyToIncrement, $ws->_get($propertyToIncrement)+$increment);
+    foreach($this->_WeaponStats as &$ws) {
+      if($ws['weapon_id'] == $weapon->getId()) {
+        $ws[$propertyToIncrement] = $ws[$propertyToIncrement]+$increment;
         $addws = false;
         break;
       }
     }
     if($addws) {
-      $wsadd = new WeaponStat();
-      $wsadd->setWeaponId($weapon->getId());
-      $wsadd->setStat($this);
-      $wsadd->_set($propertyToIncrement, $increment);
-      $this->WeaponStats[] = $wsadd;
+      $this->_WeaponStats[] = WeaponStat::createWeaponStat($weapon->getId(), $propertyToIncrement, $increment);
     }
   }
   

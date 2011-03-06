@@ -24,8 +24,27 @@ class LogSave {
     $logid = $this->log->getId();
     
     $this->saveEvents($this->log->getEvents(), $logid);
+    $this->saveStatChildren($logid);
     
     return $logid;
+  }
+  
+  protected function saveStatChildren($logid) {
+    foreach($this->log->Stats as $stat) {
+      $statid = $stat->getId();
+      $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(), $statid);
+    }
+  }
+  
+  /**
+    This is a convenience function to save the Stat Table's children, such as WeaponStats
+  */
+  protected function saveStatsTable($tableName, $statsTableArray, $statId) {
+    $table = Doctrine::getTable($tableName);
+    foreach($statsTableArray as $obj) {
+      $obj['stat_id'] = $statId;
+      $this->conn->insert($table, $obj);
+    }
   }
   
   protected function saveEvents($events, $logid) {

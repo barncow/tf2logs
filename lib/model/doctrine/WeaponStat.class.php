@@ -12,4 +12,13 @@
  */
 class WeaponStat extends BaseWeaponStat
 {
+
+  public static function createWeaponStat($weaponId, $propertyToIncrement, $increment = 1) {
+    return array(
+      'weapon_id' => $weaponId,
+      'kills' => 0,
+      'deaths' => 0,
+      $propertyToIncrement => $increment //this will either be kills or deaths, and this will override the defaults above.
+    );
+  }
 }
