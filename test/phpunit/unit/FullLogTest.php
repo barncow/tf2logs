@@ -15,52 +15,53 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
   }
   
   public function testFull_withGarbageAtEnd() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $logfile = Doctrine::getTable('LogFile')->findOneByLogId($logid);
     
     //893 instead of 894 because rcon line is removed.
-    $this->assertEquals(893, count(explode("\n", $log->getLogFile()->getLogData()))-1, "count scrubbed lines stops when game appears over");
+    $this->assertEquals(893, count(explode("\n", $logfile->getLogData()))-1, "count scrubbed lines stops when game appears over");
     
-    foreach($log->getStats() as $stat) {
-      $this->assertNotNull($stat->getTeam(), $stat->getPlayer()->getSteamid()." team is not null");
+    foreach($log['Stats'] as $stat) {
+      $this->assertNotNull($stat['team'], $stat['Player']['steamid']." team is not null");
     }
-    $log->free(true);
   }
   
   public function testFull_1123dwidgranary() {
     //note - this log seems to start in the middle of a round. the first capture by red currently does not count until the "round_start"
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
-    $this->assertEquals(1, $log->getBluescore(), "blue score of 1123dwidgranary");
-    $this->assertEquals(4, $log->getRedscore(), "red score of 1123dwidgranary");
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_1123dwidgranary.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $this->assertEquals(1, $log['bluescore'], "blue score of 1123dwidgranary");
+    $this->assertEquals(4, $log['redscore'], "red score of 1123dwidgranary");
     
-    foreach($log->getStats() as $stat) {
-      if($stat->getName() == "=OBL= Rubber Ducky") {
+    foreach($log['Stats'] as $stat) {
+      if($stat['name'] == "=OBL= Rubber Ducky") {
         $this->fail("Spectator found in granary log.");
       }
     }
-    $log->free(true);
   }
   
   public function testFull_ctfdoublecross() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
-    $this->assertEquals(7, $log->getBluescore(), "blue score of doublecross");
-    $this->assertEquals(2, $log->getRedscore(), "red score of doublecross");
-    $log->free(true);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_ctfdoublecross.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $this->assertEquals(7, $log['bluescore'], "blue score of doublecross");
+    $this->assertEquals(2, $log['redscore'], "red score of doublecross");
   }
   
   public function testFull_plupward() {
     //note, this file was changed from original to make sure at the end the teams are on opposite teams from the beginning.
     //this is to ensure that team switching is being found.
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_plupward.log", 1);
-    $this->assertEquals(4, $log->getBluescore(), "blue score of plupward");
-    $this->assertEquals(0, $log->getRedscore(), "red score of plupward");
-    $log->free(true);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_plupward.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $this->assertEquals(4, $log['bluescore'], "blue score of plupward");
+    $this->assertEquals(0, $log['redscore'], "red score of plupward");
   }
   
   public function testFull_kothviaduct() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_kothviaduct.log", 1);
-    $this->assertEquals(4, $log->getBluescore(), "blue score of kothviaduct");
-    $this->assertEquals(0, $log->getRedscore(), "red score of kothviaduct");
-    $log->free(true);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_kothviaduct.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+    $this->assertEquals(4, $log['bluescore'], "blue score of kothviaduct");
+    $this->assertEquals(0, $log['redscore'], "red score of kothviaduct");
   }
   
   /**
@@ -74,22 +75,22 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     and we will just suck up the extra round_win
   */
   public function testFull_badlands_2halves() {
-    $log = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
+    $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     
-    $this->assertEquals(5, $log->getRedscore(), "red score");
+    $this->assertEquals(5, $log['redscore'], "red score");
     
-    $this->assertEquals(0, $log->getBluescore(), "blue score");
+    $this->assertEquals(0, $log['bluescore'], "blue score");
     
-    foreach($log->getStats() as $stat) {
-      if($stat->getPlayer()->getSteamid() == "STEAM_0:1:16481274") {
+    foreach($log['Stats'] as $stat) {
+      if($stat['Player']['steamid'] == "STEAM_0:1:16481274") {
         //barncow
         //halftime intermission has 3 kills, plus barncow was given two kills on either half, so should only have 2 kills here.
-        $this->assertEquals(2, $stat->getKills(), "barncow's kills");
+        $this->assertEquals(2, $stat['kills'], "barncow's kills");
         
         break;
       }
     }
-    $log->free(true);
   }
   
   /**
