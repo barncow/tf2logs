@@ -10,9 +10,7 @@
  * @author     Your name here
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
-class WeaponStat extends BaseWeaponStat
-{
-
+class WeaponStat extends BaseWeaponStat {
   public static function createWeaponStat($weaponId, $propertyToIncrement, $increment = 1) {
     return array(
       'weapon_id' => $weaponId,

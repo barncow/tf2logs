@@ -33,6 +33,7 @@ class LogSave {
     foreach($this->log->Stats as $stat) {
       $statid = $stat->getId();
       $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(), $statid);
+      $this->saveStatsTable('PlayerStat', $stat->getPlayerStatsArray(), $statid);
     }
   }
   

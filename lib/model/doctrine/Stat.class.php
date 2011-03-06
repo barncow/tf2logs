@@ -12,14 +12,20 @@
 class Stat extends BaseStat {  
   protected $currentLongestKillStreak = 0;
   protected $_WeaponStats;
+  protected $_PlayerStats;
   
   public function getWeaponStatsArray() {
     return $this->_WeaponStats;
   }
   
+  public function getPlayerStatsArray() {
+    return $this->_PlayerStats;
+  }
+  
   //constructor used with doctrine
   public function construct() {
     $this->_WeaponStats = array();
+    $this->_PlayerStats = array();
   }
   
   /**
@@ -134,19 +140,15 @@ class Stat extends BaseStat {
   */
   public function addPlayerStat($otherPlayer, $propertyToIncrement, $increment = 1) {
     $addps = true;
-    foreach($this->PlayerStats as &$ps) {
-      if($ps->getPlayerId() == $otherPlayer->getId()) {
-        $ps->_set($propertyToIncrement, $ps->_get($propertyToIncrement)+$increment);
+    foreach($this->_PlayerStats as &$ps) {
+      if($ps['player_id'] == $otherPlayer->getId()) {
+        $ps[$propertyToIncrement] = $ps[$propertyToIncrement]+$increment;
         $addps = false;
         break;
       }
     }
     if($addps) {
-      $psadd = new PlayerStat();
-      $psadd->setPlayerId($otherPlayer->getId());
-      $psadd->setStat($this);
-      $psadd->_set($propertyToIncrement, $increment);
-      $this->PlayerStats[] = $psadd;
+      $this->_PlayerStats[] = PlayerStat::createPlayerStat($otherPlayer->getId(), $propertyToIncrement, $increment);
     }
   }
   
