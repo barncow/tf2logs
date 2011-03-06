@@ -6,7 +6,7 @@ use_helper('Search');
 $homepagelink = link_to('Upload one now!', '@homepage');
 $s = <<<EOD
 <div class="subInfo">
-Use this area to modify information about the logs you have uploaded, and check your stats. Haven't uploaded a log? <strong>$homepagelink</strong>
+Use this area to modify information about the logs you have uploaded. Haven't uploaded a log? <strong>$homepagelink</strong>
 </div>
 EOD;
 echo '<div class="infoBoxContainer">';
