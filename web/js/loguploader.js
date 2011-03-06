@@ -29,8 +29,30 @@ $(function() {
 	$("#uploader_container").attr('title', ''); //clearing the ui's runtime title
 	var droptext = "Drag and drop log files here, or click the Add Files button.";
 	$(".plupload_droptext").html(droptext);
-	$(".plupload_header_title").html("Upload Log Files");
+	$(".plupload_header_title").html('Upload Log Files <button id="uploadHelpButton"></button>');
 	$(".plupload_header_text").html('Click the Add Files button to add a log file to the queue. You can enter in an optional name and map name for the log file. In order to view the events of the log with the Log Viewer, a map must be specified. When you are ready, click Start Upload. If you make a mistake, you can always edit your log files at <a href="'+$("#mycplink").attr("href")+'" style="text-decoration: underline;">My TF2Logs</a>.');
+	
+	$('#helpMessage').dialog({ 
+	  autoOpen: false, 
+	  modal: true,
+	  height: 300,
+		width: 500,
+		buttons: {
+			Close: function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	$('#uploadHelpButton').button({
+	  icons: {
+      primary: "ui-icon-help",
+      text: false,
+      label: ''
+    }
+	}).click(function(e){
+	  e.preventDefault();
+	  $('#helpMessage').dialog('open');
+	}).removeClass("ui-button-text-icon-primary").addClass("ui-button-icon-only"); //adjust styling
 	
 	var uploader = $('#uploader').plupload('getUploader');
 	//since we updated the text of the uploader, in order for the upload button to work, we need to refresh its position.

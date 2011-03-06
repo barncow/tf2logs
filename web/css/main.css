@@ -362,6 +362,28 @@ img {
   margin-right: auto;
 }
 
+#helpMessage {
+  display: none;
+  font-size: 12px;
+}
+
+#helpMessage p {
+  text-indent: 1em;
+}
+
+#helpMessage h3 {
+  margin-top: 5px;
+}
+
+#helpMessage code {
+  display: block;
+  border: 1px dotted #9C947C;
+}
+
+#uploadHelpButton {
+  width: 16px;
+}
+
 .ui-autocomplete {
 	max-height: 100px;
 	overflow-y: auto;
