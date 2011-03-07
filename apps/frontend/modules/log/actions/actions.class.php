@@ -33,6 +33,7 @@ class logActions extends sfActions {
   
   public function executeIndex(sfWebRequest $request) {
     $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
+    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogs();
     $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
     $this->mapNames = array();
     Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);

@@ -90,6 +90,15 @@ class LogTable extends Doctrine_Table {
         ->execute();
     }
     
+    public function getTopViewedLogs($num_to_retrieve = 10) {
+      return $this
+        ->createQuery('l')
+        ->where('l.error_log_name is null')
+        ->orderBy('l.views DESC')
+        ->limit($num_to_retrieve)
+        ->execute();
+    }
+    
     //retrieves logs that the user participated in, not submitted
     public function getParticipantLogsByPlayerNumericSteamidQuery($playerId) {
       return $this

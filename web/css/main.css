@@ -259,12 +259,17 @@ img {
 }
 
 #recentlyAdded {
-  width: 350px;
+  width: 550px;
   float: left;
 }
 
 #topUploaders {
-  width: 200px;
+  width: 225px;
+  float: left;
+}
+
+#topViewed {
+  width: 300px;
   float: left;
 }
 
@@ -274,7 +279,7 @@ img {
 }
 
 #infoBoxContainer {
-  width: 600px;
+  width: 550px;
   margin-left: auto;
   margin-right: auto;
 }

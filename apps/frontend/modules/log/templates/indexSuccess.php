@@ -107,17 +107,18 @@ echo '</div><br class="hardSeparator"/>';
 <?php endif ?>
 <br/>
 <div id="infoBoxContainer">
-  <div id="recentlyAdded" class="infoBox">
-    <div class="ui-widget ui-widget-header ui-corner-top header">Recently Added</div>
+  <div id="topViewed" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Top Viewed</div>
     <div class="content">
       <table width="100%">
-      <?php foreach($logs as $l): ?>
-        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td style="white-space: nowrap;"><?php echo getHumanReadableDate($l->getDateTimeObject('created_at')) ?></td></tr>
+      <?php foreach($topViewedLogs as $l): ?>
+        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td style="white-space: nowrap;"><?php echo $l->getViews() ?></td></tr>
       <?php endforeach ?>
       </table>
     </div>
     <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
   </div>
+
 
   <div id="topUploaders" class="infoBox">
     <div class="ui-widget ui-widget-header ui-corner-top header">Top Uploaders</div>
@@ -130,7 +131,20 @@ echo '</div><br class="hardSeparator"/>';
     </div>
     <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
   </div>
+  
   <br class="hardSeparator"/>
+  
+  <div id="recentlyAdded" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Recently Added</div>
+    <div class="content">
+      <table width="100%">
+      <?php foreach($logs as $l): ?>
+        <tr><td><?php echo link_to($l->getName(), 'log/show?id='.$l->getId()) ?></td><td style="white-space: nowrap;"><?php echo getHumanReadableDate($l->getDateTimeObject('created_at')) ?></td></tr>
+      <?php endforeach ?>
+      </table>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
+  </div>
 </div>
 
 <script type="application/x-javascript">
