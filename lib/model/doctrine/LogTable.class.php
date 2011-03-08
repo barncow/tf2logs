@@ -90,10 +90,14 @@ class LogTable extends Doctrine_Table {
         ->execute();
     }
     
-    public function getTopViewedLogs($num_to_retrieve = 10) {
+    public function getTopViewedLogs($num_to_retrieve = 10, $prev_days = 7) {
+      $days_ago_dt = new DateTime();
+      $days_ago_dt->sub(new DateInterval('P'.$prev_days.'D'));
+      $dtstring = $days_ago_dt->format('Y-m-d 00:00:00');
       return $this
         ->createQuery('l')
         ->where('l.error_log_name is null')
+        ->andWhere('l.created_at >= ?', $dtstring)
         ->orderBy('l.views DESC')
         ->limit($num_to_retrieve)
         ->execute();

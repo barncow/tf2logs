@@ -108,7 +108,7 @@ echo '</div><br class="hardSeparator"/>';
 <br/>
 <div id="infoBoxContainer">
   <div id="topViewed" class="infoBox">
-    <div class="ui-widget ui-widget-header ui-corner-top header">Top Viewed</div>
+    <div class="ui-widget ui-widget-header ui-corner-top header">Top Viewed Logs Added in Past Week</div>
     <div class="content">
       <table width="100%">
       <?php foreach($topViewedLogs as $l): ?>
