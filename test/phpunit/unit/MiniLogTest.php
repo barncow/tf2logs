@@ -73,7 +73,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertTrue(count($wstats) > 0);
         foreach($wstats as $ws) {
           if($ws['Weapon']['key_name'] == "scattergun") {
-            $this->assertEquals(2, $ws['kills'], "target has 2 kills with scatter");
+            $this->assertEquals(2, $ws['kills'], "target has 2 kills with scatter, excluding DR kill");
           } else if($ws['Weapon']['key_name'] == "sniperrifle") {
             $this->assertEquals(1, $ws['deaths'], "target has 1 death to sniperrifle");
           }
@@ -138,7 +138,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         }
       } else if($stat['Player']['steamid'] == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
-        $this->assertEquals(1, $stat['assists'], "cres' assists");
+        $this->assertEquals(1, $stat['assists'], "cres' assists, excluding DR");
       } else if($stat['Player']['steamid'] == "STEAM_0:1:9852193") {
         //verify numbers for "Ctrl+f Muffin!"
         $this->assertEquals(2, $stat['deaths'], "Ctrl+f Muffin!'s deaths");
@@ -229,6 +229,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         //verify numbers for "`yay!"
         $this->assertEquals(1, $stat['capture_points_blocked'], "yay's point blocks");
         $this->assertEquals(1, $stat['backstabs'], "yay's backstabs");
+        $this->assertEquals(0, $stat['deaths'], "yay's deaths - exclude feign death");
         
         $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
         $this->assertTrue(count($wstats) > 0);

@@ -179,9 +179,10 @@ class LogParser {
 	    $this->isTournamentMode = true;
 	  }
 	  
+	  $prevLogLine = "";
 	  foreach($arrayLogLines as $key => $logLine) {
 	    try {
-	      $game_state = $this->parseLine($logLine);
+	      $game_state = $this->parseLine($logLine, $prevLogLine);
 	    } catch(UnrecognizedLogLineException $ulle) {
 	      if($key != $fileLength-1) {
 	        //if exception was not thrown on last line, keep throwing it
@@ -202,6 +203,7 @@ class LogParser {
 	      //mark as game over, but keep processing in case there is another round_start.
 	      $this->gameOver = true;
 	    }
+	    $prevLogLine = $logLine;
 	  }
 	  if(!$this->isTournamentMode) {
 	    throw new TournamentModeNotFoundException();
@@ -214,8 +216,6 @@ class LogParser {
     
     $this->finishLog();
     $st = sfTimerManager::getTimer('saveLog');
-	  //$this->log->save();
-	  //var_dump($this->log->getLogFile()->getLogData());
 	  $ls = new LogSave();
 	  $id = $ls->save($this->log);
 	  $st->addTime();
@@ -227,12 +227,12 @@ class LogParser {
 	* and being able to do some init and cleanup tasks if needed.
 	* @see protected function doLine($logLine)
 	*/
-	public function parseLine($logLine) {
+	public function parseLine($logLine, $prevLogLine) {
 	  $exception = null;
 	  $game_state = null;
 	  $logLine = $this->beforeParseLine($logLine);
 	  try {
-	    $game_state = $this->doLine($logLine);
+	    $game_state = $this->doLine($logLine, $prevLogLine);
 	  } catch(Exception $e) {
 	    $exception = $e;
 	  }
@@ -297,7 +297,7 @@ class LogParser {
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
 	*/
-	protected function doLine($logLine) {	  
+	protected function doLine($logLine, $prevLogLine) {	  
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
@@ -470,6 +470,11 @@ class LogParser {
 	        $w = $this->parsingUtils->getWeapon($logLineDetails);
 	        $ck = $this->parsingUtils->getCustomKill($logLineDetails);
 	        
+	        if($ck == "feign_death") {
+	          //do not alter stats for dead ringer spies.
+	          return self::GAME_CONTINUE;
+	        }
+	        
 	        if(($w == "sniperrifle" || $w == "tf_projectile_arrow" || $w == "ambassador") && $ck == "headshot") {
 	          //if a headshot occurred, edit the weapon to be the normal weapon's headshot variant.
 	          //also, add headshot score
@@ -509,6 +514,10 @@ class LogParser {
 	        
 	        if($playerLineActionDetail == "kill assist") {
 	          //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
+	          if($this->parsingUtils->getCustomKill($prevLogLine) == "feign_death") {
+	            //do not mark an assist if the assist is for a DR kill.
+	            return self::GAME_CONTINUE;
+	          }
 	          $p = $players[0];
 	          $this->log->incrementStatFromSteamid($p->getSteamid(), "assists"); 
 	          $this->log->markLastKillEventWithAssist($p->getSteamid(), $this->parsingUtils->getKillCoords("assister", $logLineDetails));
