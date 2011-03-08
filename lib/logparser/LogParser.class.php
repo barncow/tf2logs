@@ -44,20 +44,28 @@ class LogParser {
   
   function __construct() {
     $this->setParsingUtils(new ParsingUtils());
-    $this->log = new Log();
-    $this->isTournamentMode = false; //assume its not, until first world trigger round_start
     $this->buildWeaponCache();
     $this->buildRoleCache();
+    $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
+    $this->clearValues();
+  }
+  
+  protected function clearValues() {
+    $this->log = new Log();
+    $this->isTournamentMode = false; //assume its not, until first world trigger round_start
     $this->isCtf = false;
     $this->addToScrubbedLog = true;
-    $this->ignoreUnrecognizedLogLines = sfConfig::get('app_ignore_unrecognized_log_lines');
     $this->gameOver = false;
     $this->isServerCvars = false;
     $this->prevBlueTeamScore = 0;
     $this->prevRedTeamScore = 0;
-    
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
+    $this->previousLogLine = null;
+  }
+  
+  public function setIgnoreUnrecognizedLogLines($ignoreUnrecognizedLogLines) {
+    $this->ignoreUnrecognizedLogLines = $ignoreUnrecognizedLogLines;
   }
   
   public function buildWeaponCache() {
@@ -135,6 +143,7 @@ class LogParser {
 	* This will parse the entire log file.
 	*/
 	public function parseLogFile($filename, $logSubmitterId, $logName = null, $logMapName = null, Log $logObj = null) {
+	  $this->clearValues();
 	  $tlp = sfTimerManager::getTimer('totalLogParse');
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
@@ -147,7 +156,6 @@ class LogParser {
 	  }
 	  $file = $this->getRawLogFile($filename);
 	  
-	  $this->previousLogLine = null; //clearing in case this is getting called again.
 	  $ret;
 	  try {
 	    $ret =  $this->parseLog($file);
@@ -163,11 +171,25 @@ class LogParser {
 	* This will parse the entire log file saved from the database.
 	*/
 	public function parseLogFromDB($logid) {  
-	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($logid)->getLogData());
+	  $this->clearValues();
 	  $this->log = Doctrine::getTable('Log')->getLogForRegenerationById($logid);
+	  if(!$this->log) {
+	    throw new LogFileNotFoundException("Could not find the log ID: ".$logid);
+	  }
+	  $file = explode("\n", Doctrine::getTable('LogFile')->findOneByLogId($logid)->getLogData());
 	  $this->log->clearLog();
-	  $this->previousLogLine = null; //clearing in case this is getting called again.
-	  return $this->parseLog($file);
+	  
+	  $logid;
+	  try {
+	    $logid =  $this->parseLog($file);
+	  } catch(TournamentModeNotFoundException $e) {
+	    //if no tournament mode was found, re-run entire log file as one round.
+	    $logid = $this->parseLog($file, true);
+	  }
+	  
+	  $this->log->free(true);
+	  unset($this->log);
+	  return $logid;
 	}
 	
 	protected function parseLog($arrayLogLines, $ignoreTourneyModeNotFound = false) {
@@ -179,10 +201,10 @@ class LogParser {
 	    $this->isTournamentMode = true;
 	  }
 	  
-	  $prevLogLine = "";
+
 	  foreach($arrayLogLines as $key => $logLine) {
 	    try {
-	      $game_state = $this->parseLine($logLine, $prevLogLine);
+	      $game_state = $this->parseLine($logLine);
 	    } catch(UnrecognizedLogLineException $ulle) {
 	      if($key != $fileLength-1) {
 	        //if exception was not thrown on last line, keep throwing it
@@ -203,7 +225,6 @@ class LogParser {
 	      //mark as game over, but keep processing in case there is another round_start.
 	      $this->gameOver = true;
 	    }
-	    $prevLogLine = $logLine;
 	  }
 	  if(!$this->isTournamentMode) {
 	    throw new TournamentModeNotFoundException();
@@ -227,12 +248,12 @@ class LogParser {
 	* and being able to do some init and cleanup tasks if needed.
 	* @see protected function doLine($logLine)
 	*/
-	public function parseLine($logLine, $prevLogLine) {
+	public function parseLine($logLine) {
 	  $exception = null;
 	  $game_state = null;
 	  $logLine = $this->beforeParseLine($logLine);
 	  try {
-	    $game_state = $this->doLine($logLine, $prevLogLine);
+	    $game_state = $this->doLine($logLine);
 	  } catch(Exception $e) {
 	    $exception = $e;
 	  }
@@ -297,7 +318,7 @@ class LogParser {
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
 	*/
-	protected function doLine($logLine, $prevLogLine) {	  
+	protected function doLine($logLine) {	  
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
@@ -514,7 +535,7 @@ class LogParser {
 	        
 	        if($playerLineActionDetail == "kill assist") {
 	          //this line is a complement to a previous line. Do not increment the victim's death; it was done above.
-	          if($this->parsingUtils->getCustomKill($prevLogLine) == "feign_death") {
+	          if($this->parsingUtils->getCustomKill($this->previousLogLine) == "feign_death") {
 	            //do not mark an assist if the assist is for a DR kill.
 	            return self::GAME_CONTINUE;
 	          }

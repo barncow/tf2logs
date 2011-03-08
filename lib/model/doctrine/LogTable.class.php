@@ -215,4 +215,13 @@ class LogTable extends Doctrine_Table {
         ->where('id = ?', $id)
         ->execute();
     }
+    
+    public function getMaxLogId() {
+     $q = $this
+        ->createQuery('l')
+        ->select('max(l.id)')
+        ->where('l.error_log_name is null');
+
+      return $q->fetchOne(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+    }
 }
