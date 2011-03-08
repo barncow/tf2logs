@@ -215,6 +215,7 @@ class LogParser {
     $this->finishLog();
     $st = sfTimerManager::getTimer('saveLog');
 	  //$this->log->save();
+	  //var_dump($this->log->getLogFile()->getLogData());
 	  $ls = new LogSave();
 	  $id = $ls->save($this->log);
 	  $st->addTime();
@@ -229,6 +230,7 @@ class LogParser {
 	public function parseLine($logLine) {
 	  $exception = null;
 	  $game_state = null;
+	  $logLine = $this->beforeParseLine($logLine);
 	  try {
 	    $game_state = $this->doLine($logLine);
 	  } catch(Exception $e) {
@@ -262,14 +264,40 @@ class LogParser {
 	}
 	
 	/**
+	  Function to be called before doing processing to do some cleanup of the text.
+	*/
+	protected function beforeParseLine($logLine) {
+	  //doing a ltrim here to remove any extraneous characters that may corrupt the log.
+	  $logLine = substr($logLine, strpos($logLine, "L"));
+	  
+	  //this will remove any invalid utf-8 chars
+	  $logLine = $this->removeIllegalChars($logLine);
+    
+    return $logLine;
+	}
+	
+	/**
+	  Provided by:
+	  http://webcollab.sourceforge.net/unicode.html
+	*/
+	protected function removeIllegalChars($logLine) {   
+   preg_match_all('/([\x09\x0a\x0d\x20-\x7e]'. // ASCII characters
+     '|[\xc2-\xdf][\x80-\xbf]'. // 2-byte (except overly longs)
+     '|\xe0[\xa0-\xbf][\x80-\xbf]'. // 3 byte (except overly longs)
+     '|[\xe1-\xec\xee\xef][\x80-\xbf]{2}'. // 3 byte (except overly longs)
+     '|\xed[\x80-\x9f][\x80-\xbf])+/', // 3 byte (except UTF-16 surrogates)
+     $logLine, $clean_pieces );
+
+    $logLine = join('?', $clean_pieces[0] );
+    return $logLine;
+	}
+	
+	/**
 	* This will do the processing of the line. This will not be called outside this
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
 	*/
-	protected function doLine($logLine) {
-	  //doing a ltrim here to remove any extraneous characters that may corrupt the log.
-	  $logLine = substr($logLine, strpos($logLine, "L"));
-	  
+	protected function doLine($logLine) {	  
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);

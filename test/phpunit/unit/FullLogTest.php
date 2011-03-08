@@ -14,6 +14,14 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     unset($this->logParser);
   }
   
+  public function testFull_crazychar() {
+    $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_crazychar.log", 1);
+    $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."full_crazychar.log"));
+    $logfile = Doctrine::getTable('LogFile')->findOneByLogId($logid);
+    
+    $this->assertEquals($countOfLines-12, count(explode("\n", $logfile->getLogData())), "count scrubbed lines includes formerly invalid chars, minus rcon lines.");
+  }
+  
   public function testFull_withGarbageAtEnd() {
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_withGarbageAtEnd.log", 1);
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
