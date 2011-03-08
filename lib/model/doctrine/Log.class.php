@@ -232,7 +232,10 @@ class Log extends BaseLog
   * outside of this class is unwise.
   */
   protected function &getStatFromSteamid($steamid) {
-    if(!isset($this->Stats[$steamid])) return false;
+    if(!isset($this->Stats[$steamid])) {
+      $ret = false;
+      return $ret;
+    }
     $f = &$this->Stats[$steamid];
     return $f;
   }
