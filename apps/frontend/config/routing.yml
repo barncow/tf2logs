@@ -6,6 +6,10 @@ homepage:
   url:   /
   param: { module: log, action: index }
   
+whats_new:
+  url: /whatsnew
+  param: {module: content, action: whatsNew}
+  
 log_by_id:
   url:   /logs/:id
   param: { module: log, action: show }

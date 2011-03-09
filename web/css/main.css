@@ -179,6 +179,26 @@ img {
   border: 0;
 }
 
+#whatsNewContainer {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+#whatsNewContainer p {
+  text-align: left;
+  text-indent: 1em;
+}
+
+#whatsNewContainer h3 {
+  margin-top: 1em;
+}
+
+#whatsNewContainer .content {
+  padding: 3px;
+}
+
 #header a {
   color: #79b3d2; /*from .ui-state-default*/
 }

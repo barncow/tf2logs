@@ -31,7 +31,7 @@ EOF;
       $this->logBlock('NOTICE - THIS EATS UP CPU DURING ITS PROCESSING - MAY WANT TO ONLY DO THIS ON OFF-HOURS', 'INFO_LARGE');
       
       $logTable = Doctrine_Core::getTable('Log');
-      $i = 7;
+      $i = 8;
       $count = 0;
       $maxid = $logTable->getMaxLogId();
       $this->logBlock(sprintf('Regenerating %d logs', $maxid), 'INFO_LARGE');

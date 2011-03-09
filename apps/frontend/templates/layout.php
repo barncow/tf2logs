@@ -17,6 +17,7 @@
         </div>
         <div id="userCP">
           <ul>
+            <li><?php echo link_to("What's New", '@whats_new') ?></li>
             <li><?php echo link_to('Log Search', '@log_search') ?></li>
             <li><?php echo link_to('Player Search', '@player_search') ?></li>
           <?php if($sf_user->isAuthenticated()): ?>
