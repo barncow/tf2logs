@@ -282,7 +282,7 @@ var MapViewer = Class.extend({
 	        '<option value="20">20x</option>' +
 	      '</select>' +
 
-        '<label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulitive</label>' +
+        '<label for="isCumulitive" title="When enabled, this will show all kills that have occurred since the beginning of the log.">Cumulative</label>' +
         '<input type="checkbox" id="isCumulitive" class="ui-widget-content-nobg ui-corner-all"/>' +
 	    '</div>' +
     '</div>' +
