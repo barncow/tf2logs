@@ -19,6 +19,9 @@ events:
 logfile:
   is_secure: false
   
+whatsNew:
+  is_secure: false
+  
 search:
   is_secure: false
   
