@@ -7,6 +7,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     /**
     NOTE - This log is also testing proper saving of weapons (the garbage weapon key at the end of the log)
     When running this test, make sure that the database is clean to get a true indication of success.
+    
+    Also being tested is disconnected due to no steam login lines - which appear to have a line break which corrupts the log.
     */
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);

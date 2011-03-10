@@ -318,7 +318,14 @@ class LogParser {
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
 	*/
-	protected function doLine($logLine) {	  
+	protected function doLine($logLine) {	 
+	  //it appears that these lines get a line break at the end, which causes corruptloglineexception
+	  //previous line - L 09/29/2010 - 19:32:08: "Cres<49><STEAM_0:0:8581157><Blue>" disconnected (reason "No Steam logon
+	  //it looks to be standard, so, we will ignore lines that are equal to: ")
+	  if($logLine == '")') {
+	    return self::GAME_CONTINUE;
+	  }
+	   
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
