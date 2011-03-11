@@ -29,6 +29,7 @@ var GameMap = Class.extend({
 		this.negX = false;
 		this.negY = false;
 		this.mirrorY = false;
+		this.mirrorX = false;
 		
 		//bl = bottom left, br = bottom right, tl = top left, tr = top right
 		//precedence for scoreboard placement: bl > br > tl > tr
@@ -78,6 +79,10 @@ var GameMap = Class.extend({
 		
 		if(this.mirrorY) {
 		  yImg = this.imgHeight-yImg;
+		}
+		
+		if(this.mirrorX) {
+		  xImg = this.imgWidth-xImg;
 		}
 		
 		return new Coordinate(xImg, yImg);
