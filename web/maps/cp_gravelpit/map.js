@@ -5,6 +5,7 @@ var GravelPitMap = GameMap.extend({
   init: function(){
 		this._super();
 		
+		this.mirrorY = true;
 	  this.minX = -4659;
 	  this.maxX = 1280;
 	  this.minY = -316;

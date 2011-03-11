@@ -28,6 +28,7 @@ var GameMap = Class.extend({
 		this.flipXY = false;
 		this.negX = false;
 		this.negY = false;
+		this.mirrorY = false;
 		
 		//bl = bottom left, br = bottom right, tl = top left, tr = top right
 		//precedence for scoreboard placement: bl > br > tl > tr
@@ -72,8 +73,13 @@ var GameMap = Class.extend({
 			coordinate = new Coordinate(coordinate.x,coordinate.y*-1);
 		}
 
-		xImg = Math.floor(coordinate.x-this.minX)/this.getCellWidth();
-		yImg = Math.floor(coordinate.y-this.minY)/this.getCellHeight();
+		var xImg = Math.floor((coordinate.x-this.minX)/this.getCellWidth());
+		var yImg = Math.floor((coordinate.y-this.minY)/this.getCellHeight());
+		
+		if(this.mirrorY) {
+		  yImg = this.imgHeight-yImg;
+		}
+		
 		return new Coordinate(xImg, yImg);
 	}
 });
