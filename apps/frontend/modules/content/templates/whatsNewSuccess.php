@@ -6,6 +6,16 @@ use_helper('PageElements');
 <div id="whatsNewContainer">
 
 <?php
+$s = <<<EOD
+<h3>Mirroring on Certain Maps</h3>
+<p>Some map images, like pl_goldrush, cp_gravelpit, and pl_upward were mirrored making them hard to read. This is now fixed. (Hit refresh in your browser if you do not see a change.)</p>
+EOD;
+echo outputInfoBox("entry1", "Updates for March 9, 2010", $s);
+?>
+
+<br/>
+
+<?php
 $bizLink = link_to('Biz', '@player_by_numeric_steamid?id=76561198004686658');
 $s = <<<EOD
 <h3>Disconnected Due to No Steam Login - Throwing Error</h3>
