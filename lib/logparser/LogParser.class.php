@@ -599,6 +599,11 @@ class LogParser {
 	        } else if($playerLineActionDetail == "weaponstats") {
 	          //superlogs specific trigger
 	          return self::GAME_CONTINUE;
+	        } else if($playerLineActionDetail == "damage") {
+	          //cinq's damage log
+	          $p = $players[0];
+	          $this->log->incrementStatFromSteamid($p->getSteamid(), "damage", $this->parsingUtils->getDamage($logLineDetails));
+	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "flagevent") {
 	          $p = $players[0];
 	          $event = $this->parsingUtils->getFlagEvent($logLineDetails);

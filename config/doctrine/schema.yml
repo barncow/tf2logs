@@ -76,6 +76,10 @@ Stat:
       type: integer(2)
       notnull: true
       default: 0
+    damage:
+      type: integer(2)
+      notnull: true
+      default: 0
     longest_kill_streak:
       type: integer(2)
       notnull: true

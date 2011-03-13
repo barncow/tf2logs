@@ -13,6 +13,7 @@
  * @property integer $kills
  * @property integer $assists
  * @property integer $deaths
+ * @property integer $damage
  * @property integer $longest_kill_streak
  * @property integer $headshots
  * @property integer $backstabs
@@ -44,6 +45,7 @@
  * @method integer             getKills()                   Returns the current record's "kills" value
  * @method integer             getAssists()                 Returns the current record's "assists" value
  * @method integer             getDeaths()                  Returns the current record's "deaths" value
+ * @method integer             getDamage()                  Returns the current record's "damage" value
  * @method integer             getLongestKillStreak()       Returns the current record's "longest_kill_streak" value
  * @method integer             getHeadshots()               Returns the current record's "headshots" value
  * @method integer             getBackstabs()               Returns the current record's "backstabs" value
@@ -74,6 +76,7 @@
  * @method Stat                setKills()                   Sets the current record's "kills" value
  * @method Stat                setAssists()                 Sets the current record's "assists" value
  * @method Stat                setDeaths()                  Sets the current record's "deaths" value
+ * @method Stat                setDamage()                  Sets the current record's "damage" value
  * @method Stat                setLongestKillStreak()       Sets the current record's "longest_kill_streak" value
  * @method Stat                setHeadshots()               Sets the current record's "headshots" value
  * @method Stat                setBackstabs()               Sets the current record's "backstabs" value
@@ -143,6 +146,12 @@ abstract class BaseStat extends sfDoctrineRecord
              'length' => 2,
              ));
         $this->hasColumn('deaths', 'integer', 2, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 2,
+             ));
+        $this->hasColumn('damage', 'integer', 2, array(
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,

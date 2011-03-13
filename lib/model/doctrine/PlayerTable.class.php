@@ -22,7 +22,7 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.kills) as kills'
         .', sum(s.assists) as assists'
         .', sum(s.deaths) as deaths'
-        .', round((sum(s.kills)+sum(s.assists))/sum(s.deaths), 3) as killsassists_per_death'
+        .', sum(s.damage) as damage'
         .', max(s.longest_kill_streak) as longest_kill_streak'
         .', sum(s.headshots) as headshots'
         .', sum(s.backstabs) as backstabs'
@@ -35,7 +35,6 @@ class PlayerTable extends Doctrine_Table {
         .', sum(s.revenges) as revenges'
         .', sum(s.extinguishes) as extinguishes'
         .', sum(s.ubers) as ubers'
-        .', round(sum(s.ubers)/sum(s.deaths), 3) as ubers_per_death'
         .', sum(s.dropped_ubers) as dropped_ubers'
         .', sum(s.healing) as healing'
       )

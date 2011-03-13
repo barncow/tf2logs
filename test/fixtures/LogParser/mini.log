@@ -19,6 +19,7 @@ L 09/29/2010 - 19:08:56: World triggered "Round_Setup_Begin"
 L 09/29/2010 - 19:08:56: Loading map "ctf_2fort"
 L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
+L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "damage" 11
 L 09/29/2010 - 19:08:58: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "tf_projectile_rocket" (attacker_position "-3718 1821 -540")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" killed "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" with "scattergun" (attacker_position "-2419 1637 -511") (victim_position "-2605 1596 -546")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" triggered "domination" against "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>"

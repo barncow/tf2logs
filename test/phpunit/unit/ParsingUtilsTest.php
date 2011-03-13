@@ -219,9 +219,15 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
   }
   
   public function testGetDamage() {
+    //superlogs damage
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_weaponstats_superlogs.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(375, $this->parsingUtils->getDamage($logLineDetails), "player did 375 damage");
+    
+    //cinq's damage v1
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_cinq_damage_v1.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(11, $this->parsingUtils->getDamage($logLineDetails), "player did 11 damage");
   }
   
   public function testGetFlagEvent() {

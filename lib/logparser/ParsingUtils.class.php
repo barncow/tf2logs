@@ -310,15 +310,22 @@ class ParsingUtils {
   }
   
   /**
-  * Retrieves the damage value for a weaponstats event.
+  * Retrieves the damage value 
   */
   public function getDamage($logLineDetails) {
     $matches;
+    //superlog damage
     preg_match("/\(damage \"(\d+?)\"\)/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return (int) $matches[1];
     } else {
-      return false;
+      //cinq's damage plugin - v1
+      preg_match("/ (\d+)$/", $logLineDetails, $matches);
+      if(count($matches) > 0) {
+        return (int) $matches[1];
+      } else {
+        return 0; //returning zero instead of false because if no value is found, we really don't care.
+      }
     }
   }
   

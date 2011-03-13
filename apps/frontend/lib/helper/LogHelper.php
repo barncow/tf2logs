@@ -214,8 +214,10 @@ $s = <<<EOD
       <th title="Classes"class="ui-table-content txtnowrap">C</th>
       <th title="Kills"class="ui-table-content txtnowrap">K</th>
       <th title="Assists"class="ui-table-content txtnowrap">A</th>
-      <th title="Deaths"class="ui-table-content txtnowrap">D</th>
+      <th title="Deaths"class="ui-table-content txtnowrap">D</th>    
       <th title="Kills+Assists/Death"class="ui-table-content txtnowrap">KAPD</th>
+      <th title="Damage"class="ui-table-content txtnowrap">DA</th>
+      <th title="Damage/Death"class="ui-table-content txtnowrap">DAPD</th>
       <th title="Longest Kill Streak"class="ui-table-content txtnowrap">LKS</th>
       <th title="Headshots"class="ui-table-content txtnowrap">HS</th>
       <th title="Backstabs"class="ui-table-content txtnowrap">BS</th>
@@ -258,6 +260,12 @@ EOD;
       $s .= '<td class="ui-table-content">';
         $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
           $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']);
+        $s .= '</span>';
+      $s .= '</td>';
+      $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['damage']).'">'. $stat['damage'].'</span></td>';
+      $s .= '<td class="ui-table-content">';
+        $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['damage'], $stat['deaths'])).'">';
+          $s .= doPerDeathDivision($stat['damage'], $stat['deaths']);
         $s .= '</span>';
       $s .= '</td>';
       $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['longest_kill_streak']).'">'. $stat['longest_kill_streak'].'</span></td>';

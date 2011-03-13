@@ -34,6 +34,8 @@ $s = <<<EOD
         <th class="ui-state-default" title="Assists">A</th>
         <th class="ui-state-default" title="Deaths">D</th>
         <th class="ui-state-default" title="Kills+Assists/Death">KAPD</th>
+        <th class="ui-state-default" title="Damage">DA</th>
+        <th class="ui-state-default" title="Damage/Death">DAPD</th>
         <th class="ui-state-default" title="Longest Kill Streak">LKS</th>
         <th class="ui-state-default" title="Headshots">HS</th>
         <th class="ui-state-default" title="Backstabs">BS</th>
@@ -58,7 +60,9 @@ EOD;
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->kills).'">'.$player->kills.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->assists).'">'.$player->assists.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->deaths).'">'.$player->deaths.'</span></td>';
-        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->killsassists_per_death).'">'.$player->killsassists_per_death.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($player->kills+$player->assists, $player->deaths)).'">'.doPerDeathDivision($player->kills+$player->assists, $player->deaths).'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->damage).'">'.$player->damage.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($player->damage, $player->deaths)).'">'.doPerDeathDivision($player->damage, $player->deaths).'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->longest_kill_streak).'">'.$player->longest_kill_streak.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->headshots).'">'.$player->headshots.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->backstabs).'">'.$player->backstabs.'</span></td>';
@@ -71,7 +75,7 @@ EOD;
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->revenges).'">'.$player->revenges.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->extinguishes).'">'.$player->extinguishes.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->ubers).'">'.$player->ubers.'</span></td>';
-        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->ubers_per_death).'">'.$player->ubers_per_death.'</span></td>';
+        $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($player->ubers, $player->deaths)).'">'.doPerDeathDivision($player->ubers, $player->deaths).'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->dropped_ubers).'">'.$player->dropped_ubers.'</span></td>';
         $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($player->healing).'">'.$player->healing.'</span></td>';
   $s .= <<<EOD
