@@ -7,10 +7,20 @@ use_helper('PageElements');
 
 <?php
 $s = <<<EOD
+<h3>Added Support for New Maps</h3>
+<p>I have added Log Viewer support for cp_steel, pl_badwater, and cp_dustbowl.</p>
+EOD;
+echo outputInfoBox("entry4", "Updates for March 15, 2010", $s);
+?>
+
+<br/>
+
+<?php
+$s = <<<EOD
 <h3>Added Support for Cinq's Damage Plugin</h3>
 <p>Cinq has made a <a href="http://www.gotfrag.com/tf2/forums/thread/438788/">damage plugin</a>. There will be some revisions of this, but TF2Logs.com will maintain support for this feature.</p>
 EOD;
-echo outputInfoBox("entry1", "Updates for March 13, 2010", $s);
+echo outputInfoBox("entry3", "Updates for March 13, 2010", $s);
 ?>
 
 <br/>
@@ -20,7 +30,7 @@ $s = <<<EOD
 <h3>Mirroring on Certain Maps</h3>
 <p>Some map images, like pl_goldrush, cp_gravelpit, and pl_upward were mirrored making them hard to read. This is now fixed. (Hit refresh in your browser if you do not see a change.)</p>
 EOD;
-echo outputInfoBox("entry1", "Updates for March 10, 2010", $s);
+echo outputInfoBox("entry2", "Updates for March 10, 2010", $s);
 ?>
 
 <br/>
