@@ -11,6 +11,7 @@ class logActions extends sfActions {
   protected static $SEED_MAPS = array(
     "cp_badlands" => "cp_badlands"
     ,"cp_coldfront" => "cp_coldfront"
+    ,"cp_dustbowl" => "cp_dustbowl"
     ,"cp_fastlane" => "cp_fastlane"
     ,"cp_freight_final1" => "cp_freight_final1"
     ,"cp_5gorge" => "cp_5gorge"

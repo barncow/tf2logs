@@ -206,6 +206,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals("#Gravelpit_cap_A", $this->parsingUtils->getCapturePointName($logLineDetails), "got cpname from point captured line");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_team_triggered_pointcaptured_steel.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("Cap A, The front door dock", $this->parsingUtils->getCapturePointName($logLineDetails), "got cpname from point captured line on steel");
   }
   
   public function testGetHealing() {

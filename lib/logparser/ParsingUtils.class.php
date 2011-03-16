@@ -283,7 +283,7 @@ class ParsingUtils {
   */
   public function getCapturePointName($logLineDetails) {
     $matches;
-    preg_match("/\(cpname \"([\w #]+?)\"\)/", $logLineDetails, $matches);
+    preg_match("/\(cpname \"(.+?)\"\)/", $logLineDetails, $matches);
     if(count($matches) > 0) {
       return $matches[1];
     } else {
