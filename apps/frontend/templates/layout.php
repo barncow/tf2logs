@@ -66,7 +66,7 @@
       <div id="pushFooter"></div>
     </div>
     <div id="footer">
-      <div id="copyright"><a href="http://steampowered.com">Powered by Steam</a><br/>&copy; 2011 TF2Logs.com. Valve, the Valve logo, Steam, the Steam logo, Team Fortress, and the Team Fortress logo are trademarks and/or registered trademarks of Valve Corporation.</div>
+      <div id="copyright"><a href="http://steampowered.com">Powered by Steam</a><br/>&copy; 2011 TF2Logs.com. Valve, the Valve logo, Steam, the Steam logo, Team Fortress, and the Team Fortress logo are trademarks and/or registered trademarks of Valve Corporation. Site maintained by <?php echo link_to('Barncow', 'player/showNumericSteamId?id=76561197993228277') ?>.</div>
     </div>
   </body>
   
