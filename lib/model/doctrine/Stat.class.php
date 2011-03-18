@@ -45,12 +45,12 @@ class Stat extends BaseStat {
       } else {
         $p = new Player();
         $p->setSteamid($playerInfo->getSteamid());
+        $p->setName($playerInfo->getName());
         $p->save();
         $this->Player = $p;
       }
     }
     $this->setName($playerInfo->getName());
-    $this->Player->setName($playerInfo->getName());
     $this->setTeam($playerInfo->getTeam());
   }
   
