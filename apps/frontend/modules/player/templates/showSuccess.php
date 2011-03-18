@@ -189,7 +189,7 @@ EOD;
 echo '<div class="statTableContainer">';
 echo '<a name="playerLogPlayed"/>';
 echo outputInfoBox("playerLogPlayed", 'Logs Played - '.$player->num_matches, $s, true);
-echo '</div></div><br class="hardSeparator"/>';
+echo '</div>';
 
 } /* user has num_matches > 0 */
 
@@ -231,4 +231,5 @@ EOD;
   echo outputInfoBox("playerLogSubmitted", 'Logs Submitted - '.$numSubmittedLogs, $s, true);
   echo '</div><br class="hardSeparator"/>';
   } //end if player submitted logs
+  echo '</div>'; //container div for all boxes
 ?>
