@@ -182,9 +182,11 @@ class logActions extends sfActions {
           $logid = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
         } catch(CorruptLogLineException $clle) {
           $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
+          unlink($uploadDir . "/" . $upload_filename);
           return "error";
         } catch(NoDataInLogFileException $ndilfe) {
           $this->getUser()->setFlash('error', 'The log file that you submitted does not appear to have any content, and was not processed.');
+          unlink($uploadDir . "/" . $upload_filename);
           return "error";
         } catch(Exception $e) {
           rename($uploadDir . "/" . $upload_filename, sfConfig::get('app_errorlogs'). "/" . $upload_filename);
