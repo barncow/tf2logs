@@ -20,6 +20,13 @@ use_stylesheet('jquery.qtip.min.20110205.css');
 use_javascript('logshow.js');
 ?>
 
+<?php if($sf_user->isAuthenticated() && ($sf_user->getAttribute(sfConfig::get('app_playerid_session_var')) == $log['submitter_player_id'] || $sf_user->hasCredential('owner'))): ?>
+<div class="center">
+<?php echo link_to('Edit this Log File', '@log_edit?id='.$log['id']) ?>
+</div>
+<br class="hardSeparator"/>
+<?php endif ?>
+
 <div id="score" class="infoBox">
   <div class="ui-widget ui-widget-header ui-corner-top header"><?php echo $log['name'] ?></div>
   <div class="content">
@@ -41,45 +48,5 @@ use_javascript('logshow.js');
 </div>
 <br class="hardSeparator"/>
 
-<?php
+<?php include_component('log', 'showLog', array('log' => $log)) ?>
 
-$s = '<div id="mapViewerContainer">';
-if($log['map_name']) {
-  if(mapExists($log['map_name'])) {
-    $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This log file has data that can be viewed on the map. However, you will need a modern browser, such as Google Chrome or Mozilla Firefox to view it.</div>';
-  } else {
-    $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>The map '.$log['map_name'].' is not currently supported.</div>';
-  }
-} else {
-  $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>'.$log['Submitter']['name'].' did not specify a map for this log file.</div>';
-}
- $s .= '</div>';
-echo outputInfoBox("logViewerInfoBox", "Log Viewer", $s);
-echo '<br class="hardSeparator"/>';
-
-$miniStats = array();
-echo outputStatPanel($log['Stats'], $miniStats);
-
-echo outputMedicStats($log['Stats']);
-
-echo outputWeaponStats($weapons, $miniStats, $weaponStats);
-
-echo '<span class="statDescription">Rows indicate kills; columns indicate deaths</span><br class="hardSeparator"/>';
-echo outputPlayerStats($miniStats, $playerStats);
-
-if(mapExists($log['map_name'])) { ?>
-<script type="application/x-javascript">
-  var gameMapObj;
-  var mapViewerObj;
-  <?php echo outputPlayerCollection($log['Stats']); ?>
-  <?php echo outputWeaponCollection($weapons); ?>
-
-/////////////////////////////////////////////////////////////////////////////////////
-// Doc ready
-/////////////////////////////////////////////////////////////////////////////////////
-$(function (){  
-	  mvc = $("#mapViewerControls");
-	  mapViewerObj = new MapViewer(gameMapObj, playerCollection, logEventCollection, weaponCollection, $("#mapViewerContainer"));
-});
-</script>
-<?php } ?>
