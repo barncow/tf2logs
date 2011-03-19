@@ -224,6 +224,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_healed.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(72, $this->parsingUtils->getHealing($logLineDetails), "med had 72 healing from Cinq and AnnuitCoeptis' supplemental stats plugin");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_healed_v2.log"); //changed so that healing is not "naked"
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(72, $this->parsingUtils->getHealing($logLineDetails), "med had 72 healing from Cinq and AnnuitCoeptis' supplemental stats plugin v2");
   }
   
   public function testGetDamage() {
@@ -234,6 +238,11 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     
     //cinq's damage v1
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_cinq_damage_v1.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(11, $this->parsingUtils->getDamage($logLineDetails), "player did 11 damage");
+    
+    //cinq's damage v2 - changed so that damage is not "naked"
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_cinq_damage_v2.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(11, $this->parsingUtils->getDamage($logLineDetails), "player did 11 damage");
   }
