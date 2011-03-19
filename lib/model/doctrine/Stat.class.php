@@ -14,6 +14,7 @@ class Stat extends BaseStat {
   protected $_WeaponStats;
   protected $_PlayerStats;
   protected $_PlayerHealStats;
+  protected $_ItemPickupStats;
   protected $_RoleStats;
   
   public function getWeaponStatsArray() {
@@ -28,6 +29,10 @@ class Stat extends BaseStat {
     return $this->_PlayerHealStats;
   }
   
+  public function getItemPickupStatsArray() {
+    return $this->_ItemPickupStats;
+  }
+  
   public function getRoleStatsArray() {
     return $this->_RoleStats;
   }
@@ -37,6 +42,7 @@ class Stat extends BaseStat {
     $this->_WeaponStats = array();
     $this->_PlayerStats = array();
     $this->_PlayerHealStats = array();
+    $this->_ItemPickupStats = array();
     $this->_RoleStats = array();
   }
   
@@ -175,6 +181,20 @@ class Stat extends BaseStat {
     }
     if($addps) {
       $this->_PlayerHealStats[] = PlayerHealStat::createPlayerHealStat($otherPlayer->getId(), $increment);
+    }
+  }
+  
+  public function addItemPickupStat($itemKeyName, $increment = 1) {
+    $addips = true;
+    foreach($this->_ItemPickupStats as &$ips) {
+      if($ips['item_key_name'] == $itemKeyName) {
+        $ips['times_picked_up'] = $ips['times_picked_up']+$increment;
+        $addips = false;
+        break;
+      }
+    }
+    if($addips) {
+      $this->_ItemPickupStats[] = ItemPickupStat::createItemPickupStat($itemKeyName, $increment);
     }
   }
   

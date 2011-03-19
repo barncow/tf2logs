@@ -38,6 +38,7 @@
  * @property Doctrine_Collection $RoleStats
  * @property Doctrine_Collection $PlayerStats
  * @property Doctrine_Collection $PlayerHealStats
+ * @property Doctrine_Collection $ItemPickupStats
  * 
  * @method integer             getId()                      Returns the current record's "id" value
  * @method integer             getLogId()                   Returns the current record's "log_id" value
@@ -72,6 +73,7 @@
  * @method Doctrine_Collection getRoleStats()               Returns the current record's "RoleStats" collection
  * @method Doctrine_Collection getPlayerStats()             Returns the current record's "PlayerStats" collection
  * @method Doctrine_Collection getPlayerHealStats()         Returns the current record's "PlayerHealStats" collection
+ * @method Doctrine_Collection getItemPickupStats()         Returns the current record's "ItemPickupStats" collection
  * @method Stat                setId()                      Sets the current record's "id" value
  * @method Stat                setLogId()                   Sets the current record's "log_id" value
  * @method Stat                setName()                    Sets the current record's "name" value
@@ -105,6 +107,7 @@
  * @method Stat                setRoleStats()               Sets the current record's "RoleStats" collection
  * @method Stat                setPlayerStats()             Sets the current record's "PlayerStats" collection
  * @method Stat                setPlayerHealStats()         Sets the current record's "PlayerHealStats" collection
+ * @method Stat                setItemPickupStats()         Sets the current record's "ItemPickupStats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -302,6 +305,10 @@ abstract class BaseStat extends sfDoctrineRecord
              'foreign' => 'stat_id'));
 
         $this->hasMany('PlayerHealStat as PlayerHealStats', array(
+             'local' => 'id',
+             'foreign' => 'stat_id'));
+
+        $this->hasMany('ItemPickupStat as ItemPickupStats', array(
              'local' => 'id',
              'foreign' => 'stat_id'));
     }

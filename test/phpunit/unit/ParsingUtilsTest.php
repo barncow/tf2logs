@@ -82,6 +82,9 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals('connected, address', $this->parsingUtils->getPlayerLineAction($logLineDetails));
     
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_picked_item.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals('picked up item', $this->parsingUtils->getPlayerLineAction($logLineDetails));
   }
   
   public function testGetPlayerLineActionDetail() {
@@ -279,5 +282,11 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_attach_sapper.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals("OBJ_ATTACHMENT_SAPPER", $this->parsingUtils->getObjectFromBuiltObject($logLineDetails), "can grab object from built_object event");
+  }
+  
+  public function testGetPickedUpItemKeyName() {
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_picked_item.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals("medkit_small", $this->parsingUtils->getPickedUpItemKeyName($logLineDetails), "can get the picked up item");
   }
 }

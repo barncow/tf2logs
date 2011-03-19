@@ -352,6 +352,30 @@ PlayerHealStat:
       onDelete: CASCADE
       foreignAlias: PlayerHealStats
       
+ItemPickupStat:
+  columns:
+    id:
+      type: integer
+      primary: true
+      autoincrement: true
+      notnull: true
+    stat_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    item_key_name:
+      type: string(20)
+      notnull: true
+    times_picked_up:
+      type: integer(2)
+      notnull: true
+      default: 0
+  relations:
+    Stat:
+      onDelete: CASCADE
+      foreignAlias: ItemPickupStats
+      
 Event:
   columns:
     log_id:

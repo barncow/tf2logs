@@ -386,5 +386,18 @@ class ParsingUtils {
       return false;
     }
   }
+  
+  /**
+  * Retrieves item from picked up item line
+  */
+  public function getPickedUpItemKeyName($logLineDetails) {
+    $matches;
+    preg_match('/ picked up item "(.+?)"$/', $logLineDetails, $matches);
+    if(count($matches) > 0) {
+      return $matches[1];
+    } else {
+      return false;
+    }
+  }
 }
 ?>

@@ -537,6 +537,11 @@ class LogParser {
 	        $this->log->addPlayerStatToSteamid($p->getSteamid(), $p->getSteamid(), "deaths");
 	        if($weapon->getRole() != null) $this->log->addRoleToSteamid($p->getSteamid(), $weapon->getRole(), $dt, $this->log->get_timeStart());
 	        return self::GAME_CONTINUE;
+	      } else if ($playerLineAction == "picked up item") {
+	        $p = $players[0];
+	        $itemKeyName = $this->parsingUtils->getPickedUpItemKeyName($logLineDetails);
+	        $this->log->addItemPickupStatToSteamid($p->getSteamid(), $itemKeyName);
+	        return self::GAME_CONTINUE;
 	      } else if($playerLineAction == "triggered") {	      
 	        $playerLineActionDetail = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
 	        

@@ -133,7 +133,9 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertTrue(count($phstats) > 0);
         foreach($phstats as $ps) {
           if($ps['Player']['steamid'] == "STEAM_0:0:8581157") {
-            $this->assertEquals(99, $ps['healing'], "barncow has healing for cres");
+            $this->assertEquals(72, $ps['healing'], "barncow has healing for cres");
+          } else if($ps['Player']['steamid'] == "STEAM_0:0:6845279") {
+            $this->assertEquals(27, $ps['healing'], "barncow has healing for target");
           }
         }
         
@@ -150,6 +152,16 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat['assists'], "cres' assists, excluding DR");
         $this->assertEquals(33, $stat['damage'], "cres' damage");
+        
+        $ipstats = Doctrine::getTable('ItemPickupStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($ipstats) > 0);
+        foreach($ipstats as $ips) {
+          if($ips['item_key_name'] == "medkit_small") {
+            $this->assertEquals(2, $ips['times_picked_up'], "cres picked up 2 small hps");
+          } else if($ips['item_key_name'] == "medkit_medium") {
+            $this->assertEquals(1, $ips['times_picked_up'], "cres picked up 1 medium hps");
+          }
+        }
       } else if($stat['Player']['steamid'] == "STEAM_0:1:9852193") {
         //verify numbers for "Ctrl+f Muffin!"
         $this->assertEquals(2, $stat['deaths'], "Ctrl+f Muffin!'s deaths");

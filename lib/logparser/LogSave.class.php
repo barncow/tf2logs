@@ -35,6 +35,7 @@ class LogSave {
       $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(), $statid);
       $this->saveStatsTable('PlayerStat', $stat->getPlayerStatsArray(), $statid);
       $this->saveStatsTable('PlayerHealStat', $stat->getPlayerHealStatsArray(), $statid);
+      $this->saveStatsTable('ItemPickupStat', $stat->getItemPickupStatsArray(), $statid);
       $this->saveStatsTable('RoleStat', $stat->getRoleStatsArray(), $statid);
     }
   }
@@ -43,6 +44,7 @@ class LogSave {
     This is a convenience function to save the Stat Table's children, such as WeaponStats
   */
   protected function saveStatsTable($tableName, $statsTableArray, $statId) {
+    if(!$statsTableArray || count($statsTableArray) == 0) return; //nothing to do
     $table = Doctrine::getTable($tableName);
     foreach($statsTableArray as $obj) {
       $obj['stat_id'] = $statId;
