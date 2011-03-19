@@ -133,7 +133,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertTrue(count($phstats) > 0);
         foreach($phstats as $ps) {
           if($ps['Player']['steamid'] == "STEAM_0:0:8581157") {
-            $this->assertEquals(72, $ps['healing'], "barncow has healing 72 for cres");
+            $this->assertEquals(99, $ps['healing'], "barncow has healing for cres");
           }
         }
         
@@ -149,7 +149,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       } else if($stat['Player']['steamid'] == "STEAM_0:0:8581157") {
         //verify numbers for "Cres"
         $this->assertEquals(1, $stat['assists'], "cres' assists, excluding DR");
-        $this->assertEquals(11, $stat['damage'], "cres' damage");
+        $this->assertEquals(33, $stat['damage'], "cres' damage");
       } else if($stat['Player']['steamid'] == "STEAM_0:1:9852193") {
         //verify numbers for "Ctrl+f Muffin!"
         $this->assertEquals(2, $stat['deaths'], "Ctrl+f Muffin!'s deaths");

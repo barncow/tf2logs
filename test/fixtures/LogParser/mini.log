@@ -20,6 +20,7 @@ L 09/29/2010 - 19:08:56: Loading map "ctf_2fort"
 L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "damage" 11
+L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "damage" (damage "22")
 L 09/29/2010 - 19:08:58: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "tf_projectile_rocket" (attacker_position "-3718 1821 -540")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" killed "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" with "scattergun" (attacker_position "-2419 1637 -511") (victim_position "-2605 1596 -546")
 L 09/29/2010 - 19:12:02: "Target<46><STEAM_0:0:6845279><Blue>" triggered "domination" against "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>"
@@ -35,6 +36,7 @@ L 09/29/2010 - 19:10:14: "ǤooB<54><STEAM_0:1:23384772><Unassigned>" joined team
 L 09/29/2010 - 19:23:30: "ǤooB<54><STEAM_0:1:23384772><Spectator>" changed name to "ǤooB's name is brandon too!!"
 L 09/29/2010 - 19:24:18: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "chargedeployed"
 L 09/29/2010 - 19:24:18: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" 72 against "Cres<49><STEAM_0:0:8581157><Blue>"
+L 09/29/2010 - 19:24:18: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" against "Cres<49><STEAM_0:0:8581157><Blue>" (healing "27")
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" triggered "medic_death" against "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" (healing "160") (ubercharge "0")
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" committed suicide with "world" (attacker_position "-5072 1286 -511")
 L 09/29/2010 - 19:25:18: "[H2K]BubbleAlan ʚϊɞ<55><STEAM_0:0:556497><Red>" joined team "Spectator"
