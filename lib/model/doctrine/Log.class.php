@@ -127,6 +127,13 @@ class Log extends BaseLog
     $attackerStat->addPlayerStat($otherStat->getPlayer(), $propertyToIncrement, $increment);
   }
   
+  public function addPlayerHealStatToSteamid($healerSteamid, $otherSteamid, $increment) {
+    $healerStat = &$this->getStatFromSteamid($healerSteamid);
+    $otherStat = $this->getStatFromSteamid($otherSteamid);
+    if($healerStat === false || $otherStat === false) throw new InvalidArgumentException("steamid could not be found in addPlayerHealStatToSteamid: $healerSteamid,  $otherSteamid, $increment");
+    $healerStat->addPlayerHealStat($otherStat->getPlayer(), $increment);
+  }
+  
   public function addKillEvent($elapsedSeconds, $weaponId, $attackerSteamid, $attackerCoord, $victimSteamid, $victimCoord) {
     $attackerStat = $this->getStatFromSteamid($attackerSteamid);
     $victimStat = $this->getStatFromSteamid($victimSteamid);

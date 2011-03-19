@@ -220,6 +220,10 @@ class unit_ParsingUtilsTest extends BaseLogParserTestCase {
     $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_healed_superlogs.log");
     $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
     $this->assertEquals(510, $this->parsingUtils->getHealing($logLineDetails), "med had 510 healing from SuperLogs");
+    
+    $l = $this->logParser->getRawLogFile($this->LFIXDIR."line_player_triggered_healed.log");
+    $logLineDetails = $this->parsingUtils->getLineDetails($l[0]);
+    $this->assertEquals(72, $this->parsingUtils->getHealing($logLineDetails), "med had 72 healing from Cinq and AnnuitCoeptis' supplemental stats plugin");
   }
   
   public function testGetDamage() {

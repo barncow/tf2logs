@@ -589,8 +589,14 @@ class LogParser {
 	          $this->log->addRoleToSteamid($victim->getSteamid(), $this->getRoleFromCache("medic"), $dt, $this->log->get_timeStart());
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "healed") {
-	          $p = $players[0];
-	          $this->log->incrementStatFromSteamid($p->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
+	          $healer = $players[0];
+	          if(count($players) == 2) {
+	            //supp stats plugin will have two players for a healed line. SuperLogs only has the one player.
+	            $healee = $players[1]; //person being healed
+	            $this->log->addPlayerHealStatToSteamid($healer->getSteamid(), $healee->getSteamid(), $this->parsingUtils->getHealing($logLineDetails));
+	          } else {
+	            $this->log->incrementStatFromSteamid($healer->getSteamid(), "healing", $this->parsingUtils->getHealing($logLineDetails));
+	          }
 	          return self::GAME_CONTINUE;
 	        } else if($playerLineActionDetail == "captureblocked") {
 	          $p = $players[0];

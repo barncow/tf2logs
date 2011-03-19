@@ -38,6 +38,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'weapons_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Weapon')),
       'roles_list'              => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Role')),
       'players_list'            => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Player')),
+      'players_healed_list'     => new sfWidgetFormDoctrineChoice(array('multiple' => true, 'model' => 'Player')),
     ));
 
     $this->setValidators(array(
@@ -66,6 +67,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'weapons_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Weapon', 'required' => false)),
       'roles_list'              => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Role', 'required' => false)),
       'players_list'            => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Player', 'required' => false)),
+      'players_healed_list'     => new sfValidatorDoctrineChoice(array('multiple' => true, 'model' => 'Player', 'required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('stat_filters[%s]');
@@ -131,6 +133,24 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
     ;
   }
 
+  public function addPlayersHealedListColumnQuery(Doctrine_Query $query, $field, $values)
+  {
+    if (!is_array($values))
+    {
+      $values = array($values);
+    }
+
+    if (!count($values))
+    {
+      return;
+    }
+
+    $query
+      ->leftJoin($query->getRootAlias().'.PlayerHealStat PlayerHealStat')
+      ->andWhereIn('PlayerHealStat.player_id', $values)
+    ;
+  }
+
   public function getModelName()
   {
     return 'Stat';
@@ -165,6 +185,7 @@ abstract class BaseStatFormFilter extends BaseFormFilterDoctrine
       'weapons_list'            => 'ManyKey',
       'roles_list'              => 'ManyKey',
       'players_list'            => 'ManyKey',
+      'players_healed_list'     => 'ManyKey',
     );
   }
 }

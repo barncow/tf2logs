@@ -154,6 +154,10 @@ Stat:
       foreignAlias: Stats
       class: Player
       refClass: PlayerStat
+    PlayersHealed:
+      foreignAlias: Stats
+      class: Player
+      refClass: PlayerHealStat
   indexes:
     name_idx:
       fields: [name]
@@ -324,6 +328,29 @@ PlayerStat:
     Stat:
       onDelete: CASCADE
       foreignAlias: PlayerStats
+      
+PlayerHealStat:
+  columns:
+    player_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    stat_id:
+      type: integer
+      primary: true
+      autoincrement: false
+      notnull: true
+    healing:
+      type: integer(3)
+      notnull: true
+      default: 0
+  relations:
+    Player:
+      foreignAlias: PlayerHealStats
+    Stat:
+      onDelete: CASCADE
+      foreignAlias: PlayerHealStats
       
 Event:
   columns:

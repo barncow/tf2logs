@@ -34,6 +34,7 @@ class LogSave {
       $statid = $stat->getId();
       $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(), $statid);
       $this->saveStatsTable('PlayerStat', $stat->getPlayerStatsArray(), $statid);
+      $this->saveStatsTable('PlayerHealStat', $stat->getPlayerHealStatsArray(), $statid);
       $this->saveStatsTable('RoleStat', $stat->getRoleStatsArray(), $statid);
     }
   }

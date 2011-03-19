@@ -16,6 +16,7 @@
  * @property Doctrine_Collection $Log
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $PlayerStats
+ * @property Doctrine_Collection $PlayerHealStats
  * @property Doctrine_Collection $Event
  * @property Doctrine_Collection $EventPlayers
  * 
@@ -30,6 +31,7 @@
  * @method Doctrine_Collection getLog()             Returns the current record's "Log" collection
  * @method Doctrine_Collection getStats()           Returns the current record's "Stats" collection
  * @method Doctrine_Collection getPlayerStats()     Returns the current record's "PlayerStats" collection
+ * @method Doctrine_Collection getPlayerHealStats() Returns the current record's "PlayerHealStats" collection
  * @method Doctrine_Collection getEvent()           Returns the current record's "Event" collection
  * @method Doctrine_Collection getEventPlayers()    Returns the current record's "EventPlayers" collection
  * @method Player              setId()              Sets the current record's "id" value
@@ -43,6 +45,7 @@
  * @method Player              setLog()             Sets the current record's "Log" collection
  * @method Player              setStats()           Sets the current record's "Stats" collection
  * @method Player              setPlayerStats()     Sets the current record's "PlayerStats" collection
+ * @method Player              setPlayerHealStats() Sets the current record's "PlayerHealStats" collection
  * @method Player              setEvent()           Sets the current record's "Event" collection
  * @method Player              setEventPlayers()    Sets the current record's "EventPlayers" collection
  * 
@@ -112,6 +115,10 @@ abstract class BasePlayer extends sfDoctrineRecord
              'foreign' => 'player_id'));
 
         $this->hasMany('PlayerStat as PlayerStats', array(
+             'local' => 'id',
+             'foreign' => 'player_id'));
+
+        $this->hasMany('PlayerHealStat as PlayerHealStats', array(
              'local' => 'id',
              'foreign' => 'player_id'));
 

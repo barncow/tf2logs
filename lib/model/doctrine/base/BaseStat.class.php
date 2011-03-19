@@ -33,9 +33,11 @@
  * @property Doctrine_Collection $Roles
  * @property Player $Player
  * @property Doctrine_Collection $Players
+ * @property Doctrine_Collection $PlayersHealed
  * @property Doctrine_Collection $WeaponStats
  * @property Doctrine_Collection $RoleStats
  * @property Doctrine_Collection $PlayerStats
+ * @property Doctrine_Collection $PlayerHealStats
  * 
  * @method integer             getId()                      Returns the current record's "id" value
  * @method integer             getLogId()                   Returns the current record's "log_id" value
@@ -65,9 +67,11 @@
  * @method Doctrine_Collection getRoles()                   Returns the current record's "Roles" collection
  * @method Player              getPlayer()                  Returns the current record's "Player" value
  * @method Doctrine_Collection getPlayers()                 Returns the current record's "Players" collection
+ * @method Doctrine_Collection getPlayersHealed()           Returns the current record's "PlayersHealed" collection
  * @method Doctrine_Collection getWeaponStats()             Returns the current record's "WeaponStats" collection
  * @method Doctrine_Collection getRoleStats()               Returns the current record's "RoleStats" collection
  * @method Doctrine_Collection getPlayerStats()             Returns the current record's "PlayerStats" collection
+ * @method Doctrine_Collection getPlayerHealStats()         Returns the current record's "PlayerHealStats" collection
  * @method Stat                setId()                      Sets the current record's "id" value
  * @method Stat                setLogId()                   Sets the current record's "log_id" value
  * @method Stat                setName()                    Sets the current record's "name" value
@@ -96,9 +100,11 @@
  * @method Stat                setRoles()                   Sets the current record's "Roles" collection
  * @method Stat                setPlayer()                  Sets the current record's "Player" value
  * @method Stat                setPlayers()                 Sets the current record's "Players" collection
+ * @method Stat                setPlayersHealed()           Sets the current record's "PlayersHealed" collection
  * @method Stat                setWeaponStats()             Sets the current record's "WeaponStats" collection
  * @method Stat                setRoleStats()               Sets the current record's "RoleStats" collection
  * @method Stat                setPlayerStats()             Sets the current record's "PlayerStats" collection
+ * @method Stat                setPlayerHealStats()         Sets the current record's "PlayerHealStats" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -278,6 +284,11 @@ abstract class BaseStat extends sfDoctrineRecord
              'local' => 'stat_id',
              'foreign' => 'player_id'));
 
+        $this->hasMany('Player as PlayersHealed', array(
+             'refClass' => 'PlayerHealStat',
+             'local' => 'stat_id',
+             'foreign' => 'player_id'));
+
         $this->hasMany('WeaponStat as WeaponStats', array(
              'local' => 'id',
              'foreign' => 'stat_id'));
@@ -287,6 +298,10 @@ abstract class BaseStat extends sfDoctrineRecord
              'foreign' => 'stat_id'));
 
         $this->hasMany('PlayerStat as PlayerStats', array(
+             'local' => 'id',
+             'foreign' => 'stat_id'));
+
+        $this->hasMany('PlayerHealStat as PlayerHealStats', array(
              'local' => 'id',
              'foreign' => 'stat_id'));
     }

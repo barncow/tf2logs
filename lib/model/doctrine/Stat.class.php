@@ -13,6 +13,7 @@ class Stat extends BaseStat {
   protected $currentLongestKillStreak = 0;
   protected $_WeaponStats;
   protected $_PlayerStats;
+  protected $_PlayerHealStats;
   protected $_RoleStats;
   
   public function getWeaponStatsArray() {
@@ -23,6 +24,10 @@ class Stat extends BaseStat {
     return $this->_PlayerStats;
   }
   
+  public function getPlayerHealStatsArray() {
+    return $this->_PlayerHealStats;
+  }
+  
   public function getRoleStatsArray() {
     return $this->_RoleStats;
   }
@@ -31,6 +36,7 @@ class Stat extends BaseStat {
   public function construct() {
     $this->_WeaponStats = array();
     $this->_PlayerStats = array();
+    $this->_PlayerHealStats = array();
     $this->_RoleStats = array();
   }
   
@@ -155,6 +161,20 @@ class Stat extends BaseStat {
     }
     if($addps) {
       $this->_PlayerStats[] = PlayerStat::createPlayerStat($otherPlayer->getId(), $propertyToIncrement, $increment);
+    }
+  }
+  
+  public function addPlayerHealStat($otherPlayer, $increment) {
+    $addps = true;
+    foreach($this->_PlayerHealStats as &$ps) {
+      if($ps['player_id'] == $otherPlayer->getId()) {
+        $ps['healing'] = $ps['healing']+$increment;
+        $addps = false;
+        break;
+      }
+    }
+    if($addps) {
+      $this->_PlayerHealStats[] = PlayerHealStat::createPlayerHealStat($otherPlayer->getId(), $increment);
     }
   }
   

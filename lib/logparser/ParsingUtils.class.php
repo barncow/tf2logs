@@ -300,12 +300,18 @@ class ParsingUtils {
     if(count($matches) > 0) {
       return (int) $matches[1];
     }
-    //still here, did not get the healing value. Try the superlogs version.
-    preg_match("/\(heal \"(\d+?)\"\)/", $logLineDetails, $matches);
+    //still here, did not get the healing value. Try the supplemental stats version.
+    preg_match('/triggered "healed" (\d+?) against/', $logLineDetails, $matches);
     if(count($matches) > 0) {
       return (int) $matches[1];
     } else {
-      return false;
+      //still here, did not get the healing value. Try the superlogs version.
+      preg_match("/\(heal \"(\d+?)\"\)/", $logLineDetails, $matches);
+      if(count($matches) > 0) {
+        return (int) $matches[1];
+      } else {
+        return false;
+      }
     }
   }
   

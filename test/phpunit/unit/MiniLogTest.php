@@ -129,6 +129,14 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
           }
         }
         
+        $phstats = Doctrine::getTable('PlayerHealStat')->findArrayByStatId($stat['id']);
+        $this->assertTrue(count($phstats) > 0);
+        foreach($phstats as $ps) {
+          if($ps['Player']['steamid'] == "STEAM_0:0:8581157") {
+            $this->assertEquals(72, $ps['healing'], "barncow has healing 72 for cres");
+          }
+        }
+        
         $rstats = Doctrine::getTable('RoleStat')->findArrayByStatId($stat['id']);
         $this->assertTrue(count($rstats) > 0);
         foreach($rstats as $r) {

@@ -3,6 +3,7 @@ CREATE TABLE event_player (id BIGINT AUTO_INCREMENT, event_id BIGINT NOT NULL, e
 CREATE TABLE log (id BIGINT AUTO_INCREMENT, name VARCHAR(100) NOT NULL, redscore SMALLINT DEFAULT 0 NOT NULL, bluescore SMALLINT DEFAULT 0 NOT NULL, elapsed_time BIGINT DEFAULT 0 NOT NULL, map_name VARCHAR(25), submitter_player_id BIGINT, error_log_name VARCHAR(50), error_exception TEXT, views INT DEFAULT 0 NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX submitter_player_id_idx (submitter_player_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE log_file (log_id BIGINT, log_data MEDIUMTEXT NOT NULL, PRIMARY KEY(log_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE player (id BIGINT AUTO_INCREMENT, numeric_steamid BIGINT UNIQUE NOT NULL, steamid VARCHAR(30) NOT NULL UNIQUE, credential VARCHAR(10) DEFAULT 'user' NOT NULL, name VARCHAR(100), last_login DATETIME, views INT DEFAULT 0, avatar_url VARCHAR(75), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
+CREATE TABLE player_heal_stat (player_id BIGINT, stat_id BIGINT, healing MEDIUMINT DEFAULT 0 NOT NULL, PRIMARY KEY(player_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE player_stat (player_id BIGINT, stat_id BIGINT, kills SMALLINT DEFAULT 0 NOT NULL, deaths SMALLINT DEFAULT 0 NOT NULL, PRIMARY KEY(player_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE role (id BIGINT AUTO_INCREMENT, key_name VARCHAR(12) NOT NULL, name VARCHAR(20), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
 CREATE TABLE role_stat (role_id BIGINT, stat_id BIGINT, time_played BIGINT DEFAULT 0 NOT NULL, PRIMARY KEY(role_id, stat_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE = INNODB;
@@ -19,6 +20,8 @@ ALTER TABLE event ADD CONSTRAINT event_assist_player_id_player_id FOREIGN KEY (a
 ALTER TABLE event_player ADD CONSTRAINT event_player_player_id_player_id FOREIGN KEY (player_id) REFERENCES player(id) ON DELETE CASCADE;
 ALTER TABLE event_player ADD CONSTRAINT event_player_event_id_event_id FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE;
 ALTER TABLE log ADD CONSTRAINT log_submitter_player_id_player_id FOREIGN KEY (submitter_player_id) REFERENCES player(id);
+ALTER TABLE player_heal_stat ADD CONSTRAINT player_heal_stat_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
+ALTER TABLE player_heal_stat ADD CONSTRAINT player_heal_stat_player_id_player_id FOREIGN KEY (player_id) REFERENCES player(id);
 ALTER TABLE player_stat ADD CONSTRAINT player_stat_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
 ALTER TABLE player_stat ADD CONSTRAINT player_stat_player_id_player_id FOREIGN KEY (player_id) REFERENCES player(id);
 ALTER TABLE role_stat ADD CONSTRAINT role_stat_stat_id_stat_id FOREIGN KEY (stat_id) REFERENCES stat(id) ON DELETE CASCADE;
