@@ -472,8 +472,21 @@ function outputItemPickupStats($miniStats, $itemPickupStats) {
     //only want distinct columns
     if(!in_array($ips['item_key_name'], $headerColKeys)) {
       $headerColKeys[] = $ips['item_key_name'];
+      $data = $ips['item_key_name'];
+      $title = "";
       
-      $thead .= '<th title="" class="ui-state-default txtnowrap">'.$ips['item_key_name'].'</th>';
+      if($ips['item_key_name'] == 'medkit_small') {
+        $title = "Small Medkit";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_small.png" alt="'.$title.'"/>';
+      } else if($ips['item_key_name'] == 'medkit_medium') {
+        $title = "Medium Medkit";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_medium.png" alt="'.$title.'"/>';
+      } else if($ips['item_key_name'] == 'medkit_large') {
+        $title = "Large Medkit";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_large.png" alt="'.$title.'"/>';
+      }
+      
+      $thead .= '<th title="'.$title.'" class="ui-state-default txtnowrap">'.$data.'</th>';
     }
   }
   $thead .= "</tr>";
