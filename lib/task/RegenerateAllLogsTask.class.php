@@ -8,7 +8,8 @@ class RegenerateAllLogsTask extends sfBaseTask {
     $this->addOptions(array(
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('start', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to Start with', 1),
-      new sfCommandOption('end', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to End with', 'max')
+      new sfCommandOption('end', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to End with', 'max'),
+      new sfCommandOption('gc', null, sfCommandOption::PARAMETER_OPTIONAL, 'Number of logs to do garbage collection', 10)
     ));
  
     $this->namespace = 'tf2logs';
@@ -76,7 +77,7 @@ EOF;
           $this->logSection('regenerate', sprintf('Regenerated Log ID: %d of %d', $logid, $maxid));
         }
         
-        if($i % 5 == 0) {
+        if($i % $options['gc'] == 0) {
           //every 10 logs we want to invoke garbage collection.
           $this->logSection('gc', 'Running garbage collection');
           gc_collect_cycles();
