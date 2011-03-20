@@ -6,7 +6,9 @@ $ php symfony tf2logs:regenerate-all --env=prod
 class RegenerateAllLogsTask extends sfBaseTask {
   protected function configure() {
     $this->addOptions(array(
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod')
+      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
+      new sfCommandOption('start', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to Start with', 1),
+      new sfCommandOption('end', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to End with', 'max')
     ));
  
     $this->namespace = 'tf2logs';
@@ -16,7 +18,7 @@ class RegenerateAllLogsTask extends sfBaseTask {
     $this->detailedDescription = <<<EOF
 The [tf2logs:regenerate-all|INFO] task regenerates all logs from the LogFile table:
  
-  [./symfony tf2logs:regenerate-all --env=prod|INFO]
+  [./symfony tf2logs:regenerate-all --env=prod --start=1 --end=max|INFO]
   
   BE SURE THAT YOU HAVE PERFORMED A MANUAL BACKUP BEFORE RUNNING THIS TASK!!!
 EOF;
@@ -31,10 +33,17 @@ EOF;
       $this->logBlock('NOTICE - THIS EATS UP CPU DURING ITS PROCESSING - MAY WANT TO ONLY DO THIS ON OFF-HOURS', 'INFO_LARGE');
       
       $logTable = Doctrine_Core::getTable('Log');
-      $i = 1;
+      $i = $options['start'];
       $count = 0;
-      $maxid = $logTable->getMaxLogId();
-      $this->logBlock(sprintf('Regenerating %d logs', $maxid), 'INFO_LARGE');
+      
+      $end = $options['end'];
+      if($end == 'max') {
+        $maxid = $logTable->getMaxLogId();
+      } else {
+        $maxid = $end;
+      }
+      
+      $this->logBlock(sprintf('Regenerating %d logs', $maxid-$i+1), 'INFO_LARGE');
       
       gc_enable();
       
@@ -57,7 +66,11 @@ EOF;
           //return; //go no further
         }
         
-        $maxid = $logTable->getMaxLogId();
+        if($end == 'max') {
+          $maxid = $logTable->getMaxLogId();
+        } else {
+          $maxid = $end;
+        }
         
         if($regenSuccess) {
           $this->logSection('regenerate', sprintf('Regenerated Log ID: %d of %d', $logid, $maxid));
