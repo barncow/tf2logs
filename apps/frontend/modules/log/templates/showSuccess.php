@@ -17,7 +17,7 @@ use_dynamic_javascript(url_for('@events_by_id?id='.$log['id']));
 
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
-use_javascript('logshow.js');
+use_javascript('logshow.min.js');
 ?>
 
 <?php if($sf_user->isAuthenticated() && ($sf_user->getAttribute(sfConfig::get('app_playerid_session_var')) == $log['submitter_player_id'] || $sf_user->hasCredential('owner'))): ?>

@@ -59,6 +59,22 @@ $(function() {
     ]
 	});
 	
+	$('#playerHealStats').dataTable({
+		"bJQueryUI": true,
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": false,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"bSortClasses": false,
+		"aoColumnDefs": [
+		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
+      { "bSearchable": true, "aTargets": [ 0 ] },
+      { "sType": "num-html", "aTargets": [ "_all" ] },
+      { "bSearchable": false, "aTargets": [ "_all" ] }
+    ]
+	});
+	
 	/*var wsdt = $('#weaponStats').dataTable({
 		"bJQueryUI": true,
 		"bPaginate": false,

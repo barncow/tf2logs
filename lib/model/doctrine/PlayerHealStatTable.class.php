@@ -19,13 +19,12 @@ class PlayerHealStatTable extends Doctrine_Table
     
     public function getPlayerHealStatsForLogId($logid) {
       return Doctrine_Query::create()
-        ->select('phs.stat_id, phs.player_id, sum(phs.healing) as healing')
+        ->select('phs.stat_id, phs.player_id, phs.healing, p.avatar_url, s.name, s.team')
         ->from('PlayerHealStat phs')
         ->innerJoin('phs.Stat s')
         ->innerJoin('s.Log l')
-        ->innerJoin('phs.Player p')
+        ->innerJoin('s.Player p')
         ->where('l.id = ?', $logid)
-        ->groupBy('s.name, p.id')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }

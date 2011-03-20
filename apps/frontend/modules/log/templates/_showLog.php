@@ -21,6 +21,8 @@ echo outputStatPanel($log['Stats'], $miniStats);
 
 echo outputMedicStats($log['Stats']);
 
+echo outputPlayerHealStats($miniStats, $playerHealStats);
+
 echo outputWeaponStats($weapons, $miniStats, $weaponStats);
 
 echo '<span class="statDescription">Rows indicate kills; columns indicate deaths</span><br class="hardSeparator"/>';
