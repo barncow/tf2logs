@@ -4,14 +4,14 @@ use_helper('Search');
 
 function outputInfoBox($id, $title, $content, $styleLikeStatTables = false) {
   $titleHTML = $title;
-  $header = ' header';
+  $header = ' header ui-widget';
   if($styleLikeStatTables) {
     $titleHTML = '<div class="statTableCaption">'.$title.'</div>';
     $header = '';
   }
  return <<<EOD
 <div id="$id" class="infoBox">
-  <div class="ui-widget ui-toolbar ui-widget-header ui-corner-top$header">$titleHTML</div>
+  <div class="ui-toolbar ui-widget-header ui-corner-top$header">$titleHTML</div>
   <div class="content">
     $content
   </div>

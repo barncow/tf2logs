@@ -7,5 +7,6 @@ class logComponents extends sfComponents {
     $this->weaponStats = Doctrine::getTable('WeaponStat')->getWeaponStatsForLogId($id);  
     $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($id);
     $this->playerHealStats = Doctrine::getTable('PlayerHealStat')->getPlayerHealStatsForLogId($id);
+    $this->itemPickupStats = Doctrine::getTable('ItemPickupStat')->getItemPickupStatsForLogId($id);
   }
 }

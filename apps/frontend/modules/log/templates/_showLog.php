@@ -19,14 +19,29 @@ echo '<br class="hardSeparator"/>';
 $miniStats = array();
 echo outputStatPanel($log['Stats'], $miniStats);
 
-echo outputMedicStats($log['Stats']);
+if(!$playerHealStats || count($playerHealStats) == 0) {
+  echo '<div class="statTableContainer">';
+  echo outputInfoBox("_playerHealStats", "Heal Spread", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin.</div>', true);
+  echo '</div>';
+} else {
+  echo outputPlayerHealStats($miniStats, $playerHealStats);
+}
 
-echo outputPlayerHealStats($miniStats, $playerHealStats);
+echo outputMedicStats($log['Stats']);
 
 echo outputWeaponStats($weapons, $miniStats, $weaponStats);
 
 echo '<span class="statDescription">Rows indicate kills; columns indicate deaths</span><br class="hardSeparator"/>';
 echo outputPlayerStats($miniStats, $playerStats);
+
+if(!$itemPickupStats || count($itemPickupStats) == 0) {
+  echo '<div class="statTableContainer">';
+  echo outputInfoBox("_itemPickupStats", "Items Picked Up", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin.</div>', true);
+  echo '</div>';
+} else {
+  echo outputItemPickupStats($miniStats, $itemPickupStats);
+}
+echo '<br class="hardSeparator"/>';
 
 if(mapExists($log['map_name'])) { ?>
 <script type="application/x-javascript">

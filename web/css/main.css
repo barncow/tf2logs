@@ -327,6 +327,10 @@ img {
   text-align: center;
 }
 
+#_playerHealStats .content, #_itemPickupStats .content {
+  padding: 2px;
+}
+
 #searchForm {
   width: 300px;
   margin-left: auto;

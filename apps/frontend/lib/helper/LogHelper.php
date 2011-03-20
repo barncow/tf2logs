@@ -380,55 +380,108 @@ return $s;
 
 function outputPlayerHealStats($miniStats, $playerHealStats) {
   $avbase = sfConfig::get('app_avatar_base_url');
-  $tbody = "This is only available with the Supplemental Stats Sourcemod Plugin.";
-  $thead = "<th>Unavailable</th>";
-  $htmlid = "_playerHealStats"; //hack - corrupting ID in case of error so JS doesn't convert this table
+  $htmlid = "playerHealStats";
   
-  if($playerHealStats && count($playerHealStats) > 0) {
-    $htmlid = "playerHealStats";
-    //make the header
-    $thead = "<tr><th><!--player name--></th>";
-    $headerColIds = array();
-    for($x = 0; $x < count($playerHealStats); ++$x) {
-      $phs = $playerHealStats[$x];
-      //only want distinct columns
-      if(!in_array($phs['stat_id'], $headerColIds)) {
-        $headerColIds[] = $phs['stat_id'];
-        
-        $thead .= '<th title="'.$phs['Stat']['name'].'" class="ui-state-default txtnowrap"><img src="'.$avbase.$phs['Stat']['Player']['avatar_url'].'" class="'.$phs['Stat']['team'].' avatarImage ui-corner-all"/></th>';
-      }
+  //make the header
+  $thead = "<tr><th><!--player name--></th>";
+  $headerColIds = array();
+  for($x = 0; $x < count($playerHealStats); ++$x) {
+    $phs = $playerHealStats[$x];
+    //only want distinct columns
+    if(!in_array($phs['stat_id'], $headerColIds)) {
+      $headerColIds[] = $phs['stat_id'];
+      
+      $thead .= '<th title="'.$phs['Stat']['name'].'" class="ui-state-default txtnowrap"><img src="'.$avbase.$phs['Stat']['Player']['avatar_url'].'" class="'.$phs['Stat']['team'].' avatarImage ui-corner-all"/></th>';
     }
-    $thead .= "</tr>";
+  }
+  $thead .= "</tr>";
+  
+  //make the body
+  $tbody = "";
+  for($x = 0; $x < count($miniStats); ++$x) {
+    $stat = $miniStats[$x];
+    $tbody .= '<tr><td class="ui-table-content txtnowrap"><img src="'.$avbase.$stat['playerAvatarUrl'].'" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
     
-    //make the body
-    $tbody = "";
-    for($x = 0; $x < count($miniStats); ++$x) {
-      $stat = $miniStats[$x];
-      $tbody .= '<tr><td class="ui-table-content txtnowrap"><img src="'.$avbase.$stat['playerAvatarUrl'].'" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
-      
-      foreach($headerColIds as $id) {
-        $found = false;
-        for($y = 0; $y <count($playerHealStats); ++$y) {
-          $phs = $playerHealStats[$y];
-          
-          if($phs['player_id'] == $stat['playerId'] && $phs['stat_id'] == $id) {
-            $tbody .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($phs['healing']).'">'.$phs['healing'].'</span></td>';
-            $found = true;
-          }
-        }
-        if(!$found) {
-          $tbody .= '<td class="ui-table-content"><span class="zeroValue">0</span></td>';
+    foreach($headerColIds as $id) {
+      $found = false;
+      for($y = 0; $y <count($playerHealStats); ++$y) {
+        $phs = $playerHealStats[$y];
+        
+        if($phs['player_id'] == $stat['playerId'] && $phs['stat_id'] == $id) {
+          $tbody .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($phs['healing']).'">'.$phs['healing'].'</span></td>';
+          $found = true;
         }
       }
-      
-      $tbody .= "</tr>";
+      if(!$found) {
+        $tbody .= '<td class="ui-table-content"><span class="zeroValue">0</span></td>';
+      }
     }
+    
+    $tbody .= "</tr>";
   }
   
   $s = <<<EOD
 <div class="statTableContainer">
   <table class="statTable" id="$htmlid" border="0" cellspacing="0" cellpadding="3">
     <caption>Heal Spread</caption>
+    <thead>
+      $thead
+    </thead>
+    <tbody>
+      $tbody
+    </tbody>
+  </table>
+</div>
+EOD;
+  return $s;
+}
+
+function outputItemPickupStats($miniStats, $itemPickupStats) {
+  $avbase = sfConfig::get('app_avatar_base_url');  
+  $htmlid = "itemPickupStats";
+  
+  //make the header
+  $thead = "<tr><th><!--player name--></th>";
+  $headerColKeys = array();
+  for($x = 0; $x < count($itemPickupStats); ++$x) {
+    $ips = $itemPickupStats[$x];
+    //only want distinct columns
+    if(!in_array($ips['item_key_name'], $headerColKeys)) {
+      $headerColKeys[] = $ips['item_key_name'];
+      
+      $thead .= '<th title="" class="ui-state-default txtnowrap">'.$ips['item_key_name'].'</th>';
+    }
+  }
+  $thead .= "</tr>";
+  
+  //make the body
+  $tbody = "";
+  for($x = 0; $x < count($miniStats); ++$x) {
+    $stat = $miniStats[$x];
+    $tbody .= '<tr><td class="ui-table-content txtnowrap"><img src="'.$avbase.$stat['playerAvatarUrl'].'" class="'.$stat['team'].' avatarImage ui-corner-all"/>'.link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['playerNumericSteamid']).'</td>';
+    
+    foreach($headerColKeys as $key) {
+      $found = false;
+      for($y = 0; $y <count($itemPickupStats); ++$y) {
+        $ips = $itemPickupStats[$y];
+        
+        if($ips['stat_id'] == $stat['id'] && $ips['item_key_name'] == $key) {
+          $tbody .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($ips['times_picked_up']).'">'.$ips['times_picked_up'].'</span></td>';
+          $found = true;
+        }
+      }
+      if(!$found) {
+        $tbody .= '<td class="ui-table-content"><span class="zeroValue">0</span></td>';
+      }
+    }
+    
+    $tbody .= "</tr>";
+  }
+  
+  $s = <<<EOD
+<div class="statTableContainer">
+  <table class="statTable" id="$htmlid" border="0" cellspacing="0" cellpadding="3">
+    <caption>Items Picked Up</caption>
     <thead>
       $thead
     </thead>
