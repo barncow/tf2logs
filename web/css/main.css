@@ -218,7 +218,7 @@ img {
   margin: 0;
 }
 
-#userCP strong a, #userCP strong, .status strong {
+#userCP strong a, #userCP strong, .status strong, .yellowText {
   font-weight: bolder;
   color: #ffff38;
 }

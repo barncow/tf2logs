@@ -20,13 +20,6 @@ use_stylesheet('jquery.qtip.min.20110205.css');
 use_javascript('logshow.min.js');
 ?>
 
-<?php if($sf_user->isAuthenticated() && ($sf_user->getAttribute(sfConfig::get('app_playerid_session_var')) == $log['submitter_player_id'] || $sf_user->hasCredential('owner'))): ?>
-<div class="center">
-<?php echo link_to('Edit this Log File', '@log_edit?id='.$log['id']) ?>
-</div>
-<br class="hardSeparator"/>
-<?php endif ?>
-
 <div id="score" class="infoBox">
   <div class="ui-widget ui-widget-header ui-corner-top header"><?php echo $log['name'] ?></div>
   <div class="content">
@@ -43,6 +36,10 @@ use_javascript('logshow.min.js');
       <br/><span title="The Last Generated date represents when the log submitter made changes to the name and map, or when an admin regenerates the log.">Last Generated: <?php echo getHumanReadableDate($log['updated_at']) ?></span>
     <?php endif ?>
       <br/><?php echo link_to('Download Log File', '@logfile?id='.$log['id'], array('target' => '_blank')) ?>
+      
+      <?php if($sf_user->isAuthenticated() && ($sf_user->getAttribute(sfConfig::get('app_playerid_session_var')) == $log['submitter_player_id'] || $sf_user->hasCredential('owner'))): ?>
+        <br/><?php echo link_to('<strong class="yellowText">Edit this Log File</strong>', '@log_edit?id='.$log['id'], array('class' => 'yellowText')) ?>
+      <?php endif ?>
   </div>
   <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
