@@ -21,7 +21,7 @@ echo outputStatPanel($log['game_seconds'], $log['Stats'], $miniStats);
 
 if(!$playerHealStats || count($playerHealStats) == 0) {
   echo '<div class="statTableContainer">';
-  echo outputInfoBox("_playerHealStats", "Heal Spread", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin.</div>', true);
+  echo outputInfoBox("_playerHealStats", "Heal Spread", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin, to be released soon.</div>', true);
   echo '</div>';
 } else {
   echo outputPlayerHealStats($miniStats, $playerHealStats);
@@ -36,7 +36,7 @@ echo outputPlayerStats($miniStats, $playerStats);
 
 if(!$itemPickupStats || count($itemPickupStats) == 0) {
   echo '<div class="statTableContainer">';
-  echo outputInfoBox("_itemPickupStats", "Items Picked Up", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin.</div>', true);
+  echo outputInfoBox("_itemPickupStats", "Items Picked Up", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/>Supplemental Stats SourceMod plugin, to be released soon.</div>', true);
   echo '</div>';
 } else {
   echo outputItemPickupStats($miniStats, $itemPickupStats);
