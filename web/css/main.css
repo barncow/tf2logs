@@ -191,6 +191,10 @@ img {
   text-indent: 1em;
 }
 
+#whatsNewContainer ul, #whatsNewContainer li {
+  text-align: left;
+}
+
 #whatsNewContainer h3 {
   margin-top: 1em;
 }

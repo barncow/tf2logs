@@ -10,6 +10,10 @@ whats_new:
   url: /whatsnew
   param: {module: content, action: whatsNew}
   
+plugins:
+  url: /plugins
+  param: {module: content, action: plugins}
+  
 log_by_id:
   url:   /logs/:id
   param: { module: log, action: show }

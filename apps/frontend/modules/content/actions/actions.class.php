@@ -10,4 +10,7 @@
 class contentActions extends sfActions {
   public function executeWhatsNew(sfWebRequest $request) {
   }
+  
+  public function executePlugins(sfWebRequest $request) {
+  }
 }

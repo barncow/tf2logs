@@ -35,6 +35,7 @@
             <li><?php echo link_to("What's New", '@whats_new') ?></li>
             <li><?php echo link_to('Log Search', '@log_search') ?></li>
             <li><?php echo link_to('Player Search', '@player_search') ?></li>
+            <li><?php echo link_to("Plugins", '@plugins') ?></li>
           <?php if($sf_user->isAuthenticated()): ?>
             <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
             <li><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></li>
