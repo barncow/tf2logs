@@ -81,6 +81,8 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     
     KOTH and PL maps both depend on round_wins not proceeding right after a capture. This feature has been removed,
     and we will just suck up the extra round_win
+    
+    Also testing game minutes calc across halves
   */
   public function testFull_badlands_2halves() {
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."full_badlands_2halves.log", 1);
@@ -89,6 +91,8 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $this->assertEquals(5, $log['redscore'], "red score");
     
     $this->assertEquals(0, $log['bluescore'], "blue score");
+    
+    $this->assertEquals(2057, $log['game_seconds'], "game seconds");
     
     foreach($log['Stats'] as $stat) {
       if($stat['Player']['steamid'] == "STEAM_0:1:16481274") {

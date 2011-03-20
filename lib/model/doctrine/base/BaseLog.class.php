@@ -10,6 +10,7 @@
  * @property integer $redscore
  * @property integer $bluescore
  * @property integer $elapsed_time
+ * @property integer $game_seconds
  * @property string $map_name
  * @property integer $submitter_player_id
  * @property string $error_log_name
@@ -25,6 +26,7 @@
  * @method integer             getRedscore()            Returns the current record's "redscore" value
  * @method integer             getBluescore()           Returns the current record's "bluescore" value
  * @method integer             getElapsedTime()         Returns the current record's "elapsed_time" value
+ * @method integer             getGameSeconds()         Returns the current record's "game_seconds" value
  * @method string              getMapName()             Returns the current record's "map_name" value
  * @method integer             getSubmitterPlayerId()   Returns the current record's "submitter_player_id" value
  * @method string              getErrorLogName()        Returns the current record's "error_log_name" value
@@ -39,6 +41,7 @@
  * @method Log                 setRedscore()            Sets the current record's "redscore" value
  * @method Log                 setBluescore()           Sets the current record's "bluescore" value
  * @method Log                 setElapsedTime()         Sets the current record's "elapsed_time" value
+ * @method Log                 setGameSeconds()         Sets the current record's "game_seconds" value
  * @method Log                 setMapName()             Sets the current record's "map_name" value
  * @method Log                 setSubmitterPlayerId()   Sets the current record's "submitter_player_id" value
  * @method Log                 setErrorLogName()        Sets the current record's "error_log_name" value
@@ -85,6 +88,12 @@ abstract class BaseLog extends sfDoctrineRecord
              'type' => 'integer',
              'notnull' => true,
              'default' => 0,
+             ));
+        $this->hasColumn('game_seconds', 'integer', 4, array(
+             'type' => 'integer',
+             'notnull' => true,
+             'default' => 0,
+             'length' => 4,
              ));
         $this->hasColumn('map_name', 'string', 25, array(
              'type' => 'string',

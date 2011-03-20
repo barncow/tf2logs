@@ -19,6 +19,7 @@ class PlayerTable extends Doctrine_Table {
     $p = Doctrine_Query::create()
       ->select('p.*'
         .', count(s.id) as num_matches'
+        .', sum(l.game_seconds) as game_seconds'
         .', sum(s.kills) as kills'
         .', sum(s.assists) as assists'
         .', sum(s.deaths) as deaths'
@@ -40,6 +41,7 @@ class PlayerTable extends Doctrine_Table {
       )
       ->from('Player p')
       ->leftJoin('p.Stats s')
+      ->leftJoin('s.Log l')
       ->where('p.numeric_steamid = ?', $id)
       ->groupBy('p.numeric_steamid')
       ->execute();

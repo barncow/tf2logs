@@ -65,7 +65,9 @@ L 09/29/2010 - 19:32:09: "`yay!<52><STEAM_0:0:973270><Blue>" killed "perl<57><ST
 L 09/29/2010 - 19:32:09: "`yay!<52><STEAM_0:0:973270><Blue>" killed "perl<57><STEAM_0:0:11710749><Red>" with "sadfsgtghgher" (attacker_position "-2419 1637 -511") (victim_position "-2605 1596 -546")
 L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Unassigned>" joined team "Red"
 L 09/29/2010 - 19:32:09: "Numnutz<17><BOT><Red>" changed role to "medic"
-L 09/29/2010 - 19:36:10: World triggered "Round_Overtime"
+L 09/29/2010 - 19:36:10: World triggered "Game_Paused"
+L 09/29/2010 - 19:36:20: World triggered "Game_Unpaused"
+L 09/29/2010 - 19:36:21: World triggered "Round_Overtime"
 L 09/29/2010 - 19:36:42: World triggered "Round_Win" (winner "Red")
 L 09/29/2010 - 19:36:42: World triggered "Round_Length" (seconds "632.25")
 L 09/29/2010 - 19:36:42: Team "Red" current score "0" with "6" players

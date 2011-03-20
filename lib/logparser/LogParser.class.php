@@ -31,6 +31,7 @@ class LogParser {
   protected $previousLogLine;
   protected $gameOver;
   protected $isServerCvars;
+  protected $minutesIntervals;
   
   //these values are used to detect whether a round_win is valid or not.
   protected $currentRoundWinTeam;
@@ -62,6 +63,7 @@ class LogParser {
     //will use assoc. array of steamids to determine unique team switches, instead of one player switching multi times.
     $this->playerChangeTeams = array(); 
     $this->previousLogLine = null;
+    $this->minutesIntervals = array();
   }
   
   public function setIgnoreUnrecognizedLogLines($ignoreUnrecognizedLogLines) {
@@ -128,6 +130,37 @@ class LogParser {
   public function getElapsedTime($now) {
     if($this->log->get_timeStart() == null) return 0;
     return $now->getTimestamp()-$this->log->get_timeStart()->getTimestamp();
+  }
+  
+  /**
+  * Returns the amount of actual gameplay seconds: elapsed_time - pause time - half time
+  */
+  public function getGameSeconds() {
+    if(count($this->minutesIntervals) == 0) return 0;
+    
+    $lastStartDt = null;
+    $seconds = 0;
+    foreach($this->minutesIntervals as $mi) {
+      if($mi['type'] == 'start') {
+        $lastStartDt = $mi['dt'];
+      } else if($mi['type'] == 'stop') {
+        if($lastStartDt) {
+          //windifference gameovers will output game_over twice, thus resulting in two stops, and a null $lastStartDt
+          //just ignore any stop that does not have a start.
+          $dt = $mi['dt'];
+          $seconds += $dt->getTimestamp()-$lastStartDt->getTimestamp();
+          $lastStartDt = null;
+        }
+      }
+    }
+    
+    if($lastStartDt) {
+      //since stop intervals will null lastStartDt (causing false value), if lastStartDt has a value, a stop was not called.
+      //use currentDt as a stop.
+      $seconds += $this->currentDt->getTimestamp()-$lastStartDt->getTimestamp();
+    }
+    
+    return $seconds;
   }
   
   /**
@@ -268,6 +301,9 @@ class LogParser {
 	*/
 	protected function finishLog() {
 	  $this->log->finishLog($this->currentDt, $this->log->get_timeStart());
+	  
+	  //calc game seconds
+	  $this->log->setGameSeconds($this->getGameSeconds());
 	}
 	
 	/**
@@ -313,6 +349,10 @@ class LogParser {
     return $logLine;
 	}
 	
+	protected function addMinutesInterval($type, $dt) {
+	  $this->minutesIntervals[] = array('type'=>$type,'dt'=>$dt);
+	}
+	
 	/**
 	* This will do the processing of the line. This will not be called outside this
 	* class. Use parseLine, since that will do some init and cleanup as needed.
@@ -338,6 +378,7 @@ class LogParser {
 	  $elapsedTime = $this->getElapsedTime($dt);
 	  $this->log->setElapsedTime($elapsedTime);
 	  
+	  
 	  if($this->log->get_timeStart() == null && $this->isTournamentMode) {
       //we do not yet have a timestart, and we are in tournament mode. This should only happen 
       //when we put ourselves manually in tournament mode to ignore the
@@ -346,6 +387,8 @@ class LogParser {
       
       //adding a round start event for the first round.
       $this->log->addRoundStartEvent($elapsedTime, 0, 0);
+      
+      $this->addMinutesInterval('start', $dt);
     }
     
     if ($this->parsingUtils->isLogLineOfType($logLine, "server cvars start", $logLineDetails)) {
@@ -364,7 +407,10 @@ class LogParser {
 	  if($this->parsingUtils->isLogLineOfType($logLine, "World triggered", $logLineDetails)) {
 	    $worldTriggerAction = $this->parsingUtils->getWorldTriggerAction($logLineDetails);
 	    if($worldTriggerAction == "Round_Start") {
-	      $this->gameOver = false;
+	      if($this->gameOver) {
+	        $this->addMinutesInterval('start', $dt);
+	        $this->gameOver = false;
+	      }
 	      $this->isTournamentMode = true;
 	      if($this->log->get_timeStart() == null) {
 	        //there will likely be multiple round_start's, only need the first one for the tmsp
@@ -372,20 +418,27 @@ class LogParser {
 	        
 	        //adding a round start event for the first round.
 	        $this->log->addRoundStartEvent($elapsedTime, 0, 0);
+	        
+	        $this->addMinutesInterval('start', $dt);
 	      }
 	      
 	      $this->playerChangeTeams = array(); //resetting change teams. assuming players are at where they need to be.
 	      
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Game_Over") {
+	      $this->addMinutesInterval('stop', $dt);
 	      return self::GAME_OVER;
 	    } else if($worldTriggerAction == "Round_Win") {
-	      //increment score for the team that won the round, if the map is not ctf (ctf has own scoring)
+	      //find the team that won the round. Scores will be updated later when this round is determined to be valid.
 	      if(!$this->isCtf) {
 	        $this->currentRoundWinTeam = $this->parsingUtils->getRoundWinTeam($logLineDetails);
-	        
-	        //$this->log->incrementScoreForTeam($team);
 	      }
+	      return self::GAME_CONTINUE;
+	    } else if($worldTriggerAction == "Game_Paused") {
+	      $this->addMinutesInterval('stop', $dt);
+	      return self::GAME_CONTINUE;
+	    } else if($worldTriggerAction == "Game_Unpaused") {
+	      $this->addMinutesInterval('start', $dt);
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Round_Setup_Begin"
 	      || $worldTriggerAction == "Round_Setup_End"
@@ -658,6 +711,7 @@ class LogParser {
       } else if($teamAction == "current score" || $teamAction == "final score") {
         if($this->parsingUtils->getTeamNumberPlayers($logLineDetails) == 0) {
           //the only time there would be zero players for a team is if something screwed up.
+          $this->addMinutesInterval('stop', $dt);
           return self::GAME_APPEARS_OVER;
         }
         

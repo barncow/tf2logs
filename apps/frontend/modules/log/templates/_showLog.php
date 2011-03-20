@@ -17,7 +17,7 @@ echo '<br class="hardSeparator"/>';
 
 
 $miniStats = array();
-echo outputStatPanel($log['Stats'], $miniStats);
+echo outputStatPanel($log['game_seconds'], $log['Stats'], $miniStats);
 
 if(!$playerHealStats || count($playerHealStats) == 0) {
   echo '<div class="statTableContainer">';
@@ -27,7 +27,7 @@ if(!$playerHealStats || count($playerHealStats) == 0) {
   echo outputPlayerHealStats($miniStats, $playerHealStats);
 }
 
-echo outputMedicStats($log['Stats']);
+echo outputMedicStats($log['game_seconds'], $log['Stats']);
 
 echo outputWeaponStats($weapons, $miniStats, $weaponStats);
 

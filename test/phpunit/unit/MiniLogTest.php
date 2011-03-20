@@ -28,6 +28,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals(1, $log['bluescore'], "blue score");
     
     $this->assertEquals(1666, $log['elapsed_time'], "elapsed time");
+    $this->assertEquals(1656, $log['game_seconds'], "game seconds");
     
     $this->assertEquals(1, $log['submitter_player_id'], "submitter has correct ID.");
     

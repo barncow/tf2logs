@@ -36,9 +36,9 @@ function dataCellOutputClass($value) {
   return 'nonZeroValue';
 }
 
-function doPerDeathDivision($numerator, $deaths) {
-  if($deaths == 0) return $numerator;
-  return round((float) $numerator/$deaths, 3);
+function doPerDivision($numerator, $denominator) {
+  if($denominator == 0) return $numerator;
+  return round((float) $numerator/$denominator, 3);
 }
 
 function mapExists($map) {
@@ -202,8 +202,9 @@ return $s;
 }
 
 //this will create a mini Stats array with the $miniStatsRet ref
-function outputStatPanel($stats, &$miniStatsRet) {
+function outputStatPanel($game_seconds, $stats, &$miniStatsRet) {
 $avbase = sfConfig::get('app_avatar_base_url');
+$minutes = (float)$game_seconds/60;
 $s = <<<EOD
 <div class="statTableContainer">
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
@@ -216,8 +217,10 @@ $s = <<<EOD
       <th title="Assists"class="ui-table-content txtnowrap">A</th>
       <th title="Deaths"class="ui-table-content txtnowrap">D</th>    
       <th title="Kills+Assists/Death"class="ui-table-content txtnowrap">KAPD</th>
+      <th title="Kills+Assists/Minute"class="ui-table-content txtnowrap">KAPM</th>
       <th title="Damage"class="ui-table-content txtnowrap">DA</th>
       <th title="Damage/Death"class="ui-table-content txtnowrap">DAPD</th>
+      <th title="Damage/Minute"class="ui-table-content txtnowrap">DAPM</th>
       <th title="Longest Kill Streak"class="ui-table-content txtnowrap">LKS</th>
       <th title="Headshots"class="ui-table-content txtnowrap">HS</th>
       <th title="Backstabs"class="ui-table-content txtnowrap">BS</th>
@@ -258,14 +261,24 @@ EOD;
       $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['assists']).'">'. $stat['assists'].'</span></td>';
       $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['deaths']).'">'. $stat['deaths'].'</span></td>';
       $s .= '<td class="ui-table-content">';
-        $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
-          $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']);
+        $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
+          $s .= doPerDivision($stat['kills']+$stat['assists'], $stat['deaths']);
+        $s .= '</span>';
+      $s .= '</td>';
+      $s .= '<td class="ui-table-content">';
+        $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['kills']+$stat['assists'], $minutes)).'">';
+          $s .= doPerDivision($stat['kills']+$stat['assists'], $minutes);
         $s .= '</span>';
       $s .= '</td>';
       $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['damage']).'">'. $stat['damage'].'</span></td>';
       $s .= '<td class="ui-table-content">';
-        $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['damage'], $stat['deaths'])).'">';
-          $s .= doPerDeathDivision($stat['damage'], $stat['deaths']);
+        $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['damage'], $stat['deaths'])).'">';
+          $s .= doPerDivision($stat['damage'], $stat['deaths']);
+        $s .= '</span>';
+      $s .= '</td>';
+      $s .= '<td class="ui-table-content">';
+        $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['damage'], $minutes)).'">';
+          $s .= doPerDivision($stat['damage'], $minutes);
         $s .= '</span>';
       $s .= '</td>';
       $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['longest_kill_streak']).'">'. $stat['longest_kill_streak'].'</span></td>';
@@ -288,8 +301,9 @@ $s .= '<br class="hardSeparator"/>';
 return $s;
 }
 
-function outputMedicStats($stats) {
+function outputMedicStats($game_seconds, $stats) {
 $avbase = sfConfig::get('app_avatar_base_url');
+$minutes = (float)$game_seconds/60;
 $s = <<<EOD
 <div class="statTableContainer">
 <table class="statTable" id="medicStats" border="0" cellspacing="0" cellpadding="3">
@@ -298,11 +312,14 @@ $s = <<<EOD
     <tr>
       <th>Name</th>
       <th title="Kills+Assists/Death">KAPD</th>
+      <th title="Kills+Assists/Minute">KAPM</th>
       <th title="Ubers">U</th>
       <th title="Ubers/Death">UPD</th>
+      <th title="Ubers/Minute">UPM</th>
       <th title="Dropped Ubers">DU</th>
       <th title="Healing">H</th>
       <th title="Healing/Death">HPD</th>
+      <th title="Healing/Minute">HPM</th>
       <th title="Extinguishes">E</th>
     </tr>
   </thead>
@@ -317,15 +334,22 @@ EOD;
               $s .= link_to($stat['name'], 'player/showNumericSteamId?id='.$stat['Player']['numeric_steamid']).'';
             $s .= '</td>';
             $s .= '<td class="ui-table-content">';
-              $s .= '<span class="'.dataCellOutputClass(doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
-                $s .= doPerDeathDivision($stat['kills']+$stat['assists'], $stat['deaths']).'';
+              $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['kills']+$stat['assists'], $stat['deaths'])).'">';
+                $s .= doPerDivision($stat['kills']+$stat['assists'], $stat['deaths']).'';
+              $s .= '</span>';
+            $s .= '</td>';
+            $s .= '<td class="ui-table-content">';
+            $s .= '<span class="'.dataCellOutputClass(doPerDivision($stat['kills']+$stat['assists'], $minutes)).'">';
+                $s .= doPerDivision($stat['kills']+$stat['assists'], $minutes).'';
               $s .= '</span>';
             $s .= '</td>';
             $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['ubers']).'">'.$stat['ubers'].'</span></td>';
-            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['ubers'], $stat['deaths'])).'">'.doPerDeathDivision($stat['ubers'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDivision($stat['ubers'], $stat['deaths'])).'">'.doPerDivision($stat['ubers'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDivision($stat['ubers'], $minutes)).'">'.doPerDivision($stat['ubers'], $minutes).'</span></td>';
             $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['dropped_ubers']).'">'.$stat['dropped_ubers'].'</span></td>';
             $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['healing']).'">'.$stat['healing'].'</span></td>';
-            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDeathDivision($stat['healing'], $stat['deaths'])).'">'.doPerDeathDivision($stat['healing'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDivision($stat['healing'], $stat['deaths'])).'">'.doPerDivision($stat['healing'], $stat['deaths']).'</span></td>';
+            $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass(doPerDivision($stat['healing'], $minutes)).'">'.doPerDivision($stat['healing'], $minutes).'</span></td>';
             $s .= '<td class="ui-table-content"><span class="'.dataCellOutputClass($stat['extinguishes']).'">'.$stat['extinguishes'].'</span></td>';
           $s .= '</tr>';
         }

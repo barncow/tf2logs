@@ -21,6 +21,10 @@ Log:
       type: integer
       notnull: true
       default: 0
+    game_seconds:
+      type: integer(4)
+      notnull: true
+      default: 0
     map_name:
       type: string(25)
       notnull: false

@@ -121,7 +121,7 @@ $(function() {
 		"bInfo": false,
 		"bAutoWidth": false,
 		"bSortClasses": false,
-		"aaSorting": [[1,'desc'], [2,'desc'], [3,'desc'], [4,'desc'], [5,'desc'], [6,'desc'], [7,'desc']],
+		"aaSorting": [[1,'desc'], [2,'desc'], [3,'desc'], [4,'desc'], [5,'desc'], [6,'desc'], [7,'desc'], [8,'desc'], [9,'desc'], [10,'desc']],
 		"aoColumnDefs": [
 		  { "sType": "html", "aTargets": [ 0 ] }, //must be in this order
       { "bSearchable": true, "aTargets": [ 0 ] },
