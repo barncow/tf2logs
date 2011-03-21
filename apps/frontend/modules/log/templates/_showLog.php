@@ -22,6 +22,7 @@ echo outputStatPanel($log['game_seconds'], $log['Stats'], $miniStats);
 if(!$playerHealStats || count($playerHealStats) == 0) {
   echo '<div class="statTableContainer">';
   echo outputInfoBox("_playerHealStats", "Heal Spread", '<div class="infoBoxAlert ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>This is only available with the<br/><a href="'.url_for('@plugins').'#suppstats">Supplemental Stats SourceMod plugin</a>.</div>', true);
+
   echo '</div>';
 } else {
   echo outputPlayerHealStats($miniStats, $playerHealStats);
