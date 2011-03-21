@@ -550,6 +550,12 @@ class LogParser {
 	        $victim = $players[1];
 	        $w = $this->parsingUtils->getWeapon($logLineDetails);
 	        $ck = $this->parsingUtils->getCustomKill($logLineDetails);
+	        $attackercoords = $this->parsingUtils->getKillCoords("attacker", $logLineDetails);
+	        $victimcoords = $this->parsingUtils->getKillCoords("victim", $logLineDetails);
+	        
+	        if(!$attackercoords || !$victimcoords) {
+	          throw new CorruptLogLineException($logLine);
+	        }
 	        
 	        if($ck == "feign_death") {
 	          //do not alter stats for dead ringer spies.
@@ -578,8 +584,10 @@ class LogParser {
 	        $this->log->incrementStatFromSteamid($victim->getSteamid(), "deaths"); 
 	        $this->log->incrementWeaponForPlayer($victim->getSteamid(), $weapon, 'deaths');
 	        $this->log->addPlayerStatToSteamid($victim->getSteamid(), $attacker->getSteamid(), "deaths");
-	        $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $this->parsingUtils->getKillCoords("attacker", $logLineDetails)
-	          ,$victim->getSteamid(), $this->parsingUtils->getKillCoords("victim", $logLineDetails));
+	        
+	        
+	        $this->log->addKillEvent($elapsedTime, $weapon->getId(), $attacker->getSteamid(), $attackercoords
+	          ,$victim->getSteamid(), $victimcoords);
 	        
 	        return self::GAME_CONTINUE;
 	      } else if($playerLineAction == "committed suicide with") {
