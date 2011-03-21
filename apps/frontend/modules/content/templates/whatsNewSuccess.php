@@ -6,11 +6,11 @@ use_helper('PageElements');
 <div id="whatsNewContainer">
 
 <?php
-$log302Link = link_to('Here is a sample log with these new features added.', '@log_by_id?id=302');
+$log314Link = link_to('Here is a sample log with these new features added.', '@log_by_id?id=314');
 $statpagehref = url_for('@plugins').'#suppstats';
 $s = <<<EOD
 <h3>Multiple Features Added, Bugs Removed</h3>
-<p>There were some small, minor bugfixes, and you will probably not notice them. There have also been some updates to the <a href="$statpagehref">Supplemental Stats Plugin</a> by Cinq and Annuit Coeptis, which will be released soon. These updates include tracking game pauses within the log, tracking how much healing is done per player, and what items, such as medkits, were picked up. Because pause logging is included, each log now has Playable Time calculated, which is the total time for the game, without time for pauses (if they are in the log) and without time between halves. This allows for the calculation of Per Minute stats, along with their Per Death counterparts.</p> <p>$log302Link</p>
+<p>There were some small, minor bugfixes, and you will probably not notice them. There have also been some updates to the <a href="$statpagehref">Supplemental Stats Plugin</a> by Cinq and Annuit Coeptis, which will be released soon. These updates include tracking game pauses within the log, tracking how much healing is done per player, and what items, such as medkits, were picked up. Because pause logging is included, each log now has Playable Time calculated, which is the total time for the game, without time for pauses (if they are in the log) and without time between halves. This allows for the calculation of Per Minute stats, along with their Per Death counterparts.</p> <p>$log314Link</p>
 EOD;
 echo outputInfoBox("entry4", "Updates for March 20, 2010", $s);
 ?>
