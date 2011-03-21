@@ -373,3 +373,53 @@ Weapon:
     name: Jag
     Role: engineer
     image_name: wrench_jag.png
+  back_scratcher:
+    key_name: back_scratcher
+    name: Backscratcher
+    Role: pyro
+    image_name: back_scratcher.png
+  ball:
+    key_name: ball
+    name: Sandman (Ball)
+    Role: scout
+    image_name: ball.png
+  battleaxe:
+    key_name: battleaxe
+    name: Scotsman's Skullcutter
+    Role: demo
+    image_name: battleaxe.png
+  battleneedle:
+    key_name: battleneedle
+    name: Vita-Saw
+    Role: medic
+    image_name: battleneedle.png
+  blackbox:
+    key_name: blackbox
+    name: Black Box
+    Role: soldier
+    image_name: blackbox.png
+  boston_basher:
+    key_name: boston_basher
+    name: Boston Basher
+    Role: scout
+    image_name: boston_basher.png
+  candy_cane:
+    key_name: candy_cane
+    name: Candy Cane
+    Role: scout
+    image_name: candy_cane.png
+  claidheamohmor:
+    key_name: claidheamohmor
+    name: Claidheamh Mòr
+    Role: demo
+    image_name: claidheamohmor.png
+  deflect_arrow:
+    key_name: deflect_arrow
+    name: Arrow Deflect
+    Role: pyro
+    image_name: deflect_arrow.png
+  deflect_sticky:
+    key_name: deflect_sticky
+    name: Sticky Deflect
+    Role: pyro
+    image_name: deflect_sticky.png
