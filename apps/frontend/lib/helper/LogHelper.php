@@ -484,6 +484,15 @@ function outputItemPickupStats($miniStats, $itemPickupStats) {
       } else if($ips['item_key_name'] == 'medkit_large') {
         $title = "Large Medkit";
         $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_large.png" alt="'.$title.'"/>';
+      } else if($ips['item_key_name'] == 'ammopack_small') {
+        $title = "Small Ammo";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_small.png" alt="'.$title.'"/>';
+      } else if($ips['item_key_name'] == 'ammopack_medium') {
+        $title = "Medium Ammo";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_medium.png" alt="'.$title.'"/>';
+      } else if($ips['item_key_name'] == 'tf_ammo_pack') {
+        $title = "Large Ammo";
+        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/tf_ammo_pack.png" alt="'.$title.'"/>';
       }
       
       $thead .= '<th title="'.$title.'" class="ui-state-default txtnowrap">'.$data.'</th>';
