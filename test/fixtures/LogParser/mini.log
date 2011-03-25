@@ -14,9 +14,9 @@ L 09/29/2010 - 19:08:08: "do0t<47><STEAM_0:1:4433828><Unassigned>" disconnected 
 L 09/29/2010 - 19:08:41: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "world" (attacker_position "-3544 1649 -611")
 L 09/29/2010 - 19:08:55: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:55: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
+L 09/29/2010 - 19:08:56: Loading map "ctf_2fort"
 L 09/29/2010 - 19:08:56: World triggered "Round_Start"
 L 09/29/2010 - 19:08:56: World triggered "Round_Setup_Begin"
-L 09/29/2010 - 19:08:56: Loading map "ctf_2fort"
 L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
 L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "damage" 11
@@ -56,6 +56,8 @@ L 09/29/2010 - 19:08:57: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill ass
 L 09/29/2010 - 19:32:08: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" disconnected (reason "Kicked by Console")
 L 09/29/2010 - 19:32:08: "Cres<49><STEAM_0:0:8581157><Blue>" disconnected (reason "No Steam logon
 ")
+L 09/29/2010 - 19:32:08: "Bill<16><STEAM_0:0:23957009><Red>" disconnected (reason "You are running software that is
+not compatible with Secure servers")
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" triggered "healed" (heal "510")
 L 09/29/2010 - 19:32:09: "FSTNG! Barncow<53><STEAM_0:1:16481274><Blue>" say "!sm_cvar sv_password secret"
 L 09/29/2010 - 19:32:09: "Console<0><Console><Console>" say "console say line"

@@ -245,11 +245,7 @@ class LogParser {
 	        throw $ulle;
 	      }
 	    } catch(CorruptLogLineException $clle) {
-	      if($key != $fileLength-1) {
-	        //if exception was not thrown on last line, keep throwing it
-	        //last lines are generally corrupted, can just pitch them
-	        throw $clle;
-	      }
+	      //just pitch the line and move on
 	    }
 	    
 	    if($game_state == self::GAME_APPEARS_OVER) {
@@ -358,14 +354,7 @@ class LogParser {
 	* class. Use parseLine, since that will do some init and cleanup as needed.
 	* @see public function parseLine($logLine)
 	*/
-	protected function doLine($logLine) {	 
-	  //it appears that these lines get a line break at the end, which causes corruptloglineexception
-	  //previous line - L 09/29/2010 - 19:32:08: "Cres<49><STEAM_0:0:8581157><Blue>" disconnected (reason "No Steam logon
-	  //it looks to be standard, so, we will ignore lines that are equal to: ")
-	  if($logLine == '")') {
-	    return self::GAME_CONTINUE;
-	  }
-	   
+	protected function doLine($logLine) {	 	   
 	  $dt = $this->parsingUtils->getTimestamp($logLine);
 	  if($dt === false) {
 	    throw new CorruptLogLineException($logLine);
@@ -456,7 +445,13 @@ class LogParser {
 	    //this could contain sensitive information. Do not add it to the log.
 	    $this->addToScrubbedLog = false;
 	    return self::GAME_CONTINUE;
-	  }
+	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)
+	  || $this->parsingUtils->isLogLineOfType($logLine, "Started map ", $logLineDetails)) {
+	    //populate the map field if not specified.
+	    $map = $this->parsingUtils->getMapFromMapLine($logLineDetails);
+	    if(!$this->log->getMapName()) $this->log->setMapName($map);
+	    return self::GAME_CONTINUE;
+	  } 
 	  
 	  if(!$this->isTournamentMode) {
 	    return self::GAME_CONTINUE; //do not want to track information when not in tournament mode.
@@ -471,12 +466,6 @@ class LogParser {
 	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)
 	  ) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
-	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Loading map ", $logLineDetails)
-	  || $this->parsingUtils->isLogLineOfType($logLine, "Started map ", $logLineDetails)) {
-	    //populate the map field if not specified.
-	    $map = $this->parsingUtils->getMapFromMapLine($logLineDetails);
-	    if(!$this->log->getMapName()) $this->log->setMapName($map);
-	    return self::GAME_CONTINUE;
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
 	    

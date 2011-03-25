@@ -22,7 +22,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     //$countOfLines-1 represents the lack of chat line with SM command, and the two rcon lines.
     $this->assertEquals($countOfLines-3, count(explode("\n", $logfile->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
     $this->assertFalse(strpos($logfile->getLogData(), "rcon"), "verify that no rcon line is in the log.");
-    $this->assertEquals(8, count($log['Stats']), "number of players, should exclude console, specs, and bots");
+    $this->assertEquals(9, count($log['Stats']), "number of players, should exclude console, specs, and bots");
     
     $this->assertEquals(0, $log['redscore'], "red score");
     $this->assertEquals(1, $log['bluescore'], "blue score");

@@ -178,7 +178,7 @@ class logActions extends sfActions {
         try {
           $logid = $logParser->parseLogFile($uploadDir . "/" . $upload_filename, $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')), $this->form->getValue('name'), $this->form->getValue('map_name'));
         } catch(CorruptLogLineException $clle) {
-          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. tf2logs.com will only take log files from a tournament mode game.');
+          $this->getUser()->setFlash('error', 'The log file that you submitted is not of the proper format. TF2Logs.com will only take log files from a tournament mode game.');
           unlink($uploadDir . "/" . $upload_filename);
           return "error";
         } catch(NoDataInLogFileException $ndilfe) {
