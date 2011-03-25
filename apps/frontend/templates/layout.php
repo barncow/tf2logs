@@ -28,9 +28,11 @@
     <div class="wrapper">
       <div id="header" class="ui-corner-all">
         <div id="homeLink">
-          <a href="<?php echo url_for('@homepage', true) ?>"><?php echo image_tag(getRandomLogoFilename()) ?></a>
+          <a href="<?php echo url_for('@homepage', true) ?>" id="homeLinkImage"><?php echo image_tag(getRandomLogoFilename()) ?></a>
+          <?php echo link_to("What's TF2Logs.com?", '@whatis', array('id' => 'whatislink')) ?>
         </div>
         <div id="userCP">
+          
           <ul>
             <li><?php echo link_to("What's New", '@whats_new') ?></li>
             <li><?php echo link_to('Log Search', '@log_search') ?></li>

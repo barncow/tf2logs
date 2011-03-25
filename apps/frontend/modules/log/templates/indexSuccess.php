@@ -82,6 +82,8 @@ echo '</div><br class="hardSeparator"/>';
     <p>
       Theoretically, no. The log parser tries to take the log file as given, and will find where the game starts and ends. If there is garbage data in the file, which can happen if the server log is left running while everyone leaves, for instance, it can make the file size very large. This should be trimmed. However, the log parser will try to detect if something is wrong and will stop parsing. Typical log files will be about a few hundred kilobytes, probably not much more than 600kB.
     </p>
+    <p>If you have multiple games on one log file, you should try to split those apart as much as possible. The log parser assumes that each log file contains one game, which could include multiple halves.</p>
+    <p>Additionally, if you have a game that was split into several pieces, you should not try to merge them. Just upload them separately.</p>
     
     <h3>Do I need to trim any pre-game events?</h3>
     <p>

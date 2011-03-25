@@ -14,6 +14,10 @@ plugins:
   url: /plugins
   param: {module: content, action: plugins}
   
+whatis:
+  url: /whatis
+  param: {module: content, action: whatis}
+  
 log_by_id:
   url:   /logs/:id
   param: { module: log, action: show }

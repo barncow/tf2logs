@@ -203,13 +203,44 @@ img {
   padding: 3px;
 }
 
+#whatIsTF2LogsContainer {
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+#whatIsTF2LogsContainer p {
+  text-align: left;
+  text-indent: 1em;
+}
+
+#whatIsTF2LogsContainer ul, #whatIsTF2LogsContainer li {
+  text-align: left;
+}
+
+#whatIsTF2LogsContainer h3 {
+  margin-top: 1em;
+}
+
+#whatIsTF2LogsContainer .content {
+  padding: 3px;
+}
+
 #header a {
   color: #79b3d2; /*from .ui-state-default*/
 }
 			
 #homeLink {
 	float: left;
-	font-size: 20pt;
+}
+
+#homeLinkImage {
+  float: left;
+}
+
+#whatislink {
+  float: right;
 }
 
 #userCP, .fRight {
