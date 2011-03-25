@@ -4,6 +4,7 @@
     <?php include_http_metas() ?>
     <?php include_metas() ?>
     <?php include_title() ?>
+    <?php use_stylesheet('main.css?date='.date('Ymd')); /* making it so that browsers only cache once per day */?>
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
     <?php use_helper('PageElements') ?>
@@ -34,7 +35,7 @@
         <div id="userCP">
           
           <ul>
-            <li><?php echo link_to("What's New", '@whats_new') ?></li>
+            <li id="whatsNewLink"><?php echo link_to("What's New", '@whats_new') ?></li>
             <li><?php echo link_to('Log Search', '@log_search') ?></li>
             <li><?php echo link_to('Player Search', '@player_search') ?></li>
             <li><?php echo link_to("Plugins", '@plugins') ?></li>
@@ -46,10 +47,15 @@
             <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
           <?php endif ?>
           </ul>
+          <br class="hardSeparator"/>
           <?php if(!$sf_user->isAuthenticated()): ?>
-            <br class="hardSeparator"/>
             <span class="subInfo fRight"><strong>To upload a log, sign in through STEAM</strong></span>
           <?php endif ?>
+          
+          <?php
+            /****************** WHAT'S NEW UPDATE DATE *********************/
+          ?>
+          <span class="fLeft">Updated March 25</span>
         </div>
         <br class="hardSeparator"/>
       </div>

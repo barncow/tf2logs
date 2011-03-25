@@ -6,6 +6,12 @@ $statpagehref = url_for('@plugins').'#suppstats';
 ?>
 
 <div id="whatsNewContainer">
+<?php
+/**************************
+WHEN ADDING AN ENTRY BELOW, UPDATE THE DATE TITLE OF THE INFOBOX,
+AND UPDATE THE WHAT'S NEW DATE IN layout.php!
+***************************/
+?>
 
 <?php
 $annuitLink = link_to('Annuit Coeptis', '@player_by_numeric_steamid?id=76561197983800058');
