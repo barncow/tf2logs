@@ -25,6 +25,7 @@ class ItemPickupStatTable extends Doctrine_Table
         ->innerJoin('s.Log l')
         ->where('l.id = ?', $logid)
         ->groupBy('s.name, ips.item_key_name')
+        ->orderBy('ips.item_key_name desc, s.name asc')
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }

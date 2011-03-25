@@ -467,36 +467,49 @@ function outputItemPickupStats($miniStats, $itemPickupStats) {
   //make the header
   $thead = "<tr><th><!--player name--></th>";
   $headerColKeys = array();
+  $tfammopack = null;
   for($x = 0; $x < count($itemPickupStats); ++$x) {
     $ips = $itemPickupStats[$x];
     //only want distinct columns
     if(!in_array($ips['item_key_name'], $headerColKeys)) {
-      $headerColKeys[] = $ips['item_key_name'];
-      $data = $ips['item_key_name'];
-      $title = "";
-      
-      if($ips['item_key_name'] == 'medkit_small') {
-        $title = "Small Medkit";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_small.png" alt="'.$title.'"/>';
-      } else if($ips['item_key_name'] == 'medkit_medium') {
-        $title = "Medium Medkit";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_medium.png" alt="'.$title.'"/>';
-      } else if($ips['item_key_name'] == 'medkit_large') {
-        $title = "Large Medkit";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_large.png" alt="'.$title.'"/>';
-      } else if($ips['item_key_name'] == 'ammopack_small') {
-        $title = "Small Ammo";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_small.png" alt="'.$title.'"/>';
-      } else if($ips['item_key_name'] == 'ammopack_medium') {
-        $title = "Medium Ammo";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_medium.png" alt="'.$title.'"/>';
-      } else if($ips['item_key_name'] == 'tf_ammo_pack') {
-        $title = "Large Ammo";
-        $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/tf_ammo_pack.png" alt="'.$title.'"/>';
+      if($ips['item_key_name'] == 'tf_ammo_pack') {
+        $tfammopack = 'tf_ammo_pack';
+      } else {
+        $headerColKeys[] = $ips['item_key_name'];
       }
-      
-      $thead .= '<th title="'.$title.'" class="ui-state-default txtnowrap">'.$data.'</th>';
     }
+  }
+  //array is sorted by item key name in reverse alpha order, which works for most items. We want this last, but will end up first originally.
+  if($tfammopack) $headerColKeys[] = $tfammopack;
+  
+  foreach($headerColKeys as $key) {
+    $data = $key;
+    $title = "";
+    
+    if($key == 'medkit_small') {
+      $title = "Small Medkit";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_small.png" alt="'.$title.'"/>';
+    } else if($key == 'medkit_medium') {
+      $title = "Medium Medkit";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_medium.png" alt="'.$title.'"/>';
+    } else if($key == 'medkit_large') {
+      $title = "Large Medkit";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/medkit_large.png" alt="'.$title.'"/>';
+    } else if($key == 'ammopack_small') {
+      $title = "Small Ammo";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_small.png" alt="'.$title.'"/>';
+    } else if($key == 'ammopack_medium') {
+      $title = "Medium Ammo";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_medium.png" alt="'.$title.'"/>';
+    } else if($key == 'ammopack_large') {
+      $title = "Large Ammo";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/ammopack_large.png" alt="'.$title.'"/>';
+    } else if($key == 'tf_ammo_pack') {
+      $title = "Dropped Metal/Ammo";
+      $data = '<img class="itemIcon" src="'.sfConfig::get('app_item_icon_base_url').'/tf_ammo_pack.png" alt="'.$title.'"/>';
+    }
+    
+    $thead .= '<th title="'.$title.'" class="ui-state-default txtnowrap">'.$data.'</th>';
   }
   $thead .= "</tr>";
   
