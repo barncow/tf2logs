@@ -212,26 +212,26 @@ $s = <<<EOD
   <thead>
     <tr>
       <th>Name</th>
-      <th title="Classes"class="ui-table-content txtnowrap">C</th>
-      <th title="Kills"class="ui-table-content txtnowrap">K</th>
-      <th title="Assists"class="ui-table-content txtnowrap">A</th>
-      <th title="Deaths"class="ui-table-content txtnowrap">D</th>    
-      <th title="Kills+Assists/Death"class="ui-table-content txtnowrap">KAPD</th>
-      <th title="Kills+Assists/Minute"class="ui-table-content txtnowrap">KAPM</th>
-      <th title="Damage"class="ui-table-content txtnowrap">DA</th>
-      <th title="Damage/Death"class="ui-table-content txtnowrap">DAPD</th>
-      <th title="Damage/Minute"class="ui-table-content txtnowrap">DAPM</th>
-      <th title="Longest Kill Streak"class="ui-table-content txtnowrap">LKS</th>
-      <th title="Headshots"class="ui-table-content txtnowrap">HS</th>
-      <th title="Backstabs"class="ui-table-content txtnowrap">BS</th>
-      <th title="Capture Points Blocked"class="ui-table-content txtnowrap">CPB</th>
-      <th title="Capture Points Captured"class="ui-table-content txtnowrap">CPC</th>
-      <th title="Intel Defends"class="ui-table-content txtnowrap">ID</th>
-      <th title="Intel Captures"class="ui-table-content txtnowrap">IC</th>
-      <th title="Dominations"class="ui-table-content txtnowrap">DOM</th>
-      <th title="Times Dominated"class="ui-table-content txtnowrap">TDM</th>
-      <th title="Revenges"class="ui-table-content txtnowrap">R</th>
-      <th title="Extinguishes"class="ui-table-content txtnowrap">E</th>
+      <th title="Classes">C</th>
+      <th title="Kills">K</th>
+      <th title="Assists">A</th>
+      <th title="Deaths">D</th>    
+      <th title="Kills+Assists/Death">KAPD</th>
+      <th title="Kills+Assists/Minute">KAPM</th>
+      <th title="Damage">DA</th>
+      <th title="Damage/Death">DAPD</th>
+      <th title="Damage/Minute">DAPM</th>
+      <th title="Longest Kill Streak">LKS</th>
+      <th title="Headshots">HS</th>
+      <th title="Backstabs">BS</th>
+      <th title="Capture Points Blocked">CPB</th>
+      <th title="Capture Points Captured">CPC</th>
+      <th title="Intel Defends">ID</th>
+      <th title="Intel Captures">IC</th>
+      <th title="Dominations">DOM</th>
+      <th title="Times Dominated">TDM</th>
+      <th title="Revenges">R</th>
+      <th title="Extinguishes">E</th>
     </tr>
   </thead>
   <tbody>
