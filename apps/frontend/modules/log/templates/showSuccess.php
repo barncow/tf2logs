@@ -30,6 +30,14 @@ use_javascript('logshow.min.js');
     <span class="subInfo">
       Total Time: <?php echo outputSecondsToHumanFormat($log['elapsed_time']) ?><br/>
       <span title="Playable Time is Total Time with the time spent during halftime removed. Also, if this server used the Supplemental Stats plugin, this will remove time spent during pausing of the game. This value is used to calculate the per minute stats below.">Playable Time: <?php echo outputSecondsToHumanFormat($log['game_seconds']) ?></span><br/>
+      Map: <?php
+        if(isset($log['map_name']) && strlen($log['map_name']) > 0) {
+          echo $log['map_name'];
+        } else {
+          echo "None Specified";
+        }
+        echo "<br/>";
+      ?>
       Uploaded: <?php echo getHumanReadableDate($log['created_at']) ?><br/>
       By: <?php echo link_to($log['Submitter']['name'], 'player/showNumericSteamId?id='.$log['Submitter']['numeric_steamid']) ?><br/>
       Views: <?php echo $log['views'] ?>
