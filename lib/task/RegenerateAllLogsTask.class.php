@@ -19,7 +19,9 @@ class RegenerateAllLogsTask extends sfBaseTask {
     $this->detailedDescription = <<<EOF
 The [tf2logs:regenerate-all|INFO] task regenerates all logs from the LogFile table:
  
-  [./symfony tf2logs:regenerate-all --env=prod --start=1 --end=max|INFO]
+  [./symfony tf2logs:regenerate-all --env=prod --start=1 --end=max --gc=10|INFO]
+  
+  Note - setting gc to false will disable garbage collection.
   
   BE SURE THAT YOU HAVE PERFORMED A MANUAL BACKUP BEFORE RUNNING THIS TASK!!!
 EOF;
@@ -77,8 +79,8 @@ EOF;
           $this->logSection('regenerate', sprintf('Regenerated Log ID: %d of %d', $logid, $maxid));
         }
         
-        if($i % $options['gc'] == 0) {
-          //every 10 logs we want to invoke garbage collection.
+        if($options['gc'] != 'false' && $i % $options['gc'] == 0) {
+          //every set number of logs we want to invoke garbage collection.
           $this->logSection('gc', 'Running garbage collection');
           gc_collect_cycles();
         }
