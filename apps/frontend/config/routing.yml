@@ -18,6 +18,10 @@ faq:
   url: /faq
   param: {module: content, action: faq}
   
+track:
+  url: /track
+  param: {module: default, action: track}
+  
 log_by_id:
   url:   /logs/:id
   param: { module: log, action: show }

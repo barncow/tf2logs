@@ -7,6 +7,9 @@ use_helper('PageElements');
 
 <?php
 $log314Link = link_to('Here is a sample log with these features active', '@log_by_id?id=314');
+$fileurl = url_for('@track').'?url='.sfConfig::get('app_supstats_dl_url');
+$dlPlural = "";
+if($supStatsHits != 1) $dlPlural = 's';
 $s = <<<EOD
 <a name="suppstats"/>
 <p>
@@ -19,7 +22,8 @@ $s = <<<EOD
   </ul>
 </p>
 <p>In order to use this plugin on your server, you will need to have <a href="http://www.sourcemod.net">SourceMod</a> <a href="http://wiki.alliedmods.net/Installing_SourceMod">installed</a> and running on your server. Then, just put the plugin from the download link below into your SourceMod plugins directory.</p>
-<h3><a href="/files/supstats.smx">DOWNLOAD SUPPLEMENTAL STATS PLUGIN</a></h3>
+<h3><a href="$fileurl">DOWNLOAD SUPPLEMENTAL STATS PLUGIN</a></h3>
+($supStatsHits download$dlPlural)<br/>
 $log314Link<br/>
 <a href="https://github.com/qpingu/tf2.pug.na-game-server/blob/master/addons/sourcemod/scripting/supstats.sp">Source on Github</a>
 EOD;

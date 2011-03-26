@@ -25,6 +25,9 @@ whatsNew:
 faq:
   is_secure: false
   
+track:
+  is_secure: false
+  
 plugins:
   is_secure: false
   

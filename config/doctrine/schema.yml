@@ -481,3 +481,14 @@ Session:
     stime:
       type: integer(4)
       notnull: true
+      
+Track:
+  columns:
+    url:
+      type: string(255)
+      unique: true
+      notnull: true
+    hits:
+      type: integer(4)
+      notnull: true
+      default: 0

@@ -27,4 +27,11 @@ class defaultActions extends sfActions {
   public function executeDisabled(){
     $this->getUser()->setFlash('error', 'This website is currently down for routine maintenance. Please try again later.');
   }
+  
+  public function executeTrack(sfWebRequest $request) {
+    $url = $request->getParameter('url');
+    $this->forward404Unless($url);
+    Doctrine_Core::getTable('Track')->incrementUrl($url);
+    $this->redirect($url);
+  }
 }
