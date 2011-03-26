@@ -16,6 +16,17 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 <?php
 $annuitLink = link_to('Annuit Coeptis', '@player_by_numeric_steamid?id=76561197983800058');
 $s = <<<EOD
+<h3>Fixed a few Issues and Added some Docs</h3>
+<p>Did numerous fixes around the site. The biggest addition though is some documentation at the FAQ link at the top left (still a work in progress). Also added some help buttons on the log view page to help clarify what is going on.</p>
+EOD;
+echo outputInfoBox("entry7", "Updates for March 26, 2010", $s);
+?>
+
+<br/>
+
+<?php
+$annuitLink = link_to('Annuit Coeptis', '@player_by_numeric_steamid?id=76561197983800058');
+$s = <<<EOD
 <h3>Fixed Some Issues with Corrupt Lines and Map Recognition</h3>
 <p>There seem to be more cases where line breaks are being erroneously entered into the log than expected. When coming upon one of these lines, the site would just reject the whole log file. Now, only the offending line will be ignored.</p>
 <p>There is also a fix to a somewhat hidden feature - automatic map recognition. TF2 will log what map the current log file is for, but generally too soon for it to show up in the log that gets saved. This will be something that will be added to the <a href="$statpagehref">Supplemental Stats Plugin</a>. But, sometimes it will get saved to the log. Originally, the site would not recognize this line outside of the tournament mode - now it does.</p>
