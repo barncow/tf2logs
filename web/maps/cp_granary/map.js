@@ -16,11 +16,11 @@ var GranaryMap = GameMap.extend({
 	  this.mapImageLocation = '/maps/cp_granary/map.jpg';
 	  this.capturePoints = [
 	    //first value should be the log's name for the point, the second value should be the value that shows up in game
-		  new CapturePointDrawable("Granary_cap_cp3", "Central Control Point", this.generateImageCoordinate(new Coordinate(-1532,0)), "", this.capturePointRadius) //midpt, neutral
-		  ,new CapturePointDrawable("Granary_cap_blue_cp1", "BLU Base", this.generateImageCoordinate(new Coordinate(-1601, 5184)), "blue", this.capturePointRadius) //still slightly off.
-		  ,new CapturePointDrawable("Granary_cap_blue_cp2", "BLU Warehouse", this.generateImageCoordinate(new Coordinate(-1537, 2963)), "blue", this.capturePointRadius)
-		  ,new CapturePointDrawable("Granary_cap_red_cp1", "RED Base", this.generateImageCoordinate(new Coordinate(-1472, -5185)), "red", this.capturePointRadius)
-		  ,new CapturePointDrawable("Granary_cap_red_cp2", "RED Warehouse", this.generateImageCoordinate(new Coordinate(-1535, -2949)), "red", this.capturePointRadius)
+		  new CapturePointDrawable("Granary_cap_cp3", "Central Control Point", new Coordinate(509,114), "", this.capturePointRadius) //midpt, neutral
+		  ,new CapturePointDrawable("Granary_cap_blue_cp1", "BLU Base", new Coordinate(75,110), "blue", this.capturePointRadius)
+		  ,new CapturePointDrawable("Granary_cap_blue_cp2", "BLU Warehouse", new Coordinate(261,115), "blue", this.capturePointRadius)
+		  ,new CapturePointDrawable("Granary_cap_red_cp1", "RED Base", new Coordinate(940,119), "red", this.capturePointRadius)
+		  ,new CapturePointDrawable("Granary_cap_red_cp2", "RED Warehouse", new Coordinate(753,112), "red", this.capturePointRadius)
 	  ];
 	}
 });
