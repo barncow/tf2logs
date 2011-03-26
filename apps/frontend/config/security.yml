@@ -22,6 +22,9 @@ logfile:
 whatsNew:
   is_secure: false
   
+faq:
+  is_secure: false
+  
 plugins:
   is_secure: false
   

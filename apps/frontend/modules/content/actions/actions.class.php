@@ -14,6 +14,6 @@ class contentActions extends sfActions {
   public function executePlugins(sfWebRequest $request) {
   }
   
-  public function executeWhatis(sfWebRequest $request) {
+  public function executeFaq(sfWebRequest $request) {
   }
 }

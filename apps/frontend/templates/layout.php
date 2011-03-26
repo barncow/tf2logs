@@ -30,7 +30,7 @@
       <div id="header" class="ui-corner-all">
         <div id="homeLink">
           <a href="<?php echo url_for('@homepage', true) ?>" id="homeLinkImage"><?php echo image_tag(getRandomLogoFilename()) ?></a>
-          <?php echo link_to("What's TF2Logs.com?", '@whatis', array('id' => 'whatislink')) ?>
+          <?php echo link_to("FAQ", '@faq', array('id' => 'faqlink')) ?>
         </div>
         <div id="userCP">
           

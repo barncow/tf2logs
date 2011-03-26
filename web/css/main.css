@@ -203,27 +203,27 @@ img {
   padding: 3px;
 }
 
-#whatIsTF2LogsContainer {
+#faqContainer {
   width: 500px;
   margin-left: auto;
   margin-right: auto;
   
 }
 
-#whatIsTF2LogsContainer p {
+#faqContainer p {
   text-align: left;
   text-indent: 1em;
 }
 
-#whatIsTF2LogsContainer ul, #whatIsTF2LogsContainer li {
+#faqContainer ul, #faqContainer li {
   text-align: left;
 }
 
-#whatIsTF2LogsContainer h3 {
+#faqContainer h3 {
   margin-top: 1em;
 }
 
-#whatIsTF2LogsContainer .content {
+#faqContainer .content {
   padding: 3px;
 }
 
