@@ -11,7 +11,7 @@ if($log['map_name']) {
   $s .= '<div class="alertBox ui-state-error ui-corner-all"><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>'.$log['Submitter']['name'].' did not specify a map for this log file.</div>';
 }
  $s .= '</div>';
-echo outputInfoBox("logViewerInfoBox", "Log Viewer", $s);
+echo outputInfoBox("logViewerInfoBox", 'Log Viewer<button id="logViewerHelpButton"></button>', $s);
 echo '<br class="hardSeparator"/>';
 
 

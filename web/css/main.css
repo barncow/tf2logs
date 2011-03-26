@@ -204,7 +204,7 @@ img {
 }
 
 #faqContainer {
-  width: 500px;
+  width: 650px;
   margin-left: auto;
   margin-right: auto;
   
@@ -426,25 +426,26 @@ img {
   margin-right: auto;
 }
 
-#helpMessage {
+#helpMessage, #healSpreadHelp, #itemsPickedUpHelp, #playerStatsHelp, #logStatsHelp, #medicComparisonHelp, #weaponStatsHelp, #logViewerHelp {
   display: none;
   font-size: 12px;
 }
 
-#helpMessage p {
+#faq p, #helpMessage p, #healSpreadHelp p, #itemsPickedUpHelp p, #playerStatsHelp p, #logStatsHelp p, #medicComparisonHelp p, #weaponStatsHelp p, #logViewerHelp p {
   text-indent: 1em;
+  margin-bottom: 1em;
 }
 
-#helpMessage h3 {
+#faq h3, #faq h4, #helpMessage h3, #healSpreadHelp h3, #itemsPickedUpHelp h3, #playerStatsHelp h3, #logStatsHelp h3, #medicComparisonHelp h3, #weaponStatsHelp h3, #logViewerHelp h3 {
   margin-top: 5px;
 }
 
-#helpMessage code {
+#faq code, #helpMessage code, #healSpreadHelp code, #itemsPickedUpHelp code, #playerStatsHelp code, #logStatsHelp code, #medicComparisonHelp code, #weaponStatsHelp code, #logViewerHelp code {
   display: block;
   border: 1px dotted #9C947C;
 }
 
-#uploadHelpButton {
+#uploadHelpButton, #healSpreadHelpButton, #itemsPickedUpHelpButton, #playerStatsHelpButton, #logStatsHelpButton, #medicComparisonHelpButton, #weaponStatsHelpButton, #logViewerHelpButton {
   width: 16px;
 }
 

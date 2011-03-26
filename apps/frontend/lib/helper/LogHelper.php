@@ -156,7 +156,7 @@ $avbase = sfConfig::get('app_avatar_base_url');
   $s = <<<EOD
 <div class="statTableContainer" id="weaponStatsContainer">
 <table class="statTable" id="weaponStats" border="0" cellspacing="0" cellpadding="3">
-  <caption class="ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr">Weapon Stats</caption>
+  <caption class="ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr">Weapon Stats<button id="weaponStatsHelpButton"></button></caption>
   <thead>
     <tr>
       <th rowspan="2" class="ui-state-default weaponStatPlayer"><!--playername--></th>
@@ -208,7 +208,7 @@ $minutes = (float)$game_seconds/60;
 $s = <<<EOD
 <div class="statTableContainer">
 <table id="statPanel" class="statTable" border="0" cellspacing="0" cellpadding="3">
-  <caption>Log Stats</caption>
+  <caption>Log Stats<button id="logStatsHelpButton"></button></caption>
   <thead>
     <tr>
       <th>Name</th>
@@ -307,7 +307,7 @@ $minutes = (float)$game_seconds/60;
 $s = <<<EOD
 <div class="statTableContainer">
 <table class="statTable" id="medicStats" border="0" cellspacing="0" cellpadding="3">
-  <caption>Medic Comparison</caption>
+  <caption>Medic Comparison<button id="medicComparisonHelpButton"></button></caption>
   <thead>
     <tr>
       <th>Name</th>
@@ -368,7 +368,7 @@ $avbase = sfConfig::get('app_avatar_base_url');
 $s = <<<EOD
 <div class="statTableContainer">
 <table class="statTable" id="playerStats" border="0" cellspacing="0" cellpadding="3">
-  <caption>Player Stats</caption>
+  <caption>Player Stats<button id="playerStatsHelpButton"></button></caption>
   <thead>
     <tr>
       <th><!--playername--></th>
@@ -447,7 +447,7 @@ function outputPlayerHealStats($miniStats, $playerHealStats) {
   $s = <<<EOD
 <div class="statTableContainer">
   <table class="statTable" id="$htmlid" border="0" cellspacing="0" cellpadding="3">
-    <caption>Heal Spread</caption>
+    <caption>Heal Spread<button id="healSpreadHelpButton"></button></caption>
     <thead>
       $thead
     </thead>
@@ -540,7 +540,7 @@ function outputItemPickupStats($miniStats, $itemPickupStats) {
   $s = <<<EOD
 <div class="statTableContainer">
   <table class="statTable" id="$htmlid" border="0" cellspacing="0" cellpadding="3">
-    <caption>Items Picked Up</caption>
+    <caption>Items Picked Up<button id="itemsPickedUpHelpButton"></button></caption>
     <thead>
       $thead
     </thead>
