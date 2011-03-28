@@ -83,25 +83,7 @@ exports.ParsingUtils = function() {
   The purpose of this object is to handle setting up the UDP connection, parsing the log lines that come through, and saving to the database.
 */
 exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
-  var 
-    dao = new exports.LogDAO(dbDriver),
-    udp = require('dgram'),
-    server = udp.createSocket("udp4"),
-    parsingUtils = new exports.ParsingUtils(),
-    START_INDEX = 5, //where the udp message should start - garbage? data before this point.
-    END_DECREMENT = 2; //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
-  
-  
-
-  server.on("listening", function() {
-    var address = server.address();
-    console.log("server listening " + address.address + ":" + address.port);
-  });
-  
-  //provide some cleanup upon exit
-  process.on('exit', function(){this.stop();});
-  
-  //public methods
+  //public methods (being defined first since init needs these references to exist
   
   /**
     starts listening for UDP packets. The node process will "hang" after this point,
@@ -128,14 +110,34 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     This should not be used outside this object - only provided for ease of testing.
   */
   this._onMessage = function(msg, rinfo) {
+    //convert message to string, stripping uneeded chars.
     var logLine = msg.toString('utf8', START_INDEX, msg.length - END_DECREMENT);
     
     var ts = parsingUtils.getTimestamp(logLine);
     if(!ts) return; //timestamp is corrupt, no need to continue
     
+    //insert the line into the log_line table.
     dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
   }
+  
+  var 
+    dao = new exports.LogDAO(dbDriver),
+    udp = require('dgram'),
+    server = udp.createSocket("udp4"),
+    parsingUtils = new exports.ParsingUtils(),
+    START_INDEX = 5, //where the udp message should start - garbage? data before this point.
+    END_DECREMENT = 2; //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
+    
+  //set up udp server event handlers
   server.on("message", this._onMessage);
+  
+  server.on("listening", function() {
+    var address = server.address();
+    console.log("server listening " + address.address + ":" + address.port);
+  });
+  
+  //provide some cleanup upon exit
+  process.on('exit', function(){this.stop();});
   
   return this;
 }
