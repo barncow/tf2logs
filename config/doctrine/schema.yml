@@ -492,3 +492,36 @@ Track:
       type: integer(4)
       notnull: true
       default: 0
+      
+LogLine:
+  columns:
+    line_year:
+      type: integer(2)
+      notnull: true
+    line_month:
+      type: integer(1)
+      notnull: true
+    line_day:
+      type: integer(1)
+      notnull: true
+    line_hour:
+      type: integer(1)
+      notnull: true
+    line_minute:
+      type: integer(1)
+      notnull: true
+    line_second:
+      type: integer(1)
+      notnull: true
+    created_at:
+      type: timestamp
+      notnull: true
+    server_ip:
+      type: string(15)
+      notnull: true
+    server_port: 
+      type: integer(2)
+      unsigned: true
+      notnull: true
+    line_data:
+      type: string(1000)
