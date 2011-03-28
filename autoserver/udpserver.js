@@ -24,11 +24,18 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
   pool.connect(DB_CONNECTIONS);
   
   //public methods
+  /**
+    performs query on the database.
+    queryCallback is optional. if not specified, a callback that throws any error that is returned is used.
+  */
   this.query = function(queryString, queryParams, queryCallback) {
     if(!queryCallback) queryCallback = noop;
     pool.query(queryString, queryParams, queryCallback);
   };
   
+  /**
+    shuts down the pool and closes all connections.
+  */
   this.close = function() {
     pool.end(function(err){if(err) throw err});
   };
@@ -63,6 +70,10 @@ exports.LogDAO = function(dbDriver) {
   Object to provide some log parsing utility functions.
 */
 exports.ParsingUtils = function() {
+  /**
+    Gets the timestamp out of the logLine.
+    If the logLine is corrupt, this function will return the value false.
+  */
   this.getTimestamp = function(logLine) {
     var matches = logLine.match(/^L (\d\d)\/(\d\d)\/(\d\d\d\d) - (\d\d):(\d\d):(\d\d)/);
     if(!matches || matches.length == 0) return false;
@@ -81,6 +92,7 @@ exports.ParsingUtils = function() {
 
 /**
   The purpose of this object is to handle setting up the UDP connection, parsing the log lines that come through, and saving to the database.
+  This is the main object to be used.
 */
 exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
   //public methods (being defined first since init needs these references to exist
