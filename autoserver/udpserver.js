@@ -37,7 +37,7 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
     shuts down the pool and closes all connections.
   */
   this.close = function() {
-    pool.end(function(err){if(err) throw err});
+    pool.end(noop);
   };
   
   return this;
@@ -76,7 +76,7 @@ exports.ParsingUtils = function() {
   */
   this.getTimestamp = function(logLine) {
     var matches = logLine.match(/^L (\d\d)\/(\d\d)\/(\d\d\d\d) - (\d\d):(\d\d):(\d\d)/);
-    if(!matches || matches.length == 0) return false;
+    if(!matches || matches.length == 0) return false; //corrupt line
     return {
       month: parseInt(matches[1],10),
       day: parseInt(matches[2],10),
@@ -86,6 +86,16 @@ exports.ParsingUtils = function() {
       second: parseInt(matches[6],10)
     };
   };
+  
+  /**
+    Gets the log line details, which is the string of chars after the timestamp.
+    If there is nothing after the timestamp, this will return the value false.
+  */
+  this.getLogLineDetails = function(logLine) {
+    var START_INDEX = 25;
+    if(logLine.length <= START_INDEX) return false; //corrupt line
+    return logLine.substring(START_INDEX, logLine.length);
+  }
   
   return this;
 }
@@ -111,11 +121,18 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     stops listening for packets, and closes the db connection pool.
   */
   this.stop = function() {
-    server.close();
+    if(this.isRunning()) server.close();
     dao.dbDriver.close();
     
     return this; //for chaining
   };
+  
+  /**
+    Specifies if UDP listening is active or not.
+  */
+  this.isRunning = function() {
+    return udpStatus == 1;
+  }
   
   /**
     This is the onMessage handler, which gets called whenever a UDP message is received.
@@ -126,10 +143,15 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     var logLine = msg.toString('utf8', START_INDEX, msg.length - END_DECREMENT);
     
     var ts = parsingUtils.getTimestamp(logLine);
-    if(!ts) return; //timestamp is corrupt, no need to continue
+    if(!ts) return this.STATUS_INVALID; //timestamp is corrupt, no need to continue
+    
+    var logLineDetails = parsingUtils.getLogLineDetails(logLine);
+    if(!logLineDetails) return this.STATUS_INVALID; //logLineDetails are corrupt, no need to continue
     
     //insert the line into the log_line table.
     dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
+    
+    return this.STATUS_SUCCESS; //still here, must be success.
   }
   
   
@@ -140,7 +162,8 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     server = udp.createSocket("udp4"),
     parsingUtils = new exports.ParsingUtils(),
     START_INDEX = 5, //where the udp message should start - garbage? data before this point.
-    END_DECREMENT = 2; //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
+    END_DECREMENT = 2, //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
+    udpStatus = 0; //0 is not running, 1 is running
     
   //set up udp server event handlers
   server.on("message", this._onMessage);
@@ -148,10 +171,18 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
   server.on("listening", function() {
     var address = server.address();
     console.log("server listening " + address.address + ":" + address.port);
+    udpStatus = 1; //set to running
+  });
+  
+  server.on("close", function() {
+    udpStatus = 0; //set to not running;
   });
   
   //provide some cleanup upon exit
   process.on('exit', function(){this.stop();});
+  
+  this.STATUS_INVALID = -1;
+  this.STATUS_SUCCESS = 1;
   
   return this;
 }
