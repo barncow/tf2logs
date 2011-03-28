@@ -11,10 +11,10 @@ var logLine = 'L 03/27/2011 - 18:00:08: "Console<0><Console><Console>" say "fres
 //test helper function - will take a normally formatted logLine and pad it to a standard UDP message.
 //used for onMessage to simulate a UDP message. 
 function udpMessage(logLine) {
-  return new Buffer('.....'+logLine+'..', encoding='utf8');
+  return new Buffer('.....'+logLine+'..', 'utf8');
 }
 //quick assertion for helper
-assert.equal('.....L 03/27/2011 - 18:00:08: "Console<0><Console><Console>" say "fresh prince of bel air"..', udpMessage(logLine));
+assert.equal('.....L 03/27/2011 - 18:00:08: "Console<0><Console><Console>" say "fresh prince of bel air"..', udpMessage(logLine).toString('utf8'));
 
 //creates a basic UDP onMessage rinfo object, to be used when simulating an onMessage.
 //both arguments are optional.
