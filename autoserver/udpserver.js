@@ -120,6 +120,8 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
   }
   
+  
+  //initialization - done last because init needs the function references above.
   var 
     dao = new exports.LogDAO(dbDriver),
     udp = require('dgram'),
