@@ -75,7 +75,7 @@ use_javascript('logshow.min.js');
 
 <div id="logStatsHelp" title="Log Stats">
   <p>The log stats table lists the players that played in the log in the first column. The other columns show the player's stats for the log file. You can see what the acronym for the stat represents by hovering your mouse over the acronym.</p>
-  <p>The two stats DA (Damage) and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the <a href="<?php echo url_for('@plugins') ?>#suppstats">Supplemental Stats SourceMod plugin</a> on the server that the log was recorded.</p>
+  <p>The two stats DA (Damage), DAPD (Damage per Death), and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the <a href="<?php echo url_for('@plugins') ?>#suppstats">Supplemental Stats SourceMod plugin</a> on the server that the log was recorded.</p>
 </div>
 
 <div id="medicComparisonHelp" title="Medic Comparison">
