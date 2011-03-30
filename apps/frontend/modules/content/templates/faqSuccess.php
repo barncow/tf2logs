@@ -41,7 +41,7 @@ $s = <<<EOD
 <a name="logstatstable"></a>
 <h4>What is the Log Stats Table?</h4>
 <p>The log stats table lists the players that played in the log in the first column. The other columns show the player's stats for the log file. You can see what the acronym for the stat represents by hovering your mouse over the acronym.</p>
-<p>The two stats DA (Damage) and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the $suppstatslink on the server that the log was recorded.</p>
+<p>The two stats DA (Damage), DAPD (Damage per Death), and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the $suppstatslink on the server that the log was recorded.</p>
   
 <a name="healspreadtable"></a>
 <h4>What is the Heal Spread Table?</h4>
