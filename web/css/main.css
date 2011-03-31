@@ -498,7 +498,7 @@ img {
   text-align: center;
 }
 
-.txtleft {
+.txtleft, .txtleft td {
   text-align: left;
 }
 

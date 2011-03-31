@@ -44,6 +44,9 @@ if(!$itemPickupStats || count($itemPickupStats) == 0) {
 }
 echo '<br class="hardSeparator"/>';
 
+echo outputChatLogTable($miniStats, $chatEvents);
+echo '<br class="hardSeparator"/>';
+
 if(mapExists($log['map_name'])) { ?>
 <script type="application/x-javascript">
   var gameMapObj;

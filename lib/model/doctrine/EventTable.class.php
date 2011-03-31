@@ -27,4 +27,16 @@ class EventTable extends Doctrine_Table
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
+    
+    public function getChatEventsByIdAsArray($id) {
+      return $this
+        ->createQuery('e')
+        ->leftJoin('e.Log l')
+        ->leftJoin('e.EventPlayers ep')
+        ->where('l.id = ?', $id)
+        ->whereIn('e.event_type', array('say', 'say_team'))
+        ->orderBy('e.elapsed_seconds asc, e.id asc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
+        ->execute();
+    }
 }
