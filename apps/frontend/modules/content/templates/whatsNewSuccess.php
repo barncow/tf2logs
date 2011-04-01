@@ -17,7 +17,7 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 $tzakaru = link_to('fFww.Tzakaru', '@player_by_numeric_steamid?id=76561198004585626');
 $s = <<<EOD
 <h3>Fixed Upload Issues with Firefox 4</h3>
-<p>I was able to (hopefully) fix issues for users uploading log files using the new Firefox 4 browser. Thanks to $tzakaru for bringing this issue to my attention.</p>
+<p>I was able to (hopefully) fix issues for users uploading log files using the new Firefox 4 browser. If you are still having issues, try refreshing the page. Thanks to $tzakaru for bringing this issue to my attention.</p>
 EOD;
 echo outputInfoBox("entry9", "Updates for March 31, 2010", $s);
 ?>
