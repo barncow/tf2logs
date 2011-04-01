@@ -94,3 +94,7 @@ use_javascript('logshow.min.js');
   <p>After the playback controls, you will see a box indicating the current playback speed. By default, it is 5x, or 5 times faster than real time. After that, you will see a button called cumulative which, when enabled, will allow you to see all the kills in the log file, up to the current playback position.</p>
   <p>Lastly, there is a box that holds all of the chat comments during game play. This indicates the team by color of the person doing the chat, as well as elapsed time within the log that the chat was done. If the player has (team) after their name, it indicates that it was team-only communication. If it is not there, the chat message went to all players.</p>
 </div>
+
+<div id="chatLogHelp" title="Chat Log">
+  <p>This is here to provide a way to easily read what chat messages were output, even if the log does not have an overhead image. All messages were sent to all chat, except for the messsages with (team) after their name. These were only sent to their own team.</p>
+</div>

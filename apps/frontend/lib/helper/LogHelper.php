@@ -569,12 +569,15 @@ EOD;
 
 function outputChatLogTable($miniStats, $chatEvents) { 
   $tbody = "";
+  $avbase = sfConfig::get('app_avatar_base_url');
   foreach($chatEvents as $e) {
     foreach($miniStats as $s) {
       if($s['playerId'] == $e['chat_player_id']) {
+        $teamchat = "";
+        if($e['event_type'] == 'say_team') $teamchat = " <strong>(team)</strong>";
         $tbody .= '<tr>';
         $tbody .= '<td class="ui-table-content">'.outputSecondsToMiniHumanFormat($e['elapsed_seconds']).'</td>';
-        $tbody .= '<td class="ui-table-content">'.$s['name'].'</td>';
+        $tbody .= '<td class="ui-table-content"><img src="'.$avbase.$s['playerAvatarUrl'].'" class="'.$s['team'].' avatarImage ui-corner-all"/>'.link_to($s['name'], 'player/showNumericSteamId?id='.$s['playerNumericSteamid']).$teamchat.'</td>';
         $tbody .= '<td class="ui-table-content" style="text-align: left;">'.$e['text'].'</td>';
         $tbody .= '</tr>';
       }
@@ -596,6 +599,7 @@ function outputChatLogTable($miniStats, $chatEvents) {
       $tbody
     </tbody>
   </table>
+  <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
 <br class="hardSeparator"/>
 EOD;
