@@ -10,14 +10,14 @@ use_javascript('jquery-ui-1.8.9.custom.min.js');
 if(mapExists($log['map_name'])) {
 use_stylesheet('canvas.css'); 
 use_javascript('class.js'); 
-use_javascript('mapviewer.min.js'); 
+use_javascript('mapviewer.min.js?date='.date('Ymd')); 
 use_javascript('/maps/'.$log['map_name'].'/map.js'); 
 use_dynamic_javascript(url_for('@events_by_id?id='.$log['id'])); 
 }
 
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
-use_javascript('logshow.min.js');
+use_javascript('logshow.min.js?date='.date('Ymd'));
 ?>
 
 <div id="score" class="infoBox">
