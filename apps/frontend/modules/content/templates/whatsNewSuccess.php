@@ -14,12 +14,23 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 ?>
 
 <?php
+$tzakaru = link_to('fFww.Tzakaru', '@player_by_numeric_steamid?id=76561198004585626');
+$s = <<<EOD
+<h3>Fixed Upload Issues with Firefox 4</h3>
+<p>I was able to (hopefully) fix issues for users uploading log files using the new Firefox 4 browser. Thanks to $tzakaru for bringing this issue to my attention.</p>
+EOD;
+echo outputInfoBox("entry9", "Updates for March 31, 2010", $s);
+?>
+
+<br/>
+
+<?php
 $annuitLink = link_to('Annuit Coeptis', '@player_by_numeric_steamid?id=76561197983800058');
 $s = <<<EOD
 <h3>Fixed a few Issues and Added some Docs</h3>
 <p>Did numerous fixes around the site. The biggest addition though is some documentation at the FAQ link at the top left (still a work in progress). Also added some help buttons on the log view page to help clarify what is going on.</p>
 EOD;
-echo outputInfoBox("entry7", "Updates for March 26, 2010", $s);
+echo outputInfoBox("entry8", "Updates for March 26, 2010", $s);
 ?>
 
 <br/>
