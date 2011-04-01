@@ -13,7 +13,8 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
   //create connection pool.
   var 
     MySQLPool = require("mysql-pool").MySQLPool,
-    pool = new MySQLPool({database: DB_DATABASE})
+    pool = new MySQLPool({database: DB_DATABASE}),
+    numQueries = 0,
     noop = function(err){if(err)throw err;};
 
   pool.properties.user = DB_USER;
@@ -30,14 +31,23 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
   */
   this.query = function(queryString, queryParams, queryCallback) {
     if(!queryCallback) queryCallback = noop;
-    pool.query(queryString, queryParams, queryCallback);
+    ++numQueries;
+    pool.query(queryString, queryParams, function(err){
+      --numQueries;
+      queryCallback(err);
+    });
   };
   
   /**
     shuts down the pool and closes all connections.
   */
   this.close = function() {
-    pool.end(noop);
+    if(numQueries <= 0) {
+      pool.end(noop);
+    } else {
+      //all queries have not completed - we will wait
+      setTimeout(this.close, 200);
+    }
   };
   
   return this;
@@ -112,6 +122,25 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     so make sure any initialization work is done before calling!
   */
   this.start = function() {
+    //initializing server here because even if not bound, it will be listening for events (and prevent node from closing naturally)
+    server = udp.createSocket("udp4");
+    
+    //set up udp server event handlers
+    server.on("message", this._onMessage);
+    
+    server.on("listening", function() {
+      var address = server.address();
+      console.log("server listening " + address.address + ":" + address.port);
+      udpStatus = 1; //set to running
+    });
+    
+    server.on("close", function() {
+      udpStatus = 0; //set to not running;
+    });
+    
+    //provide some cleanup upon exit
+    process.on('exit', function(){this.stop();});
+    
     server.bind(SERVER_PORT);
     
     return this; //for chaining
@@ -154,32 +183,15 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     return this.STATUS_SUCCESS; //still here, must be success.
   }
   
-  
   //initialization - done last because init needs the function references above.
   var 
     dao = new exports.LogDAO(dbDriver),
     udp = require('dgram'),
-    server = udp.createSocket("udp4"),
+    server, //init done in .start() method.
     parsingUtils = new exports.ParsingUtils(),
     START_INDEX = 5, //where the udp message should start - garbage? data before this point.
     END_DECREMENT = 2, //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
     udpStatus = 0; //0 is not running, 1 is running
-    
-  //set up udp server event handlers
-  server.on("message", this._onMessage);
-  
-  server.on("listening", function() {
-    var address = server.address();
-    console.log("server listening " + address.address + ":" + address.port);
-    udpStatus = 1; //set to running
-  });
-  
-  server.on("close", function() {
-    udpStatus = 0; //set to not running;
-  });
-  
-  //provide some cleanup upon exit
-  process.on('exit', function(){this.stop();});
   
   this.STATUS_INVALID = -1;
   this.STATUS_SUCCESS = 1;

@@ -2,9 +2,9 @@ var
   assert = require('assert'),
   udpServer = require('./udpserver.js'),
   cfg = require('./udpserverconfig_test.js').udpServerConfig,
-  parsingUtils = new udpServer.ParsingUtils()/*,
+  parsingUtils = new udpServer.ParsingUtils(),
   driver = new udpServer.DBDriver(cfg.DB_USER, cfg.DB_PASS, cfg.DB_DATABASE, cfg.DB_CONNECTIONS),
-  logUDPServer = new udpServer.LogUDPServer(cfg.SERVER_PORT, driver)*/;
+  logUDPServer = new udpServer.LogUDPServer(cfg.SERVER_PORT, driver);
   
 var logLine = 'L 03/27/2011 - 18:00:08: "Console<0><Console><Console>" say "fresh prince of bel air"';
 
@@ -55,8 +55,8 @@ assert.ok(!parsingUtils.getLogLineDetails(logLine.substring(0, 10)));
 ////////////////////////////////////
 
 //test onMessage sunny case
-//assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(logLine), createRinfo()));
+assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(logLine), createRinfo()));
 
 
 //this MUST be last - closes the pool and then the test suite.
-//logUDPServer.stop(); //has problems actually closing due to mysql pool
+logUDPServer.stop();
