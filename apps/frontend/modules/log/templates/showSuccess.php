@@ -96,5 +96,5 @@ use_javascript('logshow.min.js');
 </div>
 
 <div id="chatLogHelp" title="Chat Log">
-  <p>This is here to provide a way to easily read what chat messages were output, even if the log does not have an overhead image. All messages were sent to all chat, except for the messsages with (team) after their name. These were only sent to their own team.</p>
+  <p>The Chat Log is here to provide a way to easily read what chat messages were output, even if the log does not have an overhead image. All messages were sent to all chat, except for the messsages with (team) after their name. These were only sent to their own team.</p>
 </div>

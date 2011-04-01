@@ -18,6 +18,7 @@ $s = <<<EOD
     <li><a href="#weaponstatstable">What is the Weapon Stats Table?</a></li>
     <li><a href="#playerstatstable">What is the Player Stats Table?</a></li>
     <li><a href="#itemspickeduptable">What is the Items Picked Up Table?</a></li>
+    <li><a href="#chatlog">What is the Chat Log?</a></li>
   </ul>
 </li>
 </ul>
@@ -67,6 +68,10 @@ $s = <<<EOD
 <p>The Items Picked Up table lists the players that played in the log in the first column. The other columns represent what item was picked up, and how many times the player listed in the first column picked the item up.</p>
 <p>You can see what the item was by hovering your mouse over the icon of the item. You can also click on the icons to sort the table.</p>
 <p>This is only available when using the $suppstatslink on the server that the log was recorded.</p>
+
+<a name="chatlog"></a>
+<h4>What is the Chat Log?</h4>
+<p>The Chat Log is here to provide a way to easily read what chat messages were output, even if the log does not have an overhead image. All messages were sent to all chat, except for the messsages with (team) after their name. These were only sent to their own team.</p>
   
 EOD;
 echo '<div id="faqContainer">';
