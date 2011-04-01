@@ -74,8 +74,8 @@ var GameMap = Class.extend({
 			coordinate = new Coordinate(coordinate.x,coordinate.y*-1);
 		}
 
-		var xImg = Math.floor((coordinate.x-this.minX)/this.getCellWidth());
-		var yImg = Math.floor((coordinate.y-this.minY)/this.getCellHeight());
+		var xImg = Math.floor(Math.abs((coordinate.x-this.minX))/this.getCellWidth());
+		var yImg = Math.floor(Math.abs((coordinate.y-this.minY))/this.getCellHeight());
 		
 		if(this.mirrorY) {
 		  yImg = this.imgHeight-yImg;
