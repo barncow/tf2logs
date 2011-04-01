@@ -18,8 +18,6 @@ var ImpactMap = GameMap.extend({
 			//first value should be the log's name for the point, the second value should be the value that shows up in game
 			new CapturePointDrawable("blue_intel", "Blue Intel", this.generateImageCoordinate(new Coordinate(5,-1658)), "blue", this.capturePointRadius)
 			,new CapturePointDrawable("red_intel", "Red Intel", this.generateImageCoordinate(new Coordinate(-4,2499)), "red", this.capturePointRadius)
-			,new CapturePointDrawable("#Badlands_cap_blue_cp2", "mid big hp", this.generateImageCoordinate(new Coordinate(1161, 440)), "", this.capturePointRadius)
-			,new CapturePointDrawable("#Badlands_cap_red_cp1", "Red back ramp", this.generateImageCoordinate(new Coordinate(1258,3034)), "", this.capturePointRadius)
 		];
 	}
 });
