@@ -299,4 +299,26 @@ $(function() {
 	  e.preventDefault();
 	  $('#logViewerHelp').dialog('open');
 	}).removeClass("ui-button-text-icon-primary").addClass("ui-button-icon-only"); //adjust styling
+	
+	$('#chatLogHelp').dialog({ 
+	  autoOpen: false, 
+	  modal: true,
+	  height: 300,
+		width: 500,
+		buttons: {
+			Close: function() {
+				$(this).dialog("close");
+			}
+		}
+	});
+	$('#chatLogHelpButton').button({
+	  icons: {
+      primary: "ui-icon-help",
+      text: false,
+      label: ''
+    }
+	}).click(function(e){
+	  e.preventDefault();
+	  $('#chatLogHelp').dialog('open');
+	}).removeClass("ui-button-text-icon-primary").addClass("ui-button-icon-only"); //adjust styling
 });

@@ -8,5 +8,6 @@ class logComponents extends sfComponents {
     $this->playerStats = Doctrine::getTable('PlayerStat')->getPlayerStatsForLogId($id);
     $this->playerHealStats = Doctrine::getTable('PlayerHealStat')->getPlayerHealStatsForLogId($id);
     $this->itemPickupStats = Doctrine::getTable('ItemPickupStat')->getItemPickupStatsForLogId($id);
+    $this->chatEvents = Doctrine::getTable('Event')->getChatEventsByIdAsArray($id);
   }
 }

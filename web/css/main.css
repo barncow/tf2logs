@@ -426,26 +426,26 @@ img {
   margin-right: auto;
 }
 
-#helpMessage, #healSpreadHelp, #itemsPickedUpHelp, #playerStatsHelp, #logStatsHelp, #medicComparisonHelp, #weaponStatsHelp, #logViewerHelp {
+#helpMessage, #healSpreadHelp, #itemsPickedUpHelp, #playerStatsHelp, #logStatsHelp, #medicComparisonHelp, #weaponStatsHelp, #logViewerHelp, #chatLogHelp {
   display: none;
   font-size: 12px;
 }
 
-#faq p, #helpMessage p, #healSpreadHelp p, #itemsPickedUpHelp p, #playerStatsHelp p, #logStatsHelp p, #medicComparisonHelp p, #weaponStatsHelp p, #logViewerHelp p {
+#faq p, #helpMessage p, #healSpreadHelp p, #itemsPickedUpHelp p, #playerStatsHelp p, #logStatsHelp p, #medicComparisonHelp p, #weaponStatsHelp p, #logViewerHelp p, #chatLogHelp p {
   text-indent: 1em;
   margin-bottom: 1em;
 }
 
-#faq h3, #faq h4, #helpMessage h3, #healSpreadHelp h3, #itemsPickedUpHelp h3, #playerStatsHelp h3, #logStatsHelp h3, #medicComparisonHelp h3, #weaponStatsHelp h3, #logViewerHelp h3 {
+#faq h3, #faq h4, #helpMessage h3, #healSpreadHelp h3, #itemsPickedUpHelp h3, #playerStatsHelp h3, #logStatsHelp h3, #medicComparisonHelp h3, #weaponStatsHelp h3, #logViewerHelp h3, #chatLogHelp h3 {
   margin-top: 5px;
 }
 
-#faq code, #helpMessage code, #healSpreadHelp code, #itemsPickedUpHelp code, #playerStatsHelp code, #logStatsHelp code, #medicComparisonHelp code, #weaponStatsHelp code, #logViewerHelp code {
+#faq code, #helpMessage code, #healSpreadHelp code, #itemsPickedUpHelp code, #playerStatsHelp code, #logStatsHelp code, #medicComparisonHelp code, #weaponStatsHelp code, #logViewerHelp code, #chatLogHelp code {
   display: block;
   border: 1px dotted #9C947C;
 }
 
-#uploadHelpButton, #healSpreadHelpButton, #itemsPickedUpHelpButton, #playerStatsHelpButton, #logStatsHelpButton, #medicComparisonHelpButton, #weaponStatsHelpButton, #logViewerHelpButton {
+#uploadHelpButton, #healSpreadHelpButton, #itemsPickedUpHelpButton, #playerStatsHelpButton, #logStatsHelpButton, #medicComparisonHelpButton, #weaponStatsHelpButton, #logViewerHelpButton, #chatLogHelpButton {
   width: 16px;
 }
 
@@ -498,7 +498,7 @@ img {
   text-align: center;
 }
 
-.txtleft {
+.txtleft, .txtleft td {
   text-align: left;
 }
 

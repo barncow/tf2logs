@@ -26,6 +26,19 @@ function outputSecondsToHumanFormat($seconds) {
 }
 
 /**
+* Outputs a number for seconds into a mini human readable format,
+* like 10:12, or if less than a minute,
+* just 00:12
+*/
+function outputSecondsToMiniHumanFormat($seconds) {
+  $mins = (int)($seconds/60);
+  $secs = $seconds%60;
+  if($mins < 10) $mins = '0'.$mins;
+  if($secs < 10) $secs = '0'.$secs;
+  return $mins.':'.$secs;
+}
+
+/**
 * If the value given is zero, the output is changed
 * to a class to fade the zero number. This is to
 * draw attention more to the non-zero values.
@@ -548,6 +561,45 @@ function outputItemPickupStats($miniStats, $itemPickupStats) {
       $tbody
     </tbody>
   </table>
+</div>
+<br class="hardSeparator"/>
+EOD;
+  return $s;
+}
+
+function outputChatLogTable($miniStats, $chatEvents) { 
+  $tbody = "";
+  $avbase = sfConfig::get('app_avatar_base_url');
+  foreach($chatEvents as $e) {
+    foreach($miniStats as $s) {
+      if($s['playerId'] == $e['chat_player_id']) {
+        $teamchat = "";
+        if($e['event_type'] == 'say_team') $teamchat = " <strong>(team)</strong>";
+        $tbody .= '<tr>';
+        $tbody .= '<td class="ui-table-content">'.outputSecondsToMiniHumanFormat($e['elapsed_seconds']).'</td>';
+        $tbody .= '<td class="ui-table-content"><img src="'.$avbase.$s['playerAvatarUrl'].'" class="'.$s['team'].' avatarImage ui-corner-all"/>'.link_to($s['name'], 'player/showNumericSteamId?id='.$s['playerNumericSteamid']).$teamchat.'</td>';
+        $tbody .= '<td class="ui-table-content" style="text-align: left;">'.$e['text'].'</td>';
+        $tbody .= '</tr>';
+      }
+    }
+  }  
+   
+  $s = <<<EOD
+<div class="statTableContainer">
+  <table class="statTable" id="chatLogTable" border="0" cellspacing="0" cellpadding="3">
+    <caption class="ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr">Chat Log<button id="chatLogHelpButton"></button></caption>
+    <thead>
+      <tr>
+        <th class="ui-state-default">Elapsed Time</th>
+        <th class="ui-state-default">Name</th>
+        <th class="ui-state-default">Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      $tbody
+    </tbody>
+  </table>
+  <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
 </div>
 <br class="hardSeparator"/>
 EOD;
