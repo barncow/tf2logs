@@ -19,7 +19,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'port'            => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'server_group_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('ServerGroup'), 'add_empty' => true)),
       'last_message'    => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate())),
-      'validate_key'    => new sfWidgetFormFilterInput(),
+      'verify_key'      => new sfWidgetFormFilterInput(),
       'status'          => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
@@ -30,7 +30,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'port'            => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'server_group_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('ServerGroup'), 'column' => 'id')),
       'last_message'    => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
-      'validate_key'    => new sfValidatorPass(array('required' => false)),
+      'verify_key'      => new sfValidatorPass(array('required' => false)),
       'status'          => new sfValidatorPass(array('required' => false)),
     ));
 
@@ -58,7 +58,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'port'            => 'Number',
       'server_group_id' => 'ForeignKey',
       'last_message'    => 'Date',
-      'validate_key'    => 'Text',
+      'verify_key'      => 'Text',
       'status'          => 'Text',
     );
   }

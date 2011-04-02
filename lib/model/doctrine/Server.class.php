@@ -11,6 +11,9 @@
  * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 class Server extends BaseServer {
+  const STATUS_NOT_VERIFIED = 'N';
+  const STATUS_INACTIVE = 'I'; //previous owner gave up rights to this server
+
   public function saveNewServer($slug, $name, $ip, $port, $owner_id) {
     $serverGroup = new ServerGroup();
     $serverGroup->setSlug($slug);
@@ -21,14 +24,22 @@ class Server extends BaseServer {
     $this->port = $port;
     $this->ServerGroup = $serverGroup;
     
-    $this->validate_key = 'asdf';
-    $this->status = 'N'; //for not validated
+    $this->verify_key = $this->generateVerifyKey($name);
+    $this->status = self::STATUS_NOT_VERIFIED;
     
     $this->save();
   }
   
-  public function getSlug() {
-    if(!$this->slug) return $this->ServerGroup->getSlug();
-    return $this->slug;
+  public function generateVerifyKey($serverName = null) {
+    if(!$serverName) {
+      $serverName = $this->name;
+    }
+    $key = "tf2logs:";
+    
+    $fieldlength = $this->getTable()->getColumnDefinition('verify_key');
+    $fieldlength = $fieldlength['length'];
+    
+    $keylength = $fieldlength-strlen($key);
+    return $key.substr(sha1($serverName.time()), 0 ,$keylength);
   }
 }

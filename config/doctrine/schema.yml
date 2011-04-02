@@ -562,7 +562,7 @@ Server:
     last_message:
       type: timestamp
       notnull: false
-    validate_key:
+    verify_key:
       type: string(20)
       notnull: false
     status:

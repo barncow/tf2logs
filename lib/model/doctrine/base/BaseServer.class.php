@@ -11,7 +11,7 @@
  * @property integer $port
  * @property integer $server_group_id
  * @property timestamp $last_message
- * @property string $validate_key
+ * @property string $verify_key
  * @property string $status
  * @property ServerGroup $ServerGroup
  * 
@@ -21,7 +21,7 @@
  * @method integer     getPort()            Returns the current record's "port" value
  * @method integer     getServerGroupId()   Returns the current record's "server_group_id" value
  * @method timestamp   getLastMessage()     Returns the current record's "last_message" value
- * @method string      getValidateKey()     Returns the current record's "validate_key" value
+ * @method string      getVerifyKey()       Returns the current record's "verify_key" value
  * @method string      getStatus()          Returns the current record's "status" value
  * @method ServerGroup getServerGroup()     Returns the current record's "ServerGroup" value
  * @method Server      setSlug()            Sets the current record's "slug" value
@@ -30,7 +30,7 @@
  * @method Server      setPort()            Sets the current record's "port" value
  * @method Server      setServerGroupId()   Sets the current record's "server_group_id" value
  * @method Server      setLastMessage()     Sets the current record's "last_message" value
- * @method Server      setValidateKey()     Sets the current record's "validate_key" value
+ * @method Server      setVerifyKey()       Sets the current record's "verify_key" value
  * @method Server      setStatus()          Sets the current record's "status" value
  * @method Server      setServerGroup()     Sets the current record's "ServerGroup" value
  * 
@@ -73,7 +73,7 @@ abstract class BaseServer extends sfDoctrineRecord
              'type' => 'timestamp',
              'notnull' => false,
              ));
-        $this->hasColumn('validate_key', 'string', 20, array(
+        $this->hasColumn('verify_key', 'string', 20, array(
              'type' => 'string',
              'notnull' => false,
              'length' => 20,

@@ -57,6 +57,13 @@ assert.ok(!parsingUtils.getLogLineDetails(logLine.substring(0, 10)));
 //test onMessage sunny case
 assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(logLine), createRinfo()));
 
+/**
+for tf2logs code verification
+L 04/02/2011 - 10:05:03: "Console<0><Console><Console>" say "tf2logs:61867d3ed590"
+L 04/02/2011 - 10:05:19: "Console<0><Console><Console>" say ""tf2logs:61867d3ed590""
+that is using hlsw to put these codes in, without quotes in the command and with quotes. try also with in game console.
+*/
+
 
 //this MUST be last - closes the pool and then the test suite.
 logUDPServer.stop();

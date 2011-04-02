@@ -22,7 +22,7 @@ abstract class BaseServerForm extends BaseFormDoctrine
       'port'            => new sfWidgetFormInputText(),
       'server_group_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('ServerGroup'), 'add_empty' => false)),
       'last_message'    => new sfWidgetFormDateTime(),
-      'validate_key'    => new sfWidgetFormInputText(),
+      'verify_key'      => new sfWidgetFormInputText(),
       'status'          => new sfWidgetFormInputText(),
     ));
 
@@ -34,7 +34,7 @@ abstract class BaseServerForm extends BaseFormDoctrine
       'port'            => new sfValidatorInteger(),
       'server_group_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('ServerGroup'))),
       'last_message'    => new sfValidatorDateTime(array('required' => false)),
-      'validate_key'    => new sfValidatorString(array('max_length' => 20, 'required' => false)),
+      'verify_key'      => new sfValidatorString(array('max_length' => 20, 'required' => false)),
       'status'          => new sfValidatorString(array('max_length' => 1, 'required' => false)),
     ));
 

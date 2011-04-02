@@ -30,7 +30,7 @@ class serversActions extends sfActions {
   */
   public function executeAdd(sfWebRequest $request) {
     $this->form = new ServerForm();
-    $this->processForm($request, $this->form, 'Your server was successfully added. Follow the instructions to validate the server.', 'Could not add the server. Make sure that your server IP, port, and URL\'s are unique.');
+    $this->processForm($request, $this->form, 'Your server was successfully added. Follow the instructions to validate the server.', 'Could not add the server. Check the error messages below.');
   }
   
   public function executeValidate(sfWebRequest $request) {
@@ -46,9 +46,10 @@ class serversActions extends sfActions {
       $server->saveNewServer($form->getValue('slug'), $form->getValue('name'), $form->getValue('ip'), $form->getValue('port'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
       
       $this->getUser()->setFlash('notice', $confirmationMsg);
-      $this->redirect('@server_validate?slug='.$server->getSlug());
+      $this->redirect('@server_validate?slug='.$form->getValue('slug'));
     } else {
       $this->getUser()->setFlash('error', $errorMsg);
+      $this->setTemplate('new');
     }
     
   }
