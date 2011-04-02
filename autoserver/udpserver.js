@@ -62,6 +62,10 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
 exports.LogDAO = function(dbDriver) {
   this.dbDriver = dbDriver;
   
+  //these taken from Server model in main code base.
+  var SERVER_STATUS_ACTIVE = "A";
+  var SERVER_STATUS_INACTIVE = "I";
+  
   //public methods
   /*
     This will do an insert of parsed data to the database. The timestamp variables should be pulled from the line to save directly.
@@ -71,6 +75,26 @@ exports.LogDAO = function(dbDriver) {
   this.insertLogLine = function(year, month, day, hour, minute, second, server_ip, server_port, data, callback) {
     dbDriver.query('insert into log_line (line_year, line_month, line_day, line_hour, line_minute, line_second, created_at, server_ip, server_port, line_data) values(?, ?, ?, ?, ?, ?, current_timestamp, ?, ?, ?)',
       [year, month, day, hour, minute, second, server_ip, server_port, data], callback);
+      
+    //doing the timestamp update here to ensure that it gets done when the message is entered.
+    this.updateLastMessageTimestamp(server_ip, server_port);
+  };
+  
+  /*
+    This will update the server record for the given IP, port, and verify_key so that the server is verified (verify_key is null, status is updated).
+    If the given IP, port, and verify_key combo does not match anything, nothing is done.
+  */
+  this.verifyServer = function(server_ip, server_port, verifyKey, callback) {
+    dbDriver.query('update server set verify_key = null, status = ? where ip = ? and port = ? and verify_key = ?',
+      [SERVER_STATUS_ACTIVE, server_ip, server_port, verifyKey], callback);
+  };
+  
+  /**
+    This will update the server record for the given server_ip and server_port (if any match) with CURRENT_TIMESTAMP for the last_message column in the server table.
+  */
+  this.updateLastMessageTimestamp = function(server_ip, server_port, callback) {
+    dbDriver.query('update server set last_message = CURRENT_TIMESTAMP where ip = ? and port = ? and status != ?',
+      [server_ip, server_port, SERVER_STATUS_INACTIVE], callback);
   };
   
   return this;
@@ -105,7 +129,16 @@ exports.ParsingUtils = function() {
     var START_INDEX = 25;
     if(logLine.length <= START_INDEX) return false; //corrupt line
     return logLine.substring(START_INDEX, logLine.length);
-  }
+  };
+  
+  /**
+    Gets the verify key, if one is found. Otherwise the value false is returned.
+  */
+  this.getVerifyKey = function(logLineDetails) {
+    var matches = logLineDetails.match(/^"Console<0><Console><Console>" say ".*(tf2logs:[a-zA-Z0-9]+)/);
+    if(!matches || matches.length == 0) return false; //corrupt line
+    return matches[1];
+  };
   
   return this;
 }
@@ -176,6 +209,12 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     
     var logLineDetails = parsingUtils.getLogLineDetails(logLine);
     if(!logLineDetails) return this.STATUS_INVALID; //logLineDetails are corrupt, no need to continue
+    
+    //if we get a verify key line, we need to update the server record, if any.
+    var verifyKey = parsingUtils.getVerifyKey(logLineDetails);
+    if(verifyKey) {
+      dao.verifyServer(rinfo.address, rinfo.port, verifyKey);
+    }
     
     //insert the line into the log_line table.
     dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);

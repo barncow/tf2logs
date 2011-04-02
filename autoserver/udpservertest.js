@@ -50,6 +50,17 @@ assert.equal('"Console<0><Console><Console>" say "fresh prince of bel air"', par
 //check that getLogLineDetails on a corrupt string returns false.
 assert.ok(!parsingUtils.getLogLineDetails(logLine.substring(0, 10)));
 
+//check that getting verifykey from non verifykey line returns false
+assert.ok(!parsingUtils.getVerifyKey(parsingUtils.getLogLineDetails(logLine)));
+
+//check that one form of chat message gets our key
+var verifykey1 = 'L 04/02/2011 - 10:05:03: "Console<0><Console><Console>" say "tf2logs:627385e4af85"';
+assert.equal('tf2logs:627385e4af85', parsingUtils.getVerifyKey(parsingUtils.getLogLineDetails(verifykey1)));
+
+//check that another form of chat message gets our key
+var verifykey2 = 'L 04/02/2011 - 10:05:19: "Console<0><Console><Console>" say ""tf2logs:61867d3ed590""';
+assert.equal('tf2logs:61867d3ed590', parsingUtils.getVerifyKey(parsingUtils.getLogLineDetails(verifykey2)));
+
 ////////////////////////////////////
 //TESTS FOR LogUDPServer._onMessage
 ////////////////////////////////////
@@ -57,12 +68,8 @@ assert.ok(!parsingUtils.getLogLineDetails(logLine.substring(0, 10)));
 //test onMessage sunny case
 assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(logLine), createRinfo()));
 
-/**
-for tf2logs code verification
-L 04/02/2011 - 10:05:03: "Console<0><Console><Console>" say "tf2logs:61867d3ed590"
-L 04/02/2011 - 10:05:19: "Console<0><Console><Console>" say ""tf2logs:61867d3ed590""
-that is using hlsw to put these codes in, without quotes in the command and with quotes. try also with in game console.
-*/
+//test that the verifykey onmessage handler works
+assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(verifykey1), createRinfo()));
 
 
 //this MUST be last - closes the pool and then the test suite.
