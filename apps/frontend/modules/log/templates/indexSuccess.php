@@ -25,11 +25,11 @@ use_javascript('autocompletehelper.js');
 <?php if($sf_user->isAuthenticated()): ?>
   <?php use_stylesheet('jquery.ui.plupload.css'); ?>
   <?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>
-  <?php use_javascript('plupload.min.js'); ?>
-  <?php use_javascript('plupload.html5.min.js'); ?>
-  <?php use_javascript('plupload.html4.min.js'); ?>
-  <?php use_javascript('jquery.ui.plupload.min.js'); ?>
-  <?php use_javascript('loguploader.min.js'); ?>
+  <?php use_javascript('plupload.min.js?date='.date('Ymd')); ?>
+  <?php use_javascript('plupload.html5.min.js?date='.date('Ymd')); ?>
+  <?php use_javascript('plupload.html4.min.js?date='.date('Ymd')); ?>
+  <?php use_javascript('jquery.ui.plupload.min.js?date='.date('Ymd')); ?>
+  <?php use_javascript('loguploader.min.js?date='.date('Ymd')); ?>
   <?php use_javascript('jquery.infieldlabel.min.js'); ?>
   <div id="uploader">
     <?php 

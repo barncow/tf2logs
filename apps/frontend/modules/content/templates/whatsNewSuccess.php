@@ -14,12 +14,33 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 ?>
 
 <?php
+$s = <<<EOD
+<h3>Added Chat Log Table, ctf_impact2 Support</h3>
+<p>Some league admins requested the ability to show the chat messages for a log in a table, even if the log does not have a map that is supported. Coming soon, the capture times will be output, but I need to rearrange some stuff in the backend before I want to go ahead with that. Also added is Log Viewer support for the ctf_impact2 map, which means that all maps in the UGC Highlander Regular Season are now supported!</p>
+EOD;
+echo outputInfoBox("entry10", "Updates for April 1, 2011", $s);
+?>
+
+<br/>
+
+<?php
+$tzakaru = link_to('fFww.Tzakaru', '@player_by_numeric_steamid?id=76561198004585626');
+$s = <<<EOD
+<h3>Fixed Upload Issues with Firefox 4</h3>
+<p>I was able to (hopefully) fix issues for users uploading log files using the new Firefox 4 browser. If you are still having issues, try refreshing the page. Thanks to $tzakaru for bringing this issue to my attention.</p>
+EOD;
+echo outputInfoBox("entry9", "Updates for March 31, 2011", $s);
+?>
+
+<br/>
+
+<?php
 $annuitLink = link_to('Annuit Coeptis', '@player_by_numeric_steamid?id=76561197983800058');
 $s = <<<EOD
 <h3>Fixed a few Issues and Added some Docs</h3>
 <p>Did numerous fixes around the site. The biggest addition though is some documentation at the FAQ link at the top left (still a work in progress). Also added some help buttons on the log view page to help clarify what is going on.</p>
 EOD;
-echo outputInfoBox("entry7", "Updates for March 26, 2010", $s);
+echo outputInfoBox("entry8", "Updates for March 26, 2011", $s);
 ?>
 
 <br/>
@@ -32,7 +53,7 @@ $s = <<<EOD
 <p>There is also a fix to a somewhat hidden feature - automatic map recognition. TF2 will log what map the current log file is for, but generally too soon for it to show up in the log that gets saved. This will be something that will be added to the <a href="$statpagehref">Supplemental Stats Plugin</a>. But, sometimes it will get saved to the log. Originally, the site would not recognize this line outside of the tournament mode - now it does.</p>
 <p>Thanks to $annuitLink for bringing these issues to my attention.</p>
 EOD;
-echo outputInfoBox("entry7", "Updates for March 25, 2010", $s);
+echo outputInfoBox("entry7", "Updates for March 25, 2011", $s);
 ?>
 
 <br/>
@@ -43,7 +64,7 @@ $s = <<<EOD
 <h3>Multiple Features Added, Bugs Removed</h3>
 <p>There were some small, minor bugfixes, and you will probably not notice them. There have also been some updates to the <a href="$statpagehref">Supplemental Stats Plugin</a> by Cinq and Annuit Coeptis, which has just been released! These updates include tracking game pauses within the log, tracking how much healing is done per player, and what items, such as medkits, were picked up. Because pause logging is included, each log now has Playable Time calculated, which is the total time for the game, without time for pauses (if they are in the log) and without time between halves. This allows for the calculation of Per Minute stats, along with their Per Death counterparts.</p> <p>$log314Link</p>
 EOD;
-echo outputInfoBox("entry6", "Updates for March 20, 2010", $s);
+echo outputInfoBox("entry6", "Updates for March 20, 2011", $s);
 ?>
 
 <br/>
@@ -53,7 +74,7 @@ $s = <<<EOD
 <h3>Added Support for New Maps</h3>
 <p>I have added Log Viewer support for cp_steel, pl_badwater, and cp_dustbowl.</p>
 EOD;
-echo outputInfoBox("entry5", "Updates for March 15, 2010", $s);
+echo outputInfoBox("entry5", "Updates for March 15, 2011", $s);
 ?>
 
 <br/>
@@ -63,7 +84,7 @@ $s = <<<EOD
 <h3>Added Support for Cinq's Damage Plugin</h3>
 <p>Cinq has made a <a href="$statpagehref">damage plugin</a>. There will be some revisions of this, but TF2Logs.com will maintain support for this feature.</p>
 EOD;
-echo outputInfoBox("entry4", "Updates for March 13, 2010", $s);
+echo outputInfoBox("entry4", "Updates for March 13, 2011", $s);
 ?>
 
 <br/>
@@ -73,7 +94,7 @@ $s = <<<EOD
 <h3>Mirroring on Certain Maps</h3>
 <p>Some map images, like pl_goldrush, cp_gravelpit, and pl_upward were mirrored making them hard to read. This is now fixed. (Hit refresh in your browser if you do not see a change.)</p>
 EOD;
-echo outputInfoBox("entry3", "Updates for March 10, 2010", $s);
+echo outputInfoBox("entry3", "Updates for March 10, 2011", $s);
 ?>
 
 <br/>
@@ -84,7 +105,7 @@ $s = <<<EOD
 <h3>Disconnected Due to No Steam Login - Throwing Error</h3>
 <p>It appears that a log line for a user that disconnects due to a "No Steam logon" has a line break which causes a fragment of the line to go to another line. The parser would then cause an error on this line because it is invalid. The parser will now ignore this corrupted line. (Thanks to $bizLink for helping me fix this issue)</p>
 EOD;
-echo outputInfoBox("entry2", "Updates for March 9, 2010", $s);
+echo outputInfoBox("entry2", "Updates for March 9, 2011", $s);
 ?>
 
 <br/>
@@ -102,7 +123,7 @@ $s = <<<EOD
 <br/>
 <p>There were also some minor bugfixes.</p>
 EOD;
-echo outputInfoBox("entry1", "Updates for March 8, 2010", $s);
+echo outputInfoBox("entry1", "Updates for March 8, 2011", $s);
 ?>
 
 </div>

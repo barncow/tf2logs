@@ -10,14 +10,14 @@ use_javascript('jquery-ui-1.8.9.custom.min.js');
 if(mapExists($log['map_name'])) {
 use_stylesheet('canvas.css'); 
 use_javascript('class.js'); 
-use_javascript('mapviewer.min.js'); 
+use_javascript('mapviewer.min.js?date='.date('Ymd')); 
 use_javascript('/maps/'.$log['map_name'].'/map.js'); 
 use_dynamic_javascript(url_for('@events_by_id?id='.$log['id'])); 
 }
 
 use_javascript('jquery.qtip.min.20110205.js'); 
 use_stylesheet('jquery.qtip.min.20110205.css'); 
-use_javascript('logshow.min.js');
+use_javascript('logshow.min.js?date='.date('Ymd'));
 ?>
 
 <div id="score" class="infoBox">
@@ -75,7 +75,7 @@ use_javascript('logshow.min.js');
 
 <div id="logStatsHelp" title="Log Stats">
   <p>The log stats table lists the players that played in the log in the first column. The other columns show the player's stats for the log file. You can see what the acronym for the stat represents by hovering your mouse over the acronym.</p>
-  <p>The two stats DA (Damage) and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the <a href="<?php echo url_for('@plugins') ?>#suppstats">Supplemental Stats SourceMod plugin</a> on the server that the log was recorded.</p>
+  <p>The two stats DA (Damage), DAPD (Damage per Death), and DAPM (Damage per Minute) represent how much hurt the player inflicted on the other team. This stat allows a team to see who outputs the most damage, but not necessarily the most kills, thus indicating more accurate performance in the game. Damage stats are only available when using the <a href="<?php echo url_for('@plugins') ?>#suppstats">Supplemental Stats SourceMod plugin</a> on the server that the log was recorded.</p>
 </div>
 
 <div id="medicComparisonHelp" title="Medic Comparison">
@@ -93,4 +93,8 @@ use_javascript('logshow.min.js');
   <p>Next you will see a play/pause button, which will start or pause playback of the events in the log file. Next to it is a slider that indicates the current position of playback. You can also move the slider anywhere in the log to jump to a specific point quicker.</p>
   <p>After the playback controls, you will see a box indicating the current playback speed. By default, it is 5x, or 5 times faster than real time. After that, you will see a button called cumulative which, when enabled, will allow you to see all the kills in the log file, up to the current playback position.</p>
   <p>Lastly, there is a box that holds all of the chat comments during game play. This indicates the team by color of the person doing the chat, as well as elapsed time within the log that the chat was done. If the player has (team) after their name, it indicates that it was team-only communication. If it is not there, the chat message went to all players.</p>
+</div>
+
+<div id="chatLogHelp" title="Chat Log">
+  <p>The Chat Log is here to provide a way to easily read what chat messages were output, even if the log does not have an overhead image. All messages were sent to all chat, except for the messsages with (team) after their name. These were only sent to their own team.</p>
 </div>
