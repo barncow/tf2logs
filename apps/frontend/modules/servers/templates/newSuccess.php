@@ -28,7 +28,7 @@ You can add a server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2">This is the URL to get to your server logs.</td>
+      <td colspan="2">This is the URL to get to your server logs. (validation todo alphanumeric,-,_)</td>
     </tr>
     <tr>
       <th class="txtright">{$form['slug']->renderLabel()}</th>

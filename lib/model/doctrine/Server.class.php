@@ -42,4 +42,32 @@ class Server extends BaseServer {
     $keylength = $fieldlength-strlen($key);
     return $key.substr(sha1($serverName.time()), 0 ,$keylength);
   }
+  
+  /**
+    Since single servers inherit settings from the group, need to modify these getters to 
+    look at the group if needed.
+  */
+  public function getSlug() {
+    if(!$this->_get('slug')) {
+      if(!$this->_get('ServerGroup')) {
+        return null;
+      } else {
+        return $this->ServerGroup->getSlug();
+      }
+    } else {
+      return $this->_get('slug');
+    }
+  }
+  
+  public function getName() {
+    if(!$this->_get('name')) {
+      if(!$this->_get('ServerGroup')) {
+        return null;
+      } else {
+        return $this->ServerGroup->getName();
+      }
+    } else {
+      return $this->_get('name');
+    }
+  }
 }

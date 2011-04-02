@@ -85,9 +85,9 @@ openid_error:
   param: { module: player, action: openidError }
   
   #server stuff
-server_validate:
-  url: /servers/:slug/validate
-  param: {module: servers, action: validate }
+server_verify:
+  url: /servers/:slug/verify
+  param: {module: servers, action: verify }
 
 # generic rules
 # please, remove them by adding more specific rules

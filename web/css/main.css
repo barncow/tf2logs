@@ -203,6 +203,31 @@ img {
   padding: 3px;
 }
 
+#contentContainer {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+#contentContainer p {
+  text-align: left;
+  text-indent: 1em;
+}
+
+#contentContainer ul, #contentContainer li {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+#contentContainer h3 {
+  margin-top: 1em;
+}
+
+#contentContainer .content {
+  padding: 3px;
+}
+
 #faqContainer {
   width: 650px;
   margin-left: auto;
@@ -440,7 +465,7 @@ img {
   margin-top: 5px;
 }
 
-#faq code, #helpMessage code, #healSpreadHelp code, #itemsPickedUpHelp code, #playerStatsHelp code, #logStatsHelp code, #medicComparisonHelp code, #weaponStatsHelp code, #logViewerHelp code, #chatLogHelp code {
+#contentContainer code, #faq code, #helpMessage code, #healSpreadHelp code, #itemsPickedUpHelp code, #playerStatsHelp code, #logStatsHelp code, #medicComparisonHelp code, #weaponStatsHelp code, #logViewerHelp code, #chatLogHelp code {
   display: block;
   border: 1px dotted #9C947C;
 }
