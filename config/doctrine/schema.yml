@@ -525,3 +525,53 @@ LogLine:
       notnull: true
     line_data:
       type: string(1000)
+
+ServerGroup:
+  columns:
+    slug:
+      type: string(30)
+      notnull: true
+      unique: true
+    name:
+      type: string(100)
+      notnull: true
+    owner_id:
+      type: integer
+      notnull: true
+    
+Server:
+  columns:
+    slug:
+      type: string(30)
+      #can inherit servergroup defn
+      notnull: false
+    name:
+      type: string(100)
+      #can inherit servergroup defn
+      notnull: false 
+    ip:
+      type: string(15)
+      notnull: true
+    port: 
+      type: integer(2)
+      unsigned: true
+      notnull: true
+    server_group_id:
+      type: integer
+      notnull: true
+    last_message:
+      type: timestamp
+      notnull: false
+    validate_key:
+      type: string(20)
+      notnull: false
+    status:
+      type: string(1)
+      notnull: true
+      #not validated
+      default: N 
+  relations:
+    ServerGroup:
+      onDelete: CASCADE
+      foreignAlias: Servers
+    

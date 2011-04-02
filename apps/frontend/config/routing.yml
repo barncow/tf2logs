@@ -83,6 +83,11 @@ openid_finishauth:
 openid_error:
   url: /players/openidError
   param: { module: player, action: openidError }
+  
+  #server stuff
+server_validate:
+  url: /servers/:slug/validate
+  param: {module: servers, action: validate }
 
 # generic rules
 # please, remove them by adding more specific rules
