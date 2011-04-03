@@ -85,8 +85,20 @@ openid_error:
   param: { module: player, action: openidError }
   
   #server stuff
-server_verify:
+server_new:
+  url: /servers/new
+  param: {module: servers, action: new }
+  
+server_add:
+  url: /servers/add
+  param: {module: servers, action: add }
+  
+server_verify_single:
   url: /servers/:slug/verify
+  param: {module: servers, action: verify }
+  
+server_verify_group:
+  url: /servers/:slug/:server_slug/verify
   param: {module: servers, action: verify }
   
 server_status:

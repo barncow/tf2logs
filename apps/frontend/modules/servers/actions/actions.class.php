@@ -23,6 +23,10 @@ class serversActions extends sfActions {
   */
   public function executeNew(sfWebRequest $request) {
     $this->form = new ServerForm();
+    $this->page = $request->getParameter('page', '');
+    if($this->page == 'newgroup') {
+      $this->form = new ServerGroupForm();
+    }
   }
   
   /**
@@ -30,14 +34,23 @@ class serversActions extends sfActions {
   */
   public function executeAdd(sfWebRequest $request) {
     $this->form = new ServerForm();
-    $this->processForm($request, $this->form, 'Your server was successfully added. Follow the instructions to validate the server.', 'Could not add the server. Check the error messages below.');
+    $this->page = $request->getParameter('page', '');
+    if($this->page == 'newgroup') {
+      $this->form = new ServerGroupForm();
+    }
+    $this->processForm($request, $this->form, 'Could not add the server. Check the error messages below.');
   }
   
   /**
     action to verify new server/server group
   */
   public function executeVerify(sfWebRequest $request) {
-    $this->server = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    if($request->getParameter('server_slug', null)) {
+      $this->server = Doctrine::getTable('Server')->findVerifyServerBySlugsAndOwner($request->getParameter('slug'), $request->getParameter('server_slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    } else {
+      $this->server = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    }
+    
     $this->forward404Unless($this->server);
   }
   
@@ -57,16 +70,25 @@ class serversActions extends sfActions {
     $this->forward404Unless($this->server);
   }
   
-  protected function processForm(sfWebRequest $request, sfForm &$form, $confirmationMsg, $errorMsg) {
+  protected function processForm(sfWebRequest $request, sfForm &$form, $errorMsg) {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     
     if ($form->isValid()) {
       
-      $server = new Server();
-      $server->saveNewServer($form->getValue('slug'), $form->getValue('name'), $form->getValue('ip'), $form->getValue('port'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
+      if($this->page == 'single') {
+        $server = new Server();
+        $server->saveNewSingleServer($form->getValue('slug'), $form->getValue('name'), $form->getValue('ip'), $form->getValue('port'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
+        $this->getUser()->setFlash('notice', 'Your server was successfully added. Follow the instructions to validate the server.');
+        $this->redirect('@server_verify_single?slug='.$form->getValue('slug'));
+      } else if ($this->page == 'newgroup') {
+        $s = $form->setOwnerId($this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')))->save();
+        
+        $this->getUser()->setFlash('notice', 'Your server and group were successfully added. Follow the instructions to validate the server.');
+        
+        $this->redirect('@server_verify_group?slug='.$s->getServerGroup()->getSlug().'&server_slug='.$s->getSlug());
+      }
       
-      $this->getUser()->setFlash('notice', $confirmationMsg);
-      $this->redirect('@server_verify?slug='.$form->getValue('slug'));
+      
     } else {
       $this->getUser()->setFlash('error', $errorMsg);
       $this->setTemplate('new');

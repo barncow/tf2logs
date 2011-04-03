@@ -14,4 +14,23 @@ class ServerGroupTable extends Doctrine_Table {
     public static function getInstance() {
         return Doctrine_Core::getTable('ServerGroup');
     }
+    
+    /**
+      This checks that the given server_slug is not used by any other server within the group represented by group_slug.
+    */
+    public function isServerSlugUsedInGroup($group_slug, $server_slug) {
+      if(!$group_slug || !$server_slug) throw new IllegalArgumentException('group_slug and server_slug cannot be null for isServerSlugUsedInGroup method.');
+      
+      $q = $this
+        ->createQuery('sg')
+        ->select('count(s.id)')
+        ->leftJoin('sg.Servers s')
+        ->where('sg.slug = ?', $group_slug)
+      ->andWhere('s.slug = ?', $server_slug)
+      ->andWhere('s.status != ?', Server::STATUS_INACTIVE);
+
+      $c = (int) $q->fetchOne(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      
+      return $c != 0;
+    }
 }

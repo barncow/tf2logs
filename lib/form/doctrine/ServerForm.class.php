@@ -25,16 +25,20 @@ class ServerForm extends BaseServerForm {
     
     $this->validatorSchema['port']->setMessage('required', 'The Port field is required.');
     $this->validatorSchema['port']->setMessage('invalid', 'The Port field can only be an integer value.');
-    
-    $this->validatorSchema['slug']->setOption('required', true);
-    $this->validatorSchema['slug']->setMessage('required', 'The URL field is required.');
+
+    $max = $this->validatorSchema['slug']->getOption('max_length');
+    $this->validatorSchema['slug'] = new sfValidatorAnd(array(
+      new sfValidatorString(array('max_length' => $max, 'required' => true), array('required' => 'The URL field is required.'))
+      , new sfValidatorRegex(array('pattern' => '/^([a-zA-Z0-9_\-]+)$/'), array('invalid' => 'The Server URL field is invalid. It can only contain letters, numbers, underscores (_), and dashes (-).'))
+    ), array('required' => 'The URL field is required.'));
     $this->widgetSchema['slug']->setOption('label', 'tf2logs.com/servers/');
     
     $this->validatorSchema['name']->setOption('required', true);
-    $this->validatorSchema['name']->setMessage('required', 'The Name field is required.');
-    
+    $this->validatorSchema['name']->setMessage('required', 'The Server Name field is required.');
+    $this->widgetSchema['name']->setOption('label', 'Server Name');
+
     $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
-      new sfValidatorDoctrineUnique(array('model' => 'ServerGroup', 'column' => array('slug')), array('invalid' => 'The URL must be unique.'))
+      new sfValidatorDoctrineUnique(array('model' => 'ServerGroup', 'column' => array('slug')), array('invalid' => 'The Server URL must be unique.'))
       ,new AvailableServerAddressValidator()
     )));
   }

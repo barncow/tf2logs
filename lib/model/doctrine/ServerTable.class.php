@@ -47,6 +47,20 @@ class ServerTable extends Doctrine_Table {
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
     }
     
+    /**
+      Finds a server in need of verifying by its group slug and server slug.
+    */
+    public function findVerifyServerBySlugsAndOwner($group_slug, $server_slug, $owner_id) {
+      $q = $this
+        ->createQuery('s')
+        ->leftJoin('s.ServerGroup sg')
+        ->where('s.status = ?', Server::STATUS_NOT_VERIFIED)
+        ->andWhere('sg.owner_id = ?', $owner_id)
+        ->andWhere('sg.slug = ?', $group_slug)
+        ->andWhere('s.slug = ?', $server_slug);
+       return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
+    }
+    
     public function findServerBySlugAndOwner($slug, $owner_id) {
       $q = $this
         ->createQuery('s')

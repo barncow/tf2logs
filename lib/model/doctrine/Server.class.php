@@ -31,7 +31,7 @@ class Server extends BaseServer {
     }
   }
 
-  public function saveNewServer($slug, $name, $ip, $port, $owner_id) {
+  public function saveNewSingleServer($slug, $name, $ip, $port, $owner_id) {
     $serverGroup = new ServerGroup();
     $serverGroup->setSlug($slug);
     $serverGroup->setName($name);
@@ -42,6 +42,24 @@ class Server extends BaseServer {
     $this->ServerGroup = $serverGroup;
     
     $this->verify_key = $this->generateVerifyKey($name);
+    $this->status = self::STATUS_NOT_VERIFIED;
+    
+    $this->save();
+  }
+  
+  public function saveNewGroupServer($group_name, $group_slug, $server_name, $server_slug, $ip, $port, $owner_id) {
+    $serverGroup = new ServerGroup();
+    $serverGroup->setSlug($group_slug);
+    $serverGroup->setName($group_name);
+    $serverGroup->setOwnerId($owner_id);
+    
+    $this->slug = $server_slug;
+    $this->name = $server_name;
+    $this->ip = $ip;
+    $this->port = $port;
+    $this->ServerGroup = $serverGroup;
+    
+    $this->verify_key = $this->generateVerifyKey($server_name);
     $this->status = self::STATUS_NOT_VERIFIED;
     
     $this->save();

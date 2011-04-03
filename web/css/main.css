@@ -555,11 +555,11 @@ img {
   border-right: 1px solid #695444;
 }
 
-#server_ip {
+#server_ip, #server_group_server_ip {
   width: 100px;
 }
 
-#server_port {
+#server_port, #server_group_server_port {
   width: 50px;
 }
 
