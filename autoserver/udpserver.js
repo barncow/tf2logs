@@ -63,8 +63,9 @@ exports.LogDAO = function(dbDriver) {
   this.dbDriver = dbDriver;
   
   //these taken from Server model in main code base.
-  var SERVER_STATUS_ACTIVE = "A";
-  var SERVER_STATUS_INACTIVE = "I";
+  this.SERVER_STATUS_ACTIVE = "A";
+  this.SERVER_STATUS_INACTIVE = "I";
+  this.SERVER_STATUS_RECORDING = "R";
   
   //public methods
   /*
@@ -86,7 +87,7 @@ exports.LogDAO = function(dbDriver) {
   */
   this.verifyServer = function(server_ip, server_port, verifyKey, callback) {
     dbDriver.query('update server set verify_key = null, status = ? where ip = ? and port = ? and verify_key = ?',
-      [SERVER_STATUS_ACTIVE, server_ip, server_port, verifyKey], callback);
+      [this.SERVER_STATUS_ACTIVE, server_ip, server_port, verifyKey], callback);
   };
   
   /**
@@ -94,7 +95,7 @@ exports.LogDAO = function(dbDriver) {
   */
   this.updateLastMessageTimestamp = function(server_ip, server_port, callback) {
     dbDriver.query('update server set last_message = CURRENT_TIMESTAMP where ip = ? and port = ? and status != ?',
-      [server_ip, server_port, SERVER_STATUS_INACTIVE], callback);
+      [server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
   };
   
   /**
@@ -102,8 +103,13 @@ exports.LogDAO = function(dbDriver) {
   */
   this.updateCurrentMap = function(server_ip, server_port, server_map, callback) {
     dbDriver.query('update server set current_map = ? where ip = ? and port = ? and status != ?',
-      [server_map, server_ip, server_port, SERVER_STATUS_INACTIVE], callback);
+      [server_map, server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
   };
+  
+  this.updateStatus = function(server_ip, server_port, server_status, callback) {
+    dbDriver.query('update server set status = ? where ip = ? and port = ? and status != ?',
+      [server_status, server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
+  }
   
   return this;
 }
@@ -246,6 +252,10 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     var map = parsingUtils.getMap(logLineDetails);
     if(map) {
       dao.updateCurrentMap(rinfo.address, rinfo.port, map);
+    }
+    
+    if(parsingUtils.isRoundStart(logLineDetails)) {
+      //dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING); //todo uncomment when able to shift status back to active
     }
     
     //insert the line into the log_line table.

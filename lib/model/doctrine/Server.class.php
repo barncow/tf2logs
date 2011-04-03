@@ -14,6 +14,7 @@ class Server extends BaseServer {
   const STATUS_NOT_VERIFIED = 'N';
   const STATUS_INACTIVE = 'I'; //previous owner gave up rights to this server
   const STATUS_ACTIVE = 'A';
+  const STATUS_RECORDING = 'R';
   
   /**
     retrieves a description for the given status code.
