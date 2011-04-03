@@ -38,6 +38,16 @@ class serversActions extends sfActions {
     $this->forward404Unless($this->server);
   }
   
+  public function executeStatus(sfWebRequest $request) {
+    $this->server = Doctrine::getTable('Server')->findServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    $this->forward404Unless($this->server);
+  }
+  
+  public function executeMain(sfWebRequest $request) {
+    $this->server = Doctrine::getTable('Server')->findServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    $this->forward404Unless($this->server);
+  }
+  
   protected function processForm(sfWebRequest $request, sfForm &$form, $confirmationMsg, $errorMsg) {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     

@@ -29,4 +29,19 @@ class unit_ServerTableTest extends sfPHPUnitBaseTestCase {
     $find = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner('blah', $owner_id);
     $this->assertFalse($find, 'assert that a non-existent server cannot be found');
   }
+  
+  public function testFindServerBySlugAndOwner() {
+    $server = new Server();
+    $slug = 'newserver';
+    $ip = '1.1.1.1';
+    $port = 6589;
+    $owner_id = 1;
+    $server->saveNewServer($slug, 'name', $ip, $port, $owner_id);
+    
+    $find = Doctrine::getTable('Server')->findServerBySlugAndOwner($slug, $owner_id);
+    $this->assertEquals($slug, $find->getSlug(), 'assert that newly entered server can be retrieved by its slug');
+    
+    $find = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner($slug, $owner_id+1);
+    $this->assertFalse($find, 'assert that finding a valid server with incorrect owner_id returns false');
+  }
 }

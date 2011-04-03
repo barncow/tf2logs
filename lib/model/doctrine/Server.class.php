@@ -13,6 +13,23 @@
 class Server extends BaseServer {
   const STATUS_NOT_VERIFIED = 'N';
   const STATUS_INACTIVE = 'I'; //previous owner gave up rights to this server
+  const STATUS_ACTIVE = 'A';
+  
+  /**
+    retrieves a description for the given status code.
+  */
+  public static function getDescriptionForStatus($status) {
+    switch($status) {
+      case self::STATUS_NOT_VERIFIED:
+        return "Server not Verified";
+      case self::STATUS_ACTIVE:
+        return "Server is Active";
+      case self::INACTIVE:
+        return "Server is Inactive";
+      default:
+        return "N/A";
+    }
+  }
 
   public function saveNewServer($slug, $name, $ip, $port, $owner_id) {
     $serverGroup = new ServerGroup();

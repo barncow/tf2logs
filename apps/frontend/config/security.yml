@@ -36,6 +36,12 @@ search:
   
 index:
   is_secure: false
+  
+status:
+  is_secure: false
+  
+main:
+  is_secure: false
 
 #defaulting to secure for owners and users. This will only contain user level operations.
 default:

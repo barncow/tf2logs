@@ -64,4 +64,16 @@ function getHumanReadableDate($date) {
     return date("M j, Y", strtotime($date));
   }
 }
+
+function getHumanReadableTimestamp($timestamp) {
+  if(is_callable(array($timestamp, 'format'))) {
+    return $timestamp->format("M j, Y g:i:s A T O").' GMT';
+  } else if (is_string($timestamp)) {
+    return date("M j, Y g:i:s A T O", strtotime($timestamp)).' GMT';
+  }
+}
+
+function checkAccess($sf_user, $user_id) {
+  return $sf_user && $sf_user->isAuthenticated() && ($sf_user->getAttribute(sfConfig::get('app_playerid_session_var')) == $user_id || $sf_user->hasCredential('owner'));
+}
 ?>

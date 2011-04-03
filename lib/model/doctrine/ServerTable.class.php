@@ -46,4 +46,15 @@ class ServerTable extends Doctrine_Table {
         ->orWhere('s.slug = ?', $slug);
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
     }
+    
+    public function findServerBySlugAndOwner($slug, $owner_id) {
+      $q = $this
+        ->createQuery('s')
+        ->leftJoin('s.ServerGroup sg')
+        ->where('s.status != ?', Server::STATUS_INACTIVE)
+        ->andWhere('sg.owner_id = ?', $owner_id)
+        ->andWhere('sg.slug = ?', $slug)
+        ->orWhere('s.slug = ?', $slug);
+       return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
+    }
 }

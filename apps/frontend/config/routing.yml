@@ -88,6 +88,14 @@ openid_error:
 server_verify:
   url: /servers/:slug/verify
   param: {module: servers, action: verify }
+  
+server_status:
+  url: /servers/:slug/status
+  param: {module: servers, action: status }
+  
+server_main:
+  url: /servers/:slug
+  param: {module: servers, action: main }
 
 # generic rules
 # please, remove them by adding more specific rules
