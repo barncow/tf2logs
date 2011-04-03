@@ -65,7 +65,7 @@ class serversActions extends sfActions {
     action to get status of server
   */
   public function executeStatus(sfWebRequest $request) {
-    $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
+    $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('server_slug'), $request->getParameter('group_slug', null));
     $this->forward404Unless($this->server);
   }
   
@@ -73,8 +73,8 @@ class serversActions extends sfActions {
     main landing page for a server
   */
   public function executeMain(sfWebRequest $request) {
-    $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
-    $this->forward404Unless($this->server);
+    $this->serverGroup = Doctrine::getTable('ServerGroup')->findOneBySlug($request->getParameter('slug'));
+    $this->forward404Unless($this->serverGroup);
   }
   
   protected function processForm(sfWebRequest $request, sfForm &$form, $errorMsg) {

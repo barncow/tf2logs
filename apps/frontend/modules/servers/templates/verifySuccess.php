@@ -3,7 +3,13 @@ $sf_response->setTitle('Verify '.$server->getName().' - TF2Logs.com');
 use_helper('PageElements');
 
 $address = sfConfig::get('app_auto_server_address');
-$url = url_for("@server_status?slug=".$server->getSlug());
+$url;
+if($server->getServerGroup()->getGroupType() == ServerGroup::GROUP_TYPE_SINGLE_SERVER) {
+  $url = url_for("@server_single_status?server_slug=".$server->getSlug());
+} else if($server->getServerGroup()->getGroupType() == ServerGroup::GROUP_TYPE_MULTI_SERVER){
+  $url = url_for("@server_multi_status?server_slug=".$server->getSlug().'&group_slug='.$server->getServerGroup()->getSlug());
+}
+
 $s = <<<EOD
 <p>Let's go through and update your server configuration, and verify ownership of the server (and make sure that everything works). Follow the next steps carefully to get started:</p>
 <ol>

@@ -72,12 +72,26 @@ class ServerTable extends Doctrine_Table {
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
     }
     
-    public function findServerBySlug($slug) {
+    /**
+      Gets a server object for the given slug. server_slug is required, group_slug is required only for multi groups.
+    */
+    public function findServerBySlug($server_slug, $group_slug = null) {
       $q = $this
         ->createQuery('s')
-        ->leftJoin('s.ServerGroup sg')
-        ->andWhere('sg.slug = ?', $slug)
-        ->orWhere('s.slug = ?', $slug);
-       return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
+        ->leftJoin('s.ServerGroup sg');
+        
+      if($group_slug) {
+        $group_type = ServerGroup::GROUP_TYPE_MULTI_SERVER;
+        $q->where('sg.group_type = ?', $group_type)
+          ->andWhere('sg.slug = ?', $group_slug)
+          ->andWhere('s.slug = ?', $server_slug);
+      } else {
+        $group_type = ServerGroup::GROUP_TYPE_SINGLE_SERVER;
+        $q->where('sg.group_type = ?', $group_type)
+          ->andWhere('sg.slug = ?', $server_slug)
+          ->orWhere('s.slug = ?', $server_slug);
+      }
+        
+      return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
     }
 }

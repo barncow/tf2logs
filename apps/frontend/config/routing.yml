@@ -101,8 +101,12 @@ server_verify_group:
   url: /servers/:slug/:server_slug/verify
   param: {module: servers, action: verify }
   
-server_status:
-  url: /servers/:slug/status
+server_single_status:
+  url: /servers/:server_slug/status
+  param: {module: servers, action: status }
+  
+server_multi_status:
+  url: /servers/:group_slug/:server_slug/status
   param: {module: servers, action: status }
   
 server_main:
