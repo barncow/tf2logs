@@ -61,6 +61,18 @@ assert.equal('tf2logs:627385e4af85', parsingUtils.getVerifyKey(parsingUtils.getL
 var verifykey2 = 'L 04/02/2011 - 10:05:19: "Console<0><Console><Console>" say ""tf2logs:61867d3ed590""';
 assert.equal('tf2logs:61867d3ed590', parsingUtils.getVerifyKey(parsingUtils.getLogLineDetails(verifykey2)));
 
+//check that roundStart is detected
+var roundStartLine = 'L 09/29/2010 - 19:08:56: World triggered "Round_Start"';
+assert.ok(parsingUtils.isRoundStart(parsingUtils.getLogLineDetails(roundStartLine)));
+assert.ok(!parsingUtils.isRoundStart(parsingUtils.getLogLineDetails(logLine)));
+
+//check that map lines are detected
+var loadingMapLine = 'L 04/03/2011 - 15:20:36: Loading map "ctf_impact2"';
+assert.equal('ctf_impact2', parsingUtils.getMap(parsingUtils.getLogLineDetails(loadingMapLine)));
+var startingMapLine = 'L 04/03/2011 - 15:20:36: Started map "ctf_impact2" (CRC "1634099807")';
+assert.equal('ctf_impact2', parsingUtils.getMap(parsingUtils.getLogLineDetails(startingMapLine)));
+assert.ok(!parsingUtils.getMap(parsingUtils.getLogLineDetails(logLine)));
+
 ////////////////////////////////////
 //TESTS FOR LogUDPServer._onMessage
 ////////////////////////////////////
@@ -70,6 +82,9 @@ assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(log
 
 //test that the verifykey onmessage handler works
 assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(verifykey1), createRinfo()));
+
+//test that the map line onmessage handler works
+assert.equal(logUDPServer.STATUS_SUCCESS, logUDPServer._onMessage(udpMessage(loadingMapLine), createRinfo()));
 
 
 //this MUST be last - closes the pool and then the test suite.

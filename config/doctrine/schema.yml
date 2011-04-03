@@ -576,7 +576,10 @@ Server:
       type: string(1)
       notnull: true
       #not validated
-      default: N 
+      default: N
+    current_map:
+      type: string(25)
+      notnull: false
   relations:
     ServerGroup:
       onDelete: CASCADE

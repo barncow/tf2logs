@@ -21,6 +21,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'last_message'    => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate())),
       'verify_key'      => new sfWidgetFormFilterInput(),
       'status'          => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'current_map'     => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
@@ -32,6 +33,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'last_message'    => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
       'verify_key'      => new sfValidatorPass(array('required' => false)),
       'status'          => new sfValidatorPass(array('required' => false)),
+      'current_map'     => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('server_filters[%s]');
@@ -60,6 +62,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'last_message'    => 'Date',
       'verify_key'      => 'Text',
       'status'          => 'Text',
+      'current_map'     => 'Text',
     );
   }
 }

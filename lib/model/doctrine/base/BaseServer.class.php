@@ -13,6 +13,7 @@
  * @property timestamp $last_message
  * @property string $verify_key
  * @property string $status
+ * @property string $current_map
  * @property ServerGroup $ServerGroup
  * 
  * @method string      getSlug()            Returns the current record's "slug" value
@@ -23,6 +24,7 @@
  * @method timestamp   getLastMessage()     Returns the current record's "last_message" value
  * @method string      getVerifyKey()       Returns the current record's "verify_key" value
  * @method string      getStatus()          Returns the current record's "status" value
+ * @method string      getCurrentMap()      Returns the current record's "current_map" value
  * @method ServerGroup getServerGroup()     Returns the current record's "ServerGroup" value
  * @method Server      setSlug()            Sets the current record's "slug" value
  * @method Server      setName()            Sets the current record's "name" value
@@ -32,6 +34,7 @@
  * @method Server      setLastMessage()     Sets the current record's "last_message" value
  * @method Server      setVerifyKey()       Sets the current record's "verify_key" value
  * @method Server      setStatus()          Sets the current record's "status" value
+ * @method Server      setCurrentMap()      Sets the current record's "current_map" value
  * @method Server      setServerGroup()     Sets the current record's "ServerGroup" value
  * 
  * @package    tf2logs
@@ -83,6 +86,11 @@ abstract class BaseServer extends sfDoctrineRecord
              'notnull' => true,
              'default' => 'N',
              'length' => 1,
+             ));
+        $this->hasColumn('current_map', 'string', 25, array(
+             'type' => 'string',
+             'notnull' => false,
+             'length' => 25,
              ));
     }
 

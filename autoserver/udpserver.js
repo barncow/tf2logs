@@ -32,9 +32,9 @@ exports.DBDriver = function(DB_USER, DB_PASS, DB_DATABASE, DB_CONNECTIONS) {
   this.query = function(queryString, queryParams, queryCallback) {
     if(!queryCallback) queryCallback = noop;
     ++numQueries;
-    pool.query(queryString, queryParams, function(err){
+    pool.query(queryString, queryParams, function(err, results, fields){
       --numQueries;
-      queryCallback(err);
+      queryCallback(err, results, fields);
     });
   };
   
@@ -97,6 +97,14 @@ exports.LogDAO = function(dbDriver) {
       [server_ip, server_port, SERVER_STATUS_INACTIVE], callback);
   };
   
+  /**
+    This will update the server record for the given server_ip and server_port (if any match) with the current map.
+  */
+  this.updateCurrentMap = function(server_ip, server_port, server_map, callback) {
+    dbDriver.query('update server set current_map = ? where ip = ? and port = ? and status != ?',
+      [server_map, server_ip, server_port, SERVER_STATUS_INACTIVE], callback);
+  };
+  
   return this;
 }
 
@@ -137,6 +145,25 @@ exports.ParsingUtils = function() {
   this.getVerifyKey = function(logLineDetails) {
     var matches = logLineDetails.match(/^"Console<0><Console><Console>" say ".*(tf2logs:[a-zA-Z0-9]+)/);
     if(!matches || matches.length == 0) return false; //corrupt line
+    return matches[1];
+  };
+  
+  /**
+    checks that the logLineDetails string given indicates a round start event or not.
+  */
+  this.isRoundStart = function(logLineDetails) {
+    return logLineDetails == 'World triggered "Round_Start"';
+  };
+  
+  this.getMap = function(logLineDetails) {
+    var matches = logLineDetails.match(/^Loading map "(.+?)"/);
+    if(!matches || matches.length == 0) {
+      //no matches, check other version
+      matches = logLineDetails.match(/^Started map "(.+?)"/);
+      if(!matches || matches.length == 0) {
+        return false; //still no matches, therefore not a map line.
+      }
+    }
     return matches[1];
   };
   
@@ -214,6 +241,11 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     var verifyKey = parsingUtils.getVerifyKey(logLineDetails);
     if(verifyKey) {
       dao.verifyServer(rinfo.address, rinfo.port, verifyKey);
+    }
+    
+    var map = parsingUtils.getMap(logLineDetails);
+    if(map) {
+      dao.updateCurrentMap(rinfo.address, rinfo.port, map);
     }
     
     //insert the line into the log_line table.
