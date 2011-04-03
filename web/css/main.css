@@ -204,7 +204,7 @@ img {
 }
 
 #contentContainer {
-  width: 500px;
+  width: 550px;
   margin-left: auto;
   margin-right: auto;
   
@@ -213,6 +213,7 @@ img {
 #contentContainer p {
   text-align: left;
   text-indent: 1em;
+  margin-bottom: 5px;
 }
 
 #contentContainer ul, #contentContainer li {

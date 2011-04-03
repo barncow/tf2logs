@@ -33,7 +33,7 @@ You can add a server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2">This is the URL to get to your server logs.</td>
+      <td colspan="2">This is the URL to get to your server logs. It can only contain letters, numbers, underscores (_), and dashes (-).</td>
     </tr>
     <tr>
       <th class="txtright">{$form['slug']->renderLabel()}</th>
@@ -89,7 +89,7 @@ You can add a group and server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2">This is the URL to get to view information about your group of servers.</td>
+      <td colspan="2">This is the URL to get to view information about your group of servers. It can only contain letters, numbers, underscores (_), and dashes (-).</td>
     </tr>
     <tr>
       <th class="txtright">{$form['slug']->renderLabel()}</th>
@@ -115,7 +115,7 @@ You can add a group and server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td colspan="2">This is the URL to get to your logs for this server. Note, since this is an address within your group, it only needs to be unique to the servers within the group, not every server and group.</td>
+      <td colspan="2">This is the URL to get to your logs for this server. Note, since this is an address within your group, it only needs to be unique to the servers within the group, not every server and group. It can only contain letters, numbers, underscores (_), and dashes (-).</td>
     </tr>
     <tr>
       <th class="txtright">{$form['server']['slug']->renderLabel()}my_group/</th>

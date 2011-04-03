@@ -23,7 +23,7 @@ class ServerGroupForm extends BaseServerGroupForm {
     
     $this->validatorSchema['name']->setOption('required', true);
     $this->validatorSchema['name']->setMessage('required', 'The Group Name field is required.');
-    $this->widgetSchema['name']->setOption('label', 'Server Name');
+    $this->widgetSchema['name']->setOption('label', 'Group Name');
     
     //we need to clear the post validator in the serverform to prevent server url unique check. we will re-do the validator with group url unique check, and available server check
     $serverForm = new ServerForm();
