@@ -33,16 +33,25 @@ class serversActions extends sfActions {
     $this->processForm($request, $this->form, 'Your server was successfully added. Follow the instructions to validate the server.', 'Could not add the server. Check the error messages below.');
   }
   
+  /**
+    action to verify new server/server group
+  */
   public function executeVerify(sfWebRequest $request) {
     $this->server = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
     $this->forward404Unless($this->server);
   }
   
+  /**
+    action to get status of server
+  */
   public function executeStatus(sfWebRequest $request) {
     $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
     $this->forward404Unless($this->server);
   }
   
+  /**
+    main landing page for a server
+  */
   public function executeMain(sfWebRequest $request) {
     $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
     $this->forward404Unless($this->server);
