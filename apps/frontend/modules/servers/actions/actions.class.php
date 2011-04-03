@@ -39,12 +39,12 @@ class serversActions extends sfActions {
   }
   
   public function executeStatus(sfWebRequest $request) {
-    $this->server = Doctrine::getTable('Server')->findServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
     $this->forward404Unless($this->server);
   }
   
   public function executeMain(sfWebRequest $request) {
-    $this->server = Doctrine::getTable('Server')->findServerBySlugAndOwner($request->getParameter('slug'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')) );
+    $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('slug'));
     $this->forward404Unless($this->server);
   }
   

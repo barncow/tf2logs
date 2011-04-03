@@ -41,7 +41,22 @@ class unit_ServerTableTest extends sfPHPUnitBaseTestCase {
     $find = Doctrine::getTable('Server')->findServerBySlugAndOwner($slug, $owner_id);
     $this->assertEquals($slug, $find->getSlug(), 'assert that newly entered server can be retrieved by its slug');
     
-    $find = Doctrine::getTable('Server')->findVerifyServerBySlugAndOwner($slug, $owner_id+1);
+    $find = Doctrine::getTable('Server')->findServerBySlugAndOwner($slug, $owner_id+1);
     $this->assertFalse($find, 'assert that finding a valid server with incorrect owner_id returns false');
+  }
+  
+  public function testFindServerBySlug() {
+    $server = new Server();
+    $slug = 'newserver2';
+    $ip = '1.1.1.1';
+    $port = 5896;
+    $owner_id = 1;
+    $server->saveNewServer($slug, 'name', $ip, $port, $owner_id);
+    
+    $find = Doctrine::getTable('Server')->findServerBySlug($slug);
+    $this->assertEquals($slug, $find->getSlug(), 'assert that newly entered server can be retrieved by its slug');
+    
+    $find = Doctrine::getTable('Server')->findServerBySlug($slug.'invalid');
+    $this->assertFalse($find, 'assert that finding a server with incorrect slug returns false');
   }
 }
