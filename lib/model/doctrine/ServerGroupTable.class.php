@@ -19,7 +19,6 @@ class ServerGroupTable extends Doctrine_Table {
       This checks that the given server_slug is not used by any other server within the group represented by group_slug.
     */
     public function isServerSlugUsedInGroup($group_slug, $server_slug) {
-      if(!$group_slug || !$server_slug) throw new IllegalArgumentException('group_slug and server_slug cannot be null for isServerSlugUsedInGroup method.');
       
       $q = $this
         ->createQuery('sg')
@@ -32,5 +31,45 @@ class ServerGroupTable extends Doctrine_Table {
       $c = (int) $q->fetchOne(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
       
       return $c != 0;
+    }
+    
+    public function getSlugByGroupId($group_id) {
+      $q = $this
+        ->createQuery('sg')
+        ->select('sg.slug')
+        ->where('sg.id = ?', $group_id);
+
+      return $q->fetchOne(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+    }
+    
+    public function ownerHasGroups($owner_id) {
+      
+      $q = $this
+        ->createQuery('sg')
+        ->select('count(s.id)')
+        ->leftJoin('sg.Servers s')
+        ->where('sg.owner_player_id = ?', $owner_id)
+        ->andWhere('sg.group_type = ?', ServerGroup::GROUP_TYPE_MULTI_SERVER)
+        ->andWhere('s.status != ?', Server::STATUS_INACTIVE);
+
+      $c = (int) $q->fetchOne(array(), Doctrine_Core::HYDRATE_SINGLE_SCALAR);
+      
+      return $c != 0;
+    }
+    
+    public function findByOwnerId($owner_id) {
+      return $this
+        ->createQuery('sg')
+        ->leftJoin('sg.Servers s')
+        ->where('sg.owner_player_id = ?', $owner_id)
+        ->andWhere('s.status != ?', Server::STATUS_INACTIVE)
+        ->execute();
+    }
+    
+    public function getAllGroupsForOwnerIdQuery($owner_id) {
+      return $this
+        ->createQuery('sg')
+        ->where('sg.owner_player_id = ?', $owner_id)
+        ->andWhere('sg.group_type = ?', ServerGroup::GROUP_TYPE_MULTI_SERVER);
     }
 }

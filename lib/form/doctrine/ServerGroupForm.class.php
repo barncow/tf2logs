@@ -11,8 +11,10 @@
 class ServerGroupForm extends BaseServerGroupForm {
   public function configure() {
 
-    unset($this->widgetSchema['owner_id']);
-    unset($this->validatorSchema['owner_id']);
+    unset($this->widgetSchema['owner_player_id']);
+    unset($this->validatorSchema['owner_player_id']);
+    unset($this->widgetSchema['group_type']);
+    unset($this->validatorSchema['group_type']);
     
     $max = $this->validatorSchema['slug']->getOption('max_length');
     $this->validatorSchema['slug'] = new sfValidatorAnd(array(

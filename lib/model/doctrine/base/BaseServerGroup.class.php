@@ -7,17 +7,23 @@
  * 
  * @property string $slug
  * @property string $name
- * @property integer $owner_id
+ * @property integer $owner_player_id
+ * @property string $group_type
+ * @property Player $Owner
  * @property Doctrine_Collection $Servers
  * 
- * @method string              getSlug()     Returns the current record's "slug" value
- * @method string              getName()     Returns the current record's "name" value
- * @method integer             getOwnerId()  Returns the current record's "owner_id" value
- * @method Doctrine_Collection getServers()  Returns the current record's "Servers" collection
- * @method ServerGroup         setSlug()     Sets the current record's "slug" value
- * @method ServerGroup         setName()     Sets the current record's "name" value
- * @method ServerGroup         setOwnerId()  Sets the current record's "owner_id" value
- * @method ServerGroup         setServers()  Sets the current record's "Servers" collection
+ * @method string              getSlug()            Returns the current record's "slug" value
+ * @method string              getName()            Returns the current record's "name" value
+ * @method integer             getOwnerPlayerId()   Returns the current record's "owner_player_id" value
+ * @method string              getGroupType()       Returns the current record's "group_type" value
+ * @method Player              getOwner()           Returns the current record's "Owner" value
+ * @method Doctrine_Collection getServers()         Returns the current record's "Servers" collection
+ * @method ServerGroup         setSlug()            Sets the current record's "slug" value
+ * @method ServerGroup         setName()            Sets the current record's "name" value
+ * @method ServerGroup         setOwnerPlayerId()   Sets the current record's "owner_player_id" value
+ * @method ServerGroup         setGroupType()       Sets the current record's "group_type" value
+ * @method ServerGroup         setOwner()           Sets the current record's "Owner" value
+ * @method ServerGroup         setServers()         Sets the current record's "Servers" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -40,15 +46,24 @@ abstract class BaseServerGroup extends sfDoctrineRecord
              'notnull' => true,
              'length' => 100,
              ));
-        $this->hasColumn('owner_id', 'integer', null, array(
+        $this->hasColumn('owner_player_id', 'integer', null, array(
              'type' => 'integer',
              'notnull' => true,
+             ));
+        $this->hasColumn('group_type', 'string', 1, array(
+             'type' => 'string',
+             'notnull' => true,
+             'length' => 1,
              ));
     }
 
     public function setUp()
     {
         parent::setUp();
+        $this->hasOne('Player as Owner', array(
+             'local' => 'owner_player_id',
+             'foreign' => 'id'));
+
         $this->hasMany('Server as Servers', array(
              'local' => 'id',
              'foreign' => 'server_group_id'));

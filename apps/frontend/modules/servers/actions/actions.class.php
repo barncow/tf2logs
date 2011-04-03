@@ -24,8 +24,12 @@ class serversActions extends sfActions {
   public function executeNew(sfWebRequest $request) {
     $this->form = new ServerForm();
     $this->page = $request->getParameter('page', '');
+    $this->hasGroups = Doctrine::getTable('ServerGroup')->ownerHasGroups($this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
     if($this->page == 'newgroup') {
       $this->form = new ServerGroupForm();
+    } else if($this->page == 'existinggroup') {
+      $this->form = new ServerForm();
+      $this->form->configureExistingGroup($this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
     }
   }
   
@@ -37,6 +41,9 @@ class serversActions extends sfActions {
     $this->page = $request->getParameter('page', '');
     if($this->page == 'newgroup') {
       $this->form = new ServerGroupForm();
+    } else if($this->page == 'existinggroup') {
+      $this->form = new ServerForm();
+      $this->form->configureExistingGroup($this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
     }
     $this->processForm($request, $this->form, 'Could not add the server. Check the error messages below.');
   }
@@ -86,6 +93,13 @@ class serversActions extends sfActions {
         $this->getUser()->setFlash('notice', 'Your server and group were successfully added. Follow the instructions to validate the server.');
         
         $this->redirect('@server_verify_group?slug='.$s->getServerGroup()->getSlug().'&server_slug='.$s->getSlug());
+      } else if ($this->page == 'existinggroup') {
+        $server = new Server();
+        $server->saveNewServerToGroup(Doctrine::getTable('ServerGroup')->getSlugByGroupId($form->getValue('server_group_id')), $form->getValue('name'), $form->getValue('slug'), $form->getValue('ip'), $form->getValue('port'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
+        
+        $this->getUser()->setFlash('notice', 'Your server was successfully added to the group. Follow the instructions to validate the server.');
+        
+        $this->redirect('@server_verify_group?slug='.$server->getServerGroup()->getSlug().'&server_slug='.$server->getSlug());
       }
       
       

@@ -42,4 +42,20 @@ class ServerForm extends BaseServerForm {
       ,new AvailableServerAddressValidator()
     )));
   }
+  
+  public function configureExistingGroup($owner_id) {
+    $this->widgetSchema['server_group_id'] = new sfWidgetFormDoctrineChoice(array(
+      'model'     => 'ServerGroup',
+      'add_empty' => true,
+      'query' => Doctrine::getTable('ServerGroup')->getAllGroupsForOwnerIdQuery($owner_id)
+    ), array('label' => 'Server Group'));
+    $this->validatorSchema['server_group_id'] = new sfValidatorDoctrineChoice(
+      array(
+        'model' => 'ServerGroup',
+        'column' => array('id'),
+        'query' => Doctrine::getTable('ServerGroup')->getAllGroupsForOwnerIdQuery($owner_id)
+      ),
+      array('invalid' => 'You must pick a valid group.', 'required' => 'Server Group is required.')
+    );
+  }
 }

@@ -32,7 +32,6 @@ class unit_ServerTableTest extends sfPHPUnitBaseTestCase {
   
   public function testFindVerifyServerBySlugsAndOwner() {
     $server = new Server();
-    $slug = 'verifyserver';
     $ip = '1.1.1.3';
     $port = 9876;
     $owner_id = 1;
@@ -41,10 +40,10 @@ class unit_ServerTableTest extends sfPHPUnitBaseTestCase {
     $server_slug = 'slug';
     $server_name = 'slugname';
     
-    $s->saveNewGroupServer($group_name, $group_slug, $server_name, $server_slug, $ip, $port, $owner_id);
+    $server->saveNewGroupServer($group_name, $group_slug, $server_name, $server_slug, $ip, $port, $owner_id);
     
     $find = Doctrine::getTable('Server')->findVerifyServerBySlugsAndOwner($group_slug, $server_slug, $owner_id);
-    $this->assertEquals($slug, $find->getSlug(), 'assert that newly entered server can be retrieved by its slugs');
+    $this->assertEquals($server_slug, $find->getSlug(), 'assert that newly entered server can be retrieved by its slugs');
     
     $find = Doctrine::getTable('Server')->findVerifyServerBySlugsAndOwner($group_slug, $server_slug, $owner_id+1);
     $this->assertFalse($find, 'assert that finding a valid server with incorrect owner_id returns false');

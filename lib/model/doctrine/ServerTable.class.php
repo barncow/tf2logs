@@ -41,7 +41,7 @@ class ServerTable extends Doctrine_Table {
         ->createQuery('s')
         ->leftJoin('s.ServerGroup sg')
         ->where('s.status = ?', Server::STATUS_NOT_VERIFIED)
-        ->andWhere('sg.owner_id = ?', $owner_id)
+        ->andWhere('sg.owner_player_id = ?', $owner_id)
         ->andWhere('sg.slug = ?', $slug)
         ->orWhere('s.slug = ?', $slug);
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
@@ -55,7 +55,7 @@ class ServerTable extends Doctrine_Table {
         ->createQuery('s')
         ->leftJoin('s.ServerGroup sg')
         ->where('s.status = ?', Server::STATUS_NOT_VERIFIED)
-        ->andWhere('sg.owner_id = ?', $owner_id)
+        ->andWhere('sg.owner_player_id = ?', $owner_id)
         ->andWhere('sg.slug = ?', $group_slug)
         ->andWhere('s.slug = ?', $server_slug);
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
@@ -66,7 +66,7 @@ class ServerTable extends Doctrine_Table {
         ->createQuery('s')
         ->leftJoin('s.ServerGroup sg')
         ->where('s.status != ?', Server::STATUS_INACTIVE)
-        ->andWhere('sg.owner_id = ?', $owner_id)
+        ->andWhere('sg.owner_player_id = ?', $owner_id)
         ->andWhere('sg.slug = ?', $slug)
         ->orWhere('s.slug = ?', $slug);
        return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);

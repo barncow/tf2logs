@@ -535,9 +535,16 @@ ServerGroup:
     name:
       type: string(100)
       notnull: true
-    owner_id:
+    owner_player_id:
       type: integer
       notnull: true
+    group_type:
+      type: string(1)
+      notnull: true
+  relations:
+    Owner:
+      local: owner_player_id
+      class: Player
     
 Server:
   columns:

@@ -35,7 +35,8 @@ class Server extends BaseServer {
     $serverGroup = new ServerGroup();
     $serverGroup->setSlug($slug);
     $serverGroup->setName($name);
-    $serverGroup->setOwnerId($owner_id);
+    $serverGroup->setOwnerPlayerId($owner_id);
+    $serverGroup->setGroupType(ServerGroup::GROUP_TYPE_SINGLE_SERVER);
     
     $this->ip = $ip;
     $this->port = $port;
@@ -51,13 +52,29 @@ class Server extends BaseServer {
     $serverGroup = new ServerGroup();
     $serverGroup->setSlug($group_slug);
     $serverGroup->setName($group_name);
-    $serverGroup->setOwnerId($owner_id);
+    $serverGroup->setOwnerPlayerId($owner_id);
+    $serverGroup->setGroupType(ServerGroup::GROUP_TYPE_MULTI_SERVER);
     
     $this->slug = $server_slug;
     $this->name = $server_name;
     $this->ip = $ip;
     $this->port = $port;
     $this->ServerGroup = $serverGroup;
+    
+    $this->verify_key = $this->generateVerifyKey($server_name);
+    $this->status = self::STATUS_NOT_VERIFIED;
+    
+    $this->save();
+  }
+  
+  public function saveNewServerToGroup($group_slug, $server_name, $server_slug, $ip, $port, $owner_id) {
+    $this->ServerGroup = Doctrine::getTable('ServerGroup')->findOneBySlugAndOwnerPlayerId($group_slug, $owner_id);
+    if(!$this->ServerGroup) throw new IllegalArgumentException("Could not find group $group_slug, $owner_id");
+    
+    $this->slug = $server_slug;
+    $this->name = $server_name;
+    $this->ip = $ip;
+    $this->port = $port;
     
     $this->verify_key = $this->generateVerifyKey($server_name);
     $this->status = self::STATUS_NOT_VERIFIED;

@@ -15,17 +15,19 @@ abstract class BaseServerGroupForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'       => new sfWidgetFormInputHidden(),
-      'slug'     => new sfWidgetFormInputText(),
-      'name'     => new sfWidgetFormInputText(),
-      'owner_id' => new sfWidgetFormInputText(),
+      'id'              => new sfWidgetFormInputHidden(),
+      'slug'            => new sfWidgetFormInputText(),
+      'name'            => new sfWidgetFormInputText(),
+      'owner_player_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Owner'), 'add_empty' => false)),
+      'group_type'      => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'id'       => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
-      'slug'     => new sfValidatorString(array('max_length' => 30)),
-      'name'     => new sfValidatorString(array('max_length' => 100)),
-      'owner_id' => new sfValidatorInteger(),
+      'id'              => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
+      'slug'            => new sfValidatorString(array('max_length' => 30)),
+      'name'            => new sfValidatorString(array('max_length' => 100)),
+      'owner_player_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Owner'))),
+      'group_type'      => new sfValidatorString(array('max_length' => 1)),
     ));
 
     $this->validatorSchema->setPostValidator(

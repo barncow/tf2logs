@@ -19,6 +19,7 @@
  * @property Doctrine_Collection $PlayerHealStats
  * @property Doctrine_Collection $Event
  * @property Doctrine_Collection $EventPlayers
+ * @property Doctrine_Collection $ServerGroup
  * 
  * @method integer             getId()              Returns the current record's "id" value
  * @method integer             getNumericSteamid()  Returns the current record's "numeric_steamid" value
@@ -34,6 +35,7 @@
  * @method Doctrine_Collection getPlayerHealStats() Returns the current record's "PlayerHealStats" collection
  * @method Doctrine_Collection getEvent()           Returns the current record's "Event" collection
  * @method Doctrine_Collection getEventPlayers()    Returns the current record's "EventPlayers" collection
+ * @method Doctrine_Collection getServerGroup()     Returns the current record's "ServerGroup" collection
  * @method Player              setId()              Sets the current record's "id" value
  * @method Player              setNumericSteamid()  Sets the current record's "numeric_steamid" value
  * @method Player              setSteamid()         Sets the current record's "steamid" value
@@ -48,6 +50,7 @@
  * @method Player              setPlayerHealStats() Sets the current record's "PlayerHealStats" collection
  * @method Player              setEvent()           Sets the current record's "Event" collection
  * @method Player              setEventPlayers()    Sets the current record's "EventPlayers" collection
+ * @method Player              setServerGroup()     Sets the current record's "ServerGroup" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -129,5 +132,9 @@ abstract class BasePlayer extends sfDoctrineRecord
         $this->hasMany('EventPlayer as EventPlayers', array(
              'local' => 'id',
              'foreign' => 'player_id'));
+
+        $this->hasMany('ServerGroup', array(
+             'local' => 'id',
+             'foreign' => 'owner_player_id'));
     }
 }
