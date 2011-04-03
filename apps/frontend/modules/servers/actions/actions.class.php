@@ -97,7 +97,7 @@ class serversActions extends sfActions {
         $server = new Server();
         $server->saveNewServerToGroup(Doctrine::getTable('ServerGroup')->getSlugByGroupId($form->getValue('server_group_id')), $form->getValue('name'), $form->getValue('slug'), $form->getValue('ip'), $form->getValue('port'), $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var')));
         
-        $this->getUser()->setFlash('notice', 'Your server was successfully added to the group. Follow the instructions to validate the server.');
+        $this->getUser()->setFlash('notice', 'Your server was successfully added to '.$server->getServerGroup()->getName().'. Follow the instructions to validate the server.');
         
         $this->redirect('@server_verify_group?slug='.$server->getServerGroup()->getSlug().'&server_slug='.$server->getSlug());
       }
