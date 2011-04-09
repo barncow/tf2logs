@@ -210,7 +210,7 @@ class LogParser {
 	* This will parse the entire log file saved from the database.
 	*/
 	public function parseLogFromDB($logid) {  
-	  $this->clearValues();
+	  $this->clearValues(); //during regen, we only use one log parser - need to clear state for next parsing.
 	  $this->log = Doctrine::getTable('Log')->getLogForRegenerationById($logid);
 	  if(!$this->log) {
 	    throw new LogFileNotFoundException("Could not find the log ID: ".$logid);
@@ -235,7 +235,6 @@ class LogParser {
 	  This will gather lines for a server from LogLine, and use those to parse the log.
 	*/
 	public function parseAutoLog($ip, $port) {
-	  $this->clearValues();
 	  $tlp = sfTimerManager::getTimer('totalAutoLogParse');
 	  
 	  $server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
