@@ -10,6 +10,11 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     Also being tested is disconnected due to no steam login lines - which appear to have a line break which corrupts the log.
     */
+    
+    //adding a new weapon after the cache was created. The log parser should detect that a new weapon was added and not create another weapon.
+    //this will cause a mysql unique index error if the test is not a success.
+    $newWeapon = $this->addNewWeapon();
+    
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     $events = Doctrine::getTable('Event')->getEventsByIdAsArray($logid);
@@ -273,5 +278,13 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         }
       }
     }
+  }
+  
+  private function addNewWeapon($keyName = "kdj4452") {
+    $wep = new Weapon();
+    $wep->setKeyName($keyName);
+    $wep->setName($keyName);
+    $wep->save();
+    return $wep;
   }
 }

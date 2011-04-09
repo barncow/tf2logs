@@ -94,6 +94,13 @@ class LogParser {
       return $this->weapons[$keyName];
     }
     
+    $wep = Doctrine::getTable('Weapon')->findOneByKeyName($keyName);
+    if($wep) {
+      //the weapon was added after the cache was created. Add the weapon to our cache.
+      $this->weapons[$keyName] = $wep;
+      return $wep;
+    }
+    
     //still here, need to create new weapon
     $wep = new Weapon();
     $wep->setKeyName($keyName);
