@@ -15,6 +15,7 @@ class Server extends BaseServer {
   const STATUS_INACTIVE = 'I'; //previous owner gave up rights to this server
   const STATUS_ACTIVE = 'A';
   const STATUS_RECORDING = 'R';
+  const STATUS_PROCESSING = 'P';
   
   /**
     retrieves a description for the given status code.
@@ -25,8 +26,12 @@ class Server extends BaseServer {
         return "Server not Verified";
       case self::STATUS_ACTIVE:
         return "Server is Active";
-      case self::INACTIVE:
+      case self::STATUS_INACTIVE:
         return "Server is Inactive";
+      case self::STATUS_RECORDING:
+        return "Recording New Log";
+      case self::STATUS_PROCESSING:
+        return "Processing New Log";
       default:
         return "N/A";
     }

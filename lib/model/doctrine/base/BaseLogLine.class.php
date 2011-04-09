@@ -12,9 +12,9 @@
  * @property integer $line_minute
  * @property integer $line_second
  * @property timestamp $created_at
- * @property string $server_ip
- * @property integer $server_port
+ * @property integer $server_id
  * @property string $line_data
+ * @property Server $Server
  * 
  * @method integer   getLineYear()    Returns the current record's "line_year" value
  * @method integer   getLineMonth()   Returns the current record's "line_month" value
@@ -23,9 +23,9 @@
  * @method integer   getLineMinute()  Returns the current record's "line_minute" value
  * @method integer   getLineSecond()  Returns the current record's "line_second" value
  * @method timestamp getCreatedAt()   Returns the current record's "created_at" value
- * @method string    getServerIp()    Returns the current record's "server_ip" value
- * @method integer   getServerPort()  Returns the current record's "server_port" value
+ * @method integer   getServerId()    Returns the current record's "server_id" value
  * @method string    getLineData()    Returns the current record's "line_data" value
+ * @method Server    getServer()      Returns the current record's "Server" value
  * @method LogLine   setLineYear()    Sets the current record's "line_year" value
  * @method LogLine   setLineMonth()   Sets the current record's "line_month" value
  * @method LogLine   setLineDay()     Sets the current record's "line_day" value
@@ -33,9 +33,9 @@
  * @method LogLine   setLineMinute()  Sets the current record's "line_minute" value
  * @method LogLine   setLineSecond()  Sets the current record's "line_second" value
  * @method LogLine   setCreatedAt()   Sets the current record's "created_at" value
- * @method LogLine   setServerIp()    Sets the current record's "server_ip" value
- * @method LogLine   setServerPort()  Sets the current record's "server_port" value
+ * @method LogLine   setServerId()    Sets the current record's "server_id" value
  * @method LogLine   setLineData()    Sets the current record's "line_data" value
+ * @method LogLine   setServer()      Sets the current record's "Server" value
  * 
  * @package    tf2logs
  * @subpackage model
@@ -81,16 +81,9 @@ abstract class BaseLogLine extends sfDoctrineRecord
              'type' => 'timestamp',
              'notnull' => true,
              ));
-        $this->hasColumn('server_ip', 'string', 15, array(
-             'type' => 'string',
-             'notnull' => true,
-             'length' => 15,
-             ));
-        $this->hasColumn('server_port', 'integer', 2, array(
+        $this->hasColumn('server_id', 'integer', null, array(
              'type' => 'integer',
-             'unsigned' => true,
              'notnull' => true,
-             'length' => 2,
              ));
         $this->hasColumn('line_data', 'string', 1000, array(
              'type' => 'string',
@@ -101,6 +94,9 @@ abstract class BaseLogLine extends sfDoctrineRecord
     public function setUp()
     {
         parent::setUp();
-        
+        $this->hasOne('Server', array(
+             'local' => 'server_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
     }
 }

@@ -94,4 +94,31 @@ class ServerTable extends Doctrine_Table {
         
       return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
     }
+    
+    /*
+      retrieves active server by IP and port
+    */
+    public function findActiveServer($ip, $port) {      
+      $q = $this
+        ->createQuery('s')
+        ->innerJoin('s.ServerGroup sg')
+        ->where('s.ip = ?', $ip)
+        ->andWhere('s.port = ?', $port)
+        ->andWhere('s.status != ?', Server::STATUS_INACTIVE);
+
+      return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);    
+    }
+    
+    /**
+      This will update the processing status to active, if needed.
+    */
+    public function endProcessingStatus($ip, $port) {
+      Doctrine_Query::create()
+        ->update('Server s')
+        ->set('s.status', '?', Server::STATUS_ACTIVE)
+        ->where('s.ip = ?', $ip)
+        ->andWhere('s.port = ?', $port)
+        ->andWhere('s.status = ?', Server::STATUS_PROCESSING)
+        ->execute();
+    }
 }

@@ -225,6 +225,37 @@ class LogParser {
 	  return $logid;
 	}
 	
+	/**
+	  This will gather lines for a server from LogLine, and use those to parse the log.
+	*/
+	public function parseAutoLog($ip, $port) {
+	  $this->clearValues();
+	  $tlp = sfTimerManager::getTimer('totalAutoLogParse');
+	  
+	  $server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
+	  
+	  $this->log->setName('Name');
+	  $this->log->setMapName($server->getCurrentMap());
+	  $this->log->setSubmitterPlayerId($server->getServerGroup()->getOwnerPlayerId());
+	  $this->log->setIsAuto(true);
+	  
+	  $lines = Doctrine::getTable('LogLine')->getLogLinesForServer($ip, $port);
+	  
+	  $ret;
+	  try {
+	    $ret =  $this->parseLog($lines);
+	  } catch(TournamentModeNotFoundException $e) {
+	    //if no tournament mode was found, re-run entire log file as one round.
+	    return $this->parseLog($lines, true);
+	  }
+	  $tlp->addTime();
+	  
+	  //update server from Processing Status to Active status.
+	  Doctrine::getTable('Server')->endProcessingStatus($ip, $port);
+	  
+	  return $ret;
+	}
+	
 	protected function parseLog($arrayLogLines, $ignoreTourneyModeNotFound = false) {
 	  $game_state = null;
 	  $fileLength = count($arrayLogLines);

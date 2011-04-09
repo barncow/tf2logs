@@ -41,6 +41,10 @@ Log:
       type: integer(4)
       notnull: true
       default: 0
+    is_auto:
+      type: boolean
+      notnull: true
+      default: false
   relations:
     LogFile:
       local: id
@@ -516,15 +520,15 @@ LogLine:
     created_at:
       type: timestamp
       notnull: true
-    server_ip:
-      type: string(15)
-      notnull: true
-    server_port: 
-      type: integer(2)
-      unsigned: true
+    server_id:
+      type: integer
       notnull: true
     line_data:
       type: string(1000)
+  relations:
+    Server:
+      onDelete: CASCADE
+      foreignAlias: LogLines
 
 ServerGroup:
   columns:

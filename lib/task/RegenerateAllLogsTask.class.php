@@ -9,7 +9,8 @@ class RegenerateAllLogsTask extends sfBaseTask {
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
       new sfCommandOption('start', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to Start with', 1),
       new sfCommandOption('end', null, sfCommandOption::PARAMETER_OPTIONAL, 'ID of Log to End with', 'max'),
-      new sfCommandOption('gc', null, sfCommandOption::PARAMETER_OPTIONAL, 'Number of logs to do garbage collection', 10)
+      new sfCommandOption('gc', null, sfCommandOption::PARAMETER_OPTIONAL, 'Number of logs to do garbage collection', 10),
+      new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name', 'frontend') //needed to get app.yml props
     ));
  
     $this->namespace = 'tf2logs';

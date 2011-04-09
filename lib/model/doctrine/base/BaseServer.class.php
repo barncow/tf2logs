@@ -15,27 +15,30 @@
  * @property string $status
  * @property string $current_map
  * @property ServerGroup $ServerGroup
+ * @property Doctrine_Collection $LogLines
  * 
- * @method string      getSlug()            Returns the current record's "slug" value
- * @method string      getName()            Returns the current record's "name" value
- * @method string      getIp()              Returns the current record's "ip" value
- * @method integer     getPort()            Returns the current record's "port" value
- * @method integer     getServerGroupId()   Returns the current record's "server_group_id" value
- * @method timestamp   getLastMessage()     Returns the current record's "last_message" value
- * @method string      getVerifyKey()       Returns the current record's "verify_key" value
- * @method string      getStatus()          Returns the current record's "status" value
- * @method string      getCurrentMap()      Returns the current record's "current_map" value
- * @method ServerGroup getServerGroup()     Returns the current record's "ServerGroup" value
- * @method Server      setSlug()            Sets the current record's "slug" value
- * @method Server      setName()            Sets the current record's "name" value
- * @method Server      setIp()              Sets the current record's "ip" value
- * @method Server      setPort()            Sets the current record's "port" value
- * @method Server      setServerGroupId()   Sets the current record's "server_group_id" value
- * @method Server      setLastMessage()     Sets the current record's "last_message" value
- * @method Server      setVerifyKey()       Sets the current record's "verify_key" value
- * @method Server      setStatus()          Sets the current record's "status" value
- * @method Server      setCurrentMap()      Sets the current record's "current_map" value
- * @method Server      setServerGroup()     Sets the current record's "ServerGroup" value
+ * @method string              getSlug()            Returns the current record's "slug" value
+ * @method string              getName()            Returns the current record's "name" value
+ * @method string              getIp()              Returns the current record's "ip" value
+ * @method integer             getPort()            Returns the current record's "port" value
+ * @method integer             getServerGroupId()   Returns the current record's "server_group_id" value
+ * @method timestamp           getLastMessage()     Returns the current record's "last_message" value
+ * @method string              getVerifyKey()       Returns the current record's "verify_key" value
+ * @method string              getStatus()          Returns the current record's "status" value
+ * @method string              getCurrentMap()      Returns the current record's "current_map" value
+ * @method ServerGroup         getServerGroup()     Returns the current record's "ServerGroup" value
+ * @method Doctrine_Collection getLogLines()        Returns the current record's "LogLines" collection
+ * @method Server              setSlug()            Sets the current record's "slug" value
+ * @method Server              setName()            Sets the current record's "name" value
+ * @method Server              setIp()              Sets the current record's "ip" value
+ * @method Server              setPort()            Sets the current record's "port" value
+ * @method Server              setServerGroupId()   Sets the current record's "server_group_id" value
+ * @method Server              setLastMessage()     Sets the current record's "last_message" value
+ * @method Server              setVerifyKey()       Sets the current record's "verify_key" value
+ * @method Server              setStatus()          Sets the current record's "status" value
+ * @method Server              setCurrentMap()      Sets the current record's "current_map" value
+ * @method Server              setServerGroup()     Sets the current record's "ServerGroup" value
+ * @method Server              setLogLines()        Sets the current record's "LogLines" collection
  * 
  * @package    tf2logs
  * @subpackage model
@@ -101,5 +104,9 @@ abstract class BaseServer extends sfDoctrineRecord
              'local' => 'server_group_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
+
+        $this->hasMany('LogLine as LogLines', array(
+             'local' => 'id',
+             'foreign' => 'server_id'));
     }
 }

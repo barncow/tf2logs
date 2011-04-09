@@ -1,10 +1,7 @@
-//keeping this for later 
-//var sys = require("sys");
-//process.addListener('uncaughtException', function(err) { sys.p(err); });
- 
- 
- 
- 
+/**
+UDP Server - based on nodejs
+*/
+
 /**
   This object is responsible for creating connections and doing underlying database work.
   Business DB access should be done in the DAO.
@@ -66,16 +63,21 @@ exports.LogDAO = function(dbDriver) {
   this.SERVER_STATUS_ACTIVE = "A";
   this.SERVER_STATUS_INACTIVE = "I";
   this.SERVER_STATUS_RECORDING = "R";
+  this.SERVER_STATUS_PROCESSING = "P";
   
   //public methods
   /*
-    This will do an insert of parsed data to the database. The timestamp variables should be pulled from the line to save directly.
+    This will do an insert of parsed data to the database, iff the server is in recording status. The timestamp variables should be pulled from the line to save directly.
     The IP and port are from the sender of the line, and data is the actual complete log line that was sent.
     Callback is optional, and will be called when the save is complete.
   */
   this.insertLogLine = function(year, month, day, hour, minute, second, server_ip, server_port, data, callback) {
-    dbDriver.query('insert into log_line (line_year, line_month, line_day, line_hour, line_minute, line_second, created_at, server_ip, server_port, line_data) values(?, ?, ?, ?, ?, ?, current_timestamp, ?, ?, ?)',
-      [year, month, day, hour, minute, second, server_ip, server_port, data], callback);
+    //note - this query gets the server_id from a subselect - based on ip, port, and if it is in recording status. If these three conditions are not met, null is put into a non-null field, which will cause an error.
+    //just ignore this error - should be fine.
+    dbDriver.query('insert into log_line (line_year, line_month, line_day, line_hour, line_minute, line_second, created_at, server_id, line_data) values(?, ?, ?, ?, ?, ?, current_timestamp, (select id from server where ip = ? and port = ? and status = ?), ?)',
+      [year, month, day, hour, minute, second, server_ip, server_port, this.SERVER_STATUS_RECORDING, data], function(err, results, fields){
+        if(callback) callback(err, results, fields);
+      });
       
     //doing the timestamp update here to ensure that it gets done when the message is entered.
     this.updateLastMessageTimestamp(server_ip, server_port);
@@ -106,6 +108,9 @@ exports.LogDAO = function(dbDriver) {
       [server_map, server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
   };
   
+  /**
+    Updates server status with the given status code.
+  */
   this.updateStatus = function(server_ip, server_port, server_status, callback) {
     dbDriver.query('update server set status = ? where ip = ? and port = ? and status != ?',
       [server_status, server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
@@ -158,8 +163,36 @@ exports.ParsingUtils = function() {
     checks that the logLineDetails string given indicates a round start event or not.
   */
   this.isRoundStart = function(logLineDetails) {
-    return logLineDetails == 'World triggered "Round_Start"';
+    return this.isWorldTriggeredEvent(logLineDetails, "Round_Start");
   };
+  
+  /**
+    returns true if the logLineDetails string represents a world triggered line.
+    Event, if specified (optional) will check for the event type.
+  */
+  this.isWorldTriggeredEvent = function(logLineDetails, event) {
+    if(!event) event = ".+?";
+    var regex = new RegExp('^World triggered "'+event+'"');
+    
+    var matches = logLineDetails.match(regex);
+    return matches && matches.length > 0;
+  }
+  
+  /**
+    returns true if the game has ended - at least for this half.
+  */
+  this.isGameOver = function(logLineDetails) {
+    /*
+    conditions for a game over:
+    world triggered game_over event
+    log file closed
+    no messages for a time period?
+    game_appears_over from logparser?
+    */
+    
+    return this.isWorldTriggeredEvent(logLineDetails, "Game_Over")
+      || logLineDetails == "Log file closed";
+  }
   
   this.getMap = function(logLineDetails) {
     var matches = logLineDetails.match(/^Loading map "(.+?)"/);
@@ -180,7 +213,7 @@ exports.ParsingUtils = function() {
   The purpose of this object is to handle setting up the UDP connection, parsing the log lines that come through, and saving to the database.
   This is the main object to be used.
 */
-exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
+exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) {
   //public methods (being defined first since init needs these references to exist
   
   /**
@@ -192,11 +225,11 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     server = udp.createSocket("udp4");
     
     //set up udp server event handlers
-    server.on("message", this._onMessage);
+    server.on("message",  this._onMessage);
     
     server.on("listening", function() {
       var address = server.address();
-      console.log("server listening " + address.address + ":" + address.port);
+      util.log("server listening " + address.address + ":" + address.port);
       udpStatus = 1; //set to running
     });
     
@@ -206,7 +239,9 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     
     //provide some cleanup upon exit
     process.on('exit', function(){this.stop();});
+    process.on('uncaughtException', function(err) { util.log(err); });
     
+    //start listening on this port
     server.bind(SERVER_PORT);
     
     return this; //for chaining
@@ -227,42 +262,58 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
   */
   this.isRunning = function() {
     return udpStatus == 1;
-  }
+  };  
   
   /**
     This is the onMessage handler, which gets called whenever a UDP message is received.
     This should not be used outside this object - only provided for ease of testing.
   */
   this._onMessage = function(msg, rinfo) {
-    //convert message to string, stripping uneeded chars.
-    var logLine = msg.toString('utf8', START_INDEX, msg.length - END_DECREMENT);
-    
-    var ts = parsingUtils.getTimestamp(logLine);
-    if(!ts) return this.STATUS_INVALID; //timestamp is corrupt, no need to continue
-    
-    var logLineDetails = parsingUtils.getLogLineDetails(logLine);
-    if(!logLineDetails) return this.STATUS_INVALID; //logLineDetails are corrupt, no need to continue
-    
-    //if we get a verify key line, we need to update the server record, if any.
-    var verifyKey = parsingUtils.getVerifyKey(logLineDetails);
-    if(verifyKey) {
-      dao.verifyServer(rinfo.address, rinfo.port, verifyKey);
+    try{
+      //convert message to string, stripping uneeded chars.
+      var logLine = msg.toString('utf8', START_INDEX, msg.length - END_DECREMENT);
+      
+      var ts = parsingUtils.getTimestamp(logLine);
+      if(!ts) return this.STATUS_INVALID; //timestamp is corrupt, no need to continue
+      
+      var logLineDetails = parsingUtils.getLogLineDetails(logLine);
+      if(!logLineDetails) return this.STATUS_INVALID; //logLineDetails are corrupt, no need to continue
+      
+      //todo now that we know that we probably have a valid line, should get server fields object here. do updates to object, then save whole object back.
+      //will possibly reduce queries.
+      
+      //if we get a verify key line, we need to update the server record, if any.
+      var verifyKey = parsingUtils.getVerifyKey(logLineDetails);
+      if(verifyKey) {
+        dao.verifyServer(rinfo.address, rinfo.port, verifyKey);
+      }
+      
+      //if we have a map line, need to update server record, if any.
+      var map = parsingUtils.getMap(logLineDetails);
+      if(map) {
+        dao.updateCurrentMap(rinfo.address, rinfo.port, map);
+      }
+      
+      //if there is a round_start event, update server status to recording, which will allow us to save loglines.
+      if(parsingUtils.isRoundStart(logLineDetails)) {
+        dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING);
+      }
+      
+      //insert the line into the log_line table, if server is in recording mode.
+      dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
+      
+      //this is being done last so that when this updates the status, we will have still saved the logLine for game over.
+      if(parsingUtils.isGameOver(logLineDetails)) {
+        dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_PROCESSING);
+        doProcessing(rinfo.address, rinfo.port);
+      }
+      
+      return this.STATUS_SUCCESS; //still here, must be success.
+    } catch(e) {
+        util.log('Error in _onMessage:');
+        util.log(e);
     }
-    
-    var map = parsingUtils.getMap(logLineDetails);
-    if(map) {
-      dao.updateCurrentMap(rinfo.address, rinfo.port, map);
-    }
-    
-    if(parsingUtils.isRoundStart(logLineDetails)) {
-      //dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING); //todo uncomment when able to shift status back to active
-    }
-    
-    //insert the line into the log_line table.
-    dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
-    
-    return this.STATUS_SUCCESS; //still here, must be success.
-  }
+  };
   
   //initialization - done last because init needs the function references above.
   var 
@@ -272,7 +323,19 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver) {
     parsingUtils = new exports.ParsingUtils(),
     START_INDEX = 5, //where the udp message should start - garbage? data before this point.
     END_DECREMENT = 2, //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
-    udpStatus = 0; //0 is not running, 1 is running
+    udpStatus = 0, //0 is not running, 1 is running
+    exec = require('child_process').exec,
+    util = require('util'),
+    self = this,
+    doProcessing = function(ip, port) {
+    /**
+      this will start a process that will call a php symfony task to collect all the lines that were recorded, and parse them.
+    */
+    exec('php '+SITE_BASE_DIR+'/symfony tf2logs:processlines --env='+SITE_ENV+' --ip='+ip+' --port='+port,
+      function (error, stdout, stderr) {
+        
+    });
+  };
   
   this.STATUS_INVALID = -1;
   this.STATUS_SUCCESS = 1;

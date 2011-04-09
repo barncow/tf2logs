@@ -5,5 +5,7 @@ exports.udpServerConfig = {
   DB_USER: 'root',
   DB_PASS: '',
   DB_DATABASE: 'tf2logs_dev',
-  DB_CONNECTIONS: 16
+  DB_CONNECTIONS: 16,
+  SITE_BASE_DIR: '/home/barncow/tf2logs',
+  SITE_ENV: 'dev'
 };

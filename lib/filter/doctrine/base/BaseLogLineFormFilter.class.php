@@ -20,8 +20,7 @@ abstract class BaseLogLineFormFilter extends BaseFormFilterDoctrine
       'line_minute' => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'line_second' => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'created_at'  => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
-      'server_ip'   => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'server_port' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'server_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Server'), 'add_empty' => true)),
       'line_data'   => new sfWidgetFormFilterInput(),
     ));
 
@@ -33,8 +32,7 @@ abstract class BaseLogLineFormFilter extends BaseFormFilterDoctrine
       'line_minute' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'line_second' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'created_at'  => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59')))),
-      'server_ip'   => new sfValidatorPass(array('required' => false)),
-      'server_port' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'server_id'   => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Server'), 'column' => 'id')),
       'line_data'   => new sfValidatorPass(array('required' => false)),
     ));
 
@@ -63,8 +61,7 @@ abstract class BaseLogLineFormFilter extends BaseFormFilterDoctrine
       'line_minute' => 'Number',
       'line_second' => 'Number',
       'created_at'  => 'Date',
-      'server_ip'   => 'Text',
-      'server_port' => 'Number',
+      'server_id'   => 'ForeignKey',
       'line_data'   => 'Text',
     );
   }

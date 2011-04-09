@@ -16,6 +16,7 @@
  * @property string $error_log_name
  * @property string $error_exception
  * @property integer $views
+ * @property boolean $is_auto
  * @property LogFile $LogFile
  * @property Player $Submitter
  * @property Doctrine_Collection $Stats
@@ -32,6 +33,7 @@
  * @method string              getErrorLogName()        Returns the current record's "error_log_name" value
  * @method string              getErrorException()      Returns the current record's "error_exception" value
  * @method integer             getViews()               Returns the current record's "views" value
+ * @method boolean             getIsAuto()              Returns the current record's "is_auto" value
  * @method LogFile             getLogFile()             Returns the current record's "LogFile" value
  * @method Player              getSubmitter()           Returns the current record's "Submitter" value
  * @method Doctrine_Collection getStats()               Returns the current record's "Stats" collection
@@ -47,6 +49,7 @@
  * @method Log                 setErrorLogName()        Sets the current record's "error_log_name" value
  * @method Log                 setErrorException()      Sets the current record's "error_exception" value
  * @method Log                 setViews()               Sets the current record's "views" value
+ * @method Log                 setIsAuto()              Sets the current record's "is_auto" value
  * @method Log                 setLogFile()             Sets the current record's "LogFile" value
  * @method Log                 setSubmitter()           Sets the current record's "Submitter" value
  * @method Log                 setStats()               Sets the current record's "Stats" collection
@@ -119,6 +122,11 @@ abstract class BaseLog extends sfDoctrineRecord
              'notnull' => true,
              'default' => 0,
              'length' => 4,
+             ));
+        $this->hasColumn('is_auto', 'boolean', null, array(
+             'type' => 'boolean',
+             'notnull' => true,
+             'default' => false,
              ));
     }
 

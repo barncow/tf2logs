@@ -23,8 +23,7 @@ abstract class BaseLogLineForm extends BaseFormDoctrine
       'line_minute' => new sfWidgetFormInputText(),
       'line_second' => new sfWidgetFormInputText(),
       'created_at'  => new sfWidgetFormDateTime(),
-      'server_ip'   => new sfWidgetFormInputText(),
-      'server_port' => new sfWidgetFormInputText(),
+      'server_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Server'), 'add_empty' => false)),
       'line_data'   => new sfWidgetFormTextarea(),
     ));
 
@@ -37,8 +36,7 @@ abstract class BaseLogLineForm extends BaseFormDoctrine
       'line_minute' => new sfValidatorInteger(),
       'line_second' => new sfValidatorInteger(),
       'created_at'  => new sfValidatorDateTime(),
-      'server_ip'   => new sfValidatorString(array('max_length' => 15)),
-      'server_port' => new sfValidatorInteger(),
+      'server_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Server'))),
       'line_data'   => new sfValidatorString(array('max_length' => 1000, 'required' => false)),
     ));
 
