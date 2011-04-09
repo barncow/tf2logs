@@ -16,6 +16,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $newWeapon = $this->addNewWeapon();
     
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
+    $this->assertTrue(is_numeric($logid), "testing that logsave, by default, returns integer.");
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     $events = Doctrine::getTable('Event')->getEventsByIdAsArray($logid);
     $logfile = Doctrine::getTable('LogFile')->findOneByLogId($logid);

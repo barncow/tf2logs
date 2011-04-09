@@ -15,8 +15,10 @@ class Log extends BaseLog
   protected $_scrubbedLog = "";
   protected $_events;
   
-  public function getEventsArray() {
-    return $this->_events;
+  public function getEventsArray($clearArray = false) {
+    $ret = $this->_events;
+    if($clearArray) $this->_events = array();
+    return $ret;
   }
   
   public function set_timeStart($timeStart) {

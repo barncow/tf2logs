@@ -17,24 +17,34 @@ class Stat extends BaseStat {
   protected $_ItemPickupStats;
   protected $_RoleStats;
   
-  public function getWeaponStatsArray() {
-    return $this->_WeaponStats;
+  public function getWeaponStatsArray($clearArray = false) {
+    $ret = $this->_WeaponStats;
+    if($clearArray) $this->_WeaponStats = array();
+    return $ret;
   }
   
-  public function getPlayerStatsArray() {
-    return $this->_PlayerStats;
+  public function getPlayerStatsArray($clearArray = false) {
+    $ret = $this->_PlayerStats;
+    if($clearArray) $this->_PlayerStats = array();
+    return $ret;
   }
   
-  public function getPlayerHealStatsArray() {
-    return $this->_PlayerHealStats;
+  public function getPlayerHealStatsArray($clearArray = false) {
+    $ret = $this->_PlayerHealStats;
+    if($clearArray) $this->_PlayerHealStats = array();
+    return $ret;
   }
   
-  public function getItemPickupStatsArray() {
-    return $this->_ItemPickupStats;
+  public function getItemPickupStatsArray($clearArray = false) {
+    $ret = $this->_ItemPickupStats;
+    if($clearArray) $this->_ItemPickupStats = array();
+    return $ret;
   }
   
-  public function getRoleStatsArray() {
-    return $this->_RoleStats;
+  public function getRoleStatsArray($clearArray = false) {
+    $ret = $this->_RoleStats;
+    if($clearArray) $this->_RoleStats = array();
+    return $ret;
   }
   
   //constructor used with doctrine

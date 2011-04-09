@@ -4,39 +4,44 @@ class LogSave {
   protected $conn;
   protected $log;
   
-  public function save($log) {
+  /**
+    If returnFullObj is true, then the saved log object is returned. This is only necessary for repeated saves of the log.
+    Only useful for the udpserver.
+  */
+  public function save($log, $returnFullObj = false) {
     $this->log = $log;
     $this->conn = Doctrine_Manager::connection();
-    $id = null;
+    $ret = null;
     try {
         $this->conn->beginTransaction();
-        $id = $this->doWork();
+        $ret = $this->doWork($returnFullObj);
         $this->conn->commit();
     } catch(Doctrine_Exception $e) {
         $this->conn->rollback();
         throw $e;
     }
-    return $id;
+    return $ret;
   }
   
-  protected function doWork() {
+  protected function doWork($returnFullObj) {
     $this->log->save();
     $logid = $this->log->getId();
     
-    $this->saveEvents($this->log->getEventsArray(), $logid);
+    $this->saveEvents($this->log->getEventsArray(true), $logid);
     $this->saveStatChildren($logid);
     
-    return $logid;
+    if($returnFullObj) return $this->log;
+    else return $logid;
   }
   
   protected function saveStatChildren($logid) {
     foreach($this->log->Stats as $stat) {
       $statid = $stat->getId();
-      $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(), $statid);
-      $this->saveStatsTable('PlayerStat', $stat->getPlayerStatsArray(), $statid);
-      $this->saveStatsTable('PlayerHealStat', $stat->getPlayerHealStatsArray(), $statid);
-      $this->saveStatsTable('ItemPickupStat', $stat->getItemPickupStatsArray(), $statid);
-      $this->saveStatsTable('RoleStat', $stat->getRoleStatsArray(), $statid);
+      $this->saveStatsTable('WeaponStat', $stat->getWeaponStatsArray(true), $statid);
+      $this->saveStatsTable('PlayerStat', $stat->getPlayerStatsArray(true), $statid);
+      $this->saveStatsTable('PlayerHealStat', $stat->getPlayerHealStatsArray(true), $statid);
+      $this->saveStatsTable('ItemPickupStat', $stat->getItemPickupStatsArray(true), $statid);
+      $this->saveStatsTable('RoleStat', $stat->getRoleStatsArray(true), $statid);
     }
   }
   
