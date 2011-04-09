@@ -183,7 +183,6 @@ class LogParser {
 	* This will parse the entire log file.
 	*/
 	public function parseLogFile($filename, $logSubmitterId, $logName = null, $logMapName = null, Log $logObj = null) {
-	  $this->clearValues();
 	  $tlp = sfTimerManager::getTimer('totalLogParse');
 	  if($logName == null) {
 	    $logName = $this->parsingUtils->getNameFromFilename($filename);
