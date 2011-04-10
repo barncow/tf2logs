@@ -1,20 +1,3 @@
-L 09/29/2010 - 19:05:47: Log file started (file "logs/L0929002.log") (game "/home/barncow/74.122.197.144-27015/srcds_l/orangebox/tf") (version "4317")
-L 09/29/2010 - 19:05:47: server_cvar: "mp_falldamage" "0"
-L 09/29/2010 - 19:05:47: server_cvar: "mp_flashlight" "0"
-L 09/29/2010 - 19:05:47: "Console<0><Console><Console>" say ""CEVO TF2 stopwatch config file loaded. 08/14/10""
-L 09/29/2010 - 19:05:47: rcon from "184.58.218.223:50039": command "exec cevo_stopwatch.cfg"
-L 09/29/2010 - 19:05:54: "Target<46><STEAM_0:0:6845279><>" entered the game
-L 09/29/2010 - 19:06:13: "Target<46><STEAM_0:0:6845279><Unassigned>" joined team "Blue"
-L 09/29/2010 - 19:06:14: "Target<46><STEAM_0:0:6845279><Blue>" changed role to "scout"
-L 09/29/2010 - 19:06:27: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-704 1584 -464") (victim_position "-824 1429 -396")
-L 09/29/2010 - 19:06:32: "Cres<49><STEAM_0:0:8581157><>" connected, address "174.55.51.80:27005"
-L 09/29/2010 - 19:06:33: "Cres<49><STEAM_0:0:8581157><>" STEAM USERID validated
-L 09/29/2010 - 19:07:05: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "pistol_scout" (attacker_position "-1513 301 -383") (victim_position "-1435 611 -383")
-L 09/29/2010 - 19:08:08: "do0t<47><STEAM_0:1:4433828><Unassigned>" disconnected (reason "Kicked by Console")
-L 09/29/2010 - 19:08:41: "Ctrl+f Muffin!<50><STEAM_0:1:9852193><Red>" committed suicide with "world" (attacker_position "-3544 1649 -611")
-L 09/29/2010 - 19:08:55: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
-L 09/29/2010 - 19:08:55: "Cres<49><STEAM_0:0:8581157><Blue>" triggered "kill assist" against "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" (assister_position "-2181 821 -201") (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
-L 09/29/2010 - 19:08:56: Loading map "cp_granary"
 L 09/29/2010 - 19:08:56: World triggered "Round_Start"
 L 09/29/2010 - 19:08:56: World triggered "Round_Setup_Begin"
 L 09/29/2010 - 19:08:57: "Target<46><STEAM_0:0:6845279><Blue>" killed "FSTNG! Barncow<48><STEAM_0:1:16481274><Red>" with "scattergun" (attacker_position "-1862 1217 -244") (victim_position "-1837 1073 -313")
@@ -75,3 +58,4 @@ L 09/29/2010 - 19:36:42: World triggered "Round_Win" (winner "Red")
 L 09/29/2010 - 19:36:42: World triggered "Round_Length" (seconds "632.25")
 L 09/29/2010 - 19:36:42: Team "Red" current score "0" with "6" players
 L 09/29/2010 - 19:36:42: Team "Blue" current score "1" with "6" players
+L 09/29/2010 - 19:36:42: Log file closed

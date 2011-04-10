@@ -13,12 +13,10 @@ abstract class BaseItemPickupStatFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'item_key_name'   => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'times_picked_up' => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
-      'item_key_name'   => new sfValidatorPass(array('required' => false)),
       'times_picked_up' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
@@ -39,7 +37,6 @@ abstract class BaseItemPickupStatFormFilter extends BaseFormFilterDoctrine
   public function getFields()
   {
     return array(
-      'id'              => 'Number',
       'stat_id'         => 'Number',
       'item_key_name'   => 'Text',
       'times_picked_up' => 'Number',

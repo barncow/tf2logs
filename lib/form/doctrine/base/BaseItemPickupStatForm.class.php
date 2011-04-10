@@ -15,16 +15,14 @@ abstract class BaseItemPickupStatForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'              => new sfWidgetFormInputHidden(),
       'stat_id'         => new sfWidgetFormInputHidden(),
-      'item_key_name'   => new sfWidgetFormInputText(),
+      'item_key_name'   => new sfWidgetFormInputHidden(),
       'times_picked_up' => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'id'              => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
       'stat_id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->get('stat_id')), 'empty_value' => $this->getObject()->get('stat_id'), 'required' => false)),
-      'item_key_name'   => new sfValidatorString(array('max_length' => 20)),
+      'item_key_name'   => new sfValidatorChoice(array('choices' => array($this->getObject()->get('item_key_name')), 'empty_value' => $this->getObject()->get('item_key_name'), 'required' => false)),
       'times_picked_up' => new sfValidatorInteger(array('required' => false)),
     ));
 

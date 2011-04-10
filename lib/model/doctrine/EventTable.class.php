@@ -39,4 +39,14 @@ class EventTable extends Doctrine_Table
         ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY)
         ->execute();
     }
+    
+    public function getLastKillEventForLogId($logid) {
+      return $this
+        ->createQuery('e')
+        ->leftJoin('e.Log l')
+        ->where('l.id = ?', $logid)
+        ->andWhere('e.event_type = ?', 'kill')
+        ->orderBy('e.elapsed_seconds desc')
+        ->fetchOne(array(), Doctrine_Core::HYDRATE_ARRAY);
+    }
 }

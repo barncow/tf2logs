@@ -32,6 +32,7 @@ class LogParser {
   protected $gameOver;
   protected $isServerCvars;
   protected $minutesIntervals;
+  protected $overwriteMapName;
   
   //these values are used to detect whether a round_win is valid or not.
   protected $currentRoundWinTeam;
@@ -64,6 +65,7 @@ class LogParser {
     $this->playerChangeTeams = array(); 
     $this->previousLogLine = null;
     $this->minutesIntervals = array();
+    $this->overwriteMapName = false;
   }
   
   public function setIgnoreUnrecognizedLogLines($ignoreUnrecognizedLogLines) {
@@ -261,6 +263,65 @@ class LogParser {
 	  return $ret;
 	}
 	
+	/**
+	  Use during generation of a log through the udp server.
+	  Will get any lines older than $delay, and then run them through the parser
+	  The results will be saved to the database.
+	  $newLines is an array of strings of the log line(s) to parse.
+	  This is also related to parseLog - make sure functionality changes are propagated accordingly.
+	*/
+	public function parseNewLines($newLines, $ip, $port) {
+	  //note - do not run clear values since state needs to be maintained between calls of this function.
+	  
+	  if(!$this->server) {
+	    //server not set, so this is our first time through. Get the server info, and init the log.
+	    $this->server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
+	    if(!$this->server) throw new Exception("Server could not be found for $ip:$port in parseNewLines");
+	  
+	    $this->log->setName('Name');
+	    $this->log->setMapName($this->server->getCurrentMap());
+	    $this->log->setSubmitterPlayerId($this->server->getServerGroup()->getOwnerPlayerId());
+	    $this->log->setIsAuto(true);
+	    $this->setIgnoreUnrecognizedLogLines(true);
+	  }
+	  
+	  foreach($newLines as $logLine) {
+	    $game_state;
+	    try {
+	      $game_state = $this->parseLine($logLine);
+	    } catch(CorruptLogLineException $clle) {
+	      //just pitch the line and move on
+	    }
+	    
+	    if($game_state === self::GAME_APPEARS_OVER) {
+	      $this->gameOver = true;
+	      break; //do not keep going as the log did not exit cleanly
+	    } else if ($game_state === self::GAME_OVER) {
+	      //mark as game over, but keep processing in case there is another round_start.
+	      $this->gameOver = true;
+	    }
+	  }
+	  
+	  //todo - need to make sure that this will always get called somehow - if not explicitly then set a timeout and finish this ////////////////////////////////////////////////////////////////////////////////////////////
+	  if($this->gameOver) {
+	    //check to see if any data was even entered.
+      if(count($this->log->Stats) == 0) {
+        $this->log->delete();
+        return; //nothing more to do
+      }
+      
+      $this->finishLog();
+    }
+    
+	  $ls = new LogSave();
+	  $this->log = $ls->save($this->log, true);
+	  return $this->log->getId();
+	}
+	
+	/**
+	  Parse through complete log file.
+	  This is also related to parseNewLines - make sure functionality changes are propagated accordingly.
+	*/
 	protected function parseLog($arrayLogLines, $ignoreTourneyModeNotFound = false) {
 	  $game_state = null;
 	  $fileLength = count($arrayLogLines);
@@ -497,11 +558,12 @@ class LogParser {
 	  if($this->parsingUtils->isLogLineOfType($logLine, "Log file started", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_cvar: ", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "server_message: ", $logLineDetails)
-	  || $this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "Your server will be restarted on map change.", $logLineDetails)
 	  || $this->parsingUtils->isLogLineOfType($logLine, "[META]", $logLineDetails)
 	  ) {
 	    return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
+	  } else if ($this->parsingUtils->isLogLineOfType($logLine, "Log file closed", $logLineDetails)) {
+	    return self::GAME_APPEARS_OVER;
 	  } else if($this->parsingUtils->isLogLineOfType($logLine, '"', $logLineDetails)) {
 	    //this will be a player action line. The quote matches the quote on a player string in the log.
 	    
@@ -543,7 +605,6 @@ class LogParser {
 	        return self::GAME_CONTINUE; //do nothing, just add to scrubbed log
 	      } else if($playerLineAction == "say" || $playerLineAction == "say_team") {
 	        $txt = $this->parsingUtils->getPlayerLineActionDetail($logLineDetails);
-	        
 	        if(strpos($txt, "!") === 0 || strpos($txt, "/") === 0) {
 	          //lines beginning with ! or / generally are Sourcemod commands, which could hold sensitive info.
 	          //do not include in scrubbed log, nor in events.

@@ -16,18 +16,44 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $newWeapon = $this->addNewWeapon();
     
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
+    $this->doAssertions($logid);    
+  }
+  
+  public function testMiniLogLineByLine() {
+    $this->_start(); //resetting log parser
+    $lines = $this->logParser->getRawLogFile($this->LFIXDIR."minilog_linebyline.log");
+    $logid = null;
+    
+    //values found in fixtures - testservers.yml
+    $ip = '255.255.255.255';
+    $port = 9576;
+    
+    //keeping this to one should be a good test to make sure that assists are marked properly.
+    $numLinesForEachPass = 1;
+    
+    $linesToDo = array();
+    $countOfLines = count($lines);
+    foreach($lines as $key => $line) {
+      $linesToDo[] = $line;
+      
+      if($key%$numLinesForEachPass == 0 || $key == $countOfLines-1) {
+        $logid = $this->logParser->parseNewLines($linesToDo, $ip, $port);
+        $linesToDo = array();
+      }
+    }
+    
+    $this->doAssertions($logid);
+  }
+  
+  private function doAssertions($logid) {
     $this->assertTrue(is_numeric($logid), "testing that logsave, by default, returns integer.");
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     $events = Doctrine::getTable('Event')->getEventsByIdAsArray($logid);
+    
     $logfile = Doctrine::getTable('LogFile')->findOneByLogId($logid);
-    
-    //this assertion will no longer be valid since we are now getting the log after the save. Keeping this around in case this changes.
-    //$this->assertEquals("09/29/2010 - 19:08:56", $log->get_timeStart()->format("m/d/Y - H:i:s"), "getTimeStart is correct");
-    
-    $countOfLines = count($this->logParser->getRawLogFile($this->LFIXDIR."mini.log"));
-    //$countOfLines-1 represents the lack of chat line with SM command, and the two rcon lines.
-    $this->assertEquals($countOfLines-3, count(explode("\n", $logfile->getLogData())), "count scrubbed lines == count orig lines subtract line with SM command");
     $this->assertFalse(strpos($logfile->getLogData(), "rcon"), "verify that no rcon line is in the log.");
+    $this->assertFalse(strpos($logfile->getLogData(), "!sm"), "verify that no sm line is in the log.");
+    
     $this->assertEquals(9, count($log['Stats']), "number of players, should exclude console, specs, and bots");
     
     $this->assertEquals(0, $log['redscore'], "red score");
@@ -38,7 +64,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     
     $this->assertEquals(1, $log['submitter_player_id'], "submitter has correct ID.");
     
-    $this->assertEquals("ctf_2fort", $log['map_name'], "map is ctf_2fort");
+    $this->assertEquals("cp_granary", $log['map_name'], "map is cp_granary");
     
     //Events
     $this->assertTrue($events[1]['attacker_player_id'] > 0, "first kill event has attacker 2");
@@ -114,7 +140,7 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $this->assertEquals(1, $stat['ubers'], "barncow's ubers");
         $this->assertEquals(1, $stat['dropped_ubers'], "Barncow dropped uber");
         //$this->assertEquals(0.5, $stat->getUbersPerDeath(), "Barncow's uber/d");
-        $this->assertEquals(2310, $stat['healing'], "Barncow's healing amount");
+        $this->assertEquals(2310, $stat['healing'], "Barncow's healing amount (official and superlogs, not supp stats individ)");
         
         $wstats = Doctrine::getTable('WeaponStat')->findArrayByStatId($stat['id']);
         $this->assertTrue(count($wstats) > 0);

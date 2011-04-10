@@ -1,0 +1,14 @@
+ServerGroup:
+  miniLogTestGroup:
+    slug: 'minilogtestgroup'
+    name: 'Mini Log Test Group'
+    Owner: barncow
+    group_type: S
+    
+Server:
+  miniLogTestServer:
+    ip: 255.255.255.255
+    port: 9576
+    ServerGroup: miniLogTestGroup
+    status: A
+    current_map: cp_granary

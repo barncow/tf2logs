@@ -362,18 +362,13 @@ PlayerHealStat:
       
 ItemPickupStat:
   columns:
-    id:
-      type: integer
-      primary: true
-      autoincrement: true
-      notnull: true
     stat_id:
       type: integer
       primary: true
-      autoincrement: false
       notnull: true
     item_key_name:
       type: string(20)
+      primary: true
       notnull: true
     times_picked_up:
       type: integer(2)

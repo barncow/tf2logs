@@ -156,6 +156,12 @@ class Log extends BaseLog
         $assistStat = $this->getStatFromSteamid($assistSteamid);
         Event::assist($e, $assistStat->getPlayerId(), $assistCoord);
       }
+    } else {
+      //this case, where there is no events and an assist came through, is likely due to linebyline processing, though a log could conceivably start with this as well.
+      $e = array('updateLastKillEvent' => true);
+      $assistStat = $this->getStatFromSteamid($assistSteamid);
+      Event::assist($e, $assistStat->getPlayerId(), $assistCoord);
+      $this->_events[] = $e;
     }
   }
   
