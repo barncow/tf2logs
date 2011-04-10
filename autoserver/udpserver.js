@@ -114,7 +114,15 @@ exports.LogDAO = function(dbDriver) {
   this.updateStatus = function(server_ip, server_port, server_status, callback) {
     dbDriver.query('update server set status = ? where ip = ? and port = ? and status != ?',
       [server_status, server_ip, server_port, this.SERVER_STATUS_INACTIVE], callback);
-  }
+  };
+  
+  this.getStatus = function(server_ip, server_port, callback) {
+    dbDriver.query('select status from server where ip = ? and port = ? and status != ?',
+      [server_ip, server_port, this.SERVER_STATUS_INACTIVE], function(err, results, fields){
+        status = results[0]['status'];
+        callback(status);
+      });
+  };
   
   return this;
 }
@@ -279,7 +287,7 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
       var logLineDetails = parsingUtils.getLogLineDetails(logLine);
       if(!logLineDetails) return this.STATUS_INVALID; //logLineDetails are corrupt, no need to continue
       
-      //todo now that we know that we probably have a valid line, should get server fields object here. do updates to object, then save whole object back.
+      //todo now that we know that we probably have a valid line, should get server fields object here. do updates to object, then save whole object back.////////////////////////////
       //will possibly reduce queries.
       
       //if we get a verify key line, we need to update the server record, if any.
@@ -296,7 +304,14 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
       
       //if there is a round_start event, update server status to recording, which will allow us to save loglines.
       if(parsingUtils.isRoundStart(logLineDetails)) {
-        dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING);
+        dao.getStatus(rinfo.address, rinfo.port, function(status){
+          if(status != dao.SERVER_STATUS_RECORDING) {
+            //this update status must be here in order to start parsing
+            dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING);
+            dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine); //todo race condition/////////////////////////////////////////////////
+            startLineByLine(rinfo.address, rinfo.port);
+          }
+        });
       }
       
       //insert the line into the log_line table, if server is in recording mode.
@@ -304,8 +319,8 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
       
       //this is being done last so that when this updates the status, we will have still saved the logLine for game over.
       if(parsingUtils.isGameOver(logLineDetails)) {
-        dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_PROCESSING);
-        doProcessing(rinfo.address, rinfo.port);
+      //todo - should this set a game over flag or something, and wait until team score lines come through? i believe they are "required" and provide better data.//////////////////////////////
+        dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_ACTIVE);
       }
       
       return this.STATUS_SUCCESS; //still here, must be success.
@@ -328,14 +343,23 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
     util = require('util'),
     self = this,
     doProcessing = function(ip, port) {
-    /**
-      this will start a process that will call a php symfony task to collect all the lines that were recorded, and parse them.
-    */
-    exec('php '+SITE_BASE_DIR+'/symfony tf2logs:processlines --env='+SITE_ENV+' --ip='+ip+' --port='+port,
-      function (error, stdout, stderr) {
-        
-    });
-  };
+      /**
+        this will start a process that will call a php symfony task to collect all the lines that were recorded, and parse them. This is done at the end of the game, not during.
+      */
+      exec('php '+SITE_BASE_DIR+'/symfony tf2logs:processlines --env='+SITE_ENV+' --ip='+ip+' --port='+port,
+        function (error, stdout, stderr) {
+          
+      })
+    },
+    startLineByLine = function(ip, port) {
+      /**
+        this will start a process that will call a php symfony task to collect all the lines that were recorded, and parse them as the log is generated.
+      */
+      exec('php '+SITE_BASE_DIR+'/symfony tf2logs:linebyline --env='+SITE_ENV+' --ip='+ip+' --port='+port,
+        function (error, stdout, stderr) {
+          
+      });
+    };
   
   this.STATUS_INVALID = -1;
   this.STATUS_SUCCESS = 1;

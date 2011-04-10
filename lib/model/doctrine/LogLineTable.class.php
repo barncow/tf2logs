@@ -15,7 +15,7 @@ class LogLineTable extends Doctrine_Table {
         return Doctrine_Core::getTable('LogLine');
     }
     
-    public function getLogLinesForServer($ip, $port) {
+    public function getLogLinesForServer($ip, $port, $delay = false) {
       //this query is essentially performed twice, once to select, once to delete. If change one, change the other!
       $q = $this
         ->createQuery('l')
@@ -25,15 +25,25 @@ class LogLineTable extends Doctrine_Table {
         ->andWhere('s.port = ?', $port)
         ->andWhere('s.status != ?', Server::STATUS_INACTIVE)
         ->orderBy('line_year, line_month, line_day, line_hour, line_minute, line_second, id asc')
-        ->setHydrationMode(Doctrine_Core::HYDRATE_SINGLE_SCALAR)
-        ->execute();
+        ->setHydrationMode(Doctrine_Core::HYDRATE_SINGLE_SCALAR);
         
       //removing all selected lines immediately
-      Doctrine_Query::create()
+      $d = Doctrine_Query::create()
         ->delete('LogLine l')
-        ->where('l.server_id = (select s.id from server s where s.ip = ? and s.port = ? and s.status != ?)', array($ip, $port, Server::STATUS_INACTIVE))
-        ->execute();
+        ->where('l.server_id = (select s.id from server s where s.ip = ? and s.port = ? and s.status != ?)', array($ip, $port, Server::STATUS_INACTIVE));
+        
+      if($delay !== false) {
+        $q->andWhere('l.created_at <= DATE_SUB(NOW(), INTERVAL ? SECOND)', $delay);
+        $d->andWhere('l.created_at <= DATE_SUB(NOW(), INTERVAL ? SECOND)', $delay);
+      }
+      
+      $lines = $q->execute();
+      $d->execute();
+      
+      if(is_string($lines)) {
+        $lines = array($lines);
+      }
 
-      return $q;
+      return $lines;
     }
 }

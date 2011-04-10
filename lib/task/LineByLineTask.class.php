@@ -1,6 +1,6 @@
 <?php
 
-class processlinesTask extends sfBaseTask {
+class LineByLineTask extends sfBaseTask {
   protected function configure() {
     $this->addOptions(array(
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
@@ -10,13 +10,13 @@ class processlinesTask extends sfBaseTask {
     ));
  
     $this->namespace = 'tf2logs';
-    $this->name = 'processlines';
-    $this->briefDescription = 'Collates log lines from the UDP Server and then adds a new log';
+    $this->name = 'linebyline';
+    $this->briefDescription = 'Collates log lines from the UDP Server and then adds a new log as it is generated';
  
     $this->detailedDescription = <<<EOF
-The [tf2logs:processlines|INFO] task Collates log lines from the UDP Server and then adds a new log:
+The [tf2logs:linebyline|INFO] task Collates log lines from the UDP Server and then adds a new log as it is generated. Should be used on first round_start:
  
-  [./symfony tf2logs:processlines --env=prod --ip=255.255.255.255 --port=27015|INFO]
+  [./symfony tf2logs:linebyline --env=prod --ip=255.255.255.255 --port=27015|INFO]
 EOF;
   }
 
@@ -31,15 +31,7 @@ EOF;
       throw new Exception("both IP and port not given to processlinesTask");
     }
 
-    $logParser = new LogParser();
-    $logParser->setIgnoreUnrecognizedLogLines(true);
-    
-    try {
-      $logid = $logParser->parseAutoLog($ip, $port);
-    } catch(LogFileNotFoundException $e) {
-      $this->logBlock('could not find log', 'ERROR');
-    } catch (Exception $ex) {
-      $this->logBlock(sprintf('Error occurred while processing Log : %s', $ex), 'ERROR');
-    }
+    $lineByLineParser = new LineByLineParser($ip, $port);
+    $lineByLineParser->start();
   }
 }

@@ -40,8 +40,19 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
         $logid = $this->logParser->parseNewLines($linesToDo, $ip, $port);
         $linesToDo = array();
       }
+      
+      //verify that data is being saved as it is being processed.
+      if($key == 5) {
+        $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+        foreach($log['Stats'] as $stat) {
+          if($stat['Player']['steamid'] == 'STEAM_0:0:8581157') {
+            $this->assertEquals(1, $stat['assists'], 'verify that can go to DB and get cres assists after the assist line goes through.');
+          }
+        }
+      }
     }
     
+    $this->assertTrue($this->logParser->isGameOver());
     $this->doAssertions($logid);
   }
   

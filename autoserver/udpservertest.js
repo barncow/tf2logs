@@ -4,7 +4,8 @@ var
   cfg = require('./udpserverconfig_test.js').udpServerConfig,
   parsingUtils = new udpServer.ParsingUtils(),
   driver = new udpServer.DBDriver(cfg.DB_USER, cfg.DB_PASS, cfg.DB_DATABASE, cfg.DB_CONNECTIONS),
-  logUDPServer = new udpServer.LogUDPServer(cfg.SERVER_PORT, driver, cfg.SITE_BASE_DIR, cfg.SITE_ENV);
+  logUDPServer = new udpServer.LogUDPServer(cfg.SERVER_PORT, driver, cfg.SITE_BASE_DIR, cfg.SITE_ENV),
+  logDAO = new udpServer.LogDAO(driver);
   
 var logLine = 'L 03/27/2011 - 18:00:08: "Console<0><Console><Console>" say "fresh prince of bel air"';
 
@@ -85,6 +86,13 @@ assert.equal('ctf_impact2', parsingUtils.getMap(parsingUtils.getLogLineDetails(l
 var startingMapLine = 'L 04/03/2011 - 15:20:36: Started map "ctf_impact2" (CRC "1634099807")';
 assert.equal('ctf_impact2', parsingUtils.getMap(parsingUtils.getLogLineDetails(startingMapLine)));
 assert.ok(!parsingUtils.getMap(parsingUtils.getLogLineDetails(logLine)));
+
+////////////////////////////////////
+//TESTS FOR LogDAO
+////////////////////////////////////
+logDAO.getStatus('96.8.112.126',	27015, function(status){
+  assert.equal(logDAO.SERVER_STATUS_ACTIVE, status);
+});
 
 ////////////////////////////////////
 //TESTS FOR LogUDPServer._onMessage

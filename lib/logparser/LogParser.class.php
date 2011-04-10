@@ -33,6 +33,7 @@ class LogParser {
   protected $isServerCvars;
   protected $minutesIntervals;
   protected $overwriteMapName;
+  protected $server;
   
   //these values are used to detect whether a round_win is valid or not.
   protected $currentRoundWinTeam;
@@ -66,6 +67,7 @@ class LogParser {
     $this->previousLogLine = null;
     $this->minutesIntervals = array();
     $this->overwriteMapName = false;
+    $this->server = null;
   }
   
   public function setIgnoreUnrecognizedLogLines($ignoreUnrecognizedLogLines) {
@@ -121,7 +123,7 @@ class LogParser {
     return $this->roles[$keyName];
   }
   
-  public function getLog() {
+  public function &getLog() {
     return $this->log;
   }
   
@@ -131,6 +133,10 @@ class LogParser {
   
   public function getParsingUtils() {
     return $this->parsingUtils;
+  }
+  
+  public function isGameOver() {
+    return $this->gameOver;
   }
   
   /**
@@ -278,7 +284,7 @@ class LogParser {
 	    $this->server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
 	    if(!$this->server) throw new Exception("Server could not be found for $ip:$port in parseNewLines");
 	  
-	    $this->log->setName('Name');
+	    $this->log->setName('Namenewlines');
 	    $this->log->setMapName($this->server->getCurrentMap());
 	    $this->log->setSubmitterPlayerId($this->server->getServerGroup()->getOwnerPlayerId());
 	    $this->log->setIsAuto(true);
