@@ -246,7 +246,7 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
     });
     
     //provide some cleanup upon exit
-    process.on('exit', function(){this.stop();});
+    process.on('exit', function(){this.stop();});////////////////////////////////////////////////////////////////////////////////////////////////todo - wait for children to finish first!
     process.on('uncaughtException', function(err) { util.log(err); });
     
     //start listening on this port
