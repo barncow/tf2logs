@@ -246,7 +246,7 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
     });
     
     //provide some cleanup upon exit
-    process.on('exit', function(){this.stop();});////////////////////////////////////////////////////////////////////////////////////////////////todo - wait for children to finish first!
+    process.on('exit', function(){this.stop();});
     process.on('uncaughtException', function(err) { util.log(err); });
     
     //start listening on this port
@@ -299,27 +299,42 @@ exports.LogUDPServer = function(SERVER_PORT, dbDriver, SITE_BASE_DIR, SITE_ENV) 
       //if we have a map line, need to update server record, if any.
       var map = parsingUtils.getMap(logLineDetails);
       if(map) {
-        dao.updateCurrentMap(rinfo.address, rinfo.port, map);
+        dao.updateCurrentMap(rinfo.address, rinfo.port, map);//todo if log recording is active, should also change the map on the log as well.
       }
       
-      //if there is a round_start event, update server status to recording, which will allow us to save loglines.
+      /*
+        if there is a round_start event, update server status to recording, which will allow us to save loglines. Also start the linebyline generation child process.
+        
+        The reason that there are three insertLogLine calls is because we need to be careful that if we need to update
+        the status to recording, that we do it without creating race conditions, and either missing the round_start
+        or adding duplicates. So, the inserts will only happen iff:
+        1. Line is round_start, and server is NOT in recording status. We will do an insert once we are sure (via callback) that the server has
+              been updated into recording status.
+        2. Line is round start, but server is already in recording status. It is safe to insert.
+        3. Line is not round_start. Insert itself will check that server is in recording status before adding the line.
+      */
       if(parsingUtils.isRoundStart(logLineDetails)) {
         dao.getStatus(rinfo.address, rinfo.port, function(status){
           if(status != dao.SERVER_STATUS_RECORDING) {
             //this update status must be here in order to start parsing
-            dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING);
-            dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine); //todo race condition/////////////////////////////////////////////////
+            dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_RECORDING, function(){
+              //server status has been updated, it is now safe to insert the round_start line.
+              dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
+            });
             startLineByLine(rinfo.address, rinfo.port);
+          } else {
+            //server status is already in recording mode, safe to insert now.
+            dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
           }
         });
+      } else {
+        //insert the line into the log_line table, if server is in recording mode.
+        dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
       }
-      
-      //insert the line into the log_line table, if server is in recording mode.
-      dao.insertLogLine(ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, rinfo.address, rinfo.port, logLine);
       
       //this is being done last so that when this updates the status, we will have still saved the logLine for game over.
       if(parsingUtils.isGameOver(logLineDetails)) {
-      //todo - should this set a game over flag or something, and wait until team score lines come through? i believe they are "required" and provide better data.//////////////////////////////
+      //todo - should this set a game over flag or something, and wait until team score lines come through? i believe they are "required" and provide better data. (may not be needed, Team lines also come after round_wins//////////
         dao.updateStatus(rinfo.address, rinfo.port, dao.SERVER_STATUS_ACTIVE);
       }
       
