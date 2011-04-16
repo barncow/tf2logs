@@ -14,6 +14,18 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 ?>
 
 <?php
+$snowieLink = link_to('-9m- snowie', '@player_by_numeric_steamid?id=76561197976448876');
+$s = <<<EOD
+<h3>Fixed Some Bugs, Regenerated Everything</h3>
+<p>Humiliation rounds no longer count toward playable minutes or any stats. Thanks to $snowieLink for pointing that out. The front page now caches every 5 minutes. When downloading a log file, the filename will default to tf2logs_id.log, where id is the number for the log (ie. tf2logs.com/logs/1 would download as tf2logs_1.log by default).</p>
+<p>Updates will continue to be slow. I'm working on a big addition to the site, and it is also getting nice outside. While updates will be slow, the site should be in good working order in the meantime.</p>
+EOD;
+echo outputInfoBox("entry11", "Updates for April 17, 2011", $s);
+?>
+
+<br/>
+
+<?php
 $s = <<<EOD
 <h3>Added Chat Log Table, ctf_impact2 Support</h3>
 <p>Some league admins requested the ability to show the chat messages for a log in a table, even if the log does not have a map that is supported. Coming soon, the capture times will be output, but I need to rearrange some stuff in the backend before I want to go ahead with that. Also added is Log Viewer support for the ctf_impact2 map, which means that all maps in the UGC Highlander Regular Season are now supported!</p>

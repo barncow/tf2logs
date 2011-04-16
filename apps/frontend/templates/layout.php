@@ -55,7 +55,7 @@
           <?php
             /****************** WHAT'S NEW UPDATE DATE *********************/
           ?>
-          <span class="fLeft">Updated April 1</span>
+          <span class="fLeft">Updated April 17</span>
         </div>
         <br class="hardSeparator"/>
       </div>
