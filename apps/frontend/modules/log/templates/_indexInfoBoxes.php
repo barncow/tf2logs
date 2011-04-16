@@ -38,5 +38,5 @@
   </div>
   
   <br class="hardSeparator"/>
-  <div id="frontPageCacheInterval">Cached Every 5 Minutes</div>
+  <div id="frontPageCacheInterval">Updated Every 5 Minutes</div>
 </div>
