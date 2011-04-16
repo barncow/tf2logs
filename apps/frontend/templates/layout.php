@@ -40,8 +40,8 @@
             <li><?php echo link_to('Player Search', '@player_search') ?></li>
             <li><?php echo link_to("Plugins", '@plugins') ?></li>
           <?php if($sf_user->isAuthenticated()): ?>
-            <li><strong><?php echo link_to('Upload a Log', '@homepage') ?></strong></li>
-            <li><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></li>
+            <li><?php echo link_to('Upload a Log', '@homepage') ?></li>
+            <li><strong><?php echo link_to('My TF2Logs', '@controlpanel', array('id' => 'mycplink')) ?></strong></li>
             <li><?php echo link_to('Logout', '@logout') ?></li>
           <?php else: ?>
             <li><a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid_bar.png') ?></a></li>
