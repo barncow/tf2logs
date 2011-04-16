@@ -55,6 +55,7 @@ class logActions extends sfActions {
     $this->logfile = Doctrine::getTable('LogFile')->findOneByLogId($request->getParameter('id'));
     $this->forward404Unless($this->logfile);
     $this->getResponse()->setContentType('text/plain');
+    $this->getResponse()->setHttpHeader('Content-Disposition', "attachment; filename=tf2logs_".$request->getParameter('id').".log");
     return $this->renderText($this->logfile->getLogData());
   }
   
