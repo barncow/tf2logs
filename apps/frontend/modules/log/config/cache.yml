@@ -8,5 +8,10 @@ _showLog:
 events:
   enabled: true
   lifetime: 1209600
+  
+#caching frontpage info boxes for 5 mins
+_indexInfoBoxes:
+  enabled: true
+  lifetime: 300
 
 #defaults will come from frontend config

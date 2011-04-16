@@ -393,7 +393,7 @@ img {
   text-align: center;
 }
 
-#copyright, #copyright a {
+#copyright, #copyright a, #frontPageCacheInterval {
   font-size: 10px;
   text-align: center;
 }
