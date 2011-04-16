@@ -6,7 +6,7 @@ class unit_ServerGroupTableTest extends sfPHPUnitBaseTestCase {
     $s = new Server();
     $ip = '1.1.1.2';
     $port = 1234;
-    $group_slug = 'mygroup';
+    $group_slug = 'mygroupa';
     $group_name = 'mygroupname';
     $server_slug = 'slug';
     $server_name = 'slugname';

@@ -34,6 +34,7 @@ class LogParser {
   protected $minutesIntervals;
   protected $overwriteMapName;
   protected $server;
+  protected $humiliationRound;
   
   //these values are used to detect whether a round_win is valid or not.
   protected $currentRoundWinTeam;
@@ -68,6 +69,7 @@ class LogParser {
     $this->minutesIntervals = array();
     $this->overwriteMapName = false;
     $this->server = null;
+    $this->humiliationRound = false;
   }
   
   public function setIgnoreUnrecognizedLogLines($ignoreUnrecognizedLogLines) {
@@ -208,6 +210,7 @@ class LogParser {
 	    $ret =  $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
 	    //if no tournament mode was found, re-run entire log file as one round.
+	    $this->clearValues();
 	    return $this->parseLog($file, true);
 	  }
 	  $tlp->addTime();
@@ -231,6 +234,7 @@ class LogParser {
 	    $logid =  $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
 	    //if no tournament mode was found, re-run entire log file as one round.
+	    $this->clearValues();
 	    $logid = $this->parseLog($file, true);
 	  }
 	  
@@ -516,9 +520,10 @@ class LogParser {
 	    $worldTriggerAction = $this->parsingUtils->getWorldTriggerAction($logLineDetails);
 	    if($worldTriggerAction == "Round_Start") {
 	      if($this->gameOver) {
-	        $this->addMinutesInterval('start', $dt);
 	        $this->gameOver = false;
 	      }
+	      
+	      $this->humiliationRound = false;
 	      $this->isTournamentMode = true;
 	      if($this->log->get_timeStart() == null) {
 	        //there will likely be multiple round_start's, only need the first one for the tmsp
@@ -526,9 +531,9 @@ class LogParser {
 	        
 	        //adding a round start event for the first round.
 	        $this->log->addRoundStartEvent($elapsedTime, 0, 0);
-	        
-	        $this->addMinutesInterval('start', $dt);
 	      }
+	      
+	      $this->addMinutesInterval('start', $dt);
 	      
 	      $this->playerChangeTeams = array(); //resetting change teams. assuming players are at where they need to be.
 	      
@@ -541,6 +546,8 @@ class LogParser {
 	      if(!$this->isCtf) {
 	        $this->currentRoundWinTeam = $this->parsingUtils->getRoundWinTeam($logLineDetails);
 	      }
+	      $this->addMinutesInterval('stop', $dt);
+	      $this->humiliationRound = true;
 	      return self::GAME_CONTINUE;
 	    } else if($worldTriggerAction == "Game_Paused") {
 	      $this->addMinutesInterval('stop', $dt);
@@ -617,7 +624,7 @@ class LogParser {
 	        $this->playerChangeTeams = array();
 	      }
 	      return self::GAME_CONTINUE;
-	    } else if($this->gameOver) {
+	    } else if($this->gameOver || $this->humiliationRound) {
 	      return self::GAME_OVER; //prevent unrecogloglineexception
 	    } else {
 	      if($playerLineAction == "entered the game"

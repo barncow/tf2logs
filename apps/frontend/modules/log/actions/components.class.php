@@ -10,4 +10,10 @@ class logComponents extends sfComponents {
     $this->itemPickupStats = Doctrine::getTable('ItemPickupStat')->getItemPickupStatsForLogId($id);
     $this->chatEvents = Doctrine::getTable('Event')->getChatEventsByIdAsArray($id);
   }
+  
+  public function executeIndexInfoBoxes() {
+    $this->recentlyAdded = Doctrine::getTable('Log')->getMostRecentLogs();
+    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogs();
+    $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
+  }
 }

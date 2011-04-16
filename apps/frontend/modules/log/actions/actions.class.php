@@ -33,9 +33,6 @@ class logActions extends sfActions {
   );
   
   public function executeIndex(sfWebRequest $request) {
-    $this->logs = Doctrine::getTable('Log')->getMostRecentLogs();
-    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogs();
-    $this->topuploaders = Doctrine::getTable('Player')->getTopUploaders();
     $this->mapNames = array();
     Doctrine::getTable('Log')->getMapsAsList($this->mapNames, self::$SEED_MAPS);
     $this->form = new LogForm();
@@ -62,6 +59,7 @@ class logActions extends sfActions {
     $this->logfile = Doctrine::getTable('LogFile')->findOneByLogId($request->getParameter('id'));
     $this->forward404Unless($this->logfile);
     $this->getResponse()->setContentType('text/plain');
+    $this->getResponse()->setHttpHeader('Content-Disposition', "attachment; filename=tf2logs_".$request->getParameter('id').".log");
     return $this->renderText($this->logfile->getLogData());
   }
   
