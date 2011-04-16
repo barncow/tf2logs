@@ -5,3 +5,4 @@ web/avatars/*
 config/app.yml
 config/databases.yml
 web/files/*
+autoserver/udpserverconfig.js
