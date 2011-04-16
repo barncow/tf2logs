@@ -24,7 +24,7 @@ class unit_SteamWebAPITest extends sfPHPUnitBaseTestCase {
   
   public function testGetName() {
     $swapi = new SteamWebAPI();
-    $this->assertEquals("Barncow", $swapi->getPlayerName("76561197993228277"), "check that can get current name");
+    $this->assertEquals("Barncow - TF2Logs.com", $swapi->getPlayerName("76561197993228277"), "check that can get current name");
   }
   
   public function testChangeJSONIntsToStrings() {

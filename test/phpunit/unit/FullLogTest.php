@@ -70,6 +70,14 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     $this->assertEquals(4, $log['bluescore'], "blue score of kothviaduct");
     $this->assertEquals(0, $log['redscore'], "red score of kothviaduct");
+    $this->assertEquals(1181, $log['game_seconds'], "game seconds, minus humuliation rounds");  
+    
+    foreach($log['Stats'] as $stat) {
+      if($stat['Player']['steamid'] == "STEAM_0:0:6845279") {
+        $this->assertEquals(31, $stat['kills'], "target's kills, without humiliation kills");
+        break;
+      }
+    }
   }
   
   /**
@@ -92,7 +100,7 @@ class unit_FullLogTest extends sfPHPUnitBaseTestCase {
     
     $this->assertEquals(0, $log['bluescore'], "blue score");
     
-    $this->assertEquals(2057, $log['game_seconds'], "game seconds");
+    $this->assertEquals(2027, $log['game_seconds'], "game seconds");
     
     foreach($log['Stats'] as $stat) {
       if($stat['Player']['steamid'] == "STEAM_0:1:16481274") {

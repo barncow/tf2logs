@@ -30,6 +30,6 @@ class unit_LogParserTest extends BaseLogParserTestCase {
     $logid = $this->logParser->parseLogFromDB($logid);
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     
-    $this->assertEquals(8, count($log['Stats']), "number of players, should exclude console and specs");
+    $this->assertEquals(9, count($log['Stats']), "number of players, should exclude console and specs");
   }
 }
