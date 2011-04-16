@@ -22,6 +22,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'verify_key'      => new sfWidgetFormFilterInput(),
       'status'          => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'current_map'     => new sfWidgetFormFilterInput(),
+      'live_log_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('LiveLog'), 'add_empty' => true)),
     ));
 
     $this->setValidators(array(
@@ -34,6 +35,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'verify_key'      => new sfValidatorPass(array('required' => false)),
       'status'          => new sfValidatorPass(array('required' => false)),
       'current_map'     => new sfValidatorPass(array('required' => false)),
+      'live_log_id'     => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('LiveLog'), 'column' => 'id')),
     ));
 
     $this->widgetSchema->setNameFormat('server_filters[%s]');
@@ -63,6 +65,7 @@ abstract class BaseServerFormFilter extends BaseFormFilterDoctrine
       'verify_key'      => 'Text',
       'status'          => 'Text',
       'current_map'     => 'Text',
+      'live_log_id'     => 'ForeignKey',
     );
   }
 }

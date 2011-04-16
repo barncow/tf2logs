@@ -55,6 +55,40 @@ class LogTable extends Doctrine_Table {
       return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
     }
     
+    public function getLiveLogFromServerSlugsAsArray($server_slug, $group_slug = null) {
+      $l = $this
+        ->createQuery('l')
+        ->leftJoin('l.Submitter sr')
+        ->leftJoin('l.Stats s')
+        ->leftJoin('l.Server srv')
+        ->leftJoin('srv.ServerGroup sg')
+        ->leftJoin('s.Player p')
+        ->leftJoin('s.Weapons w')
+        ->leftJoin('s.RoleStats rs')
+        ->leftJoin('rs.Role r')
+        ->where('l.error_log_name is null')
+        ->andWhere('l.is_live = ?', true)
+        ->orderBy('s.team asc, s.name asc, rs.time_played desc')
+        ->setHydrationMode(Doctrine_Core::HYDRATE_ARRAY);
+        
+      if($group_slug) {
+        $group_type = ServerGroup::GROUP_TYPE_MULTI_SERVER;
+        $l->andWhere('sg.group_type = ?', $group_type)
+          ->andWhere('sg.slug = ?', $group_slug)
+          ->andWhere('srv.slug = ?', $server_slug);
+      } else {
+        $group_type = ServerGroup::GROUP_TYPE_SINGLE_SERVER;
+        $l->andWhere('sg.group_type = ?', $group_type)
+          ->andWhere('sg.slug = ?', $server_slug)
+          ->orWhere('srv.slug = ?', $server_slug);
+      }
+      
+      $l = $l->execute();
+     
+      if(count($l) == 0) return null;
+      return $l[0]; //returns doctrine_collection obj, we only want first (all we should get)
+    }
+    
     public function getErrorLogById($id) {
       $l = $this
         ->createQuery('l')
@@ -85,6 +119,7 @@ class LogTable extends Doctrine_Table {
       return $this
         ->createQuery('l')
         ->where('l.error_log_name is null')
+        ->andWhere('l.server_id is null')
         ->orderBy('l.created_at DESC')
         ->limit($num_to_retrieve)
         ->execute();
@@ -98,7 +133,38 @@ class LogTable extends Doctrine_Table {
         ->createQuery('l')
         ->where('l.error_log_name is null')
         ->andWhere('l.created_at >= ?', $dtstring)
+        ->andWhere('l.is_live = ?', false) //doing is not live here since we want all top viewed logs
         ->orderBy('l.views DESC')
+        ->limit($num_to_retrieve)
+        ->execute();
+    }
+    
+    public function getTopViewedLogsForServerGroup($group_slug, $num_to_retrieve = 10, $prev_days = 7) {
+      $days_ago_dt = new DateTime();
+      $days_ago_dt->sub(new DateInterval('P'.$prev_days.'D'));
+      $dtstring = $days_ago_dt->format('Y-m-d 00:00:00');
+      return $this
+        ->createQuery('l')
+        ->leftJoin('l.Server s')
+        ->leftJoin('s.ServerGroup sg')
+        ->where('l.error_log_name is null')
+        ->andWhere('l.created_at >= ?', $dtstring)
+        ->andWhere('sg.slug = ?', $group_slug)
+        ->andWhere('l.is_live = ?', false)
+        ->orderBy('l.views DESC')
+        ->limit($num_to_retrieve)
+        ->execute();
+    }
+    
+    public function getMostRecentLogsForServerGroup($group_slug, $num_to_retrieve = 10) {
+      return $this
+        ->createQuery('l')
+        ->leftJoin('l.Server s')
+        ->leftJoin('s.ServerGroup sg')
+        ->where('l.error_log_name is null')
+        ->andWhere('sg.slug = ?', $group_slug)
+        ->andWhere('l.is_live = ?', false)
+        ->orderBy('l.created_at DESC')
         ->limit($num_to_retrieve)
         ->execute();
     }

@@ -47,6 +47,13 @@ class logActions extends sfActions {
     Doctrine::getTable('Log')->incrementViews($request->getParameter('id'));
   }
   
+  public function executeLive(sfWebRequest $request) {
+    $this->log = Doctrine::getTable('Log')->getLiveLogFromServerSlugsAsArray($request->getParameter('server_slug'), $request->getParameter('group_slug'));
+    $this->forward404Unless($this->log);
+    //dont increment views for this, since this could involve refreshes until the log is complete.
+    $this->setTemplate('show');
+  }
+  
   public function executeEvents(sfWebRequest $request) {
     $this->events = Doctrine::getTable('Event')->getEventsByIdAsArray($request->getParameter('id'));
   }

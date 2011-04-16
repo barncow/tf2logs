@@ -44,6 +44,11 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
       //verify that data is being saved as it is being processed.
       if($key == 5) {
         $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
+        $this->assertTrue($log['is_live'], "checking that we are live");
+        
+        $server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
+        $this->assertTrue($server->getLiveLogId() > 0, "assert that live log id is set");
+        
         foreach($log['Stats'] as $stat) {
           if($stat['Player']['steamid'] == 'STEAM_0:0:8581157') {
             $this->assertEquals(1, $stat['assists'], 'verify that can go to DB and get cres assists after the assist line goes through.');
@@ -53,6 +58,10 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     }
     
     $this->assertTrue($this->logParser->isGameOver());
+    
+    $server = Doctrine::getTable('Server')->findActiveServer($ip, $port);
+    $this->assertFalse($server->getLiveLogId() > 0, "assert that live log id is no longer set");
+    
     $this->doAssertions($logid);
   }
   
@@ -76,6 +85,8 @@ class unit_MiniLogTest extends BaseLogParserTestCase {
     $this->assertEquals(1, $log['submitter_player_id'], "submitter has correct ID.");
     
     $this->assertEquals("cp_granary", $log['map_name'], "map is cp_granary");
+    
+    $this->assertFalse((boolean)$log['is_live'], "checking that we are no longer live");
     
     //Events
     $this->assertTrue($events[1]['attacker_player_id'] > 0, "first kill event has attacker 2");

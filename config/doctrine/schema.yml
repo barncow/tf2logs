@@ -41,10 +41,12 @@ Log:
       type: integer(4)
       notnull: true
       default: 0
-    is_auto:
+    server_id:
+      type: integer
+      notnull: false
+    is_live:
       type: boolean
-      notnull: true
-      default: false
+      notnull: false
   relations:
     LogFile:
       local: id
@@ -52,6 +54,9 @@ Log:
     Submitter:
       local: submitter_player_id
       class: Player
+    Server:
+      onDelete: CASCADE
+      foreignAlias: Logs
 
 Stat:
   columns:
@@ -579,8 +584,14 @@ Server:
     current_map:
       type: string(25)
       notnull: false
+    live_log_id:
+      type: integer
+      notnull: false
   relations:
     ServerGroup:
       onDelete: CASCADE
       foreignAlias: Servers
+    LiveLog:
+      local: live_log_id
+      class: Log
     

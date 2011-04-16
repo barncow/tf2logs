@@ -70,11 +70,13 @@ class serversActions extends sfActions {
   }
   
   /**
-    main landing page for a server
+    main landing page for a server group
   */
   public function executeMain(sfWebRequest $request) {
     $this->serverGroup = Doctrine::getTable('ServerGroup')->findOneBySlug($request->getParameter('slug'));
     $this->forward404Unless($this->serverGroup);
+    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogsForServerGroup($request->getParameter('slug'));
+    $this->recentlyAdded = Doctrine::getTable('Log')->getMostRecentLogsForServerGroup($request->getParameter('slug'));
   }
   
   protected function processForm(sfWebRequest $request, sfForm &$form, $errorMsg) {

@@ -287,8 +287,11 @@ class LogParser {
 	    $this->log->setName('Namenewlines');
 	    $this->log->setMapName($this->server->getCurrentMap());
 	    $this->log->setSubmitterPlayerId($this->server->getServerGroup()->getOwnerPlayerId());
-	    $this->log->setIsAuto(true);
+	    $this->log->setServerId($this->server->getId());
+	    $this->log->setIsLive(true);
 	    $this->setIgnoreUnrecognizedLogLines(true);
+	    
+	    
 	  }
 	  
 	  foreach($newLines as $logLine) {
@@ -316,11 +319,24 @@ class LogParser {
         return; //nothing more to do
       }
       
+      $this->log->setIsLive(false);
+      
+      //game is over, remove live log relation
+      $this->server->setLiveLogId(null);
+	    $this->server->save();
+      
       $this->finishLog();
     }
     
 	  $ls = new LogSave();
 	  $this->log = $ls->save($this->log, true);
+	  
+	  //if server live log id not set and the game is not over, set it here.
+	  if(!$this->server->getLiveLogId() && !$this->gameOver) {
+	    $this->server->setLiveLogId($this->log->getId());
+	    $this->server->save();
+	  }
+	  
 	  return $this->log->getId();
 	}
 	

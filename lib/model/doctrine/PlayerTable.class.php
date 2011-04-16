@@ -82,6 +82,7 @@ class PlayerTable extends Doctrine_Table {
       .'from log l '
       .'left join player p on l.submitter_player_id = p.id '
       .'where l.error_log_name is null '
+      .'and l.server_id is null '
       .'group by p.numeric_steamid, p.name '
       .'having num_logs > 0 '
       .'order by num_logs desc '

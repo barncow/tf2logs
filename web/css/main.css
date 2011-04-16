@@ -339,7 +339,7 @@ img {
   clear: both;
 }
 
-#recentlyAdded {
+#recentlyAdded, #topViewedServer {
   width: 550px;
   float: left;
 }

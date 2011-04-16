@@ -14,7 +14,10 @@
  * @property string $verify_key
  * @property string $status
  * @property string $current_map
+ * @property integer $live_log_id
  * @property ServerGroup $ServerGroup
+ * @property Log $LiveLog
+ * @property Doctrine_Collection $Logs
  * @property Doctrine_Collection $LogLines
  * 
  * @method string              getSlug()            Returns the current record's "slug" value
@@ -26,7 +29,10 @@
  * @method string              getVerifyKey()       Returns the current record's "verify_key" value
  * @method string              getStatus()          Returns the current record's "status" value
  * @method string              getCurrentMap()      Returns the current record's "current_map" value
+ * @method integer             getLiveLogId()       Returns the current record's "live_log_id" value
  * @method ServerGroup         getServerGroup()     Returns the current record's "ServerGroup" value
+ * @method Log                 getLiveLog()         Returns the current record's "LiveLog" value
+ * @method Doctrine_Collection getLogs()            Returns the current record's "Logs" collection
  * @method Doctrine_Collection getLogLines()        Returns the current record's "LogLines" collection
  * @method Server              setSlug()            Sets the current record's "slug" value
  * @method Server              setName()            Sets the current record's "name" value
@@ -37,7 +43,10 @@
  * @method Server              setVerifyKey()       Sets the current record's "verify_key" value
  * @method Server              setStatus()          Sets the current record's "status" value
  * @method Server              setCurrentMap()      Sets the current record's "current_map" value
+ * @method Server              setLiveLogId()       Sets the current record's "live_log_id" value
  * @method Server              setServerGroup()     Sets the current record's "ServerGroup" value
+ * @method Server              setLiveLog()         Sets the current record's "LiveLog" value
+ * @method Server              setLogs()            Sets the current record's "Logs" collection
  * @method Server              setLogLines()        Sets the current record's "LogLines" collection
  * 
  * @package    tf2logs
@@ -95,6 +104,10 @@ abstract class BaseServer extends sfDoctrineRecord
              'notnull' => false,
              'length' => 25,
              ));
+        $this->hasColumn('live_log_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
+             ));
     }
 
     public function setUp()
@@ -104,6 +117,14 @@ abstract class BaseServer extends sfDoctrineRecord
              'local' => 'server_group_id',
              'foreign' => 'id',
              'onDelete' => 'CASCADE'));
+
+        $this->hasOne('Log as LiveLog', array(
+             'local' => 'live_log_id',
+             'foreign' => 'id'));
+
+        $this->hasMany('Log as Logs', array(
+             'local' => 'id',
+             'foreign' => 'server_id'));
 
         $this->hasMany('LogLine as LogLines', array(
              'local' => 'id',

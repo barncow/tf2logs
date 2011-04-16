@@ -16,9 +16,11 @@
  * @property string $error_log_name
  * @property string $error_exception
  * @property integer $views
- * @property boolean $is_auto
+ * @property integer $server_id
+ * @property boolean $is_live
  * @property LogFile $LogFile
  * @property Player $Submitter
+ * @property Server $Server
  * @property Doctrine_Collection $Stats
  * @property Doctrine_Collection $Events
  * 
@@ -33,9 +35,11 @@
  * @method string              getErrorLogName()        Returns the current record's "error_log_name" value
  * @method string              getErrorException()      Returns the current record's "error_exception" value
  * @method integer             getViews()               Returns the current record's "views" value
- * @method boolean             getIsAuto()              Returns the current record's "is_auto" value
+ * @method integer             getServerId()            Returns the current record's "server_id" value
+ * @method boolean             getIsLive()              Returns the current record's "is_live" value
  * @method LogFile             getLogFile()             Returns the current record's "LogFile" value
  * @method Player              getSubmitter()           Returns the current record's "Submitter" value
+ * @method Server              getServer()              Returns the current record's "Server" value
  * @method Doctrine_Collection getStats()               Returns the current record's "Stats" collection
  * @method Doctrine_Collection getEvents()              Returns the current record's "Events" collection
  * @method Log                 setId()                  Sets the current record's "id" value
@@ -49,9 +53,11 @@
  * @method Log                 setErrorLogName()        Sets the current record's "error_log_name" value
  * @method Log                 setErrorException()      Sets the current record's "error_exception" value
  * @method Log                 setViews()               Sets the current record's "views" value
- * @method Log                 setIsAuto()              Sets the current record's "is_auto" value
+ * @method Log                 setServerId()            Sets the current record's "server_id" value
+ * @method Log                 setIsLive()              Sets the current record's "is_live" value
  * @method Log                 setLogFile()             Sets the current record's "LogFile" value
  * @method Log                 setSubmitter()           Sets the current record's "Submitter" value
+ * @method Log                 setServer()              Sets the current record's "Server" value
  * @method Log                 setStats()               Sets the current record's "Stats" collection
  * @method Log                 setEvents()              Sets the current record's "Events" collection
  * 
@@ -123,10 +129,13 @@ abstract class BaseLog extends sfDoctrineRecord
              'default' => 0,
              'length' => 4,
              ));
-        $this->hasColumn('is_auto', 'boolean', null, array(
+        $this->hasColumn('server_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
+             ));
+        $this->hasColumn('is_live', 'boolean', null, array(
              'type' => 'boolean',
-             'notnull' => true,
-             'default' => false,
+             'notnull' => false,
              ));
     }
 
@@ -140,6 +149,11 @@ abstract class BaseLog extends sfDoctrineRecord
         $this->hasOne('Player as Submitter', array(
              'local' => 'submitter_player_id',
              'foreign' => 'id'));
+
+        $this->hasOne('Server', array(
+             'local' => 'server_id',
+             'foreign' => 'id',
+             'onDelete' => 'CASCADE'));
 
         $this->hasMany('Stat as Stats', array(
              'local' => 'id',

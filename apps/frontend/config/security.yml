@@ -42,6 +42,9 @@ status:
   
 main:
   is_secure: false
+  
+live:
+  is_secure: false
 
 #defaulting to secure for owners and users. This will only contain user level operations.
 default:

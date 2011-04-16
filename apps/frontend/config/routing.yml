@@ -112,6 +112,14 @@ server_multi_status:
 server_main:
   url: /servers/:slug
   param: {module: servers, action: main }
+  
+server_single_live:
+  url: /servers/:server_slug/live
+  param: {module: log, action: live }
+  
+server_multi_live:
+  url: /servers/:group_slug/:server_slug/live
+  param: {module: log, action: live }
 
 # generic rules
 # please, remove them by adding more specific rules

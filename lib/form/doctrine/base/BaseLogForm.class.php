@@ -26,7 +26,8 @@ abstract class BaseLogForm extends BaseFormDoctrine
       'error_log_name'      => new sfWidgetFormInputText(),
       'error_exception'     => new sfWidgetFormTextarea(),
       'views'               => new sfWidgetFormInputText(),
-      'is_auto'             => new sfWidgetFormInputCheckbox(),
+      'server_id'           => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Server'), 'add_empty' => true)),
+      'is_live'             => new sfWidgetFormInputCheckbox(),
       'created_at'          => new sfWidgetFormDateTime(),
       'updated_at'          => new sfWidgetFormDateTime(),
     ));
@@ -43,7 +44,8 @@ abstract class BaseLogForm extends BaseFormDoctrine
       'error_log_name'      => new sfValidatorString(array('max_length' => 50, 'required' => false)),
       'error_exception'     => new sfValidatorString(array('max_length' => 500, 'required' => false)),
       'views'               => new sfValidatorInteger(array('required' => false)),
-      'is_auto'             => new sfValidatorBoolean(array('required' => false)),
+      'server_id'           => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Server'), 'required' => false)),
+      'is_live'             => new sfValidatorBoolean(array('required' => false)),
       'created_at'          => new sfValidatorDateTime(),
       'updated_at'          => new sfValidatorDateTime(),
     ));

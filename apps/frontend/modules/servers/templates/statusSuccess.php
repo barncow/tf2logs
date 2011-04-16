@@ -7,9 +7,22 @@ $lastmessage = getHumanReadableTimestamp($server->getLastMessage());
 if(!$lastmessage || strlen($lastmessage) == 0) {
   $lastmessage = "No messages received from server";
 }
+
+$liveLogLink = "";
+if($server->getServerGroup()->getGroupType() == ServerGroup::GROUP_TYPE_SINGLE_SERVER) {
+  if($server->getLiveLogId()) {
+    $liveLogLink = link_to('LIVE', '@server_single_live?server_slug='.$server->getSlug())."<br/>";
+  }
+} else if($server->getServerGroup()->getGroupType() == ServerGroup::GROUP_TYPE_MULTI_SERVER) {
+  if($server->getLiveLogId()) {
+    $liveLogLink = link_to('LIVE', '@server_multi_live?server_slug='.$server->getSlug().'&group_slug='.$server->getServerGroup()->getSlug())."<br/>";
+  }
+}
+
 $s = <<<EOD
 Status: $status<br/>
 Last Message Received: $lastmessage<br/>
+$liveLogLink
 EOD;
 
 if($server->getStatus() == Server::STATUS_NOT_VERIFIED && checkAccess($sf_user, $server->getServerGroup()->getOwnerPlayerId())) {
