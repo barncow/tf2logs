@@ -14,7 +14,7 @@ use_javascript('autocompletehelper.js');
 <div id="pageLogin" class="infoBox">
     <div class="ui-widget ui-widget-header ui-corner-top header">Login to Upload</div>
     <div class="content">
-     In order to upload a log file, you must login through STEAM.<br/>It is quick and safe.<br/>You can browse the site without logging in.<br/>
+     In order to upload a log file or add a server, you must login through STEAM.<br/>It is quick and safe.<br/>You can browse the site without logging in.<br/>
      <a href="<?php echo url_for('@autoLogin') ?>"><?php echo image_tag('steam_openid.png') ?></a>
     </div>
     <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
