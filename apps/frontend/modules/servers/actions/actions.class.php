@@ -52,24 +52,59 @@ class serversActions extends sfActions {
     form to edit a server/server group
   */
   public function executeEdit(sfWebRequest $request) {
-    $server_slug = $request->getParameter('server_slug');
-    $group_slug = $request->getParameter('group_slug');
-    $owner_id = $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var'));
+    $this->server_slug = $request->getParameter('server_slug');
+    $this->group_slug = $request->getParameter('group_slug');
+    $owner_id = $this->getUser()->getCurrentPlayerId();
     
-    if($group_slug && $server_slug) {
+    if($this->getUser()->isOwner()) $owner_id = null;
+    
+    if($this->group_slug && $this->server_slug) {
       //server within group
-      $this->server = Doctrine::getTable('Server')->findServerBySlug($server_slug, $group_slug, $owner_id);
-      $this->form = new ServerForm($this->server);
-    } else if($group_slug && !$server_slug) {
+      $this->server = Doctrine::getTable('Server')->findServerBySlug($this->server_slug, $this->group_slug, $owner_id);
+      $this->forward404Unless($this->server);
+      $this->form = new ServerUpdateForm($this->server);
+    } else if($this->group_slug && !$this->server_slug) {
       //either group or server, depending on servergroup's group_type
-      $this->server = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($group_slug, $owner_id);
-      $this->form = new ServerGroupForm($this->server);
+      $this->serverGroup = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($this->group_slug, $owner_id);
+      $this->forward404Unless($this->serverGroup);
+      $this->form = new ServerGroupUpdateForm($this->serverGroup);
     } else {
       //invalid page
       $this->forward404();
-    }    
+    }
+  }
+  
+  /**
+    action to save edits to a server within a group
+  */
+  public function executeUpdateServer(sfWebRequest $request) {
+    $this->server_slug = $request->getParameter('server_slug');
+    $this->group_slug = $request->getParameter('group_slug');
+    $owner_id = $this->getUser()->getCurrentPlayerId();
     
+    if($this->getUser()->isOwner()) $owner_id = null;
+    
+    $this->server = Doctrine::getTable('Server')->findServerBySlug($this->server_slug, $this->group_slug, $owner_id);
     $this->forward404Unless($this->server);
+    $this->form = new ServerUpdateForm($this->server);
+    $this->form->configureUniqueSlugValidator($this->group_slug, $this->server_slug);
+    $this->processUpdateForm($request, $this->form, 'Could not save. Check error messages below.', '@server_multi_edit?group_slug='.$this->group_slug.'&server');
+  }
+  
+  /**
+    action to save edits to a server group or single server
+  */
+  public function executeUpdateGroup(sfWebRequest $request) {
+    $this->server_slug = $request->getParameter('server_slug');
+    $this->group_slug = $request->getParameter('group_slug');
+    $owner_id = $this->getUser()->getCurrentPlayerId();
+    
+    if($this->getUser()->isOwner()) $owner_id = null;
+    
+    $this->serverGroup = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($this->group_slug, $owner_id);
+    $this->forward404Unless($this->serverGroup);
+    $this->form = new ServerGroupUpdateForm($this->serverGroup);
+    $this->processUpdateForm($request, $this->form, 'Could not save. Check error messages below.', '@server_single_edit?group');
   }
   
   /**
@@ -132,6 +167,21 @@ class serversActions extends sfActions {
     } else {
       $this->getUser()->setFlash('error', $errorMsg);
       $this->setTemplate('new');
+    }
+    
+  }
+  
+  protected function processUpdateForm(sfWebRequest $request, sfForm &$form, $errorMsg, $redirect) {
+    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+    
+    if ($form->isValid()) {
+      
+      $this->form->save();
+      $this->getUser()->setFlash('notice', 'Your changes were saved.');
+      $this->redirect($redirect.'_slug='.$this->form->getValue('slug'));
+    } else {
+      $this->getUser()->setFlash('error', $errorMsg);
+      $this->setTemplate('edit');
     }
     
   }

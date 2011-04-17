@@ -8,7 +8,7 @@
  * @author     Brian Barnekow
  * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class ServerForm extends BaseServerForm {
+class ServerUpdateForm extends BaseServerForm {
   public function configure() {
     unset($this->widgetSchema['server_group_id']);
     unset($this->validatorSchema['server_group_id']);
@@ -22,13 +22,10 @@ class ServerForm extends BaseServerForm {
     unset($this->validatorSchema['current_map']);
     unset($this->widgetSchema['live_log_id']);
     unset($this->validatorSchema['live_log_id']);
-    
-    $this->validatorSchema['ip'] = new sfValidatorRegex(array('pattern' => '/^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})$/'));
-    $this->validatorSchema['ip']->setMessage('required', 'The IP field is required.');
-    $this->validatorSchema['ip']->setMessage('invalid', 'The IP field is invalid. It must be in the form of XXX.XXX.XXX.XXX. Do not include the port.');
-    
-    $this->validatorSchema['port']->setMessage('required', 'The Port field is required.');
-    $this->validatorSchema['port']->setMessage('invalid', 'The Port field can only be an integer value.');
+    unset($this->widgetSchema['ip']);
+    unset($this->validatorSchema['ip']);
+    unset($this->widgetSchema['port']);
+    unset($this->validatorSchema['port']);
 
     $max = $this->validatorSchema['slug']->getOption('max_length');
     $this->validatorSchema['slug'] = new sfValidatorAnd(array(
@@ -43,31 +40,14 @@ class ServerForm extends BaseServerForm {
 
     $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
       new sfValidatorDoctrineUnique(array('model' => 'ServerGroup', 'column' => array('slug')), array('invalid' => 'The Server URL must be unique.'))
-      ,new AvailableServerAddressValidator()
       ,new SlugUniqueToGroupValidator()
     )));
   }
   
-  public function configureExistingGroup($owner_id) {
-    $this->widgetSchema['server_group_id'] = new sfWidgetFormDoctrineChoice(array(
-      'model'     => 'ServerGroup',
-      'add_empty' => true,
-      'query' => Doctrine::getTable('ServerGroup')->getAllGroupsForOwnerIdQuery($owner_id)
-    ), array('label' => 'Server Group'));
-    $this->validatorSchema['server_group_id'] = new sfValidatorDoctrineChoice(
-      array(
-        'model' => 'ServerGroup',
-        'column' => array('id'),
-        'query' => Doctrine::getTable('ServerGroup')->getAllGroupsForOwnerIdQuery($owner_id)
-      ),
-      array('invalid' => 'You must pick a valid group.', 'required' => 'Server Group is required.')
-    );
-  }
-  
-  public function removeIpPort() {
-    unset($this->widgetSchema['ip']);
-    unset($this->validatorSchema['ip']);
-    unset($this->widgetSchema['port']);
-    unset($this->validatorSchema['port']);
+  public function configureUniqueSlugValidator($group_slug_value, $old_server_slug_value) {
+    $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
+      new sfValidatorDoctrineUnique(array('model' => 'ServerGroup', 'column' => array('slug')), array('invalid' => 'The Server URL must be unique.'))
+      ,new SlugUniqueToGroupValidator(array('group_slug_value' => $group_slug_value, 'server_slug_key' => 'slug', 'old_server_slug_value' => $old_server_slug_value))
+    )));
   }
 }

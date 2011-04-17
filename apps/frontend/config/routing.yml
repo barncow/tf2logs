@@ -118,6 +118,15 @@ server_multi_edit:
   url: /servers/:group_slug/:server_slug/edit
   param: {module: servers, action: edit }
   
+server_single_save:
+  #for a single server, this is the server itself, for a group, this is the group itself
+  url: /servers/:group_slug/save
+  param: {module: servers, action: updateGroup }
+  
+server_multi_save:
+  url: /servers/:group_slug/:server_slug/save
+  param: {module: servers, action: updateServer }
+  
 server_main:
   url: /servers/:slug
   param: {module: servers, action: main }
