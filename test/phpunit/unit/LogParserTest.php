@@ -27,9 +27,10 @@ class unit_LogParserTest extends BaseLogParserTestCase {
   public function testParseFromDB() {
     $logid = $this->logParser->parseLogFile($this->LFIXDIR."mini.log", 1);
     $this->logParser = new LogParser();
-    $logid = $this->logParser->parseLogFromDB($logid);
+    $logidnew = $this->logParser->parseLogFromDB($logid);
     $log = Doctrine::getTable('Log')->getLogByIdAsArray($logid);
     
     $this->assertEquals(9, count($log['Stats']), "number of players, should exclude console and specs");
+    $this->assertEquals($logid, $logidnew, 'testing that log id does not change');
   }
 }

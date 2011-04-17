@@ -196,7 +196,12 @@ class LogParser {
 	    $ret =  $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
 	    //if no tournament mode was found, re-run entire log file as one round.
+	    
+	    //clearing state - need to keep log obj
+	    $log = $this->log;
 	    $this->clearValues();
+	    $this->log = $log;
+	    
 	    return $this->parseLog($file, true);
 	  }
 	  $tlp->addTime();
@@ -220,7 +225,12 @@ class LogParser {
 	    $logid =  $this->parseLog($file);
 	  } catch(TournamentModeNotFoundException $e) {
 	    //if no tournament mode was found, re-run entire log file as one round.
+	    
+	    //clearing state - need to keep log obj
+	    $log = $this->log;
 	    $this->clearValues();
+	    $this->log = $log;
+	    
 	    $logid = $this->parseLog($file, true);
 	  }
 	  
