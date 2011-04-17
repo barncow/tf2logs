@@ -49,6 +49,30 @@ class serversActions extends sfActions {
   }
   
   /**
+    form to edit a server/server group
+  */
+  public function executeEdit(sfWebRequest $request) {
+    $server_slug = $request->getParameter('server_slug');
+    $group_slug = $request->getParameter('group_slug');
+    $owner_id = $this->getUser()->getAttribute(sfConfig::get('app_playerid_session_var'));
+    
+    if($group_slug && $server_slug) {
+      //server within group
+      $this->server = Doctrine::getTable('Server')->findServerBySlug($server_slug, $group_slug, $owner_id);
+      $this->form = new ServerForm($this->server);
+    } else if($group_slug && !$server_slug) {
+      //either group or server, depending on servergroup's group_type
+      $this->server = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($group_slug, $owner_id);
+      $this->form = new ServerGroupForm($this->server);
+    } else {
+      //invalid page
+      $this->forward404();
+    }    
+    
+    $this->forward404Unless($this->server);
+  }
+  
+  /**
     action to verify new server/server group
   */
   public function executeVerify(sfWebRequest $request) {

@@ -109,6 +109,15 @@ server_multi_status:
   url: /servers/:group_slug/:server_slug/status
   param: {module: servers, action: status }
   
+server_single_edit:
+  #for a single server, this is the server itself, for a group, this is the group itself
+  url: /servers/:group_slug/edit
+  param: {module: servers, action: edit }
+  
+server_multi_edit:
+  url: /servers/:group_slug/:server_slug/edit
+  param: {module: servers, action: edit }
+  
 server_main:
   url: /servers/:slug
   param: {module: servers, action: main }

@@ -72,4 +72,19 @@ class ServerGroupTable extends Doctrine_Table {
         ->where('sg.owner_player_id = ?', $owner_id)
         ->andWhere('sg.group_type = ?', ServerGroup::GROUP_TYPE_MULTI_SERVER);
     }
+    
+    /**
+      Gets a server object for the given slug. server_slug is required, group_slug is required only for multi groups.
+    */
+    public function findServerGroupBySlug($group_slug, $owner_id = null) {
+      $q = $this
+        ->createQuery('sg')
+        ->where('sg.slug = ?', $group_slug);
+        
+      if($owner_id) {
+        $q->andWhere('sg.owner_player_id = ?', $owner_id);
+      }
+        
+      return $q->fetchOne(array(), Doctrine_Core::HYDRATE_RECORD);
+    }
 }
