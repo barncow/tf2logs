@@ -1,4 +1,5 @@
 <?php
+include_partial('navigation', array('serverGroup' => $serverGroup, 'sf_user' => $sf_user, 'server' => $server));
 $sf_response->setTitle('Verify '.$server->getName().' - TF2Logs.com');
 use_helper('PageElements');
 

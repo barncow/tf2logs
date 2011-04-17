@@ -1,21 +1,21 @@
 <?php
+include_partial('navigation', array('serverGroup' => $serverGroup, 'sf_user' => $sf_user, 'server' => $server));
 $sf_response->setTitle($serverGroup->getName().' - TF2Logs.com');
 use_helper('PageElements');
 $s = "";
 $serverTitle = "to this Server";
 
 if($serverGroup->getGroupType() == ServerGroup::GROUP_TYPE_MULTI_SERVER) {
-  $serverTitle = "to this Group";
+  if(!isset($server) || !$server) $serverTitle = "to this Group";
   foreach($serverGroup->getServers() as $server) {
     $liveLogLink = "";
     if($server->getLiveLogId()) {
-      $liveLogLink = link_to('LIVE', '@server_multi_live?server_slug='.$server->getSlug().'&group_slug='.$serverGroup->getSlug())."<br/>";
+      $liveLogLink = link_to('LIVE', '@server_multi_live?server_slug='.$server->getSlug().'&group_slug='.$serverGroup->getSlug());
     }
   
-    $status = url_for("@server_multi_status?server_slug=".$server->getSlug().'&group_slug='.$serverGroup->getSlug());
+    $serverName = link_to($server->getName(), '@server_main_group?group_slug='.$serverGroup->getSlug().'&server_slug='.$server->getSlug());
     $s .= <<<EOD
-    {$server->getName()} <a href="$status">Status</a><br/>
-    $liveLogLink
+    $serverName $liveLogLink<br/>
 EOD;
   } 
 } else if($serverGroup->getGroupType() == ServerGroup::GROUP_TYPE_SINGLE_SERVER) {

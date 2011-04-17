@@ -60,11 +60,13 @@ class serversActions extends sfActions {
     
     if($this->group_slug && $this->server_slug) {
       //server within group
+      $this->serverGroup = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($this->group_slug, $owner_id);
       $this->server = Doctrine::getTable('Server')->findServerBySlug($this->server_slug, $this->group_slug, $owner_id);
       $this->forward404Unless($this->server);
       $this->form = new ServerUpdateForm($this->server);
     } else if($this->group_slug && !$this->server_slug) {
       //either group or server, depending on servergroup's group_type
+      $this->server = null;
       $this->serverGroup = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($this->group_slug, $owner_id);
       $this->forward404Unless($this->serverGroup);
       $this->form = new ServerGroupUpdateForm($this->serverGroup);
@@ -124,6 +126,8 @@ class serversActions extends sfActions {
     action to get status of server
   */
   public function executeStatus(sfWebRequest $request) {
+    $group_slug = $request->getParameter('group_slug', $request->getParameter('server_slug'));
+    $this->serverGroup = Doctrine::getTable('ServerGroup')->findOneBySlug($group_slug);
     $this->server = Doctrine::getTable('Server')->findServerBySlug($request->getParameter('server_slug'), $request->getParameter('group_slug', null));
     $this->forward404Unless($this->server);
   }
@@ -132,10 +136,21 @@ class serversActions extends sfActions {
     main landing page for a server group
   */
   public function executeMain(sfWebRequest $request) {
-    $this->serverGroup = Doctrine::getTable('ServerGroup')->findOneBySlug($request->getParameter('slug'));
+    $group_slug = $request->getParameter('group_slug');
+    $server_slug = $request->getParameter('server_slug');
+    
+    $this->serverGroup = Doctrine::getTable('ServerGroup')->findOneBySlug($group_slug);
     $this->forward404Unless($this->serverGroup);
-    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogsForServerGroup($request->getParameter('slug'));
-    $this->recentlyAdded = Doctrine::getTable('Log')->getMostRecentLogsForServerGroup($request->getParameter('slug'));
+    
+    if($server_slug) {
+      $this->server = Doctrine::getTable('Server')->findServerBySlug($server_slug, $group_slug);
+      $this->forward404Unless($this->server);
+    } else {
+      $this->server = null;
+    }
+    
+    $this->topViewedLogs = Doctrine::getTable('Log')->getTopViewedLogsForServerGroup($request->getParameter('group_slug'), $request->getParameter('server_slug'));
+    $this->recentlyAdded = Doctrine::getTable('Log')->getMostRecentLogsForServerGroup($request->getParameter('group_slug'), $request->getParameter('server_slug'));
   }
   
   protected function processForm(sfWebRequest $request, sfForm &$form, $errorMsg) {

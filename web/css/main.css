@@ -165,7 +165,7 @@ br.hardSeparator {
   font-weight: normal;
 }
 
-#header {
+#header, #serverNavigationBar {
 	border: 1px solid #695649; /*from .ui-widget-header*/
 	background: #1c160d url(/css/images/ui-bg_gloss-wave_20_1c160d_500x100.png) 50% 50% repeat-x; /*from .ui-state-default*/
 	font-weight: bold; /*from .ui-widget-header*/
@@ -173,6 +173,11 @@ br.hardSeparator {
 	
 	padding: 5px;
 	margin-bottom: 1em;
+}
+#serverNavigationBar {
+  /*negating separation between header and content for the navigation bar.*/
+  margin-top: -0.75em;
+  color: #E3DDC9;
 }
 
 img {
@@ -273,10 +278,11 @@ img {
 	float: right;
 }
 
-#userCP ul, #userCP li {
+#userCP ul, #serverNavigationBar ul, #userCP li, #serverNavigationBar li {
   display: inline;
   list-style-type: none;
   margin: 0;
+  padding: 0;
 }
 
 #userCP strong a, #userCP strong, .status strong, .yellowText {

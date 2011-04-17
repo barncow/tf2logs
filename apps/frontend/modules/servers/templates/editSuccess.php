@@ -1,4 +1,5 @@
 <?php 
+include_partial('navigation', array('serverGroup' => $serverGroup, 'sf_user' => $sf_user, 'server' => $server));
 use_stylesheets_for_form($form);
 use_javascripts_for_form($form);
 

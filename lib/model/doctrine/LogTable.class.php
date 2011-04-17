@@ -139,11 +139,11 @@ class LogTable extends Doctrine_Table {
         ->execute();
     }
     
-    public function getTopViewedLogsForServerGroup($group_slug, $num_to_retrieve = 10, $prev_days = 7) {
+    public function getTopViewedLogsForServerGroup($group_slug, $server_slug = null, $num_to_retrieve = 10, $prev_days = 7) {
       $days_ago_dt = new DateTime();
       $days_ago_dt->sub(new DateInterval('P'.$prev_days.'D'));
       $dtstring = $days_ago_dt->format('Y-m-d 00:00:00');
-      return $this
+      $q = $this
         ->createQuery('l')
         ->leftJoin('l.Server s')
         ->leftJoin('s.ServerGroup sg')
@@ -152,12 +152,17 @@ class LogTable extends Doctrine_Table {
         ->andWhere('sg.slug = ?', $group_slug)
         ->andWhere('l.is_live = ?', false)
         ->orderBy('l.views DESC')
-        ->limit($num_to_retrieve)
-        ->execute();
+        ->limit($num_to_retrieve);
+        
+        if($server_slug) {
+          $q->andWhere('s.slug = ?', $server_slug);
+        }
+        
+        return $q->execute();
     }
     
-    public function getMostRecentLogsForServerGroup($group_slug, $num_to_retrieve = 10) {
-      return $this
+    public function getMostRecentLogsForServerGroup($group_slug, $server_slug = null, $num_to_retrieve = 10) {
+      $q = $this
         ->createQuery('l')
         ->leftJoin('l.Server s')
         ->leftJoin('s.ServerGroup sg')
@@ -165,8 +170,13 @@ class LogTable extends Doctrine_Table {
         ->andWhere('sg.slug = ?', $group_slug)
         ->andWhere('l.is_live = ?', false)
         ->orderBy('l.created_at DESC')
-        ->limit($num_to_retrieve)
-        ->execute();
+        ->limit($num_to_retrieve);
+        
+      if($server_slug) {
+        $q->andWhere('s.slug = ?', $server_slug);
+      }
+      
+      return $q->execute();
     }
     
     //retrieves logs that the user participated in, not submitted
