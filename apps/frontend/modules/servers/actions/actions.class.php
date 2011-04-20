@@ -120,6 +120,7 @@ class serversActions extends sfActions {
     }
     
     $this->forward404Unless($this->server);
+    $this->serverGroup = Doctrine::getTable('ServerGroup')->findServerGroupBySlug($request->getParameter('slug'));
   }
   
   /**
