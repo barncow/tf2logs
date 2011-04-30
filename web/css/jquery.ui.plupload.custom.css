@@ -19,11 +19,13 @@ div.plupload div.plupload_header {border-width: 0 0 1px 0; position: relative;}
 	cursor:pointer;	
 }
 
+/*commenting out plupload logo styles*/
 .plupload_header_content {
 	/*background-image: url('../img/plupload.png');*/
 	background-repeat: no-repeat;
 	background-position: 8px center;
 	min-height: 56px;
+	/*padding-left: 60px; for plupload logo, below is custom*/
 	padding-left: 1em;
 	position:relative;
 }
