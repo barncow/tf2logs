@@ -6,3 +6,4 @@ config/app.yml
 config/databases.yml
 web/files/*
 autoserver/udpserverconfig.js
+lib/task/regen_config.js

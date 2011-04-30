@@ -14,6 +14,17 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 ?>
 
 <?php
+$ShwanLink = link_to('Shwan', '@player_by_numeric_steamid?id=76561198003897562');
+$s = <<<EOD
+<h3>Fixed Uploading with Chrome 11</h3>
+<p>Chrome 11 should now be able to upload. Thanks to $ShwanLink for bringing this issue to my attention.</p>
+EOD;
+echo outputInfoBox("entry12", "Updates for April 30, 2011", $s);
+?>
+
+<br/>
+
+<?php
 $snowieLink = link_to('-9m- snowie', '@player_by_numeric_steamid?id=76561197976448876');
 $s = <<<EOD
 <h3>Fixed Some Bugs</h3>

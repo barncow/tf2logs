@@ -16,6 +16,7 @@ $(function() {
 		  up.logMetaAttributes = {};
 		  
 		  up.bind('QueueChanged', _cacheFileInfos);
+		  
 		}
 	});
 	$("#uploader_container").attr('title', ''); //clearing the ui's runtime title
@@ -63,6 +64,7 @@ $(function() {
   });
   
   uploader.bind('FileUploaded', function(up, file, response) {
+    console.log('FIleUploaded');
     //$('#'+file.id+' .openAC').button( "option", "icons", {primary:'ui-icon-triangle-1-s'});
     var obj = jQuery.parseJSON(response.response);
     var status = $('#'+file.id+' .plupload_file_name .logInfo .status');
@@ -74,7 +76,6 @@ $(function() {
       that the queue has been rebuilt because the status object will not have any data. If this is true, we will
       rebuild the queue, and find the status for the last file.
     */
-    var doCache = true;
     if(!status || status.length == 0) {
       _queueChanged.call(this,up); //since we are calling this outside of a normal event handler, we need to set the "this" variable manually.
       
@@ -82,21 +83,37 @@ $(function() {
       $('.plupload_file_name :text').attr('disabled', true);
       
       status = $('#'+file.id+' .plupload_file_name .logInfo .status'); //with queue rebuilt, re-find status.
-      doCache = false; //we are done, no need to cache this file.
     }
-    
     if(obj.url) {
       status.html('<a href="'+obj.url+'" class="viewLogLink">View the Log</a>');
     } else {
       status.html('<span class="error">'+obj.msg+'</span>');
     }
-    if(doCache) {
-      //only want to do this if it is not the last file to be uploaded, want state to be clear
-      _cacheFileInfo(up, file);//caching queue status for rebuilding when uploads are complete
+
+    _cacheFileInfo(up, file);//caching queue status for rebuilding when uploads are complete
+  });
+  
+  uploader.bind('UploadComplete', function(up, files) {
+    console.log('uploadcomplete');
+  });
+  
+  //plupload removes everything on DONE status, want to re-draw when plupload is done.
+  uploader.bind('StateChanged', function(up) {
+    if(!up.previousState) up.previousState = null;
+    
+    if(up.state === plupload.STOPPED && up.previousState === plupload.STARTED) {
+      //stopped can be an initial state. we only want to do work if the stopped is after a started state, so we can redraw our info.
+      _queueChanged.call(this,up); //since we are calling this outside of a normal event handler, we need to set the "this" variable manually.
+      
+      //since the queue is rebuilt, we need to re-disable our text boxes for all files.
+      $('.plupload_file_name :text').attr('disabled', true);
     }
+    
+    up.previousState = up.state;
   });
   
   uploader.bind('UploadProgress', function(up, file) {
+    console.log(file.status);
     switch (file.status) {			
 			case plupload.FAILED:
 				$('#'+file.id+' .plupload_file_name .logInfo .status').html("An Error Occurred.");
@@ -128,6 +145,7 @@ $(function() {
   }
 	
 	function _queueChanged(up) {
+	  if(up.logMetaAttributes.length == 0) return;
     $.each(this.files, function(i, file) {
       logNameVal = "";
       logMapNameVal = "";
