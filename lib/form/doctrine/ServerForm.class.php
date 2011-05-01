@@ -46,6 +46,14 @@ class ServerForm extends BaseServerForm {
       ,new AvailableServerAddressValidator()
       ,new SlugUniqueToGroupValidator()
     )));
+    
+    $this->widgetSchema['region'] = new sfWidgetFormChoice(array(
+      'choices'   => array_merge(array('' => 'Select a Region'), Server::getRegions())
+    ));
+    
+    $this->validatorSchema['region'] = new sfValidatorChoice(array(
+      'choices' => array_keys(Server::getRegions())
+    ));
   }
   
   public function configureExistingGroup($owner_id) {

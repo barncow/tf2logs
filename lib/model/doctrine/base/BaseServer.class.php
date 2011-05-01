@@ -15,6 +15,7 @@
  * @property string $status
  * @property string $current_map
  * @property integer $live_log_id
+ * @property string $region
  * @property ServerGroup $ServerGroup
  * @property Log $LiveLog
  * @property Doctrine_Collection $Logs
@@ -30,6 +31,7 @@
  * @method string              getStatus()          Returns the current record's "status" value
  * @method string              getCurrentMap()      Returns the current record's "current_map" value
  * @method integer             getLiveLogId()       Returns the current record's "live_log_id" value
+ * @method string              getRegion()          Returns the current record's "region" value
  * @method ServerGroup         getServerGroup()     Returns the current record's "ServerGroup" value
  * @method Log                 getLiveLog()         Returns the current record's "LiveLog" value
  * @method Doctrine_Collection getLogs()            Returns the current record's "Logs" collection
@@ -44,6 +46,7 @@
  * @method Server              setStatus()          Sets the current record's "status" value
  * @method Server              setCurrentMap()      Sets the current record's "current_map" value
  * @method Server              setLiveLogId()       Sets the current record's "live_log_id" value
+ * @method Server              setRegion()          Sets the current record's "region" value
  * @method Server              setServerGroup()     Sets the current record's "ServerGroup" value
  * @method Server              setLiveLog()         Sets the current record's "LiveLog" value
  * @method Server              setLogs()            Sets the current record's "Logs" collection
@@ -107,6 +110,11 @@ abstract class BaseServer extends sfDoctrineRecord
         $this->hasColumn('live_log_id', 'integer', null, array(
              'type' => 'integer',
              'notnull' => false,
+             ));
+        $this->hasColumn('region', 'string', 2, array(
+             'type' => 'string',
+             'notnull' => true,
+             'length' => 2,
              ));
     }
 

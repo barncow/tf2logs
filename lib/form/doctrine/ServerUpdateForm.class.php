@@ -42,6 +42,14 @@ class ServerUpdateForm extends BaseServerForm {
       new sfValidatorDoctrineUnique(array('model' => 'ServerGroup', 'column' => array('slug')), array('invalid' => 'The Server URL must be unique.'))
       ,new SlugUniqueToGroupValidator()
     )));
+    
+    $this->widgetSchema['region'] = new sfWidgetFormChoice(array(
+      'choices'   => array_merge(array('' => 'Select a Region'), Server::getRegions())
+    )));
+    
+    $this->validatorSchema['region'] = new sfValidatorChoice(array(
+      'choices' => Server::getRegions()
+    )));
   }
   
   public function configureUniqueSlugValidator($group_slug_value, $old_server_slug_value) {

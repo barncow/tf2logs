@@ -31,6 +31,9 @@ use_javascript('autocompletehelper.js');
   <?php use_javascript('jquery.ui.plupload.js?date='.date('Ymd')); ?>
   <?php use_javascript('loguploader.min.js?date='.date('Ymd')); ?>
   <?php use_javascript('jquery.infieldlabel.min.js'); ?>
+  
+  <div class="center"><strong>To manage your log files and servers, <?php echo link_to('click here', '@controlpanel') ?>.</strong></div>
+  
   <div id="uploader">
     <?php 
     $url = url_for('log/add');

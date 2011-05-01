@@ -26,6 +26,7 @@ abstract class BaseServerForm extends BaseFormDoctrine
       'status'          => new sfWidgetFormInputText(),
       'current_map'     => new sfWidgetFormInputText(),
       'live_log_id'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('LiveLog'), 'add_empty' => true)),
+      'region'          => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -40,6 +41,7 @@ abstract class BaseServerForm extends BaseFormDoctrine
       'status'          => new sfValidatorString(array('max_length' => 1, 'required' => false)),
       'current_map'     => new sfValidatorString(array('max_length' => 25, 'required' => false)),
       'live_log_id'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('LiveLog'), 'required' => false)),
+      'region'          => new sfValidatorString(array('max_length' => 2)),
     ));
 
     $this->widgetSchema->setNameFormat('server[%s]');

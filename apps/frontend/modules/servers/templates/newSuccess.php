@@ -47,6 +47,16 @@ You can add a server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
+      <th class="txtright">{$form['region']->renderLabel()}</th>
+      <td class="txtleft">
+        {$form['region']->renderError()}
+        {$form['region']->render(array('class' => 'ui-widget-content-nobg ui-corner-all'))}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
       <th class="txtright">{$form['ip']->renderLabel()}:{$form['port']->renderLabel()}</th>
       <td class="txtleft">
         {$form['ip']->renderError()}

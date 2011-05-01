@@ -587,6 +587,9 @@ Server:
     live_log_id:
       type: integer
       notnull: false
+    region:
+      type: string(2)
+      notnull: true
   relations:
     ServerGroup:
       onDelete: CASCADE

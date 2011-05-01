@@ -17,6 +17,14 @@ class Server extends BaseServer {
   const STATUS_RECORDING = 'R';
   const STATUS_PROCESSING = 'P';
   
+  public static function getRegions() {
+    return array(
+      'NA' => 'North America',
+      'EU' => 'European',
+      'AU' => 'Australia'
+    );
+  }
+  
   /**
     retrieves a description for the given status code.
   */
