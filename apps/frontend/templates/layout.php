@@ -60,6 +60,10 @@
         <br class="hardSeparator"/>
       </div>
       
+      <?php if (has_slot('serverMenu')): ?>
+        <?php include_slot('serverMenu') ?>
+      <?php endif ?>
+      
       <?php if ($sf_user->hasFlash('notice')): ?>
         <div class="alertBox ui-state-highlight ui-corner-all"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span><?php echo $sf_user->getFlash('notice') ?></div>
         <?php $sf_user->setFlash('notice', null) /*erasing flash */?>

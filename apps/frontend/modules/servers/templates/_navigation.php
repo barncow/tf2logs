@@ -1,3 +1,4 @@
+<?php slot('serverMenu') ?>
 <div id="serverNavigationBar" class="ui-corner-all">
 <ul>
   <li>
@@ -35,6 +36,6 @@
     <?php endif ?>
   <?php endif ?>
   
-  
 </ul>
 </div>
+<?php end_slot() ?>

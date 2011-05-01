@@ -4,9 +4,11 @@ use_helper("PageElements");
 use_helper('Search');
 
 $homepagelink = link_to('Upload one now!', '@homepage');
+$newServer = link_to('Add a Server', '@server_new');
 $s = <<<EOD
 <div class="subInfo">
 Use this area to modify information about the logs you have uploaded, or manage your servers. Haven't uploaded a log? <strong>$homepagelink</strong>
+<br/><br/><strong>$newServer</strong>
 </div>
 EOD;
 echo '<div class="infoBoxContainer">';
