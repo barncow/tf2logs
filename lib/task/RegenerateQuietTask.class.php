@@ -3,7 +3,7 @@
 This will regenerate all logs. BE SURE TO DO A MANUAL BACKUP BEFORE RUNNING!!!!
 $ php symfony tf2logs:regenerate-all --env=prod
 */
-class RegenerateAllLogsTask extends sfBaseTask {
+class RegenerateQuietTask extends sfBaseTask {
   protected function configure() {
     $this->addOptions(array(
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'prod'),
