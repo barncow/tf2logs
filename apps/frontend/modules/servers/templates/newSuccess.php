@@ -139,6 +139,16 @@ You can add a group and server using the form below.<br/>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
+      <th class="txtright">{$form['server']['region']->renderLabel()}</th>
+      <td class="txtleft">
+        {$form['server']['region']->renderError()}
+        {$form['server']['region']->render(array('class' => 'ui-widget-content-nobg ui-corner-all'))}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
       <th class="txtright">{$form['server']['ip']->renderLabel()}:{$form['server']['port']->renderLabel()}</th>
       <td class="txtleft">
         {$form['server']['ip']->renderError()}
@@ -203,6 +213,16 @@ You can add a server to a group using the form below.<br/>
       <td class="txtleft">
         {$form['slug']->renderError()}
         {$form['slug']->render(array('class' => 'ui-widget-content-nobg ui-corner-all'))}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <th class="txtright">{$form['region']->renderLabel()}</th>
+      <td class="txtleft">
+        {$form['region']->renderError()}
+        {$form['region']->render(array('class' => 'ui-widget-content-nobg ui-corner-all'))}
       </td>
     </tr>
     <tr>
