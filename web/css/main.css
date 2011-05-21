@@ -266,7 +266,7 @@ img {
   font-weight: bold;
 }
 
-#pageLogin {
+#pageLogin, #vidhelp {
   width: 300px;
   margin-left: auto;
   margin-right: auto;

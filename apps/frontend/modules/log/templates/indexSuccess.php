@@ -22,6 +22,15 @@ use_javascript('autocompletehelper.js');
 <br class="hardSeparator"/>
 <?php endif ?>
 
+<div id="vidhelp" class="infoBox">
+    <div class="ui-widget ui-widget-header ui-corner-top header">Confused?</div>
+    <div class="content">
+     <div>Confused as to how this works? Don't know what a log file is, or how to install the <a href="<?php echo url_for('@plugins') ?>#suppstats">Supplemental Stats Plugin</a>? <?php echo link_to('Shwan', '@player_by_numeric_steamid?id=76561198003897562') ?> made an excellent <a href="http://www.youtube.com/watch?v=knoyakbrTok">video</a> that shows you how.</div>
+    </div>
+    <div class="ui-widget-header ui-corner-bottom bottomSpacer"></div>
+</div>
+<br class="hardSeparator"/>
+
 <?php if($sf_user->isAuthenticated()): ?>
   <?php use_stylesheet('jquery.ui.plupload.custom.css'); ?>
   <?php use_javascript('jquery-ui-1.8.9.custom.min.js'); ?>

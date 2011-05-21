@@ -16,6 +16,16 @@ AND UPDATE THE WHAT'S NEW DATE IN layout.php!
 <?php
 $ShwanLink = link_to('Shwan', '@player_by_numeric_steamid?id=76561198003897562');
 $s = <<<EOD
+<h3>Updated Front Page with How-to Video</h3>
+<p>Added a link on the front page to the excellent <a href="http://www.youtube.com/watch?v=knoyakbrTok">video</a> that $ShwanLink made. It shows you how to upload a log file and install the Supplemental Stats Plugin. Check it out!</p>
+EOD;
+echo outputInfoBox("entry13", "Updates for May 21, 2011", $s);
+?>
+
+<br/>
+
+<?php
+$s = <<<EOD
 <h3>Fixed Uploading with Chrome 11</h3>
 <p>Chrome 11 should now be able to upload. Thanks to $ShwanLink for bringing this issue to my attention.</p>
 EOD;
