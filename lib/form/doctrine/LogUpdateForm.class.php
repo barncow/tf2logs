@@ -28,6 +28,9 @@ class LogUpdateForm extends BaseLogForm
     unset($this->validatorSchema['created_at']);
     unset($this->widgetSchema['updated_at']);
     unset($this->validatorSchema['updated_at']);
+    
+    $this->validatorSchema['name'] = new CleanStringValidator(array('min_length' => 1, 'max_length' => 100));
+    $this->validatorSchema['map_name'] = new CleanStringValidator(array('max_length' => 50, 'required' => false));
   }
   
   
