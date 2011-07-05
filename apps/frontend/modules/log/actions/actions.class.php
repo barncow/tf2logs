@@ -210,6 +210,14 @@ class logActions extends sfActions {
       return 'log/show?id='.$lastid;
     } else {
       $this->getUser()->setFlash('error', 'The file you sent was not valid. Be sure that you choose a TF2 server log file to upload.');
+      
+      /*
+      //print error to output
+      foreach($this->form->getErrorSchema()->getErrors() as $i) {
+        print_r($i->__toString());
+      }
+      */
+      
       return "error";
     }
   }

@@ -48,7 +48,7 @@ class LogForm extends sfForm
       'logfile'    => new sfValidatorFile(array(
                         'required'   => true,
                         'path'       => sfConfig::get('sf_upload_dir').'/logs',
-                        'mime_types' => array('text/plain', 'text/x-pascal'),
+                        'mime_types' => array('text/plain', 'text/x-pascal', 'text/x-c++'),
                       ))
     ));
     
