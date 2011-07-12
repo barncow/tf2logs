@@ -1,4 +1,0 @@
-all:
-  .settings:
-    #check if the site has been disabled for maintenance
-    check_lock:             true

@@ -1,8 +1,0 @@
-exports.regenConfig = {
-  //place all configuration between the braces. This is standard JS object syntax.
-  DB_USER: 'root',
-  DB_PASS: '',
-  DB_DATABASE: 'tf2logs_dev',
-  SITE_BASE_DIR: '/home/barncow/tf2logs',
-  SITE_ENV: 'dev'
-};

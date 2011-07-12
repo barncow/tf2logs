@@ -1,5 +1,0 @@
-autoload:
-  logparser:
-    name:           logparser
-    path:           %SF_LIB_DIR%/logparser
-    recursive:      false
