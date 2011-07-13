@@ -1,10 +1,2 @@
-log/
-cache/
-uploadedlogs/
-web/avatars/*
-config/app.yml
-config/databases.yml
-web/files/*
-autoserver/udpserverconfig.js
-lib/task/regen_config.js
-.idea/
+node_modules/
+logs/
