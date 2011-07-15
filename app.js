@@ -9,9 +9,11 @@ var app = module.exports = express.createServer();
 
 var util = require('util');
 
+var MongoStore = require('connect-mongo');
+
 //set default environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var envConfig = require('./conf/environments.js')[process.env.NODE_ENV];
+var envConfig = require('./conf/environments.js')[process.env.NODE_ENV], globalConfig = require('./conf/global.js');
 
 // Configuration
 
@@ -21,7 +23,13 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser()); //make sure this is before session
-  app.use(express.session({ secret: "keyboard cat" })); //make sure this is before app.router
+  app.use(express.session({
+    secret: globalConfig.sessionSecret
+    , key: globalConfig.sessionCookieKey
+    , store: new MongoStore({
+        url: envConfig.sessionDbUrl
+      })
+  })); //make sure this is before app.router
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
