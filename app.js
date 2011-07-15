@@ -20,6 +20,8 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser()); //make sure this is before session
+  app.use(express.session({ secret: "keyboard cat" })); //make sure this is before app.router
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
