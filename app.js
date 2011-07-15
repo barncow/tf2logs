@@ -7,6 +7,12 @@ var express = require('express');
 
 var app = module.exports = express.createServer();
 
+var util = require('util');
+
+//set default environment
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var envConfig = require('./conf/environments.js')[process.env.NODE_ENV];
+
 // Configuration
 
 app.configure(function(){
@@ -19,11 +25,11 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 /**
@@ -32,7 +38,7 @@ app.configure('production', function(){
 (function(app) {
   //set our base directory for routes
   var baseDir = __dirname + '/routes';
-  
+
   //read the contents. Using sync here because we need to get results before moving on with server setup.
   var files = require('fs').readdirSync(baseDir);
   for(var i in files) {
@@ -40,3 +46,7 @@ app.configure('production', function(){
     if(files[i].match('\.js$')) require(baseDir + '/' + files[i])(app);
   }
 })(app);
+
+app.listen(envConfig.port);
+util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");
+

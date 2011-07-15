@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
-//This is in charge of launching the application.
+/**
+  This script is in charge of setting the environment, and then launching the application.
+*/
 
 (function() {
+  //set default environment
   var environment = 'development';
 
-  //skipping the first two which will be node and this file
+  //search the switches given from the command line to decide the environment to use.
+  //skipping the first two tokens which will be node and this file
   for(var i = 2; i < process.argv.length; ++i) {
     var token = process.argv[i];
     switch(token) {
@@ -28,9 +32,7 @@
   //setting the NODE_ENV environment variable, which Connect and Express use to configure themselves
   process.env.NODE_ENV = environment;
 
-  var envConfig = require('../conf/environments.js'), app = require('../app.js'), util = require('util');
-
-  app.listen(envConfig[environment].port);
-  util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");
+  //start the server
+  var app = require('../app.js');
 })();
 
