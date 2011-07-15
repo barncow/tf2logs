@@ -9,7 +9,7 @@ In the directory that you wish to hold the project, do the following:
 ```
 $ git clone http://github.com/barncow/tf2logs
 $ cd tf2logs
-$ npm install
+$ npm install -d
 $ npm link
 $ cp conf/default/*.js conf
 ```
