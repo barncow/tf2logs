@@ -4,7 +4,7 @@
 
 (function() {
   var environment = 'development';
-  
+
   //skipping the first two which will be node and this file
   for(var i = 2; i < process.argv.length; ++i) {
     var token = process.argv[i];
@@ -24,12 +24,13 @@
       default: throw new Error("The switch '"+token+"' could not be recognized.");
     }
   }
-  
+
   //setting the NODE_ENV environment variable, which Connect and Express use to configure themselves
   process.env.NODE_ENV = environment;
-  
-  var envConfig = require('../conf/environments.js'), app = require('../app.js');
-  
+
+  var envConfig = require('../conf/environments.js'), app = require('../app.js'), util = require('util');
+
   app.listen(envConfig[environment].port);
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+  util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");
 })();
+
