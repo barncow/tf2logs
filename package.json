@@ -8,10 +8,16 @@
       "express": "2.4.2"
     , "jade": ">= 0.0.1"
   }
-  , "bin" : { "tf2logs" : "bin/tf2logs.js" } 
-  , "repository" :  { 
+  , "devDependencies": {
+      "expresso": ">=0.7.7"
+    , "should": ">=0.2.1"
+    , "zombie": ">=0.9.5"
+  }
+  , "bin" : { "tf2logs" : "bin/tf2logs.js" }
+  , "repository" :  {
       "type" : "git"
     , "url" : "http://github.com/barncow/tf2logs.git"
   }
 
 }
+
