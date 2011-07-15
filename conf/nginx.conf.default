@@ -1,0 +1,12 @@
+#sample nginx configuration - passes requests to our Express instance.
+
+server {
+ listen   80;
+ server_name  v2.local.tf2logs.com;
+ access_log  /var/www/tf2logs/logs/nginx.access.log;
+ error_log  /var/www/tf2logs/logs/nginx_error.log error;
+
+  location / {
+   proxy_pass         http://127.0.0.1:3001/;
+  }
+}

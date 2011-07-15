@@ -1,9 +1,17 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
+    "name": "tf2logs"
+  , "description": "The tf2logs.com website."
+  , "author": "Brian Barnekow"
+  , "version": "2.0.0"
   , "private": true
   , "dependencies": {
       "express": "2.4.2"
     , "jade": ">= 0.0.1"
   }
+  , "bin" : { "tf2logs" : "bin/tf2logs.js" } 
+  , "repository" :  { 
+      "type" : "git"
+    , "url" : "http://github.com/barncow/tf2logs.git"
+  }
+
 }

@@ -1,2 +1,5 @@
 node_modules/
 logs/
+
+#ignore any file not ending with .default in the conf directory
+conf/*.js
