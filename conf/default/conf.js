@@ -11,19 +11,19 @@ module.exports = {
 
     'test': {
         port: 2999 //server port
-      , sessionDbUrl: 'mongodb://localhost:27017/tf2logs_test/sessions' //database location for session information
+      , sessionDbUrl: 'mongodb://localhost/tf2logs_test/sessions' //database location for session information
       , dataDbUrl: 'mongodb://localhost/tf2logs_test' //base database location
     },
 
     'qa': {
         port: 3002 //server port
-      , sessionDbUrl: 'mongodb://localhost:27017/tf2logs_qa/sessions' //database location for session information
+      , sessionDbUrl: 'mongodb://localhost/tf2logs_qa/sessions' //database location for session information
       , dataDbUrl: 'mongodb://localhost/tf2logs_qa' //base database location
     },
 
     'production': {
         port: 3000 //server port
-      , sessionDbUrl: 'mongodb://localhost:27017/tf2logs/sessions' //database location for session information
+      , sessionDbUrl: 'mongodb://localhost/tf2logs/sessions' //database location for session information
       , dataDbUrl: 'mongodb://localhost/tf2logs' //base database location
     }
   },
