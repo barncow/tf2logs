@@ -8,6 +8,8 @@
       "express": "2.4.2"
     , "jade": ">= 0.0.1"
     , "connect-mongo": ">=0.1.5"
+    , "openid": ">=0.2.0"
+    , "underscore": ">=0.1.7"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"
