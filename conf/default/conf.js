@@ -32,6 +32,7 @@ module.exports = {
     , sessionCookieKey: 'blah.sid' //this is what the cookie is named
     , baseUrl: 'http://www.mysite.com' //domain where the app sits
     , steamOpenIdProviderUrl: 'http://steamcommunity.com/openid/' //what Valve's Steam OpenID Provider URL is
+    , steamWebAPIKey: 'XXXXXXXXXXXXXXXXXXXXXXXX' //key to access the steam web API
   }
 }
 
