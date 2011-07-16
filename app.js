@@ -13,10 +13,12 @@ var MongoStore = require('connect-mongo');
 
 var _u = require('underscore');
 
+var mongoose = require('mongoose');
+
 //set default environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var configAll = require('./conf/conf.js'), config = {};
-_u.extend(config, configAll.def, configAll.env[process.env.NODE_ENV]);
+var confAll = require('./conf/conf.js'), conf = {};
+_u.extend(conf, confAll.def, confAll.env[process.env.NODE_ENV]);
 
 // Configuration
 app.configure(function(){
@@ -26,10 +28,10 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser()); //make sure this is before session
   app.use(express.session({
-    secret: config.sessionSecret
-    , key: config.sessionCookieKey
+    secret: conf.sessionSecret
+    , key: conf.sessionCookieKey
     , store: new MongoStore({
-        url: config.sessionDbUrl
+        url: conf.sessionDbUrl
       })
   })); //make sure this is before app.router
   app.helpers(require('./lib/helpers.js').helpers);
@@ -46,10 +48,14 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+//setup Mongoose
+mongoose.connect(conf.dataDbUrl);
+require('./lib/schemas.js')(mongoose); //pull in models
+
 /**
   Add our routes. Breaking these out into separate files to keep things clean.
 */
-(function(app, config) {
+(function(app, conf, mongoose) {
   //set our base directory for routes
   var baseDir = __dirname + '/routes';
 
@@ -57,10 +63,10 @@ app.configure('production', function(){
   var files = require('fs').readdirSync(baseDir);
   for(var i in files) {
     //if the file ends with .js, then load it. require will return a function for our route script, so just run it right away passing app to it.
-    if(files[i].match('\.js$')) require(baseDir + '/' + files[i])(app, config);
+    if(files[i].match('\.js$')) require(baseDir + '/' + files[i])(app, conf, mongoose);
   }
-})(app, config);
+})(app, conf, mongoose);
 
-app.listen(config.port);
+app.listen(conf.port);
 util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");
 

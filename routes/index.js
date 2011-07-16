@@ -1,6 +1,6 @@
 //Default index route.
 
-module.exports = function(app, config) {
+module.exports = function(app, conf, mongoose) {
   app.get('/', function(req, res){
     req.session.count = req.session.count || 0;
     ++req.session.count;

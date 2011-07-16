@@ -10,6 +10,7 @@
     , "connect-mongo": ">=0.1.5"
     , "openid": ">=0.2.0"
     , "underscore": ">=0.1.7"
+    , "mongoose": ">=1.7.3"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"
@@ -21,6 +22,5 @@
       "type" : "git"
     , "url" : "http://github.com/barncow/tf2logs.git"
   }
-
 }
 

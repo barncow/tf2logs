@@ -1,6 +1,6 @@
 //Routes for handling authentication
 
-module.exports = function(app, conf) {
+module.exports = function(app, conf, mongoose) {
   var verifyRoute = '/players/verify'; //using a variable here so that the openID and our route match
   var openid = require('openid');
   var relyingParty = new openid.RelyingParty(
@@ -36,10 +36,15 @@ module.exports = function(app, conf) {
   app.get(verifyRoute, function(req, res){
     relyingParty.verifyAssertion(req, function(error, result) {
       if(!error && result.authenticated) {
-        markSessionAsLoggedIn(req, result);
-        req.flash('info', "You were successfully logged in.");
-      } else req.flash('error', "An error ocurred while logging you in. Please try again later.");
-      res.redirect('/');
+        markSessionAsLoggedIn(req, result, mongoose, function(err){
+          if(err) req.flash('error', 'Could not save to database.');
+          else req.flash('info', "You were successfully logged in.");
+          res.redirect('/');
+        });
+      } else {
+        req.flash('error', "An error ocurred while logging you in. Please try again later.");
+        res.redirect('/');
+      }
     });
   });
 
@@ -75,8 +80,12 @@ function isLoggedIn(req) {
 /**
   Helper method to actually mark the user as logged in.
 */
-function markSessionAsLoggedIn(req, answer) {
-  req.session.friendid = answer.claimedIdentifier.match(/(\d+)$/)[1];
+function markSessionAsLoggedIn(req, answer, mongoose, callback) {
+  var friendid = answer.claimedIdentifier.match(/(\d+)$/)[1]
+    , Player = mongoose.model('Player');
+
+  req.session.friendid = friendid;
+  Player.markAsLoggedIn(friendid, callback);
 }
 
 /**
