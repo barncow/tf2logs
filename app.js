@@ -50,7 +50,7 @@ app.configure('production', function(){
 
 //setup Mongoose
 mongoose.connect(conf.dataDbUrl);
-require('./lib/schemas.js')(mongoose); //pull in models
+loadModules('/schemas', /Schema\.js$/, mongoose); //pull in models
 
 /**
   Add our routes. Breaking these out into separate files to keep things clean.
