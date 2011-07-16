@@ -11,6 +11,7 @@
     , "openid": ">=0.2.0"
     , "underscore": ">=0.1.7"
     , "mongoose": ">=1.7.3"
+    , "steam": ">=0.1.0"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"

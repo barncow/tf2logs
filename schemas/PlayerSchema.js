@@ -1,12 +1,13 @@
 /**
   Represents a player, and a user of the system
 */
+var steam = require('../lib/steamwebapi');
 
 /**
   called by app.js to initialize our schemas as models.
   @param mongoose - standard mongoose lib object
 */
-module.exports = function(mongoose) {
+module.exports = function(mongoose, conf) {
   //defining some shortcuts
   var Schema = mongoose.Schema;
 
@@ -15,6 +16,7 @@ module.exports = function(mongoose) {
   */
   var PlayerSchema = new Schema({
       friendid: String
+    , name: {type: String, default: ''}
     , appRole: {type: String, enum: ['owner', 'user'], default: 'user'}
     , lastLogin: {type: Date, default: null}
   });
@@ -40,8 +42,13 @@ module.exports = function(mongoose) {
         player.friendid = friendid;
       }
 
-      player.lastLogin = Date.now();
-      player.save(callback);
+      steam.getPlayerName(conf, friendid, function(err, playerName){
+        if(err) console.log(err);
+        else player.name = playerName;
+
+        player.lastLogin = Date.now();
+        player.save(callback);
+      });
     });
   });
 

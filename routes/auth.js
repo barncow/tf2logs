@@ -36,7 +36,7 @@ module.exports = function(app, conf, mongoose) {
   app.get(verifyRoute, function(req, res){
     relyingParty.verifyAssertion(req, function(error, result) {
       if(!error && result.authenticated) {
-        markSessionAsLoggedIn(req, result, mongoose, function(err){
+        markSessionAsLoggedIn(req, result, conf, mongoose, function(err){
           if(err) req.flash('error', 'Could not save to database.');
           else req.flash('info', "You were successfully logged in.");
           res.redirect('/');
@@ -80,7 +80,7 @@ function isLoggedIn(req) {
 /**
   Helper method to actually mark the user as logged in.
 */
-function markSessionAsLoggedIn(req, answer, mongoose, callback) {
+function markSessionAsLoggedIn(req, answer, conf, mongoose, callback) {
   var friendid = answer.claimedIdentifier.match(/(\d+)$/)[1]
     , Player = mongoose.model('Player');
 
