@@ -38,6 +38,13 @@ app.configure(function(){
   app.dynamicHelpers(require('./lib/helpers.js').dynamicHelpers);
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(function(err, req, res, next){
+    res.render('500', {
+        status: err.status || 500
+      , error: err
+      , title: 'Unrecoverable Error'
+    });
+  });
 });
 
 app.configure('development', function(){
@@ -50,12 +57,12 @@ app.configure('production', function(){
 
 //setup Mongoose
 mongoose.connect(conf.dataDbUrl);
-loadModules('/schemas', /Schema\.js$/, mongoose, conf); //pull in models
+loadModules('/schemas', /Schema(s?)\.js$/, mongoose, conf); //pull in models
 
 /**
   Add our routes. Breaking these out into separate files to keep things clean.
 */
-loadModules('/routes', /\.js$/, app, conf, mongoose);
+loadModules('/routes', /Route(s?)\.js$/, app, conf, mongoose);
 
 app.listen(conf.port);
 util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");

@@ -24,7 +24,7 @@ module.exports = function(mongoose, conf) {
   /**
     Retrieves a Player by its friendid.
     @param friendid string of friendid of player to retrieve
-    @param callback function to call after data is retrieved.
+    @param callback function to call after data is retrieved. Arguments passed are "err" and "player". Player, if found, will be an instance of the PlayerModel, otherwise falsey is given.
   */
   PlayerSchema.static('findByFriendId', function(friendid, callback) {
     this.findOne({friendid: friendid}, callback);
