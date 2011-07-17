@@ -3,19 +3,15 @@
  * Module dependencies.
  */
 
-var express = require('express');
-
-var stylus = require('stylus');
+var express = require('express')
+  , stylus = require('stylus')
+  , util = require('util')
+  , MongoStore = require('connect-mongo')
+  , _u = require('underscore')
+  , mongoose = require('mongoose')
+  , form = require('connect-form');
 
 var app = module.exports = express.createServer();
-
-var util = require('util');
-
-var MongoStore = require('connect-mongo');
-
-var _u = require('underscore');
-
-var mongoose = require('mongoose');
 
 //set default environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -26,7 +22,8 @@ _u.extend(conf, confAll.def, confAll.env[process.env.NODE_ENV]);
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.bodyParser());
+  app.use(express.bodyParser()); //handles regular forms
+  app.use(form({ keepExtensions: true })); //handles multipart forms (could also do regular)
   app.use(express.methodOverride());
   app.use(express.cookieParser()); //make sure this is before session
   app.use(express.session({
@@ -53,6 +50,7 @@ app.configure(function(){
   //  res.render('404', { status: 404, url: req.url, title: 'Not Found' });
   //}); //TODO causes errors in console about dyn helpers
   app.use(function(err, req, res, next){
+    util.log(err.status+": "+err);
     res.render('500', {
         status: err.status || 500
       , error: err

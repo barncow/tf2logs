@@ -13,6 +13,8 @@
     , "mongoose": ">=1.7.3"
     , "steam": ">=0.1.0"
     , "stylus": ">=0.13.7"
+    , "tf2logparser": ">=0.1.0"
+    , "connect-form": ">=0.2.1"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"
