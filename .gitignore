@@ -3,3 +3,7 @@ logs/
 
 #ignore any file not ending with .default in the conf directory
 conf/*.js
+
+#ignoring stylus generated css
+public/*.css
+

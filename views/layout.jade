@@ -1,9 +1,21 @@
-!!!
+!!! 5
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title
+      =title
+    link(rel='stylesheet', href='/main.css')
   body
+    #topbar
+      #logo
+        a(href='/')
+          img(src='/images/tf2logsv2logo.png')
+      #menu
+        - if (isLoggedIn)
+          a(href='/players/logout') Logout
+        - else
+          a(href='/players/login') Login
+      .clearBoth
     !{flashMessages}
-    #content!= body
+    #contentWrapper
+      #content!= body
 

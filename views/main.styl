@@ -1,0 +1,47 @@
+body
+  font 12px Arial, sans-serif
+  color #fff
+  background-color #201913
+  margin 0
+  padding 0
+
+contentColors()
+  color #000
+  background-color #b7b7b7
+
+topbarFontSize = 12px
+topbarHeight = 35px
+menuTopPadding = topbarHeight - topbarFontSize - 3px
+
+#topbar
+  contentColors()
+  height topbarHeight
+  font-size topbarFontSize
+  width 100%
+
+#logo
+  float left
+
+#menu
+  float right
+  padding-top menuTopPadding
+
+.clearBoth
+  clear both
+
+#contentWrapper
+  margin 5px
+
+#content
+  contentColors()
+
+.flash
+  font-weight bold
+  color #000
+
+.ui-state-highlight
+  background-color #5d93ae
+
+.ui-state-error
+  background-color #d06553
+

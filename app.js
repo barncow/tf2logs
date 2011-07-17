@@ -5,6 +5,8 @@
 
 var express = require('express');
 
+var stylus = require('stylus');
+
 var app = module.exports = express.createServer();
 
 var util = require('util');
@@ -36,8 +38,20 @@ app.configure(function(){
   })); //make sure this is before app.router
   app.helpers(require('./lib/helpers.js').helpers);
   app.dynamicHelpers(require('./lib/helpers.js').dynamicHelpers);
-  app.use(app.router);
+  app.use(stylus.middleware({
+      src: __dirname + '/views'
+    , dest: __dirname + '/public'
+    , compile: function (str, path) {
+      return stylus(str)
+        .set('filename', path)
+        .set('compress', true);
+    }
+  }));
   app.use(express.static(__dirname + '/public'));
+  app.use(app.router);
+  //app.use(function(req, res, next){
+  //  res.render('404', { status: 404, url: req.url, title: 'Not Found' });
+  //}); //TODO causes errors in console about dyn helpers
   app.use(function(err, req, res, next){
     res.render('500', {
         status: err.status || 500
