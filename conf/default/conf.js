@@ -1,7 +1,21 @@
 /**
   Application configuration. Defaults should go to the 'def' namespace. Environment specific variables should be in 'env' - these will override defaults.
 */
-module.exports = {
+
+var _ = require('underscore');
+
+/**
+  Retrieves the configuration for the given environment.
+  @param environment to run in. If not specified, it will use NODE_ENV, if that is not specified, it will use 'test'
+*/
+module.exports = function(env) {
+  env = env || process.env.NODE_ENV || 'development';
+  ret = {};
+  _.extend(ret, conf.def, conf.env[env]);
+  return ret;
+}
+
+var conf = {
   'env': {
     'development': {
         port: 3001 //server port
@@ -13,6 +27,7 @@ module.exports = {
         port: 2999 //server port
       , sessionDbUrl: 'mongodb://localhost/tf2logs_test/sessions' //database location for session information
       , dataDbUrl: 'mongodb://localhost/tf2logs_test' //base database location
+      , baseUrl: 'http://localhost' //domain where the app sits - running tests locally
     },
 
     'qa': {

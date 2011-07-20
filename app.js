@@ -7,7 +7,7 @@ var express = require('express')
   , stylus = require('stylus')
   , util = require('util')
   , MongoStore = require('connect-mongo')
-  , _u = require('underscore')
+  , _ = require('underscore')
   , mongoose = require('mongoose')
   , form = require('connect-form');
 
@@ -15,8 +15,7 @@ var app = module.exports = express.createServer();
 
 //set default environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var confAll = require('./conf/conf.js'), conf = {};
-_u.extend(conf, confAll.def, confAll.env[process.env.NODE_ENV]);
+var conf = require('./conf/conf.js')();
 
 // Configuration
 app.configure(function(){
@@ -95,7 +94,7 @@ function loadModules(baseDir, fileRegEx) {
   for(var i in files) {
     //if the file matches the regex, then load it. require will return a function.
     //use the extra arguments given to this function to call the function
-    if(files[i].match(fileRegEx)) require(baseDirectory + '/' + files[i]).apply(this, _u.toArray(arguments).slice(2));
+    if(files[i].match(fileRegEx)) require(baseDirectory + '/' + files[i]).apply(this, _.toArray(arguments).slice(2));
   }
 }
 
