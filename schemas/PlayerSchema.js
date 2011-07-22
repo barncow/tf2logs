@@ -38,7 +38,7 @@ module.exports = function(mongoose, conf) {
   PlayerSchema.static('markAsLoggedIn', function(friendid, callback) {
     this.findByFriendId(friendid, function(err, player){
       if(!player) {
-        player = new this(); //create a new Player instance from a Schema instance (this)
+        player = new (mongoose.model('Player'))();
         player.friendid = friendid;
       }
 
