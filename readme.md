@@ -21,8 +21,18 @@ If you have problems with the `npm link` command, try upgrading npm: `curl http:
 # The `tf2logs` Command
 
 The `tf2logs` command allows you to start up the server. By default, with no switches passed, it will launch into development mode (default port 3001). Here are the possible switches:
+
 `-d` development (for running the server locally)
+
 `-t` test (for unit testing)
+
 `-q` QA (for pushing to a server for testing, potentially with other people)
+
 `-p` production (live use)
+
+# Tests
+To run tests, do the following (likely to change):
+Open a terminal window, from the project root directory, run: `java -jar bin/selenium-server-standalone-2.1.0.jar`
+Open another terminal window, run `tf2logs -t`
+Open another terminal window from the project root directory, run `expresso`
 
