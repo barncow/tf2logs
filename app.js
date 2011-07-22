@@ -45,9 +45,6 @@ app.configure(function(){
   }));
   app.use(express.static(__dirname + '/public'));
   app.use(app.router);
-  //app.use(function(req, res, next){
-  //  res.render('404', { status: 404, url: req.url, title: 'Not Found' });
-  //}); //TODO causes errors in console about dyn helpers
   app.use(function(err, req, res, next){
     util.log(err.status+": "+err);
     res.render('500', {
@@ -55,6 +52,9 @@ app.configure(function(){
       , error: err
       , title: 'Unrecoverable Error'
     });
+  });
+  app.use(function(req, res, next){
+    res.render('404', { status: 404, url: req.url, title: 'Not Found' });
   });
 });
 
