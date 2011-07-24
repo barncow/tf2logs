@@ -26,7 +26,7 @@ module.exports = function(app, conf, mongoose) {
         req.flash('error', 'An error ocurred while uploading. Please try again later.');
         res.redirect('/');
       } else {
-        var parser = TF2LogParser.create();
+        var parser = TF2LogParser.create();//todo verify that got file, and that log metadata is valid
         parser.parseLogFile(files.logfile.path, function(err, log) {
           if(err) {
             util.log(err);

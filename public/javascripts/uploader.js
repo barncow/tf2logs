@@ -23,6 +23,14 @@
   */
   var LogFileCollection = Backbone.Collection.extend({
     model: LogFile
+
+    , getByPluploadFileId: function(fileId) {
+      return this.find(function(logFile){
+        console.log(logFile);
+        console.log('trying to find "'+fileId+'", now "'+logFile.get('fileId')+'"');
+        return (logFile.get('fileId') === fileId);
+      });
+    }
   });
 
   /**
@@ -53,6 +61,7 @@
     }
 
     , removeLogFile: function(){
+      logUploaderView.removeFile(this.model.fileId);
       this.model.destroy();
     }
 
@@ -128,14 +137,56 @@
     el: $('#logUploader')
 
     , events: {
-      'click #addLogFiles':  'addLogFiles'
+      //addLogFiles is handled by plupload
+      'click #uploadLogFiles':  'uploadLogFiles'
     }
 
     , initialize: function(){
-      _.bindAll(this, 'render', 'addLogFiles');
-      this.render();
-      this.logQueueView = new LogQueueView({collection: this.collection});
-      this.logFileMetaView = null;
+      var self = this;
+      _.bindAll(self, 'render', 'addLogFile', 'removeFile', 'uploadLogFiles');
+      self.render();
+      self.logQueueView = new LogQueueView({collection: self.collection});
+      self.logFileMetaView = null;
+
+      self.uploader = new plupload.Uploader({
+		    runtimes : 'html5'
+		    , browse_button : 'addLogFile'
+		    , container : 'logUploadQueue'
+		    , drop_element: 'logUploadQueue'
+		    , file_data_name: 'logfile'
+		    , max_file_size : '5mb'
+		    , url : '/logs/upload'
+		    , multipart: true
+		    , multipart_params: []
+	    });
+      self.uploader.init();
+      self.uploader.bind('FilesAdded', function(up, files) {
+		    _.each(files, function(file) {
+		      self.addLogFile(file.name, file.id, plupload.formatSize(file.size));
+		    });
+
+		    up.refresh(); //realign file open button
+	    });
+
+	    self.uploader.bind('UploadProgress', function(up, file) {
+		    console.log(file);
+	    });
+
+	    self.uploader.bind('Error', function(up, err) {
+		    console.log(err);
+	    });
+
+	    self.uploader.bind('FileUploaded', function(up, file) {
+		    console.log(file);
+		    console.log('done');
+	    });
+
+	    self.uploader.bind('BeforeUpload', function(up, file) {
+	      //plupload will handle upload, however we need to pass our extra model fields along with the request.
+	      var logFile = self.collection.getByPluploadFileId(file.id);
+		    up.settings.multipart_params['logName'] = logFile.get('logName');
+		    up.settings.multipart_params['mapName'] = logFile.get('mapName');
+	    });
     }
 
     , render: function(){
@@ -143,18 +194,26 @@
       $(this.el).html('<div id="logUploadQueue"><ul></ul></div><button id="addLogFiles">Add Logs</button><button id="uploadLogFiles">Upload Logs</button>');
     }
 
-    , addLogFiles: function() {
+    , addLogFile: function(fileName, fileId, fileSize) {
       var logFile = new LogFile();
-      var logFileName = 'l'+tempIndex+'.log'; //todo remove tempindex
       logFile.set({
-        logFileName: logFileName
-        , logName: logFileName
+        logFileName: fileName
+        , logName: fileName
+        , fileId: fileId
+        , fileSize: fileSize
       });
       this.collection.add(logFile);
 
       this.changeMetaView(logFile);
+    }
 
-      ++tempIndex; //todo remove
+    , removeFile: function(id) {
+      var file = this.uploader.getFile(id);
+      if(file) this.uploader.removeFile(file);
+    }
+
+    , uploadLogFiles: function() {
+      this.uploader.start();
     }
 
     , changeMetaView: function(model){
