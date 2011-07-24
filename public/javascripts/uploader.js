@@ -1,5 +1,6 @@
 ;(function($){
   //big todo, use templates instead of direct HTML manipulation
+  //todo remove any lingering console.log
 
   //overriding .sync here to prevent errors on model.destroy()
   Backbone.sync = function(method, model, success, error){
@@ -15,6 +16,7 @@
     defaults: {
       logName: 'My Log'
       , mapName: ''
+      , status: 'Waiting to upload.'
     }
   });
 
@@ -26,8 +28,6 @@
 
     , getByPluploadFileId: function(fileId) {
       return this.find(function(logFile){
-        console.log(logFile);
-        console.log('trying to find "'+fileId+'", now "'+logFile.get('fileId')+'"');
         return (logFile.get('fileId') === fileId);
       });
     }
@@ -87,7 +87,8 @@
     }
 
     , render: function(){
-      var html = '<form><label>File Name:</label>'+this.model.get('logFileName') //todo XSS
+      var html = '<span class="status">'+this.model.get('status')+'</span>'
+        +'<form><label>File Name:</label>'+this.model.get('logFileName') //todo XSS
         +'<br/> <label for="logName">Log Name:</label><input type="text" class="logName" value="'+this.model.get('logName')+'"/></form>'
         +'<br/> <label for="mapName">Map Name:</label><input type="text" class="mapName" value="'+this.model.get('mapName')+'"/></form>'
 
@@ -169,21 +170,39 @@
 	    });
 
 	    self.uploader.bind('UploadProgress', function(up, file) {
-		    console.log(file);
+		    var status;
+		    switch (file.status) {
+			    case plupload.FAILED:
+				    status = "An Error Occurred.";
+				    break;
+
+			    case plupload.UPLOADING:
+			      if(file.percent === 100) {
+			        //file has been uploaded, just waiting for response.
+				      status = "<strong>Processing...</strong>";
+				    } else {
+				      status = "Uploading: "+file.percent + "%";
+				    }
+				    var logFile = self.collection.getByPluploadFileId(file.id);
+	          logFile.set({status: status});
+				    break;
+		    }
 	    });
 
 	    self.uploader.bind('Error', function(up, err) {
-		    console.log(err);
+	      var logFile = self.collection.getByPluploadFileId(file.id);
+	      logFile.set({status: "Error: " + err.code + ", Message: " + err.message});
 	    });
 
 	    self.uploader.bind('FileUploaded', function(up, file) {
-		    console.log(file);
-		    console.log('done');
+	      var logFile = self.collection.getByPluploadFileId(file.id);
+	      logFile.set({status: 'Done.'});
 	    });
 
 	    self.uploader.bind('BeforeUpload', function(up, file) {
 	      //plupload will handle upload, however we need to pass our extra model fields along with the request.
 	      var logFile = self.collection.getByPluploadFileId(file.id);
+	      self.changeMetaView(logFile);
 		    up.settings.multipart_params['logName'] = logFile.get('logName');
 		    up.settings.multipart_params['mapName'] = logFile.get('mapName');
 	    });
@@ -191,7 +210,7 @@
 
     , render: function(){
       //todo each view should render its own interface
-      $(this.el).html('<div id="logUploadQueue"><ul></ul></div><button id="addLogFiles">Add Logs</button><button id="uploadLogFiles">Upload Logs</button>');
+      $(this.el).html('<div id="logUploadQueue"><div class="helper">To upload logs, click the Add Logs button or drag your log files from the desktop here.</div><div><ul></ul></div></div><button id="addLogFiles">Add Logs</button><button id="uploadLogFiles">Upload Logs</button>');
     }
 
     , addLogFile: function(fileName, fileId, fileSize) {
