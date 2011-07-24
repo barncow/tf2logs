@@ -10,10 +10,15 @@ html
         a(href='/')
           img(src='/images/tf2logsv2logo.png')
       #menu
-        - if (isLoggedIn)
-          a(href='/players/logout') Logout
-        - else
-          a(href='/players/login') Login
+        ul
+          - if (isLoggedIn)
+            li
+              a(href='/logs/upload') Upload Log
+            li
+              a(href='/players/logout') Logout
+          - else
+            li
+              a(href='/players/login') Login
       .clearBoth
     !{flashMessages}
     #contentWrapper

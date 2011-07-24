@@ -1,17 +1,21 @@
+contentColors()
+  color #000
+  background-color #b7b7b7
+
+inlineList()
+  list-style-type none
+  display inline
+
+topbarFontSize = 12px
+topbarHeight = 35px
+menuTopPadding = topbarHeight - topbarFontSize - 3px
+
 body
   font 12px Arial, sans-serif
   color #fff
   background-color #201913
   margin 0
   padding 0
-
-contentColors()
-  color #000
-  background-color #b7b7b7
-
-topbarFontSize = 12px
-topbarHeight = 35px
-menuTopPadding = topbarHeight - topbarFontSize - 3px
 
 #topbar
   contentColors()
@@ -25,6 +29,30 @@ menuTopPadding = topbarHeight - topbarFontSize - 3px
 #menu
   float right
   padding-top menuTopPadding
+
+#menu ul, #menu li
+  padding-left 3px
+  inlineList()
+
+#logUploadQueue ul
+  inlineList()
+
+#logUploadQueue li
+  inlineList()
+  margin-left 3px
+  padding: 5px
+  border 1px solid black
+
+#logUploader .remove
+  color red
+  cursor pointer
+
+#logUploadQueue li .logName
+  cursor pointer
+  text-decoration underline
+
+#logFileMetaEditor
+  border 1px solid red
 
 .clearBoth
   clear both
