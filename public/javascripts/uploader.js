@@ -156,7 +156,7 @@
 		    , drop_element: 'logUploadQueue'
 		    , file_data_name: 'logfile'
 		    , max_file_size : '5mb'
-		    , url : '/logs/upload'
+		    , url : '/logs/upload.json'
 		    , multipart: true
 		    , multipart_params: {}
 	    });
@@ -194,9 +194,10 @@
 	      logFile.set({status: "Error: " + err.code + ", Message: " + err.message});
 	    });
 
-	    self.uploader.bind('FileUploaded', function(up, file) {
+	    self.uploader.bind('FileUploaded', function(up, file, response) {
 	      var logFile = self.collection.getByPluploadFileId(file.id);
-	      logFile.set({status: 'Done.'});
+        var obj = jQuery.parseJSON(response.response);
+	      logFile.set({status: obj.info});
 	    });
 
 	    self.uploader.bind('BeforeUpload', function(up, file) {
