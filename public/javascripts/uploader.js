@@ -158,7 +158,7 @@
 		    , max_file_size : '5mb'
 		    , url : '/logs/upload'
 		    , multipart: true
-		    , multipart_params: []
+		    , multipart_params: {}
 	    });
       self.uploader.init();
       self.uploader.bind('FilesAdded', function(up, files) {

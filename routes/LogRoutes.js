@@ -27,15 +27,13 @@ module.exports = function(app, conf, mongoose) {
         res.redirect('/');
       } else {
         var parser = TF2LogParser.create();//todo verify that got file, and that log metadata is valid
-        parser.parseLogFile(files.logfile.path, function(err, log) {
-          if(err) {
-            util.log(err);
-            req.flash('error', 'An error ocurred while processing your log. Please try again later.');
-            res.redirect('/');
-          }
-
-          var logModel = mongoose.model('Log');
-          logModel.createLog(log, files.logfile.filename, function(err, savedLog){
+        parser.on('done', function(log) {
+          var logModel = mongoose.model('Log')
+            , meta = {
+              logName: fields.logName || files.logfile.filename
+              , mapName: fields.mapName, 
+            };
+          logModel.createLog(log, meta, function(err, savedLog){
             if(err) {
               util.log(err);
               req.flash('error', 'An error ocurred while saving your log. Please try again later.');
@@ -46,6 +44,12 @@ module.exports = function(app, conf, mongoose) {
             }
           });
         });
+        parser.on('error', function(err) {
+          util.log(err);
+          req.flash('error', 'An error ocurred while processing your log. Please try again later.');
+          res.redirect('/');
+        });
+        parser.parseLogFile(files.logfile.path);
       }
     });
   });
