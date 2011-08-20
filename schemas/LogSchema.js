@@ -10,7 +10,7 @@ module.exports = function(mongoose, conf) {
   //defining some shortcuts
   var Schema = mongoose.Schema;
 
-  var LogSchema = new Schema({
+  var LogSchema = new Schema({ //todo specify _id field, use a pre-save middleware to generate ID using findAndModify - findAndModify must be used on another schema (LogIDSchema?)
       name: {type: String, required: true}
     , mapName: {type: String}
     , log: {type: mongoose.SchemaTypes.Mixed, required: true} //main log document. Saving raw object instead of embedded doc schema for now.
