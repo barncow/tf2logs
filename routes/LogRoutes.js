@@ -72,6 +72,7 @@ module.exports = function(app, conf, mongoose) {
       } else {
         res.render('logs/show', {
             title: log.name
+          , log: log
           , playerStats: View.playerStats(log.log.players, log.log.playableSeconds)
           , medicSpread: View.medicSpread(log.log.players, log.log.playableSeconds)
           , healSpread: View.healSpread(log.log.players)
