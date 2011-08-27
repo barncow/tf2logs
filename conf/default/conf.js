@@ -48,6 +48,7 @@ var conf = {
     , baseUrl: 'http://www.mysite.com' //domain where the app sits
     , steamOpenIdProviderUrl: 'http://steamcommunity.com/openid/' //what Valve's Steam OpenID Provider URL is
     , steamWebAPIKey: 'XXXXXXXXXXXXXXXXXXXXXXXX' //key to access the steam web API
+    , udpServerPort: 2600
   }
 }
 

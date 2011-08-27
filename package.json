@@ -22,10 +22,13 @@
     , "should": ">=0.2.1"
     , "soda": ">=0.2.4"
   }
-  , "bin" : { "tf2logs" : "bin/tf2logs.js" }
+  , "bin" : { 
+      "tf2logs": "bin/tf2logs.js"
+    , "tf2logsudp":  "bin/tf2logsudp.js"
+  }
   , "repository" :  {
-      "type" : "git"
-    , "url" : "http://github.com/barncow/tf2logs.git"
+      "type": "git"
+    , "url": "http://github.com/barncow/tf2logs.git"
   }
 }
 
