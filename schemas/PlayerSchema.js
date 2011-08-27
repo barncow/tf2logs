@@ -53,5 +53,7 @@ module.exports = function(mongoose, conf) {
   });
 
   mongoose.model('Player', PlayerSchema);
+
+  return PlayerSchema;
 };
 

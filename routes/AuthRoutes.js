@@ -59,7 +59,7 @@ module.exports = function(app, conf, mongoose) {
     Mainly for users that try to access routes that require logging in, but are not logged in.
   */
   app.get('/players/login/interstitial', rm.loadUser, rm.andRestrictToNonLoggedInUser, function(req, res){
-    res.render('players/interstitial', {title: 'Login Required'});
+    res.render('players/interstitial', {title: 'Login Required'}); //todo store referrer in session, then redirect user upon successful login to that url
   });
 }
 

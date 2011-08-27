@@ -10,11 +10,12 @@
     , "connect-mongo": ">=0.1.5"
     , "openid": ">=0.2.0"
     , "underscore": ">=0.1.7"
-    , "mongoose": ">=1.7.3"
+    , "mongoose": ">=2.0.0"
     , "steam": ">=0.1.2"
     , "stylus": ">=0.13.7"
     , "tf2logparser": ">=0.1.0"
     , "connect-form": ">=0.2.1"
+    , "express-validate": ">=0.0.7"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"

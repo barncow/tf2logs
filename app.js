@@ -9,7 +9,8 @@ var express = require('express')
   , MongoStore = require('connect-mongo')
   , _ = require('underscore')
   , mongoose = require('mongoose')
-  , form = require('connect-form');
+  , form = require('connect-form')
+  , expressValidate = require('express-validate');
 
 var app = module.exports = express.createServer();
 
@@ -23,6 +24,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.bodyParser()); //handles regular forms
   app.use(form({ keepExtensions: true })); //handles multipart forms (could also do regular)
+  app.use(expressValidate);
   app.use(express.methodOverride());
   app.use(express.cookieParser()); //make sure this is before session
   app.use(express.session({

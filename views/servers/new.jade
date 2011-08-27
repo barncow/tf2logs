@@ -1,0 +1,56 @@
+h1= title
+p Use this form to add a new server.
+
+include ../partials/_error
+
+form(action='/servers/new', method='POST')
+  table
+    tr
+      th Server Name
+      td
+        input(type='text', name='name', value=params.name)
+    tr
+      th Server URL
+      td
+        | tf2logs.com/servers/
+        input(type='text', name='slug', value=params.slug)
+    tr
+      th IP:Port
+      td
+        input(type='text', name='ip', value=params.ip)
+        | : 
+        input(type='text', name='port', value=params.port)
+    tr
+      td(colspan='2')
+        input(type='submit', value='Save')
+
+//-
+  When a user views this screen, present them with three options: 
+    Add a new Single Server, 
+    Add a new Group of Servers, 
+    and, iff they already have a group, Add Server to existing group (with a dropdown to select a group to add)
+
+  Add New Single Server
+    Form presents all the options to enter:
+      a name, 
+      a URL slug (with client-side AJAX check to make sure its unique, along with server-side check, and check that it does not have illegal chars, including route names), 
+      IP/port (use client-side JS to validate, AJAX to make sure it is not already taken by active server, along with server-side check)
+    When the form is submitted, do server-side validation, generate verification keys, and bring them to the Verify Ownership page
+    Verify Ownership page
+      Has instructions for setting up the actual TF2 server to point its log information to our end.
+      Has automatic AJAX refresh (or a manual reload button or something for non-js) to check if the verification code has been seen
+        This should also have an indicator for if the server has been detected to be talking to our server as well. Inform the user that the server may not have output anything yet, so this may not necessarily be an accurate sign as to whether or not config is good.
+      When complete, pop up a message saying that setup is complete, bring them to the main server page.
+    Add new Group of Servers
+      Form presents all the options to enter:
+        Group Name,
+        Group URL slug (with client-side AJAX check to make sure its unique, along with server-side check, and check that it does not have illegal chars, including route names)
+        An option to enter an initial 2 IP/Port (use client-side JS to validate, AJAX to make sure it is not already taken by active server, along with server-side check)
+          JS users can have a button to enter additional servers.
+          User MUST enter at least two servers.
+      When the form is submitted, do server-side validation, generate verification keys, and bring them to the Verify Ownership page
+      Verify Ownership page
+        Foreach server that needs to be verified, follow the Single Server verification.
+        When complete, bring them to main group page.
+    Add Server to Existing Group
+      Follow steps for Add New Single Server, only that the server is actually being added to the group.
