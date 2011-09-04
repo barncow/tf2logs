@@ -13,9 +13,11 @@ var conf = require('./conf/conf.js')()
     , clients = module.exports.clients = {} //holds all clients currently connected to this server. Keys are IP:Port (ie. 255.255.255.255:27015)
     , START_INDEX = 5 //where the udp message should start - garbage? data before this point.
     , END_DECREMENT = 2 //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
-    , PARSE_DELAY_MSECS = module.exports.PARSE_DELAY_MSECS = conf.parseDelay*1000
+    , PARSE_DELAY_MSECS = module.exports.PARSE_DELAY_MSECS = conf.udpParseDelaySecs*1000
     , CLIENT_ITERATION_MSECS = 1 * 1000
-    , CLIENT_ITERATION_TIMEOUT = null;
+    , CLIENT_ITERATION_TIMEOUT = null
+    , CLIENT_TIMEOUT_MSECS = conf.udpClientTimeoutSecs*1000
+    , CLIENT_STALE_TIMEOUT = null;
 
 /**
   Connects to Mongo, starts server
@@ -42,6 +44,7 @@ var start = module.exports.start = function() {
 
   server.bind(conf.udpServerPort);
   iterateClients();
+  removeStaleClients();
 };
 
 /**
@@ -52,6 +55,7 @@ var stop = module.exports.stop = function() {
   mongoose.disconnect();
   if(server) server.close();
   if(CLIENT_ITERATION_TIMEOUT !== null) clearTimeout(CLIENT_ITERATION_TIMEOUT);
+  if(CLIENT_STALE_TIMEOUT !== null) clearTimeout(CLIENT_STALE_TIMEOUT);
 };
 
 /**
@@ -88,7 +92,23 @@ var iterateClients = module.exports.iterateClients = function(){
   CLIENT_ITERATION_TIMEOUT = setTimeout(iterateClients, CLIENT_ITERATION_MSECS);
 }
 
-//todo set an interval to clean clients that haven't connect after a certain period of time
+/**
+  Iterates over clients, removing those that have not received a message in the allotted time
+*/
+var removeStaleClients = module.exports.removeStaleClients = function(){
+  util.log('removeTimedOutClients');
+  var now = Date.now();
+
+  _.each(clients, function(client, index, clientList) {
+    if(client.isStale(now)) {
+      util.log('removing client for (last message was '+client._lastLineReceived+', now: '+now+'): '+client._ip+":"+client._port);
+      delete clientList[index];
+    }
+  });
+
+  CLIENT_STALE_TIMEOUT = setTimeout(removeTimedOutClients, CLIENT_TIMEOUT_MSECS);
+}
+
 //todo set an interval to clean clients that are no longer active
 
 /**
@@ -102,10 +122,17 @@ var Client = module.exports.Client = function(ip, port, logLineObj) {
   this._queuedLines = [logLineObj]; //while waiting for async operations or for 90 sec delay, we need to hold lines until we get a go, no-go decision.
   this._server = null;
   this._waitingForServerInfo = true;
-  this._lastLineReceived = null;
+  this._lastLineReceived = logLineObj.received;
 
   //send request to get server information. Will queue lines until we hear back.
   this.updateServer();
+};
+
+/**
+  Determines if this client has timed out or is no longer active
+*/
+Client.prototype.isStale = function(now) {
+  return (this._lastLineReceived+CLIENT_TIMEOUT_MSECS < now || this._server.get('active') === 'I');
 };
 
 /**
@@ -161,7 +188,20 @@ Client.prototype._onGetServerInfo = function(err, server) {
 
   //still here, we have a valid server
   this._server = server;
-  if(!this._parser) this._parser = TF2LogParser.create();
+  if(!this._parser) this._parser = new TF2LogParser({isRealTime: true});
+
+  this._parser.on("done", function(log) {
+      var logModel = mongoose.model('Log')
+        , meta = {
+          logName: 'auto generate'
+          , mapName: server.map, 
+        };
+      logModel.createLog(log, meta, function(err, savedLog){
+        if(err) util.log(err);      
+      });
+    });
+  });
+  
   //messages will be processed on next interval.
 };
 

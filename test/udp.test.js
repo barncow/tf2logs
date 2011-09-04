@@ -19,6 +19,7 @@ module.exports = {
     client.should.be.ok;
     client._parser.should.be.ok;
     client._queuedLines.length.should.be.eql(1);
+    client._lastLineReceived.should.be.ok;
   }
   , 'message received with no client, and has no server - client created, not taking messages': function() {
     var udp = require('../udp.js')
@@ -36,6 +37,7 @@ module.exports = {
     client.should.be.ok;
     should.not.exist(client._parser);
     client._queuedLines.length.should.be.eql(0);
+    client._lastLineReceived.should.be.ok;
   }
   , 'message received with client, and has server - should have queued messages': function() {
     var udp = require('../udp.js')
@@ -52,6 +54,7 @@ module.exports = {
 
     var client = udp.clients[clientKey];
     client._queuedLines.length.should.be.eql(2);
+    client._lastLineReceived.should.be.eql(now+1);
   }
   , 'message received with client, and has no server - should have no queued messages': function() {
     var udp = require('../udp.js')
@@ -68,6 +71,7 @@ module.exports = {
 
     var client = udp.clients[clientKey];
     client._queuedLines.length.should.be.eql(0);
+    client._lastLineReceived.should.be.eql(now+1);
   }
 }
 

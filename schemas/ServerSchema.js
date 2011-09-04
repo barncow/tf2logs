@@ -22,6 +22,7 @@ module.exports = function(mongoose, conf) {
     , createdAt: {type: Date, default: Date.now}
     , lastLineReceived: {type: Date, default: null}
     , active: {type: String, enum: ['A', 'I'], default: 'A'} //Active or Inactive
+    , map: {type: String}
     //todo , verificationCode: {type: String, default: createRandomCode} 
         //where createRandomCode generates a random SHA1 key in the form of tf2logs:123456789abcde (15 char key) for the user to RCON in an verify they own the server
     //todo additional info? like map name? current players?

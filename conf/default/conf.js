@@ -49,7 +49,8 @@ var conf = {
     , steamOpenIdProviderUrl: 'http://steamcommunity.com/openid/' //what Valve's Steam OpenID Provider URL is
     , steamWebAPIKey: 'XXXXXXXXXXXXXXXXXXXXXXXX' //key to access the steam web API
     , udpServerPort: 2600
-    , parseDelay: 90
+    , udpParseDelaySecs: 90
+    , udpClientTimeoutSecs: 60
   }
 }
 
