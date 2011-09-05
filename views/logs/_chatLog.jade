@@ -1,0 +1,20 @@
+table
+  caption Chat Log
+  thead
+    tr
+      - chatLog.thead.forEach(function(col) {
+          th= col
+      - });
+  tbody
+    - chatLog.tbody.forEach(function(col) {
+        tr
+          td
+            #{minutes(col[0])}
+          - name = col[1].name
+          - if(col[2].type === 'say_team') {
+            - name = name+' (team)'
+          - }
+          td= name
+          td
+            #{col[2].text}
+    - });

@@ -1,0 +1,27 @@
+#playerSpreadDescription Rows indicate kills, columns indicate deaths
+
+table
+  caption Player Spread
+  thead
+    tr
+      - playerSpread.thead.forEach(function(row) {
+          - if(row.acronym) {
+              th(title=row.full)
+                =row.acronym
+          - } else if(row.full) {
+              th= row.full  
+          - } else {
+              th= row.name
+          - }
+      - });
+  tbody
+    - playerSpread.tbody.forEach(function(row) {
+        tr
+          - row.forEach(function(col, index) {
+              - if(index == 1) {
+                  td= col.name
+              - } else {
+                  td= col
+              - }
+          - });
+    - });

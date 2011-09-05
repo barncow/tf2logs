@@ -1,0 +1,31 @@
+table
+  caption Player Stats
+  thead
+    tr
+      - playerStats.thead.forEach(function(row) {
+          - if(row.acronym) {
+              th(title=row.full)
+                =row.acronym
+          - } else {
+              th= row.full  
+          - }
+      - });
+  tbody
+    - playerStats.tbody.forEach(function(row) {
+        tr
+          - row.forEach(function(col, index) {
+              - if(index == 1) {
+                  td= col.name
+              - } else if(index == 2) {
+                  td
+                    - if(col) {
+                      - Object.keys(col).forEach(function(roleKey){
+                          span(title='#{minutes(col[roleKey].secondsPlayed)}')
+                            =col[roleKey].name
+                      - });
+                    - }
+              - } else {
+                  td= col
+              - }
+          - });
+    - });

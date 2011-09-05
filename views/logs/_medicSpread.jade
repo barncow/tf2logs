@@ -1,0 +1,23 @@
+table
+  caption Medic Spread
+  thead
+    tr
+      - medicSpread.thead.forEach(function(row) {
+          - if(row.acronym) {
+              th(title=row.full)
+                =row.acronym
+          - } else {
+              th= row.full  
+          - }
+      - });
+  tbody
+    - medicSpread.tbody.forEach(function(row) {
+        tr
+          - row.forEach(function(col, index) {
+              - if(index == 1) {
+                  td= col.name
+              - } else {
+                  td= col
+              - }
+          - });
+    - });

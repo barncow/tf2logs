@@ -1,0 +1,25 @@
+table
+  caption Heal Spread
+  thead
+    tr
+      - healSpread.thead.forEach(function(row) {
+          - if(row.acronym) {
+              th(title=row.full)
+                =row.acronym
+          - } else if(row.full) {
+              th= row.full  
+          - } else {
+              th= row.name
+          - }
+      - });
+  tbody
+    - healSpread.tbody.forEach(function(row) {
+        tr
+          - row.forEach(function(col, index) {
+              - if(index == 1) {
+                  td= col.name
+              - } else {
+                  td= col
+              - }
+          - });
+    - });

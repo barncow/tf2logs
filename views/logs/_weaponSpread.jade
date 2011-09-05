@@ -1,0 +1,38 @@
+table
+  caption Weapon Spread
+  thead
+    tr
+      - weaponSpread.thead.forEach(function(col) {
+          - if(col.acronym) {
+              th(title=col.full)
+                =col.acronym
+          - } else if(col.full) {
+              th= col.full  
+          - } else {
+              th(colspan=2)= col.name
+          - }
+      - });
+    tr
+      - weaponSpread.thead.forEach(function(col) {
+          - if(col.acronym || col.full) {
+              th
+          - } else {
+              th(title='Kills') K
+              th(title='Deaths') D
+          - }
+      - });
+
+  tbody
+    - weaponSpread.tbody.forEach(function(row) {
+        tr
+          - row.forEach(function(col, index) {
+              - if(index == 0) {
+                  td= col
+              - } else if(index == 1) {
+                  td= col.name
+              - } else {
+                  td= col.kills
+                  td= col.deaths
+              - }
+          - });
+    - });
