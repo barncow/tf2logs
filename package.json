@@ -16,6 +16,7 @@
     , "tf2logparser": ">=0.1.0"
     , "connect-form": ">=0.2.1"
     , "express-validate": ">=0.0.7"
+    , "optimist": ">=0.2.6"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"
@@ -25,6 +26,7 @@
   , "bin" : { 
       "tf2logs": "bin/tf2logs.js"
     , "tf2logsudp":  "bin/tf2logsudp.js"
+    , "tf2logsudpspammer":  "bin/tf2logsudpspammer.js"
   }
   , "repository" :  {
       "type": "git"

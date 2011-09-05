@@ -28,10 +28,6 @@ module.exports = function(mongoose, conf) {
     //todo additional info? like map name? current players?
   });
 
-  ServerSchema.static('getServerForIPAndPort', function(ip, port, callback) {
-    mongoose.model('Server').findOne({ip: ip, port: port, active: 'A'}, callback);
-  });
-
   /**
     Holds information about whether or not this represents a group or a single server
   */
@@ -65,6 +61,10 @@ module.exports = function(mongoose, conf) {
       if(err) callback(err);
       else callback(null, serverMeta);
     });
+  });
+
+  ServerMetaSchema.static('getServerForIPAndPort', function(ip, port, callback) {
+    this.findOne({'servers.ip': ip, 'servers.port': port, 'servers.active': 'A'}, callback); //todo doesn't work. may want to do this at servermeta level. don't store server as model.
   });
   
   mongoose.model('ServerMeta', ServerMetaSchema);

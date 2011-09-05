@@ -32,6 +32,7 @@ var start = module.exports.start = function() {
   server = udp.createSocket("udp4");
 
   server.on("message", function(msg, rinfo) {
+    if(msg.length < START_INDEX+END_DECREMENT) return; //invalid msg
     //convert message to string, stripping unneeded chars.
     var logLine = msg.toString('utf8', START_INDEX, msg.length - END_DECREMENT);
     onMessage({received: Date.now(), logLine: logLine}, rinfo.address, rinfo.port);
@@ -106,7 +107,7 @@ var removeStaleClients = module.exports.removeStaleClients = function(){
     }
   });
 
-  CLIENT_STALE_TIMEOUT = setTimeout(removeTimedOutClients, CLIENT_TIMEOUT_MSECS);
+  CLIENT_STALE_TIMEOUT = setTimeout(removeStaleClients, CLIENT_TIMEOUT_MSECS);
 }
 
 //todo set an interval to clean clients that are no longer active
@@ -130,9 +131,11 @@ var Client = module.exports.Client = function(ip, port, logLineObj) {
 
 /**
   Determines if this client has timed out or is no longer active
+  Client is stale iff the client has no queued lines, and has not received a message within the timeout
+  , or, if there is a server for this client, and it is inactive, it is also stale.
 */
 Client.prototype.isStale = function(now) {
-  return (this._lastLineReceived+CLIENT_TIMEOUT_MSECS < now || this._server.get('active') === 'I');
+  return ((this._queuedLines.length === 0 && this._lastLineReceived+CLIENT_TIMEOUT_MSECS < now) || (this.server && this._server.get('active') === 'I'));
 };
 
 /**
@@ -158,7 +161,7 @@ Client.prototype.updateServer = function() {
 Client.prototype._getServerInfo = function() {
   util.log('getting server info from mongo for: '+this.getIpAndPort());
   var self = this;
-  mongoose.model('Server').getServerForIPAndPort(this._ip, this._port, function(err, server) {
+  mongoose.model('ServerMeta').getServerForIPAndPort(this._ip, this._port, function(err, server) {
     //need to preserve "this" context for the callback
     Client.prototype._onGetServerInfo.call(self, err, server);
   });
@@ -168,6 +171,7 @@ Client.prototype._getServerInfo = function() {
   Callback for when mongoose has retrieved server info
 */
 Client.prototype._onGetServerInfo = function(err, server) {
+  var self = this;
   util.log('ongetserverinfo callback for: '+this.getIpAndPort());
   this._waitingForServerInfo = false;
 
@@ -191,17 +195,18 @@ Client.prototype._onGetServerInfo = function(err, server) {
   if(!this._parser) this._parser = new TF2LogParser({isRealTime: true});
 
   this._parser.on("done", function(log) {
-      var logModel = mongoose.model('Log')
-        , meta = {
-          logName: 'auto generate'
-          , mapName: server.map, 
-        };
-      logModel.createLog(log, meta, function(err, savedLog){
-        if(err) util.log(err);      
-      });
+    util.log("Processing done for: "+self.getIpAndPort())
+    var logModel = mongoose.model('Log')
+      , meta = {
+        logName: 'auto generate'
+        , mapName: server.map, 
+      };
+    logModel.createLog(log, meta, function(err, savedLog){
+      if(err) util.log(err); 
+      util.log('Added log for: '+self.getIpAndPort()+ " id: "+savedLog.id);     
     });
   });
-  
+
   //messages will be processed on next interval.
 };
 
@@ -228,11 +233,14 @@ Client.prototype.processLines = function(now) {
     return;
   }
 
-  util.log('processing lines for: '+this.getIpAndPort());
   while(this._queuedLines.length > 0) {
     var logLineObj = this._queuedLines.shift(); //shifting so that the line is already removed if processed
-    if(logLineObj.received+PARSE_DELAY_MSECS >= now) {
+    if(logLineObj.received+PARSE_DELAY_MSECS <= now) {
+      util.log('processing line for: '+this.getIpAndPort()+" "+logLineObj.logLine);
       this._parser.parseLine(logLineObj.logLine);
-    } else this._queuedLines.unshift(logLineObj); //can't process line yet, unshift it back
+    } else {
+      this._queuedLines.unshift(logLineObj); //can't process line yet, unshift it back
+      break;
+    }
   }
 };
