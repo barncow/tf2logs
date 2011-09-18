@@ -32,7 +32,7 @@ module.exports = function(app, conf, mongoose) {
         util.log(err);
         reqHandler({error: 'An error ocurred while uploading. Please try again later.'}, '/');
       } else {
-        var parser = TF2LogParser.create();//todo verify that got file, and that log metadata is valid
+        var parser = new TF2LogParser();//todo verify that got file, and that log metadata is valid
 
         parser.on('done', function(log) {
           var logModel = mongoose.model('Log')
