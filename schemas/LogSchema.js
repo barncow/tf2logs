@@ -26,7 +26,7 @@ module.exports = function(mongoose, conf) {
     @param callback function to call after data is updated. Will have err and the resulting log object passed to callback.
   */
   LogSchema.static('createLog', function(log, meta, callback) {
-      var logModel = new (mongoose.model('Log'))();
+      var logModel = new (mongoose.model('Log'))(); //todo can we use "this"
       logModel.log = log;
       logModel.name = meta.logName;
       logModel.mapName = meta.mapName || log.mapName;
@@ -34,6 +34,136 @@ module.exports = function(mongoose, conf) {
         if(err) callback(err);
         else callback(null, logModel);
       });
+  });
+
+  /**
+    Gets a player's stats for all logs (ie. all kills)
+    @param friendid player's friendid
+    @param callback - called when complete. Parameters given: (err, stats)
+  */
+  /**
+  damage: 0,
+      deaths: 0,
+      assists: 0,
+      longestKillStreak: 0,
+      longestDeathStreak: 0,
+      headshots: 0,
+      backstabs: 0,
+      pointCaptures: 0,
+      pointCaptureBlocks: 0,
+      flagDefends: 0,
+      flagCaptures: 0,
+      dominations: 0,
+      timesDominated: 0,
+      revenges: 0,
+      extinguishes: 0,
+      ubers: 0,
+      droppedUbers: 0,
+      healing: 0,
+      medPicksTotal: 0,
+      medPicksDroppedUber: 0,
+      roleSpread: {},
+      itemSpread: {},
+      healSpread: {},
+      weaponSpread: {},
+      playerSpread: {},
+
+  */
+  LogSchema.static('getPlayerStatsByFriendId', function(friendid, callback) {
+    var mapFunction = (function() {
+      this.log.players.forEach(function(p){
+        if(p.friendid === friendid) {
+          emit(friendid, {
+              damage: p.damage
+            , kills: p.kills
+            , deaths: p.deaths
+            , assists: p.assists
+            , longestKillStreak: p.longestKillStreak
+            , longestDeathStreak: p.longestDeathStreak
+            , headshots: p.headshots
+            , backstabs: p.backstabs
+            , pointCaptures: p.pointCaptures
+            , pointCaptureBlocks: p.pointCaptureBlocks
+            , flagDefends: p.flagDefends
+            , flagCaptures: p.flagCaptures
+            , dominations: p.dominations
+            , timesDominated: p.timesDominated
+            , revenges: p.revenges
+            , extinguishes: p.extinguishes
+            , ubers: p.ubers
+            , droppedUbers: p.droppedUbers
+            , healing: p.healing
+            , medPicksTotal: p.medPicksTotal
+            , medPicksDroppedUber: p.medPicksDroppedUber
+          });
+        }
+      });
+    }).toString();
+
+    var reduceFunction = (function(k, values) {
+      var result = {
+        damage: 0
+        , kills: 0
+        , deaths: 0
+        , assists: 0
+        , longestKillStreak: 0
+        , longestDeathStreak: 0
+        , headshots: 0
+        , backstabs: 0
+        , pointCaptures: 0
+        , pointCaptureBlocks: 0
+        , flagDefends: 0
+        , flagCaptures: 0
+        , dominations: 0
+        , timesDominated: 0
+        , revenges: 0
+        , extinguishes: 0
+        , ubers: 0
+        , droppedUbers: 0
+        , healing: 0
+        , medPicksTotal: 0
+        , medPicksDroppedUber: 0
+      }
+
+      values.forEach(function(v) {
+        result.damage += v.damage;
+        result.kills += v.kills;
+        result.deaths += v.deaths;
+        result.assists += v.assists;
+        if(v.longestKillStreak > result.longestKillStreak) result.longestKillStreak = v.longestKillStreak;
+        if(v.longestDeathStreak > result.longestDeathStreak) result.longestDeathStreak = v.longestDeathStreak;
+        result.headshots += v.headshots;
+        result.backstabs += v.backstabs;
+        result.pointCaptures += v.pointCaptures;
+        result.pointCaptureBlocks += v.pointCaptureBlocks;
+        result.flagDefends += v.flagDefends;
+        result.flagCaptures += v.flagCaptures;
+        result.dominations += v.dominations;
+        result.timesDominated += v.timesDominated;
+        result.revenges += v.revenges;
+        result.extinguishes += v.extinguishes;
+        result.ubers += v.ubers;
+        result.droppedUbers += v.droppedUbers;
+        result.healing += v.healing;
+        result.medPicksTotal += v.medPicksTotal;
+        result.medPicksDroppedUber += v.medPicksDroppedUber;
+      });
+
+      return result;
+    }).toString();
+
+    this.collection.mapReduce(mapFunction, reduceFunction, {
+        out: {inline: 1}
+      , scope: {friendid: friendid}
+      , query: {"log.players.friendid": friendid} //only want to process log data for logs with our player
+    }, function(err, result) {
+      if(err) callback(err);
+      else {
+        var value = null;
+        if(result && result[0] && result[0].value) value = result[0].value;
+        callback(null, value);
+      }
+    });
   });
 
   mongoose.model('Log', LogSchema);
