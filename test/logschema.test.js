@@ -46,11 +46,226 @@ module.exports.tests = function() {
             stats.medPicksTotal.should.eql(3);
             stats.medPicksDroppedUber.should.eql(0);
 
+            stats.roleSpread.should.eql({
+              "scout" : {
+                  "secondsPlayed" : 5445
+                , "key" : "scout"
+              }
+              , "pyro" : {
+                  "secondsPlayed" : 8
+                , "key" : "pyro"
+              }
+            });
+
+            stats.itemSpread.should.eql({
+                "ammopack_small" : 4
+              , "ammopack_medium" : 8
+              , "medkit_medium" : 23
+              , "tf_ammo_pack" : 51
+              , "medkit_small" : 14
+            });
+
+            stats.healSpread.should.eql({});
+
+            stats.weaponSpread.should.eql({
+              "maxgun" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "maxgun"
+              },
+              "sniperrifle_hs" : {
+                "deaths" : 2,
+                "kills" : 0,
+                "key" : "sniperrifle_hs"
+              },
+              "minigun" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "minigun"
+              },
+              "tf_projectile_pipe" : {
+                "deaths" : 3,
+                "kills" : 0,
+                "key" : "tf_projectile_pipe"
+              },
+              "sniperrifle" : {
+                "deaths" : 2,
+                "kills" : 0,
+                "key" : "sniperrifle"
+              },
+              "obj_sentrygun2" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "obj_sentrygun2"
+              },
+              "degreaser" : {
+                "deaths" : 4,
+                "kills" : 0,
+                "key" : "degreaser"
+              },
+              "world" : {
+                "deaths" : 1,
+                "kills" : 1,
+                "key" : "world"
+              },
+              "knife_bs" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "knife_bs"
+              },
+              "paintrain" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "paintrain"
+              },
+              "tf_projectile_pipe_remote" : {
+                "deaths" : 7,
+                "kills" : 0,
+                "key" : "tf_projectile_pipe_remote"
+              },
+              "iron_curtain" : {
+                "deaths" : 3,
+                "kills" : 0,
+                "key" : "iron_curtain"
+              },
+              "shotgun_primary" : {
+                "deaths" : 1,
+                "kills" : 0,
+                "key" : "shotgun_primary"
+              },
+              "tf_projectile_rocket" : {
+                "deaths" : 12,
+                "kills" : 0,
+                "key" : "tf_projectile_rocket"
+              },
+              "force_a_nature" : {
+                "deaths" : 0,
+                "kills" : 34,
+                "key" : "force_a_nature"
+              },
+              "scattergun" : {
+                "deaths" : 9,
+                "kills" : 2,
+                "key" : "scattergun"
+              }
+            });
+
+            stats.playerSpread.should.eql({
+              "STEAM_0:1:8656857" : {
+                "deaths" : 0,
+                "kills" : 3,
+                "steamid" : "STEAM_0:1:8656857",
+              },
+              "STEAM_0:0:521077" : {
+                "deaths" : 3,
+                "kills" : 2,
+                "steamid" : "STEAM_0:0:521077",
+              },
+              "STEAM_0:1:15466986" : {
+                "deaths" : 4,
+                "kills" : 4,
+                "steamid" : "STEAM_0:1:15466986",
+              },
+              "STEAM_0:1:12152866" : {
+                "deaths" : 5,
+                "kills" : 3,
+                "steamid" : "STEAM_0:1:12152866",
+              },
+              "STEAM_0:1:17186868" : {
+                "deaths" : 0,
+                "kills" : 2,
+                "steamid" : "STEAM_0:1:17186868",
+              },
+              "STEAM_0:0:16250003" : {
+                "deaths" : 2,
+                "kills" : 4,
+                "steamid" : "STEAM_0:0:16250003",
+              },
+              "STEAM_0:0:206754" : {
+                "deaths" : 12,
+                "kills" : 3,
+                "steamid" : "STEAM_0:0:206754",
+              },
+              "STEAM_0:0:14295714" : {
+                "deaths" : 12,
+                "kills" : 6,
+                "steamid" : "STEAM_0:0:14295714",
+              },
+              "STEAM_0:0:1300065" : {
+                "deaths" : 4,
+                "kills" : 3,
+                "steamid" : "STEAM_0:0:1300065",
+              },
+              "STEAM_0:0:13365050" : {
+                "deaths" : 6,
+                "kills" : 5,
+                "steamid" : "STEAM_0:0:13365050",
+              },
+              "STEAM_0:1:9852193" : {
+                "deaths" : 1,
+                "kills" : 1,
+                "steamid" : "STEAM_0:1:9852193",
+              },
+              "STEAM_0:1:16481274" : {
+                "deaths" : 0,
+                "kills" : 1,
+                "steamid" : "STEAM_0:1:16481274",
+              }
+            });
+
             callback();
           } catch (err) {
             callback(err);
           }
         });
+      });
+    }
+    , 'testing healspread': function(callback) {
+      //getting player stats for barncow
+      logModel.getPlayerStatsByFriendId('76561197993228277', function(err, stats) {
+        try {
+          should.not.exist(err);
+          stats.should.be.ok;
+
+          stats.healSpread.should.eql({
+            "STEAM_0:1:17557682" : {
+              "healing" : 2820,
+              "steamid" : "STEAM_0:1:17557682"
+            },
+            "STEAM_0:0:1939017" : {
+              "healing" : 942,
+              "steamid" : "STEAM_0:0:1939017"
+            },
+            "STEAM_0:0:8581157" : {
+              "healing" : 4747,
+              "steamid" : "STEAM_0:0:8581157"
+            },
+            "STEAM_0:1:10977141" : {
+              "healing" : 586,
+              "steamid" : "STEAM_0:1:10977141"
+            },
+            "STEAM_0:1:16208935" : {
+              "healing" : 317,
+              "steamid" : "STEAM_0:1:16208935"
+            },
+            "STEAM_0:0:6845279" : {
+              "healing" : 880,
+              "steamid" : "STEAM_0:0:6845279"
+            },
+            "STEAM_0:0:946908" : {
+              "healing" : 5167,
+              "steamid" : "STEAM_0:0:946908"
+            },
+            "STEAM_0:0:20079783" : {
+              "healing" : 2719,
+              "steamid" : "STEAM_0:0:20079783"
+            }
+          });
+
+          callback();
+        } catch (err) {
+          callback(err);
+        }
       });
     }
     , 'cannot get stats for invalid player': function(callback) {

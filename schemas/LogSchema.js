@@ -2,6 +2,8 @@
   Represents a log file.
 */
 
+//todo create indexes where needed
+
 /**
   called by app.js to initialize our schemas as models.
   @param mongoose - standard mongoose lib object
@@ -41,34 +43,6 @@ module.exports = function(mongoose, conf) {
     @param friendid player's friendid
     @param callback - called when complete. Parameters given: (err, stats)
   */
-  /**
-  damage: 0,
-      deaths: 0,
-      assists: 0,
-      longestKillStreak: 0,
-      longestDeathStreak: 0,
-      headshots: 0,
-      backstabs: 0,
-      pointCaptures: 0,
-      pointCaptureBlocks: 0,
-      flagDefends: 0,
-      flagCaptures: 0,
-      dominations: 0,
-      timesDominated: 0,
-      revenges: 0,
-      extinguishes: 0,
-      ubers: 0,
-      droppedUbers: 0,
-      healing: 0,
-      medPicksTotal: 0,
-      medPicksDroppedUber: 0,
-      roleSpread: {},
-      itemSpread: {},
-      healSpread: {},
-      weaponSpread: {},
-      playerSpread: {},
-
-  */
   LogSchema.static('getPlayerStatsByFriendId', function(friendid, callback) {
     var mapFunction = (function() {
       this.log.players.forEach(function(p){
@@ -95,6 +69,11 @@ module.exports = function(mongoose, conf) {
             , healing: p.healing
             , medPicksTotal: p.medPicksTotal
             , medPicksDroppedUber: p.medPicksDroppedUber
+            , roleSpread: p.roleSpread || {}
+            , itemSpread: p.itemSpread || {}
+            , healSpread: p.healSpread || {}
+            , weaponSpread: p.weaponSpread || {}
+            , playerSpread: p.playerSpread || {}
           });
         }
       });
@@ -123,6 +102,11 @@ module.exports = function(mongoose, conf) {
         , healing: 0
         , medPicksTotal: 0
         , medPicksDroppedUber: 0
+        , roleSpread: {}
+        , itemSpread: {}
+        , healSpread: {}
+        , weaponSpread: {}
+        , playerSpread: {}
       }
 
       values.forEach(function(v) {
@@ -147,6 +131,70 @@ module.exports = function(mongoose, conf) {
         result.healing += v.healing;
         result.medPicksTotal += v.medPicksTotal;
         result.medPicksDroppedUber += v.medPicksDroppedUber;
+
+        for(var roleKey in v.roleSpread) {
+          var role = v.roleSpread[roleKey];
+
+          if(typeof result.roleSpread[roleKey] !== 'undefined') {
+            result.roleSpread[roleKey].secondsPlayed += role.secondsPlayed;
+          } else {
+            result.roleSpread[roleKey] = {
+                key: role.key
+              , secondsPlayed: role.secondsPlayed
+            };
+          }
+        }
+
+        for(var itemKey in v.itemSpread) {
+          if(typeof result.itemSpread[itemKey] !== 'undefined') {
+            result.itemSpread[itemKey] += v.itemSpread[itemKey];
+          } else {
+            result.itemSpread[itemKey] = v.itemSpread[itemKey];
+          }
+        }
+
+        for(var patientKey in v.healSpread) {
+          var patient = v.healSpread[patientKey];
+
+          if(typeof result.healSpread[patientKey] !== 'undefined') {
+            result.healSpread[patientKey].healing += patient.healing;
+          } else {
+            result.healSpread[patientKey] = {
+                steamid: patientKey
+              , healing: patient.healing
+            };
+          }
+        }
+
+        for(var weaponKey in v.weaponSpread) {
+          var weapon = v.weaponSpread[weaponKey];
+
+          if(typeof result.weaponSpread[weaponKey] !== 'undefined') {
+            result.weaponSpread[weaponKey].kills += weapon.kills;
+            result.weaponSpread[weaponKey].deaths += weapon.deaths;
+          } else {
+            result.weaponSpread[weaponKey] = {
+                key: weaponKey
+              , kills: weapon.kills
+              , deaths: weapon.deaths
+            };
+          }
+        }
+
+        for(var playerKey in v.playerSpread) {
+          var player = v.playerSpread[playerKey];
+
+          if(typeof result.playerSpread[playerKey] !== 'undefined') {
+            result.playerSpread[playerKey].kills += player.kills;
+            result.playerSpread[playerKey].deaths += player.deaths;
+          } else {
+            result.playerSpread[playerKey] = {
+                steamid: playerKey
+              , kills: player.kills
+              , deaths: player.deaths
+            };
+          }
+        }
       });
 
       return result;
