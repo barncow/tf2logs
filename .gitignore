@@ -7,3 +7,4 @@ conf/*.js
 #ignoring stylus generated css
 public/*.css
 
+tf2logs.sublime*
