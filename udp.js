@@ -7,7 +7,8 @@ var conf = require('./conf/conf.js')()
     , util = require('util')
     , loadModules = require('./lib/loadmodules')
     , tf2lib = require('tf2logparser')
-    , _ = require('underscore')
+    , _ = require('underscore') //todo might not need
+    , async = require('async')
     , TF2LogParser = tf2lib.TF2LogParser
     , server = null //reference to our UDP server
     , clients = module.exports.clients = {} //holds all clients currently connected to this server. Keys are IP:Port (ie. 255.255.255.255:27015)
@@ -99,11 +100,18 @@ var iterateClients = module.exports.iterateClients = function(){
   util.log('iterating clients');
   var now = Date.now();
 
-  _.each(clients, function(client) {
+  async.forEach(clients, function(client, callback) {
+    console.log(client);
     client.processLines(now);
+    callback();
+  }, function(err) {
+    if(err) {
+      util.log('Error iterating client');
+      util.log(err);
+      return;
+    }
+    CLIENT_ITERATION_TIMEOUT = setTimeout(iterateClients, CLIENT_ITERATION_MSECS);
   });
-
-  CLIENT_ITERATION_TIMEOUT = setTimeout(iterateClients, CLIENT_ITERATION_MSECS);
 }
 
 /**
