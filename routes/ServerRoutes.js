@@ -4,7 +4,7 @@
 
 var Validate = require('../lib/validate');
 
-module.exports = function(app, conf, mongoose) {
+module.exports = function(app, conf, mongoose, WebHook) {
   var rm = require('../lib/routemiddleware').init(app, conf, mongoose)
       , rf = require('../lib/routefunctions')
       , util = require('util')
@@ -42,7 +42,10 @@ module.exports = function(app, conf, mongoose) {
           , params: req.body
         });
       } 
-      else res.redirect('/servers/'+serverMeta.slug); //save success, go to new server page
+      else {
+        outputServerChangeEvent(req.body.ip, req.body.port);
+        res.redirect('/servers/'+serverMeta.slug); //save success, go to new server page
+      }
     });
   });
 
@@ -52,6 +55,10 @@ module.exports = function(app, conf, mongoose) {
   app.get('/servers/:groupSlug/:serverSlug?', rm.loadUser, function(req, res){
     res.end('server page'); //todo elaborate
   });
+
+  function outputServerChangeEvent(serverIP, serverPort) {
+    WebHook.emit('serverChange', {ip: serverIP, port: serverPort});
+  }
 };
 
 /**
@@ -68,3 +75,4 @@ function validateNewServer(req) {
     .addMessage(function() {req.check('port', 'Port must be a number and must be 5 or less characters').isInt().len(1, 5);});
   return v.errors;
 }
+

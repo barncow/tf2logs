@@ -7,7 +7,7 @@ var Web = exports.Web = function (options) {
   Hook.call(this, options);
   
   this.on('hook::ready', function () {
-    var app = require('../app.js');	
+    var app = require('../app.js')(this);	
   });
 };
 

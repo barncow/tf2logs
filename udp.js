@@ -24,7 +24,6 @@ var conf = require('./conf/conf.js')()
   Connects to Mongo, starts server
 */
 var start = module.exports.start = function(hook) {
-  UDPHook = hook;
   util.log('starting server');
 
   //setup Mongoose
@@ -43,6 +42,17 @@ var start = module.exports.start = function(hook) {
   server.on("listening", function() {
     var address = server.address();
     util.log("server listening " + address.address + ":" + address.port + " in '"+process.env.NODE_ENV+"' environment");
+  });
+
+  UDPHook = hook;
+  //if a server change event was caught, see if the server is currently a client. If so, update.
+  UDPHook.on('*::serverChange', function(data) {
+    var clientKey = data.ip+":"+data.port
+      , client = clients[clientKey];
+    if(typeof client !== 'undefined') {
+      client.updateServer();
+    }
+
   });
 
   server.bind(conf.udpServerPort);
