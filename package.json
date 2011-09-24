@@ -18,6 +18,7 @@
     , "express-validate": ">=0.0.7"
     , "optimist": ">=0.2.6"
     , "async": ">=0.1.9"
+    , "hook.io": ">=0.7.7"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"

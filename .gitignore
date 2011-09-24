@@ -8,3 +8,5 @@ conf/*.js
 public/*.css
 
 tf2logs.sublime*
+
+config.json
