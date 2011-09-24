@@ -17,12 +17,14 @@ var conf = require('./conf/conf.js')()
     , CLIENT_ITERATION_MSECS = 1 * 1000
     , CLIENT_ITERATION_TIMEOUT = null
     , CLIENT_TIMEOUT_MSECS = conf.udpClientTimeoutSecs*1000
-    , CLIENT_STALE_TIMEOUT = null;
+    , CLIENT_STALE_TIMEOUT = null
+    , UDPHook = null;
 
 /**
   Connects to Mongo, starts server
 */
-var start = module.exports.start = function() {
+var start = module.exports.start = function(hook) {
+  UDPHook = hook;
   util.log('starting server');
 
   //setup Mongoose
@@ -72,7 +74,8 @@ var onMessage = module.exports.onMessage = function(logLineObj, ip, port) {
   
   if(typeof client === 'undefined') {
     util.log('no client found, creating new');
-    clients[clientKey] = new Client(ip, port, logLineObj);
+    client = clients[clientKey] = new Client(ip, port);
+    client.addLine(logLineObj);
   } else {
     util.log('client found, adding line');
     client.addLine(logLineObj);
@@ -115,18 +118,24 @@ var removeStaleClients = module.exports.removeStaleClients = function(){
 /**
   Represents a client
 */
-var Client = module.exports.Client = function(ip, port, logLineObj) {
+var Client = module.exports.Client = function(ip, port) {
   util.log('creating client for: '+ip+":"+port);
   this._ip = ip;
   this._port = port;
   this._parser = null; //create parser obj when ready and we know we can take info
-  this._queuedLines = [logLineObj]; //while waiting for async operations or for 90 sec delay, we need to hold lines until we get a go, no-go decision.
+  this._queuedLines = []; //while waiting for async operations or for 90 sec delay, we need to hold lines until we get a go, no-go decision.
   this._server = null;
   this._waitingForServerInfo = true;
-  this._lastLineReceived = logLineObj.received;
+  this._verifyLine = null;
 
   //send request to get server information. Will queue lines until we hear back.
   this.updateServer();
+};
+
+Client.prototype.getVerifyString = function(logLine) {
+  var matches = logLine.match(/^L \d\d\/\d\d\/\d\d\d\d - \d\d:\d\d:\d\d: "Console<0><Console><Console>" say "(tf2logs:[0-9a-f]+)/);
+  if(!matches || matches.length == 0) return false;
+  return matches[1];
 };
 
 /**
@@ -165,7 +174,23 @@ Client.prototype._getServerInfo = function() {
     //need to preserve "this" context for the callback
     Client.prototype._onGetServerInfo.call(self, err, server);
   });
-}
+};
+
+Client.prototype.verify = function(verifyString) {
+  util.log('verifying '+this.getIpAndPort());
+  var verified = this._server.verifyServer(this._ip, this._port, verifyString, function(err) {
+    console.log('verified')
+    if(err) {
+      util.log('Error verifying server information for: '+this.getIpAndPort());
+      util.log(err);
+      return;
+    }
+  });
+  if(verified) {
+    util.log('verified '+this.getIpAndPort());
+    UDPHook.emit('verifiedServer', {ip: this._ip, port: this._port});
+  }
+};
 
 /**
   Callback for when mongoose has retrieved server info
@@ -192,6 +217,13 @@ Client.prototype._onGetServerInfo = function(err, server) {
 
   //still here, we have a valid server
   this._server = server;
+
+  //now that we have our server info, if we have a verifystring, lets check it.
+  if(this._verifyString) {
+    this.verify(this._verifyString);
+    this._verifyString = null;
+  }
+
   if(!this._parser) this._parser = new TF2LogParser({isRealTime: true});
 
   this._parser.on("done", function(log) {
@@ -215,8 +247,15 @@ Client.prototype._onGetServerInfo = function(err, server) {
 */
 Client.prototype.addLine = function(logLineObj) {
   util.log('given a line to add - if it is added the next log line will say so for: '+this.getIpAndPort());
-  //add lines iff we are waiting for server info, or if we have a server
-  if(this._waitingForServerInfo || this._server) {
+  var verifyString = this.getVerifyString(logLineObj.logLine);
+
+  if(verifyString && this._waitingForServerInfo) {
+    //we received a verify string, but still waiting for server data. save for later.
+    util.log('caching verifystring');
+    this._verifyString = verifyString;
+  } else if(verifyString && this._server) {
+    this.verify(verifyString);
+  } else if(this._waitingForServerInfo || this._server) { //add lines iff we are waiting for server info, or if we have a server
     util.log('adding line for: '+this.getIpAndPort());
     this._queuedLines.push(logLineObj);
   }

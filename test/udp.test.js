@@ -73,6 +73,18 @@ module.exports = {
     client._queuedLines.length.should.be.eql(0);
     client._lastLineReceived.should.be.eql(now+1);
   }
+
+  , 'can get verify string': function() {
+    var udp = require('../udp.js')
+      , Client = udp.Client
+      , ip = '255.255.255.255'
+      , port = 4000
+      , clientKey = ip + ":" + port
+      , now = Date.now();
+    
+    var c = new Client(ip, port);
+    c.getVerifyString('L 09/29/2010 - 19:05:47: "Console<0><Console><Console>" say "tf2logs:cef08b5cc79e60b"').should.eql("tf2logs:cef08b5cc79e60b");
+  }
 }
 
 function mockMongooseCallReturnServerObj(Client) {

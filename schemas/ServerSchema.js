@@ -1,6 +1,16 @@
 /**
   Represents a single server, or a group of servers.
 */
+var crypto = require('crypto');
+
+//todo indexes
+
+var createVerificationCode = function(salt) {
+  var algo = crypto.createHash('sha1');
+  algo.update(Date.now()+salt);
+  var sha1 = algo.digest('hex');
+  return 'tf2logs:'+sha1.substring(sha1.length-15);
+};
 
 /**
   called by app.js to initialize our schemas as models.
@@ -23,8 +33,7 @@ module.exports = function(mongoose, conf) {
     , lastLineReceived: {type: Date, default: null}
     , active: {type: String, enum: ['A', 'I'], default: 'A'} //Active or Inactive
     , map: {type: String}
-    //todo , verificationCode: {type: String, default: createRandomCode} 
-        //where createRandomCode generates a random SHA1 key in the form of tf2logs:123456789abcde (15 char key) for the user to RCON in an verify they own the server
+    , verificationCode: {type: String}
     //todo additional info? like map name? current players?
   });
 
@@ -37,7 +46,7 @@ module.exports = function(mongoose, conf) {
     , slug: {type: String, required: true} //todo validate format
     , createdAt: {type: Date, default: Date.now}
     , servers: [ServerSchema]
-    //, owner: PlayerSchema //see DBRef
+    //, owner: PlayerSchema //todo see DBRef
   });
 
   /**
@@ -55,6 +64,7 @@ module.exports = function(mongoose, conf) {
     serverMeta.slug = obj.slug;
     server.ip = obj.ip;
     server.port = obj.port;
+    server.verificationCode = createVerificationCode(obj.slug+obj.ip+obj.port);
     serverMeta.servers = [server];
 
     serverMeta.save(function(err){
@@ -64,8 +74,33 @@ module.exports = function(mongoose, conf) {
   });
 
   ServerMetaSchema.static('getServerForIPAndPort', function(ip, port, callback) {
-    this.findOne({'servers.ip': ip, 'servers.port': port, 'servers.active': 'A'}, callback); //todo doesn't work. may want to do this at servermeta level. don't store server as model.
+    this.findOne({'servers.ip': ip, 'servers.port': port, 'servers.active': 'A'}, callback);
   });
+
+  ServerMetaSchema.methods.getServer = function(ip, port) {
+    var servers = this.get('servers');
+    for(var i = 0; i < servers.length; ++i) {
+      var s = servers[i];
+      if(s.get('ip') == ip && s.get('port') == port) return s;
+    }
+
+    //still here, did not find what we wanted.
+    return null;
+  }
+
+  ServerMetaSchema.methods.verifyServer = function(ip, port, verifyCode, callback) {
+    var server = this.getServer(ip, port)
+      , self = this;
+
+    if(server && server.get('verificationCode') && server.get('verificationCode') == verifyCode) {
+      server.set('verificationCode', null);
+      self.save(function(err) {
+        if(err) callback(err);
+        else callback(null, self);
+      });
+      return true;
+    }
+  };
   
   mongoose.model('ServerMeta', ServerMetaSchema);
   mongoose.model('Server', ServerSchema);

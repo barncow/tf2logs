@@ -7,7 +7,7 @@ var Udp = exports.Udp = function (options) {
   Hook.call(this, options);
   
   this.on('hook::ready', function () {
-    require('../udp').start();
+    require('../udp').start(self);
   });
 };
 
