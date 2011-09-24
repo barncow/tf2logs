@@ -14,6 +14,7 @@ module.exports = function(mongoose, conf) {
 
   var LogSchema = new Schema({ //todo specify _id field, use a pre-save middleware to generate ID using findAndModify - findAndModify must be used on another schema (LogIDSchema?)
       name: {type: String, required: true}
+    , sequence: {type: Number, required: true}
     , mapName: {type: String}
     , log: {type: mongoose.SchemaTypes.Mixed, required: true} //main log document. Saving raw object instead of embedded doc schema for now.
     , createdAt: {type: Date, default: Date.now}
@@ -28,14 +29,24 @@ module.exports = function(mongoose, conf) {
     @param callback function to call after data is updated. Will have err and the resulting log object passed to callback.
   */
   LogSchema.static('createLog', function(log, meta, callback) {
+    mongoose.model("Sequence").getSequence('logid', function(err, sequence) {
+      if(err) {
+        return callback(err);
+      }
       var logModel = new (mongoose.model('Log'))(); //todo can we use "this"
       logModel.log = log;
       logModel.name = meta.logName;
+      logModel.sequence = sequence;
       logModel.mapName = meta.mapName || log.mapName;
       logModel.save(function(err){
-        if(err) callback(err);
-        else callback(null, logModel);
+        if(err) return callback(err);
+        else return callback(null, logModel);
       });
+    });
+  });
+
+  LogSchema.static('getLogBySequence', function(sequence, callback) {
+    this.findOne({'sequence': sequence}, callback);
   });
 
   /**

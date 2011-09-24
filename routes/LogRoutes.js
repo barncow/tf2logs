@@ -45,7 +45,7 @@ module.exports = function(app, conf, mongoose) {
               util.log(err);
               reqHandler({error: 'An error ocurred while saving your log. Please try again later.'}, '/');
             } else {
-              reqHandler({info: 'Log Uploaded - id: '+savedLog._id, id:savedLog._id}, '/logs/upload');
+              reqHandler({info: 'Log Uploaded - id: '+savedLog.sequence, id:savedLog.sequence}, '/logs/upload');
             }
           });
         });
@@ -65,7 +65,7 @@ module.exports = function(app, conf, mongoose) {
     This should be accessible regardless of login status.
   */
   app.get('/logs/:id', rm.loadUser, function(req, res) {
-    mongoose.model('Log').findById(req.params.id, {}, [], function(err, log) {
+    mongoose.model('Log').getLogBySequence(req.params.id, function(err, log) {
       if(err) { //todo what happens when not found
         util.log(err);
         rf.getReqHandler(req, res)({error: 'An error ocurred while retrieving the log. Please try again later.'}, '/');

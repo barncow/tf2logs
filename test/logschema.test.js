@@ -8,6 +8,7 @@ var should = require('should')
   , async = require('async');
 
 mongoose.connect(conf.dataDbUrl);
+require('../schemas/SequenceSchema')(mongoose, conf);
 require('../schemas/LogSchema')(mongoose, conf);
 logModel = mongoose.model('Log');
 
@@ -295,6 +296,7 @@ function addLogFiles(files, cb) {
           , mapName: null, 
         };
       logModel.createLog(log, meta, function(err, savedLog){
+        savedLog.sequence.should.be.above(0);
         --parsers;
         if(err) throw err;
         if(parsers === 0) cb();
