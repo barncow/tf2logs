@@ -12,13 +12,17 @@ module.exports = function(WebHook) {
     , mongoose = require('mongoose')
     , form = require('connect-form')
     , expressValidate = require('express-validate')
-    , loadModules = require('./lib/loadmodules');
+    , loadModules = require('./lib/loadmodules')
+    , nowjs = require('now');
 
   var app = module.exports = express.createServer();
 
   //set default environment
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-  var conf = require('./conf/conf.js')();
+  var conf = require('./conf/conf.js')()
+    , sessionStore = new MongoStore({
+    url: conf.sessionDbUrl
+  });
 
   // Configuration
   app.configure(function(){
@@ -32,9 +36,7 @@ module.exports = function(WebHook) {
     app.use(express.session({
       secret: conf.sessionSecret
       , key: conf.sessionCookieKey
-      , store: new MongoStore({
-          url: conf.sessionDbUrl
-        })
+      , store: sessionStore
     })); //make sure this is before app.router
     app.helpers(require('./lib/helpers.js').helpers);
     app.dynamicHelpers(require('./lib/helpers.js').dynamicHelpers);
@@ -81,4 +83,48 @@ module.exports = function(WebHook) {
 
   app.listen(conf.port);
   util.log("Express server listening on port "+app.address().port+" in "+app.settings.env+" mode");
+
+  //session support inspired by: http://www.danielbaulig.de/socket-ioexpress/
+  var parseCookie = require('connect').utils.parseCookie
+    , Session = require('connect').middleware.session.Session
+    , everyone = nowjs.initialize(app, {
+      socketio: {
+        'authorization': function(data, accept) {
+          if (data.headers.cookie) {
+              data.cookie = parseCookie(data.headers.cookie);
+              data.sessionID = data.cookie[conf.sessionCookieKey];
+              // save the session store to the data object 
+              // (as required by the Session constructor)
+              data.sessionStore = sessionStore;
+              sessionStore.get(data.sessionID, function (err, session) {
+                  if (err) {
+                      accept(err.message, false);
+                  } else {
+                      // create a session object, passing data as request and our
+                      // just acquired session data
+                      data.session = new Session(data, session);
+                      accept(null, true);
+                  }
+              });
+          } else {
+             return accept('No cookie transmitted.', false);
+          }
+        }
+      }
+    });
+
+  nowjs.on('connect', function() {
+    var self = this;
+
+    //set an interval to reload the session every minute and keep it active.
+    self.user.sessionReloadInterval = setInterval(function () {
+      self.socket.handshake.session.reload( function () { 
+          self.socket.handshake.session.touch().save();
+      });
+    }, 60 * 1000);
+  });
+
+  nowjs.on('disconnect', function() {
+    clearInterval(this.user.sessionReloadInterval);
+  });
 };

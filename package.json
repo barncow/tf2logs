@@ -19,6 +19,8 @@
     , "optimist": ">=0.2.6"
     , "async": ">=0.1.9"
     , "hook.io": ">=0.7.7"
+    , "now": ">=0.7.5"
+    , "connect": ">=1.7.1"
   }
   , "devDependencies": {
       "expresso": ">=0.7.7"
