@@ -1,2 +1,10 @@
-h1= title
-p Welcome to #{title}
+table(id='recentlyAdded')
+  caption Recently Added
+  tbody
+    - recentlyAddedLogs.forEach(function(log) {
+        tr
+          td
+            a(href='/logs/#{log.sequence}')
+              =log.name
+          td=log.createdAt
+    - });

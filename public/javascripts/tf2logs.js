@@ -26,14 +26,15 @@
     Changes the content view.
     usage: tf2logs.functions.changeContentView(tf2logs.views.Home);
     Note, do not pass an instantiated view, just the "class"
+    @param data object to pass to render function
   */
-  tf2logs.functions.changeContentView = function(newContentView) {
+  tf2logs.functions.changeContentView = function(newContentView, data) {
     var contentView = tf2logs.state.contentView
       , firstRequest = tf2logs.state.firstRequest; //shortcuts
-
+    //todo clear flash messages
     if(contentView) contentView.remove();
     contentView = new newContentView();
-    contentView.render();
+    contentView.render(data);
   };
 
   /**
@@ -41,14 +42,19 @@
     to calling new pages.
   */
   tf2logs.functions.convertLinksToRoutes = function() {
-    $('body').delegate('a', 'click', function(e) {
+    $('body').delegate('a:not(.externalLink)', 'click', function(e) {
       var href = $(this).attr("href");
       console.log("click href", href);
       Backbone.history.navigate(href, true);
       e.preventDefault();
-      return false;
     });
   };
+
+  /*#####################   MODELS  #########################*/
+
+  tf2logs.models.FrontPage = Backbone.Model.extend({
+    url: '/.json'
+  });
 
   /*#####################   VIEWS   #########################*/
 
@@ -64,8 +70,8 @@
 
   tf2logs.views.Home = BaseContentView.extend({
     template: 'index'
-    , render: function() {
-      $(this.el).html(this.renderTemplate(this.template, {title: 'blah'}));
+    , render: function(data) {
+      $(this.el).html(this.renderTemplate(this.template, data));
     }
   });
 
@@ -76,7 +82,20 @@
     }
 
     , "home": function() {
-      tf2logs.functions.changeContentView(tf2logs.views.Home);
+      console.log('home route');
+      new tf2logs.models.FrontPage().fetch({success: function(model) {
+        tf2logs.functions.changeContentView(tf2logs.views.Home, model.toJSON());
+      }});
+    }
+  });
+
+  tf2logs.routers.Logs = Backbone.Router.extend({
+    routes: {
+      "/logs/:id": "show"
+    }
+
+    , "show": function(id) {
+      
     }
   });
 

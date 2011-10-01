@@ -281,6 +281,20 @@ module.exports.tests = function() {
         }
       });
     }
+    , 'get most recently added logs': function(callback) {
+      logModel.getRecentlyAddedLogs(5, function(err, logs) {
+        try {
+          should.not.exist(err);
+          should.exist(logs);
+
+          logs[0].createdAt.should.be.above(logs[1].createdAt);
+
+          callback();
+        } catch (err) {
+          callback(err);
+        }
+      });
+    }
   }
   , function(err, results) {
     mongoose.disconnect();

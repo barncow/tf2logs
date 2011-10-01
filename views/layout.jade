@@ -2,6 +2,7 @@
 html
   head
     title=title
+      | - TF2Logs.com
     link(rel='stylesheet', href='/main.css')
   body
     #topbar
@@ -14,10 +15,10 @@ html
             li
               a(href='/logs/upload') Upload Log
             li
-              a(href='/players/logout') Logout
+              a(href='/players/logout', class='externalLink') Logout
           - else
             li
-              a(href='/players/login') Login
+              a(href='/players/login', class='externalLink') Login
       .clearBoth
     !{flashMessages}
     #contentWrapper

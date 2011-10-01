@@ -10,7 +10,8 @@ var jade = require('jade')
   file -> location of template, relative to views directory.
 */
 var templates = [
-      {name: "index", file: 'index.jade'}
+        {name: "index", file: 'index.jade'}
+      , {name: "log_show", file: 'logs/show.jade'}
     ];
 
 module.exports = function(app, conf, mongoose) {

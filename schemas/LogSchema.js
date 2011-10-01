@@ -10,7 +10,8 @@
 */
 module.exports = function(mongoose, conf) {
   //defining some shortcuts
-  var Schema = mongoose.Schema;
+  var Schema = mongoose.Schema
+    , Query = mongoose.Query;
 
   var LogSchema = new Schema({ //todo specify _id field, use a pre-save middleware to generate ID using findAndModify - findAndModify must be used on another schema (LogIDSchema?)
       name: {type: String, required: true}
@@ -47,6 +48,14 @@ module.exports = function(mongoose, conf) {
 
   LogSchema.static('getLogBySequence', function(sequence, callback) {
     this.findOne({'sequence': sequence}, callback);
+  });
+
+  LogSchema.static('getRecentlyAddedLogs', function(numLogs, callback) {
+    this.find()
+      .select('name', 'sequence', 'createdAt')
+      .limit(numLogs)
+      .desc('createdAt')
+      .run(callback);
   });
 
   /**
