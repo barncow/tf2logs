@@ -30,13 +30,15 @@
     @param data object to pass to render function
   */
   tf2logs.functions.changeContentView = function(newContentView, data) {
-    var contentView = tf2logs.state.contentView
-      , initialLoad = tf2logs.state.initialLoad; //shortcuts
+    var contentView = tf2logs.state.contentView;
+    tf2logs.state.initialLoad = false;
+
     //todo clear flash messages
+    
     if(contentView) contentView.remove();
     contentView = new newContentView();
     contentView.render(data);
-    initialLoad = false;
+    
   };
 
   /**
