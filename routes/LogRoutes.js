@@ -64,13 +64,14 @@ module.exports = function(app, conf, mongoose) {
     The main route to display a log. This should be toward the bottom to prevent :id from being caught earlier.
     This should be accessible regardless of login status.
   */
-  app.get('/logs/:id', rm.loadUser, function(req, res) {
+  app.get('/logs/:id.:format?', rm.loadUser, function(req, res) {
+    var reqHandler = rf.getReqHandler(req, res);
     mongoose.model('Log').getLogBySequence(req.params.id, function(err, log) {
       if(err) { //todo what happens when not found
         util.log(err);
-        rf.getReqHandler(req, res)({error: 'An error ocurred while retrieving the log. Please try again later.'}, '/');
+        reqHandler({error: 'An error ocurred while retrieving the log. Please try again later.'}, '/');
       } else {
-        res.render('logs/show', {
+        reqHandler({
             title: log.name
           , log: log
           , playerStats: View.playerStats(log.log.players, log.log.playableSeconds)
@@ -80,7 +81,7 @@ module.exports = function(app, conf, mongoose) {
           , playerSpread: View.playerSpread(log.log.players)
           , itemSpread: View.itemSpread(log.log.players)
           , chatLog: View.chatLog(log.log.events)
-        });
+        }, {render: 'logs/show'});
       }
     });
   });

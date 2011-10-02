@@ -34,7 +34,7 @@
     tf2logs.state.initialLoad = false;
 
     //todo clear flash messages
-    
+
     if(contentView) contentView.remove();
     contentView = new newContentView();
     contentView.render(data);
@@ -71,6 +71,13 @@
     url: '/.json'
   });
 
+  tf2logs.models.Log = Backbone.Model.extend({
+    urlRoot: '/logs'
+    , url: function() {
+      return Backbone.Model.prototype.url.call(this)+'.json';
+    }
+  });
+
   /*#####################   VIEWS   #########################*/
 
   /**
@@ -85,6 +92,13 @@
 
   tf2logs.views.Home = BaseContentView.extend({
     template: 'index'
+    , render: function(data) {
+      $(this.el).html(this.renderTemplate(this.template, data));
+    }
+  });
+
+  tf2logs.views.LogShow = BaseContentView.extend({
+    template: 'log_show'
     , render: function(data) {
       $(this.el).html(this.renderTemplate(this.template, data));
     }
@@ -355,11 +369,20 @@
   tf2logs.routers.Logs = Backbone.Router.extend({
     routes: {
       "logs/upload": "upload"
+      , "logs/:id": "show"
     }
 
-    , "upload": function(id) {
+    , "upload": function() {
       console.log('upload route');
       tf2logs.functions.changeContentView(tf2logs.views.LogUpload);
+    }
+
+    , "show": function(id) {
+      if(tf2logs.functions.getInitialLoad()) return; //do nothing more if this page was already loaded
+      new tf2logs.models.Log({id: id}).fetch({success: function(model) {
+        console.log('fetch from show');
+        tf2logs.functions.changeContentView(tf2logs.views.LogShow, model.toJSON());
+      }, error: function(err) {console.log('error in log show', err);}});
     }
   });
 

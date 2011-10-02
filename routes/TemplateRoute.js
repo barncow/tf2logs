@@ -2,7 +2,8 @@
 //todo add minifier?
 
 var jade = require('jade')
-  , fs = require('fs');
+  , fs = require('fs')
+  , helpers = require('../lib/helpers');
 
 /**
   Add templates here to compile for use on client.
@@ -25,6 +26,12 @@ module.exports = function(app, conf, mongoose) {
     res.setHeader("Content-Type", "text/javascript");
 
     var js = "(function(){var tmpl=window.tf2logs.templates;";
+
+    //make helpers available to the templates.
+    Object.keys(helpers.helpers).forEach(function(method) {
+      js += "var "+method+"="+helpers.helpers[method].toString()+";";
+    });
+
 
     templates.forEach(function(tmpl) {
       var filename = viewsDir+"/"+tmpl.file;
