@@ -1,4 +1,5 @@
 //Route for generating compiled templates from Jade for use in single page app.
+//todo add minifier?
 
 var jade = require('jade')
   , fs = require('fs');
@@ -6,12 +7,13 @@ var jade = require('jade')
 /**
   Add templates here to compile for use on client.
   It is an array of objects, with keys:
-  name -> name to reference in window.tf2logs.templates namespace. Keep the name safe for use in inline notation (ie. no spaces, quotes, etc.)
+  name -> name to reference in window.tf2logs.templates namespace.
   file -> location of template, relative to views directory.
 */
 var templates = [
         {name: "index", file: 'index.jade'}
       , {name: "log_show", file: 'logs/show.jade'}
+      , {name: "log_upload", file: 'logs/upload.jade'}
     ];
 
 module.exports = function(app, conf, mongoose) {

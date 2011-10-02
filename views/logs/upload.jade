@@ -1,15 +1,6 @@
-h1= title
 p Use this form to upload your logs.
 
 #logUploader
   form(action='/logs/upload', method='POST', enctype='multipart/form-data')
     input(type='file', name='logfile')
     input(type='submit', value='Upload')
-
-script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js')
-script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js')
-script(src='http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.1/backbone-min.js')
-script(src='/javascripts/plupload.1.4.3.2.js')
-script(src='/javascripts/plupload.html5.1.4.3.2.js')
-script(src='/javascripts/uploader.js')
-
