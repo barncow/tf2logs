@@ -45,7 +45,8 @@ function compile(viewsDir) {
   templates.forEach(function(tmpl) {
     var filename = viewsDir+"/"+tmpl.file;
     var data = fs.readFileSync(filename, "utf8");
-    js += "tmpl."+tmpl.name+"="+jade.compile(data, {filename: filename, compileDebug: false}).toString()+";"; //todo client: true
+    var fn = jade.compile(data, {filename: filename, compileDebug: false, client: true});
+    js += "tmpl."+tmpl.name+"="+fn.toString()+";";
     ++numCompiled;
 
     if(numCompiled === templates.length) {
