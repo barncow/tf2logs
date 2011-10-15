@@ -2,7 +2,7 @@
   TF2Logs.js
   All javascript necessary to view the website
 */
-
+//todo uploader doesn't work in FF7
 //todo remove all console.log
 
 //prevent accidental global creation. Not using jQuery ready event because we need the tf2logs namespace available instantly.
@@ -65,6 +65,10 @@
     return initialLoad;
   }
 
+  tf2logs.functions.renderTemplate = function(templateName, locals) {
+    return tf2logs.templates[templateName](locals);
+  }
+
   /*#####################   MODELS  #########################*/
 
   tf2logs.models.FrontPage = Backbone.Model.extend({
@@ -85,9 +89,7 @@
   */
   var BaseContentView = tf2logs.views.BaseContentView = Backbone.View.extend({
     el: '#content'
-    , renderTemplate: function(templateName, locals) {
-      return tf2logs.templates[templateName](locals);
-    }
+    , renderTemplate: tf2logs.functions.renderTemplate
   });
 
   tf2logs.views.Home = BaseContentView.extend({
@@ -108,6 +110,7 @@
     template: 'log_upload'
     , render: function() {
       $(this.el).html(this.renderTemplate(this.template));
+      //todo add backbone objects to main namespace?
 
       /**
         Model - Represents a LogFile and all of its data (name, map, tags, etc.)
@@ -134,47 +137,52 @@
       });
 
       /**
-        This represents the LogFile model in the queue panel. It is a miniature version of the model.
-      */
-      var LogFileQueueView = Backbone.View.extend({
-        tagName: 'li'
+      This represents the LogFile model in the queue panel. It is a miniature version of the model.
+    */
+    var LogFileQueueView = Backbone.View.extend({
+      tagName: 'li'
 
-        , events: {
-          'click span.remove':  'removeLogFile'
-          , 'click span.logName': 'viewLogFile'
-        }
+      , template: 'logfile_queue_view'
 
-        , initialize: function(){
-          _.bindAll(this, 'render', 'unrender', 'removeLogFile');
+      , events: {
+        'click span.remove':  'removeLogFile'
+        , 'click span.logName': 'viewLogFile'
+      }
 
-          this.model.bind('change', this.render);
-          this.model.bind('remove', this.unrender);
-        }
+      , initialize: function(){
+        _.bindAll(this, 'render', 'unrender', 'removeLogFile');
 
-        , render: function(){
-          $(this.el).html('<span class="logFileName">'+this.model.get('logFileName')+'</span><span class="logName">'+this.model.get('logName')+'</span><span class="remove">x</span>');//todo XSS
-          return this;
-        }
+        this.model.bind('change', this.render);
+        this.model.bind('remove', this.unrender);
+      }
 
-        , unrender: function(){
-          $(this.el).remove();
-        }
+      , render: function(){
+        var html = tf2logs.functions.renderTemplate(this.template, {logFileName: this.model.get('logFileName'), logName: this.model.get('logName')});
+        $(this.el).html(html);
+        return this;
+      }
 
-        , removeLogFile: function(){
-          logUploaderView.removeFile(this.model.fileId);
-          this.model.destroy();
-        }
+      , unrender: function(){
+        $(this.el).remove();
+      }
 
-        , viewLogFile: function() {
-          logUploaderView.changeMetaView(this.model);
-        }
-      });
+      , removeLogFile: function(){
+        logUploaderView.removeFile(this.model.fileId);
+        this.model.destroy();
+      }
+
+      , viewLogFile: function() {
+        logUploaderView.changeMetaView(this.model);
+      }
+    });
 
       /**
         This represents the form to make changes to the log file's map, tags, etc.
       */
       var LogFileMetaView = Backbone.View.extend({
         el: '#logFileMetaEditor'
+
+        , template: "logfile_meta_view"
 
         , events: {
           "change input": "saveChanges"
@@ -187,10 +195,12 @@
         }
 
         , render: function(){
-          var html = '<span class="status">'+this.model.get('status')+'</span>'
-            +'<form><label>File Name:</label>'+this.model.get('logFileName') //todo XSS
-            +'<br/> <label for="logName">Log Name:</label><input type="text" class="logName" value="'+this.model.get('logName')+'"/></form>'
-            +'<br/> <label for="mapName">Map Name:</label><input type="text" class="mapName" value="'+this.model.get('mapName')+'"/></form>'
+          var html = tf2logs.functions.renderTemplate(this.template, {
+              status: this.model.get('status')
+              , logFileName: this.model.get('logFileName')
+              , logName: this.model.get('logName')
+              , mapName: this.model.get('mapName')
+          });
 
           $(this.el).html(html);
           return this;
@@ -245,6 +255,7 @@
         , initialize: function(){
           var self = this;
           _.bindAll(self, 'render', 'addLogFile', 'removeFile', 'uploadLogFiles');
+
           self.render();
           self.logQueueView = new LogQueueView({collection: self.collection});
           self.logFileMetaView = null;
@@ -279,7 +290,7 @@
               case plupload.UPLOADING:
                 if(file.percent === 100) {
                   //file has been uploaded, just waiting for response.
-                  status = "<strong>Processing...</strong>";
+                  status = "Processing...";
                 } else {
                   status = "Uploading: "+file.percent + "%";
                 }
@@ -307,11 +318,15 @@
             up.settings.multipart_params['logName'] = logFile.get('logName');
             up.settings.multipart_params['mapName'] = logFile.get('mapName');
           });
+          self.uploader.refresh();
         }
+
+        , template: "log_uploader_view"
 
         , render: function(){
           //todo each view should render its own interface
-          $(this.el).html('<div id="logUploadQueue"><div class="helper">To upload logs, click the Add Logs button or drag your log files from the desktop here.</div><div><ul></ul></div></div><button id="addLogFiles">Add Logs</button><button id="uploadLogFiles">Upload Logs</button>');
+          var html = tf2logs.functions.renderTemplate(this.template);
+          $(this.el).html(html);
         }
 
         , addLogFile: function(fileName, fileId, fileSize) {
@@ -373,6 +388,7 @@
     }
 
     , "upload": function() {
+      //todo only logged in users should have access here.
       console.log('upload route');
       tf2logs.functions.changeContentView(tf2logs.views.LogUpload);
     }
