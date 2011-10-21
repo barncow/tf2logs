@@ -1,16 +1,21 @@
 /*
-  This will take lines from TF2 (and probably other Source engine games) and put them into Redis.
+  This will take lines from a game server and put them into Redis.
 */
 
 var redislib = require('redis')
   , udp = require('dgram')
-  , util = require('util');
+  , util = require('util')
+  , realtime = require('../lib/realtime');
 
-var SourceLineServer = function(port, game) {
-  if(!(this instanceof SourceLineServer)) return new SourceLineServer(port, game);
+var LineServer = function(port, game) {
+  if(!(this instanceof LineServer)) return new LineServer(port, game);
 
   if(!port) throw 'Port is required.'
   if(!game) throw 'Game is required.';
+
+  var contextClass = realtime.contexts[game];
+  if(!contextClass) throw 'Game is not supported: '+game;
+  this.convertFromBuffer = new contextClass().convertFromBuffer;
 
   this._server = null;
   this._redis = null;
@@ -21,12 +26,12 @@ var SourceLineServer = function(port, game) {
   this._lastReceived = null; //need to track the Date.now() of the last message received, since it can repeat when it shouldn't.
   this._lastReceivedCounter = 0; //keep track of how many lines have occurred at the same Date.now()
 };
-module.exports = SourceLineServer;
+module.exports = LineServer;
 
 /**
   Connects to Redis, starts server
 */
-SourceLineServer.prototype.start = function() {
+LineServer.prototype.start = function() {
   var self = this;
 
   self._redis = redislib.createClient();
@@ -34,8 +39,7 @@ SourceLineServer.prototype.start = function() {
 
   self._server.on("message", function(msg, rinfo) {
     if(msg.length < this._START_INDEX+this._END_DECREMENT) return; //invalid msg
-    //convert message to string, stripping unneeded chars.
-    var logLine = msg.toString('utf8', self._START_INDEX, msg.length - self._END_DECREMENT);
+    var logLine = self.convertFromBuffer(msg);
     self.onMessage(Date.now(), logLine, rinfo.address, rinfo.port);
   });
 
@@ -50,7 +54,7 @@ SourceLineServer.prototype.start = function() {
 /**
   Stops everything
 */
-SourceLineServer.prototype.stop = function() {
+LineServer.prototype.stop = function() {
   if(this._server) this._server.close();
   if(this._redis) this._redis.quit();
 };
@@ -62,7 +66,7 @@ SourceLineServer.prototype.stop = function() {
   @param ip ip of server that sent the message
   @param port port of server that sent the message
 */
-SourceLineServer.prototype.onMessage = function(received, logLine, ip, port) {
+LineServer.prototype.onMessage = function(received, logLine, ip, port) {
   util.log('Message Received ('+ip+':'+port+'): ' + logLine); //todo remove
   var self = this;
 
@@ -76,10 +80,10 @@ SourceLineServer.prototype.onMessage = function(received, logLine, ip, port) {
   }
 
   var redis = self._redis
-    , clientKey = ip+'-'+port
-    , linesSetKey = 'rts:'+clientKey+':lines'
-    , serversSetKey = 'rts:'+self.game+':servers'
-    , logLineHashed = received+'.'+self._lastReceivedCounter+logLine; //concat'ing the . casts both sides as string instead of adds, easier to read
+    , clientKey = realtime.getServersSetClient(ip, port, self.game)
+    , linesSetKey = realtime.getLinesSetKey(ip, port)
+    , serversSetKey = realtime.serversSetKey
+    , logLineHashed = realtime.hashLogLine(logLine, received, self._lastReceivedCounter); 
 
   redis.zadd(linesSetKey, received, logLineHashed, function(err, data){
     if(err) return util.log("Error ocurred when saving line to sorted set in onMessage: "+err, received, logLineHashed, ip, port);
@@ -98,4 +102,4 @@ SourceLineServer.prototype.onMessage = function(received, logLine, ip, port) {
 };
 
 //todo this file shouldn't really start the server
-var s = new SourceLineServer(2600, 'tf2').start();
+var s = new LineServer(2600, 'tf2').start();
