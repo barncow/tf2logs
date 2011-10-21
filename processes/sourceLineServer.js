@@ -6,12 +6,16 @@ var redislib = require('redis')
   , udp = require('dgram')
   , util = require('util');
 
-var SourceLineServer = function(port) {
-  if(!(this instanceof SourceLineServer)) return new SourceLineServer(port);
+var SourceLineServer = function(port, game) {
+  if(!(this instanceof SourceLineServer)) return new SourceLineServer(port, game);
+
+  if(!port) throw 'Port is required.'
+  if(!game) throw 'Game is required.';
 
   this._server = null;
   this._redis = null;
   this.port = port;
+  this.game = game; //what game this server is taking lines from (ie. tf2)
   this._START_INDEX = 5; //where the udp message should start - garbage? data before this point.
   this._END_DECREMENT = 2; //the end of the UDP message -> msg.length - END_DECREMENT (2 gets rid of strange char, plus line break
   this._lastReceived = null; //need to track the Date.now() of the last message received, since it can repeat when it shouldn't.
@@ -71,18 +75,27 @@ SourceLineServer.prototype.onMessage = function(received, logLine, ip, port) {
     self._lastReceivedCounter = 0;
   }
 
-  var clientKey = ip+'-'+port
+  var redis = self._redis
+    , clientKey = ip+'-'+port
     , linesSetKey = 'rts:'+clientKey+':lines'
-    , logLineHashed = received+'.'+self._lastReceivedCounter+logLine;
+    , serversSetKey = 'rts:'+self.game+':servers'
+    , logLineHashed = received+'.'+self._lastReceivedCounter+logLine; //concat'ing the . casts both sides as string instead of adds, easier to read
 
-  self._redis.zadd(linesSetKey, received, logLineHashed, function(err, data){
-    if(err) util.log("Error ocurred in onMessage: "+err, received, logLineHashed, ip, port);
+  redis.zadd(linesSetKey, received, logLineHashed, function(err, data){
+    if(err) return util.log("Error ocurred when saving line to sorted set in onMessage: "+err, received, logLineHashed, ip, port);
 
     //redis returns the number of items that were added to the set (not score changed items)
     //if it is not one, something wrong happened.
-    if(data !== 1) util.log("Line was added to set in onMessage: ", received, logLineHashed, ip, port)
+    if(data !== 1) return util.log("Line was added to sorted set in onMessage: ", received, logLineHashed, ip, port);
+
+    //we are still here, therefore everything went OK with saving the line.
+    //let's add (or update the score of) the server to the sorted set of servers.
+    //doing this since it will be easy to tell when servers are stale.
+    redis.zadd(serversSetKey, received, clientKey, function(err){
+      if(err) return util.log("Could not add server to sorted servers set: "+err, received, clientKey);
+    });
   });
 };
 
 //todo this file shouldn't really start the server
-var s = new SourceLineServer(2600).start();
+var s = new SourceLineServer(2600, 'tf2').start();
