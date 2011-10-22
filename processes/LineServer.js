@@ -13,9 +13,9 @@ var LineServer = function(port, game) {
   if(!port) throw 'Port is required.'
   if(!game) throw 'Game is required.';
 
-  var contextClass = realtime.contexts[game];
-  if(!contextClass) throw 'Game is not supported: '+game;
-  this.convertFromBuffer = new contextClass().convertFromBuffer;
+  var context = realtime.getContext(game);
+  if(!context) throw 'Game is not supported: '+game;
+  this.convertFromBuffer = context.convertFromBuffer;
 
   this._server = null;
   this._redis = null;
