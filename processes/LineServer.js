@@ -61,14 +61,16 @@ LineServer.prototype.stop = function() {
 
 /**
   On message handler. Customized to make testing easier, and factor out dgram subtleties
-  @param received timestamp that the message was received
-  @param logLine string of the message that was received (cleaned up as necessary)
+  @param received timestamp that the message was received (Date.now())
+  @param logLine string of the message that was received (cleaned up, converted to utf8, as necessary)
   @param ip ip of server that sent the message
   @param port port of server that sent the message
 */
 LineServer.prototype.onMessage = function(received, logLine, ip, port) {
   util.log('Message Received ('+ip+':'+port+'): ' + logLine); //todo remove
   var self = this;
+
+  //todo - detect if line is an immediate line. Put into immediate list and skip the rest of this. Immediate line should be prepended with game, ip, port. No hashing needed.
 
   //if the Date.now() did not change from the last time a message was received
   //increment counter, otherwise reset with the current Date.now().

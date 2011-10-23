@@ -2,11 +2,16 @@
   This will take lines from Redis
 */
 
-var redislib = require('redis')
+//set default environment
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+var conf = require('../../conf/conf.js')()
+  , redislib = require('redis')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
   , Hook = require('hook.io').Hook
-  , realtime = require('../../lib/realtime');
+  , realtime = require('../../lib/realtime')
+  , loadModules = require('../../lib/loadmodules');
 
 
 var log = (function() {
@@ -33,6 +38,9 @@ var ParseHook = function(options) {
   this.DO_WAIT = 3;
 
   this._redis = redislib.createClient();
+  this._mongoose = require('mongoose');
+  this._mongoose.connect(conf.dataDbUrl);
+  loadModules('./schemas', /Schema(s?)\.js$/, this._mongoose, conf); //pull in models
   
   this.cacheImmediateTryLock();
   this.cacheServerTryLock();
@@ -134,12 +142,17 @@ ParseHook.prototype.cacheServerTryLock = function() {
       , linesSetKey = realtime.getLinesSetKey(serverInfo.ip, serverInfo.port)
       , linesOlderThanDelay = Date.now()-(self.options.delaySecs*1000);
 
+      //todo get isValidVerified from redis (how would this become invalid? expires?)
+      //if not in redis, get from mongo, place into redis
+      //only do following if the server is valid and verified.
+
     //get a list of lines from redis
     self._redis.zrangebyscore(linesSetKey, 0, linesOlderThanDelay, function(err, rawLines) {
       if(err) return log('error occurred when getting lines from: ', linesSetKey, err);
+      log('got '+rawLines.length+' lines from redis');
 
       if(rawLines.length > 0) {
-        context = realtime.getContext(serverInfo.game, self, self._redis, null); //todo mongoose conn
+        context = realtime.getContext(serverInfo.game, self, self._redis, self._mongoose, conf);
         
         //clean up the lines
         var lines = [];
@@ -148,9 +161,19 @@ ParseHook.prototype.cacheServerTryLock = function() {
         });
 
         //send to parser for processing
+        log('sending '+lines.length+' lines to parser');
         context.parseLines(lines, serverInfo.ip, serverInfo.port, function(err) {
-          //todo remove lines
-          releaseLock();
+          if(err) {
+            log('error in parseLines', err);
+            return releaseLock();
+          }
+
+          //processing was a success, remove old data.
+          self._redis.zremrangebyscore(linesSetKey, 0, linesOlderThanDelay, function(err) {
+            if(err) /*don't return*/ log('error removing processed lines');
+
+            releaseLock();
+          });
         });
       } else releaseLock();
     }); 
@@ -239,5 +262,7 @@ TryLock.prototype.tryLock = function(key) {
 };
 
 //todo this shouldn't really start the hook
+//todo mongo MUST be run in 64bit mode
+//should also set environment properly.
 var parser = new ParseHook({delaySecs: 90, waitMsecs: 5*1000});
 parser.start();

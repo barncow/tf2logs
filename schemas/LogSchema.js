@@ -3,6 +3,7 @@
 */
 
 //todo create indexes where needed
+var util = require('util');
 
 /**
   called by app.js to initialize our schemas as models.
@@ -21,6 +22,7 @@ module.exports = function(mongoose, conf) {
     , createdAt: {type: Date, default: Date.now}
     , metaUpdatedAt: {type: Date, default: Date.now} //when meta information was updated, like name, tags, etc.
     , regeneratedAt: {type: Date, default: null} //when the log was last regenerated. If never regenerated, use null.
+    , status: {type: String, enum: ['generating', 'uploaded', 'generated'], default: 'generating'}
   });
 
   /**
@@ -39,9 +41,45 @@ module.exports = function(mongoose, conf) {
       logModel.name = meta.logName;
       logModel.sequence = sequence;
       logModel.mapName = meta.mapName || log.mapName;
+      logModel.status = 'uploaded';
       logModel.save(function(err){
         if(err) return callback(err);
         else return callback(null, logModel);
+      });
+    });
+  });
+
+  LogSchema.static('reserveLog', function(meta, callback) {
+    util.log('about to reserve a log');
+    mongoose.model("Sequence").getSequence('logid', function(err, sequence) {
+      util.log('back from get sequence');
+      if(err) {
+        return callback(err);
+      }
+      var logModel = new (mongoose.model('Log'))(); //todo can we use "this"
+      logModel.name = meta.name;
+      logModel.sequence = sequence;
+      logModel.mapName = meta.mapName;
+      logModel.status = 'generating';
+      logModel.save(function(err){
+        if(err) return callback(err);
+        else return callback(null, sequence);
+      });
+    });
+  });
+
+  LogSchema.static('completeLog', function(sequence, log, callback) {
+    mongoose.model("Log").getLogBySequence(sequence, function(err, logModel) {
+      if(err) {
+        return callback(err);
+      } else if (!logModel) return callback('Log at Sequence: '+sequence+' could not be found.');
+      
+      logModel.status = 'generated';
+      logModel.log = log;
+
+      logModel.save(function(err){
+        if(err) return callback(err);
+        else return callback(null, sequence);
       });
     });
   });
